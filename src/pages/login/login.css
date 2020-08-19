@@ -54,3 +54,7 @@ form input {
   font-weight: bold;
   align-content: cen;
 }
+
+div button {
+  margin-top: 20px;
+}
