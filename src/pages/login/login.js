@@ -44,9 +44,7 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <div className='button-block'>
-          <button type='submit'>Log in</button>
-        </div>
+        <button type='submit'>Log in</button>
       </form>
     </div>
   )
