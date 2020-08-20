@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './IETable.css'
 
 function IETable() {
 
+  const [selected, setSelected] = useState([])
+
   let data = [
     {
       No: 1,
-      ProductID: 1,
-      ProductName: 'A',
-      Amount: 1,
+      ProductID: 12345,
+      ProductName: 'AAAAAAAAA',
+      Amount: 1000,
       Time: '',
     },
     {
@@ -40,21 +42,21 @@ function IETable() {
       Time: '',
     },
     {
-      No: 4,
+      No: 6,
       ProductID: 4,
       ProductName: 'D',
       Amount: 4,
       Time: '',
     },
     {
-      No: 4,
+      No: 7,
       ProductID: 4,
       ProductName: 'D',
       Amount: 4,
       Time: '',
     },
     {
-      No: 4,
+      No: 8,
       ProductID: 4,
       ProductName: 'D',
       Amount: 4,
@@ -76,7 +78,9 @@ function IETable() {
         </thead>
         <tbody>
           {data.map((a, index) => {
-            return <tr key={index} >
+            return <tr key={index} onClick={() => {
+              setSelected(data[index])
+            }}>
               <td>{a.No}</td>
               <td>{a.ProductID}</td>
               <td>{a.ProductName}</td>

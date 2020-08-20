@@ -6,7 +6,7 @@ import RetryBtn from '../components/button/retryButton'
 import CancelBtn from '../components/button/cancelButton'
 import SubmitBtn from '../components/button/submitButton'
 
-import './Import-Export.css'
+import './ImportExport.css'
 
 function IEProduct() {
 

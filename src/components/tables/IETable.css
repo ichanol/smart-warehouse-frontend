@@ -7,8 +7,8 @@ table{
   height:500px;
   width: 90%;
   position: absolute;
-  overflow: auto;
   left: 5%;
+  overflow: auto;
 }
 
 thead{
@@ -16,9 +16,6 @@ thead{
  }
 
 tbody{
-  height:300px;
-  overflow:auto;
-  margin-top: 0px;
   background-color: #FFF;
 }
 
@@ -39,10 +36,13 @@ td{
   color: lightcoral;
   border-bottom: solid 2px rgba(240,128,128,0.1);
 }
-tr:hover {
+tbody tr:hover {
   background-color:lightgray;
   cursor:pointer;
 }
-tr:active {
-  background-color: lightgreen  ;
-}
+tbody tr:active {
+  background-color: lightgreen;
+} 
+
+
+ 

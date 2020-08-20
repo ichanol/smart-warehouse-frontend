@@ -4,6 +4,7 @@
   background-color: lightcoral;
   text-decoration: none;
   height: 80px;
+  border-radius: 0px 0px 30px 30px ;
 }
 
 .logo {
@@ -12,7 +13,7 @@
   padding-left: 40px;
   flex: 0.46;
   font-size: 30px;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 ul {
@@ -35,7 +36,6 @@ ul li {
 }
 
 .navbar ul a:hover {
-  transition: 0.5s;
   border-bottom: 4px solid#FFF;
   border-radius: 3px;
 }
