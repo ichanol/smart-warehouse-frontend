@@ -1,0 +1,28 @@
+.ie-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.ie-header label {
+  font-size: 30px;
+  font-weight: bold;
+}
+.ie-table {
+  position: absolute;
+  width: 90%;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%)
+}
+
+.button-block {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  justify-content: space-around;
+}
