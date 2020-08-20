@@ -83,9 +83,7 @@ function Login() {
     // Server will fire USER_GRANTED event and send information to user
     // If access's granted user will successfully login
     // then navigate to another page
-    console.log(process.env.REACT_APP_SOCKET_IO)
     socket.on('USER_GRANTED', ({ message, granted, room }) => {
-      console.log(message, granted, room)
       setIsloading(!granted)
     })
     // Remove socket event listener when unmounted
