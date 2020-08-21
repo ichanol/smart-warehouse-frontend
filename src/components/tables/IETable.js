@@ -1,7 +1,7 @@
 import React from 'react'
 import './IETable.css'
 
-function IETable(props) {
+function ImportExportTable(props) {
 
   return (
     <div className='wrapper'>
@@ -31,4 +31,4 @@ function IETable(props) {
   )
 }
 
-export default IETable
+export default ImportExportTable

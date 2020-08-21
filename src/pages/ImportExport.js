@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import Navbar from '../components/navbar/navbar'
-import IETable from '../components/tables/IETable'
+import ImportExportTable from '../components/tables/IETable'
 import { EditBtn, RetryBtn, CancelBtn, SubmitBtn } from '../components/button/Button'
 import { data } from '../components/mockData/mockImport'
 
 import './ImportExport.css'
 
-function IEProduct() {
+function ImportExportProduct() {
 
   const [selected, setSelected] = useState([])
+
+
 
   const select = (value) => {
     data.find((v, index) => {
@@ -24,7 +26,7 @@ function IEProduct() {
       <div className='ie-header'>
         <label>Import - Export</label>
       </div>
-      <IETable
+      <ImportExportTable
         selected={selected}
         data={data}
         select={select}
@@ -39,4 +41,4 @@ function IEProduct() {
   )
 }
 
-export default IEProduct
+export default ImportExportProduct
