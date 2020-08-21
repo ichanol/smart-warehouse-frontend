@@ -1,0 +1,1 @@
+export { ImportExportTable } from './IETable'

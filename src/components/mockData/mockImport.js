@@ -1,25 +1,24 @@
 export const data = [
   {
-    No: 1,
-    ProductID: 12345,
-    ProductName: 'AAAAAAAAA',
-    Amount: 1000,
-    Time: '',
+    no: 1,
+    productid: 12345,
+    productname: 'AAAAAAAAA',
+    amount: 1000,
+    time: '',
   },
   {
-    No: 2,
-    ProductID: 2,
-    ProductName: 'B',
-    Amount: 2,
-    Time: '',
+    no: 2,
+    productid: 2,
+    productname: 'B',
+    amount: 2,
+    time: '',
   },
   {
-    No: 3,
-    ProductID: 3,
-    ProductName: 'C',
-    Amount: 3,
-    Time: '',
-  }
+    no: 3,
+    productid: 3,
+    productname: 'C',
+    amount: 3,
+    time: '',
+  },
 ]
 
-export default { data }

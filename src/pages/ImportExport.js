@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../components/navbar/navbar'
-import ImportExportTable from '../components/tables/IETable'
-import { EditBtn, RetryBtn, CancelBtn, SubmitBtn } from '../components/button/Button'
-import { data } from '../components/mockData/mockImport'
+import { EditBtn, RetryBtn, CancelBtn, SubmitBtn, ImportExportTable, Navbar, data } from '../components'
 
 import './ImportExport.css'
 
@@ -10,11 +7,9 @@ function ImportExportProduct() {
 
   const [selected, setSelected] = useState([])
 
-
-
   const select = (value) => {
     data.find((v, index) => {
-      if (value === data[index].No) {
+      if (value === data[index].no) {
         setSelected(data[index])
       }
     })
