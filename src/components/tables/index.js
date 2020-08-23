@@ -1,1 +1,3 @@
-export { ImportExportTable } from './IETable'
+import ImportExportTable from './IETable'
+
+export { ImportExportTable }

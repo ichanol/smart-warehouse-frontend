@@ -1,12 +1,12 @@
 import React from 'react'
 
-import './buttonStyle.css'
+import Button from './buttonStyle'
 
 function CancelBtn() {
 
   return (
     <div className='btn'>
-      <button>Cancel</button>
+      <Button>Cancel</Button>
     </div>
   )
 }
@@ -15,7 +15,7 @@ function EditBtn() {
 
   return (
     <div className='btn'>
-      <button>Edit</button>
+      <Button>Edit</Button>
     </div>
   )
 }
@@ -24,7 +24,7 @@ function RetryBtn() {
 
   return (
     <div className='btn'>
-      <button>Retry</button>
+      <Button>Retry</Button>
     </div>
   )
 }
@@ -33,7 +33,7 @@ function SubmitBtn() {
 
   return (
     <div className='btn'>
-      <button>Submit</button>
+      <Button>Submit</Button>
     </div>
   )
 }

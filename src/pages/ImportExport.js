@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { EditBtn, RetryBtn, CancelBtn, SubmitBtn, ImportExportTable, Navbar, data } from '../components'
-
-import './ImportExport.css'
+import { Header, Head, BlockBtn } from './ImportExportStyle'
 
 function ImportExportProduct() {
 
@@ -18,20 +17,19 @@ function ImportExportProduct() {
   return (
     <div className='ie-container'>
       <Navbar />
-      <div className='ie-header'>
-        <label>Import - Export</label>
-      </div>
+      <Header>
+        <Head>Import - Export</Head>
+      </Header>
       <ImportExportTable
-        selected={selected}
         data={data}
         select={select}
       />
-      <div className='button-block'>
+      <BlockBtn>
         <EditBtn />
         <RetryBtn />
         <CancelBtn />
         <SubmitBtn />
-      </div>
+      </BlockBtn>
     </div>
   )
 }

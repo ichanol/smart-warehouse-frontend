@@ -1,21 +1,21 @@
 import React from 'react'
-import './navbar.css'
+import { Navigatebar, Logo, Lists, Link, List } from './navbarStyle'
 
 function Navbar() {
 
   return (
-    <div className='navbar'>
-      <div className='logo'>
+    <Navigatebar>
+      <Logo>
         <a><label>Smart Warehouse</label></a>
-      </div>
-      <ul>
-        <a href='#'><li>Import - Export</li></a>
-        <a href='#'><li>IPS Tracking</li></a>
-        <a href='#'><li>History</li></a>
-        <a href='#'><li>Inventory</li></a>
-      </ul>
-    </div>
+      </Logo>
+      <Lists>
+        <Link href='#'><List>Import - Export</List></Link>
+        <Link href='#'><List>IPS Tracking</List></Link>
+        <Link href='#'><List>History</List></Link>
+        <Link href='#'><List>Inventory</List></Link>
+      </Lists>
+    </Navigatebar>
   )
 }
 
-export { Navbar }
+export default Navbar

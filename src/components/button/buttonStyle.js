@@ -1,4 +1,6 @@
-.btn button {
+import styled from 'styled-components'
+
+const Button = styled.button`
   border: 1px solid white;
   margin: 20px;
   border-radius: 30px;
@@ -9,12 +11,14 @@
   cursor: pointer;
   font-weight: bold;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
 
-.btn:hover button{
-  background-color: lightpink;
-  transition: 0.3s;
-}
-.btn:active button {
-  background-color: lightcoral;
-}
+  &:hover { 
+    background-color: lightpink;
+    transition: 0.3s;
+  }
+  &:active {
+    background-color: lightcoral;
+  }
+`
+
+export default Button

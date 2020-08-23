@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Dots } from 'react-activity'
 import io from 'socket.io-client'
 import 'react-activity/dist/react-activity.css'
-import './login.css'
+import { Form, Header, Head, Input, Button } from './loginStyle.js'
 
 const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
 
@@ -92,19 +92,19 @@ function Login() {
     }
   }, [])
   return (
-    <div className='form'>
-      <div className='header'>
-        <label>LOG IN</label>
-      </div>
+    <Form>
+      <Header>
+        <Head>LOG IN</Head>
+      </Header>
       <form className='login-form' onSubmit={handleSubmit}>
-        <input
+        <Input
           id='username'
           placeholder='Username'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <input
+        <Input
           id='password'
           type='password'
           placeholder='Password'
@@ -112,11 +112,11 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type='submit'>Log in</button>
+        <Button type='submit'>Log in</Button>
       </form>
-      <button onClick={() => sendMOCKrequest()}>send MOCK req</button>
+      <Button onClick={() => sendMOCKrequest()}>send MOCK req</Button>
       {isLoading && <Dots />}
-    </div>
+    </Form>
   )
 }
 
