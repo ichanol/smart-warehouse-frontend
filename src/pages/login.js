@@ -4,16 +4,19 @@ import { Dots } from 'react-activity'
 import io from 'socket.io-client'
 import 'react-activity/dist/react-activity.css'
 import { Form, Header, Head, Input, Button } from './loginStyle.js'
+import { useHistory } from 'react-router-dom'
 
 const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
 
-function Login() {
+const Login = () => {
+  let history = useHistory()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [token, setToken] = useState({ accessToken: '', refreshToken: '' })
   const [isLoading, setIsloading] = useState(false)
+  const [isError, setIsError] = useState(false)
 
-  const handleSubmit = (e) => {
+  const submitLogIn = (e) => {
     e.preventDefault()
     const request = {
       username: username,
@@ -22,20 +25,22 @@ function Login() {
     axios
       .post(process.env.REACT_APP_LOGIN, request)
       .then((res) => {
-        // If login success, server will response with access token and refresh token
-        const { data } = res
-        setToken({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        })
-        setIsloading(true)
-        // Then user will join a specific room to real time communicate with server
-        // User has to waiting for server to send USER_GRANTED event
-        socket.emit('join_room', { room: username })
+        //  If login success, server will response with access token and refresh token
+        const { status, data } = res
+        if (status === 200) {
+          setToken({
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          })
+          setIsloading(true)
+          //  Then user will join a specific room to real time communicate with server
+          //  User has to waiting for server to send USER_GRANTED event
+          socket.emit('join_room', { room: username })
+        }
       })
-      .catch((err) => {
-        // If log in failed
-        // Do something here
+      .catch((error) => {
+        //  If login failed, server will response with status code 404
+        setIsError(true)
       })
   }
 
@@ -78,25 +83,27 @@ function Login() {
   }
 
   useEffect(() => {
-    // Add socket event listener to observe for USER_GRANTED event from server
-    // If server received a request from HARDWARE and the server process is success
-    // Server will fire USER_GRANTED event and send information to user
-    // If access's granted user will successfully login
-    // then navigate to another page
+    //  Add socket event listener to observe for USER_GRANTED event from server
+    //  If server received a request from HARDWARE and the server process is success
+    //  Server will fire USER_GRANTED event and send information to user
+    //  If access's granted user will successfully login
+    //  then navigate to another page
     socket.on('USER_GRANTED', ({ message, granted, room }) => {
       setIsloading(!granted)
+      history.push('/import-export')
     })
-    // Remove socket event listener when unmounted
+    //  Remove socket event listener when unmounted
     return () => {
       socket.off('USER_GRANTED')
     }
   }, [])
   return (
     <Form>
+      {isLoading && <Dots />}
       <Header>
         <Head>LOG IN</Head>
       </Header>
-      <form className='login-form' onSubmit={handleSubmit}>
+      <form className='login-form' onSubmit={submitLogIn}>
         <Input
           id='username'
           placeholder='Username'
@@ -114,8 +121,6 @@ function Login() {
         />
         <Button type='submit'>Log in</Button>
       </form>
-      <Button onClick={() => sendMOCKrequest()}>send MOCK req</Button>
-      {isLoading && <Dots />}
     </Form>
   )
 }
