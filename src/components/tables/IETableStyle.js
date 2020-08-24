@@ -37,6 +37,7 @@ const Row = styled.td`
   color: lightcoral;
   border-bottom: solid 2px rgba(240,128,128,0.1);
 `
+
 const Trow = styled.tr`
   &:hover {
     background-color: lightgray;
