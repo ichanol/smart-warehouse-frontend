@@ -20,7 +20,7 @@ display: flex;
 `
 
 const Lists = styled.ul`
-display: flex;
+  display: flex;
   flex: 0.5;
   flex-direction: row;
   justify-content: space-between;
@@ -28,17 +28,17 @@ display: flex;
 `
 
 const Link = styled.a`
-text-decoration: none;
+  text-decoration: none;
 
-&:hover {
-  border-bottom: 4px solid #FFF;
-  border-radius: 3px;
-}
+  &:hover {
+    border-bottom: 4px solid #FFF;
+    border-radius: 3px;
+  }
 `
 
 const List = styled.li`
-margin: 10px;
-  fo nt-size: 20px;
+  margin: 10px;
+  font-size: 20px;
   color: black;
 `
 

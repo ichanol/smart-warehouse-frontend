@@ -1,7 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import { Wrapper, Table, Top, Body, Head, Trow, Row } from './IETableStyle'
 
 const ImportExportTable = ({ data, select }) => {
+
+  ImportExportTable.defaultProps = {
+    data: {},
+    select: { select },
+  }
+
+  ImportExportTable.propTypes = {
+    data: PropTypes.object,
+    select: PropTypes.func,
+  }
 
   return (
     <Wrapper>

@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { EditBtn, RetryBtn, CancelBtn, SubmitBtn, ImportExportTable, Navbar, data } from '../components'
+import {
+  EditBtn,
+  RetryBtn,
+  CancelBtn,
+  SubmitBtn,
+  ImportExportTable,
+  Navbar,
+  data,
+} from '../components'
 import { Header, Head, BlockBtn } from './ImportExportStyle'
 
 function ImportExportProduct() {
