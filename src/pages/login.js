@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
 
 const Login = () => {
-  let history = useHistory()
+  const history = useHistory()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [token, setToken] = useState({ accessToken: '', refreshToken: '' })
