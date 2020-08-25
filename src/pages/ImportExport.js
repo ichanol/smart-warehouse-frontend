@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import io from 'socket.io-client'
+
 import {
   RetryBtn,
   CancelBtn,
   SubmitBtn,
   ImportExportTable,
   Navbar,
+  data,
+  Modal,
 } from '../components'
-import { Container, Header, Head, BlockTable, BlockBtn } from './ImportExportStyle'
+import { Container, Header, Head, BlockTable, BlockBtn, Content } from './ImportExportStyle'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
-function ImportExportProduct(props) {
+const ImportExportProduct = (props) => {
 
   const history = useHistory()
   const { handleSubmit } = useForm()
@@ -19,6 +23,11 @@ function ImportExportProduct(props) {
   const [action, setAction] = useState('')
   const responsable = 12345
   const referenceNumber = 555
+  const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const [selected, setSelected] = useState([])
+  const [productList, setProductList] = useState(null)
 
   // const callApi = async () => {
   //   const response = await fetch('http://192.168.56.1:8000/test')
@@ -57,12 +66,8 @@ function ImportExportProduct(props) {
     setAction('')
   }
 
-  useEffect(() => {
-    // callApi()
-    if (props.location.state) {
-      setData(props.location.state.data)
-    }
-  }, [])
+
+  
 
   const select = (value) => {
     data.find((v, index) => {
@@ -90,12 +95,38 @@ function ImportExportProduct(props) {
     setAction(e.target.value)
   }
 
+  useEffect(() => {
+    const { username } = props.location.state
+    console.log(username)
+    socket.emit('join_room', { room: username })
+
+    socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
+      setProductList(productData)
+      setIsLoading(!success)
+      console.log(productData)
+    })
+
+    return () => {
+      socket.off('PRODUCT_SCANNER')
+    }
+  }, [productList])
+
   return (
     <Container>
+      <Modal isShow={isLoading} dismissButton={false} />
+      <Modal
+        isShow={isError}
+        dismissModal
+        header='Error'
+        isIndicator={false}
+        detail='sdsd'
+      />
       <Navbar />
-      <Header>
-        <Head>Import -Export</Head>
-      </Header>
+      <Content blur={isLoading || isError}>
+        <Header>
+          <Head>Import - Export</Head>
+        </Header>
+
       <BlockTable>
         <ImportExportTable
           data={data}
@@ -123,8 +154,10 @@ function ImportExportProduct(props) {
           <option value='4'>Damaged</option>
         </select>
       </BlockBtn>
+      </Content>
     </Container>
-  )
+
+
 }
 
 export default ImportExportProduct

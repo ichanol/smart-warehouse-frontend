@@ -5,6 +5,7 @@ import { data } from './mockData'
 import { Filter } from './Filter'
 import { Datepicker } from './Datepicker'
 import { DropdownFilter } from './Dropdown'
+import { Modal } from './Modal'
 
 export {
   CancelBtn,
@@ -21,4 +22,5 @@ export {
   Filter,
   Datepicker,
   DropdownFilter,
+  Modal,
 }

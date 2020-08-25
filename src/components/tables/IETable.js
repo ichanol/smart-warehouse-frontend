@@ -21,7 +21,6 @@ import {
 } from './TableStyle'
 
 const ImportExportTable = ({ data, select }) => {
-
   return (
     <Wrapper>
       <Table cellSpacing='0'>
@@ -60,7 +59,7 @@ const ImportExportTable = ({ data, select }) => {
 
 ImportExportTable.defaultProps = {
   data: {},
-  select: () => { },
+  select: () => {},
 }
 
 ImportExportTable.propTypes = {

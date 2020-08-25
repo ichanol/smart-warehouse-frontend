@@ -8,19 +8,15 @@ const Container = styled.div`
 
 const Form = styled.div`
   display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 330px;
-  padding: 30px 30px 30px 30px;
+  padding: 30px;
   border-radius: 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  filter: blur(${(props) => props.blur ? 5 : 0}px);
 `
 
 const Header = styled.div`
-  margin: 20px;
   margin-bottom: 20px;
   font-size: 30px;
   text-align: center;
