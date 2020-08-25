@@ -6,12 +6,13 @@ const Navigatebar = styled.div`
   background-color: lightcoral;
   text-decoration: none;
   height: 80px;
+  width: 100%;
   border-radius: 0px 0px 30px 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `
 
 const Logo = styled.div`
-display: flex;
+  display: flex;
   align-items: center;
   padding-left: 40px;
   flex: 0.46;
@@ -31,7 +32,7 @@ const Link = styled.a`
   text-decoration: none;
 
   &:hover {
-    border-bottom: 4px solid #FFF;
+    border-bottom: 4px solid #fff;
     border-radius: 3px;
   }
 `

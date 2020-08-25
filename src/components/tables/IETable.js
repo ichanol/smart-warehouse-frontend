@@ -1,18 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  Wrapper,
-  Table,
-  Top,
-  Body,
-  Head,
-  Trow,
-  Row,
-} from './IETableStyle'
+import { Wrapper, Table, Top, Body, Head, Trow, Row } from './IETableStyle'
 
 const ImportExportTable = ({ data, select }) => {
-
   return (
     <Wrapper>
       <Table cellSpacing='0'>
@@ -27,13 +18,15 @@ const ImportExportTable = ({ data, select }) => {
         </Top>
         <Body>
           {data.map((a, index) => {
-            return <Trow key={index} onClick={() => select(a.no)}>
-              <Row>{a.no}</Row>
-              <Row>{a.productid}</Row>
-              <Row>{a.productname}</Row>
-              <Row>{a.amount}</Row>
-              <Row>{a.time}</Row>
-            </Trow>
+            return (
+              <Trow key={index} onClick={() => select(a.no)}>
+                <Row>{index + 1}</Row>
+                <Row>{a.productSerialNumber}</Row>
+                <Row>{a.productname}</Row>
+                <Row>{a.amount}</Row>
+                <Row>{a.time}</Row>
+              </Trow>
+            )
           })}
         </Body>
       </Table>
@@ -43,7 +36,7 @@ const ImportExportTable = ({ data, select }) => {
 
 ImportExportTable.defaultProps = {
   data: {},
-  select: () => { },
+  select: () => {},
 }
 
 ImportExportTable.propTypes = {

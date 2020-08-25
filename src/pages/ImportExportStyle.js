@@ -16,10 +16,30 @@ const BlockBtn = styled.div`
   display: flex;
   flex-direction: row;
   position: fixed;
-  top: 80%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 50px;
+  transform: translate(-50%, 0%);
   justify-content: space-around;
 `
 
-export { Header, Head, BlockBtn }
+const Container = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  background-color: red;
+`
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  height: calc(100vh - 80px);
+  filter: blur(${(props) => (props.blur ? 10 : 0)}px);
+`
+
+export { Header, Head, BlockBtn, Container, Content }

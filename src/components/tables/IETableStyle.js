@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  height: 500px;
-  width: 90%;
-  position: absolute;
-  left: 5%;
+  max-height: 500px;
+  width: 75%;
   overflow: auto;
 `
 

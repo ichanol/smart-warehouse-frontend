@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import io from 'socket.io-client'
+
 import {
   EditBtn,
   RetryBtn,
@@ -7,12 +9,16 @@ import {
   ImportExportTable,
   Navbar,
   data,
+  Modal,
 } from '../components'
-import { Header, Head, BlockBtn } from './ImportExportStyle'
+import { Header, Head, BlockBtn, Container, Content } from './ImportExportStyle'
 
-function ImportExportProduct() {
-
+const ImportExportProduct = (props) => {
+  const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
   const [selected, setSelected] = useState([])
+  const [productList, setProductList] = useState(null)
 
   const select = (value) => {
     data.find((v, index) => {
@@ -22,23 +28,50 @@ function ImportExportProduct() {
     })
   }
 
+  useEffect(() => {
+    const { username } = props.location.state
+    console.log(username)
+    socket.emit('join_room', { room: username })
+
+    socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
+      setProductList(productData)
+      setIsLoading(!success)
+      console.log(productData)
+    })
+
+    return () => {
+      socket.off('PRODUCT_SCANNER')
+    }
+  }, [productList])
+
   return (
-    <div className='ie-container'>
-      <Navbar />
-      <Header>
-        <Head>Import - Export</Head>
-      </Header>
-      <ImportExportTable
-        data={data}
-        select={select}
+    <Container>
+      <Modal isShow={isLoading} dismissButton={false} />
+      <Modal
+        isShow={isError}
+        dismissModal
+        header='Error'
+        isIndicator={false}
+        detail='sdsd'
       />
-      <BlockBtn>
-        <EditBtn />
-        <RetryBtn />
-        <CancelBtn />
-        <SubmitBtn />
-      </BlockBtn>
-    </div>
+      <Navbar />
+      <Content blur={isLoading || isError}>
+        <Header>
+          <Head>Import - Export</Head>
+        </Header>
+
+        {productList && (
+          <ImportExportTable data={productList} select={select} />
+        )}
+
+        <BlockBtn>
+          <EditBtn />
+          <RetryBtn />
+          <CancelBtn />
+          <SubmitBtn />
+        </BlockBtn>
+      </Content>
+    </Container>
   )
 }
 
