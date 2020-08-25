@@ -1,21 +1,6 @@
-.header {
-  margin: 20px;
-  margin-bottom: 20px;
-  font-size: 30px;
-  text-align: center;
-}
+import styled from 'styled-components'
 
-.header label {
-  font-weight: 900;
-  color: lightcoral
-}
-
-form label {
-  margin: 20px;
-  font-size: 18px;
-}
-
-.form {
+const Form = styled.div`
   display: block;
   position: absolute;
   top: 50%;
@@ -26,9 +11,21 @@ form label {
   padding: 30px 30px 45px 30px;
   border-radius: 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
+`
 
-form input {
+const Header = styled.div`
+  margin: 20px;
+  margin-bottom: 20px;
+  font-size: 30px;
+  text-align: center;
+`
+
+const Head = styled.div`
+  font-weight: 900;
+  color: lightcoral
+`
+
+const Input = styled.input`
   background-color: #f2f2f2;
   outline: 0;
   font-size: 16px;
@@ -38,11 +35,11 @@ form input {
   padding-left: 20px;
   border: 0;
   border-radius: 20px;
-}
+`
 
-.form button {
-  color: #FFFFFF;
+const Button = styled.button`
   background-color: lightcoral;
+  color: #FFFFFF;
   outline: 0;
   width: 100%;
   height: 50px;
@@ -52,9 +49,7 @@ form input {
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
-  align-content: cen;
-}
+  align-content: center;
+`
 
-div button {
-  margin-top: 20px;
-}
+export { Form, Header, Head, Input, Button }
