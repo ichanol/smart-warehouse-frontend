@@ -37,7 +37,6 @@ const Container = styled.div`
   align-items: center;
   padding: 0;
   margin: 0;
-  background-color: red;
 `
 
 const Content = styled.div`
