@@ -10,10 +10,10 @@ const ImportExportTable = ({ data, select }) => {
         <Top>
           <tr>
             <Head>No.</Head>
-            <Head>Product_ID</Head>
-            <Head>Product_Name</Head>
+            <Head>Serial Number</Head>
+            <Head>Name</Head>
+            <Head>Company</Head>
             <Head>Amount</Head>
-            <Head>Time</Head>
           </tr>
         </Top>
         <Body>
@@ -22,9 +22,9 @@ const ImportExportTable = ({ data, select }) => {
               <Trow key={index} onClick={() => select(a.no)}>
                 <Row>{index + 1}</Row>
                 <Row>{a.productSerialNumber}</Row>
-                <Row>{a.productname}</Row>
+                <Row>{a.product_name}</Row>
+                <Row>{a.company_name}</Row>
                 <Row>{a.amount}</Row>
-                <Row>{a.time}</Row>
               </Trow>
             )
           })}
