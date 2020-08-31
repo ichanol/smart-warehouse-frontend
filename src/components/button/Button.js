@@ -1,21 +1,30 @@
 import React from 'react'
-
-import Button from './buttonStyle'
+import {
+  CancelButton,
+  RetryButton,
+  EditButton,
+  SubmitButton,
+  ExportButton,
+} from './buttonStyle'
 
 function CancelBtn() {
 
   return (
     <div className='btn'>
-      <Button>Cancel</Button>
+      <CancelButton>Cancel</CancelButton>
     </div>
   )
 }
 
-function EditBtn() {
+function EditBtn({ selected, select, row }) {
 
   return (
     <div className='btn'>
-      <Button>Edit</Button>
+      <EditButton
+        onClick={() => {
+          select(row)
+        }}
+      >Edit</EditButton>
     </div>
   )
 }
@@ -24,7 +33,7 @@ function RetryBtn() {
 
   return (
     <div className='btn'>
-      <Button>Retry</Button>
+      <RetryButton>Retry</RetryButton>
     </div>
   )
 }
@@ -33,9 +42,18 @@ function SubmitBtn() {
 
   return (
     <div className='btn'>
-      <Button>Submit</Button>
+      <SubmitButton>Submit</SubmitButton>
     </div>
   )
 }
 
-export { CancelBtn, EditBtn, RetryBtn, SubmitBtn }
+function ExportBtn() {
+
+  return (
+    <div className='btn'>
+      <ExportButton>Export</ExportButton>
+    </div>
+  )
+}
+
+export { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn }

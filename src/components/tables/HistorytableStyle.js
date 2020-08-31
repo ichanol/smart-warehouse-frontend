@@ -1,11 +1,9 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
+  margin: 0px auto;
   height: 500px;
-  width: 90%;
-  position: absolute;
-  left: 5%;
-  overflow: auto;
+  width: 100%;
 `
 
 const Table = styled.table`
@@ -48,4 +46,5 @@ const Trow = styled.tr`
     background-color: lightgray;
   }
 `
-export { Wrapper, Table, Top, Body, Head, Trow, Row }
+
+export { Wrapper, Table, Top, Head, Body, Trow, Row }

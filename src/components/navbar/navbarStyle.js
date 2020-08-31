@@ -1,22 +1,28 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const Navigatebar = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: lightcoral;
+  background-color: #FFF;
   text-decoration: none;
   height: 80px;
   border-radius: 0px 0px 30px 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-`
+  `
 
-const Logo = styled.div`
-display: flex;
+const Head = styled.div`
+  display: flex;
   align-items: center;
   padding-left: 40px;
   flex: 0.46;
+`
+
+const Logo = styled(Link)`
   font-size: 30px;
   font-weight: 900;
+  color: #292A73;
+  text-decoration: none;
 `
 
 const Lists = styled.ul`
@@ -27,11 +33,12 @@ const Lists = styled.ul`
   list-style: none;
 `
 
-const Link = styled.a`
+const LinkStyled = styled(Link)`
   text-decoration: none;
+  color: inherit;
 
   &:hover {
-    border-bottom: 4px solid #FFF;
+    border-bottom: 4px solid #292A73;
     border-radius: 3px;
   }
 `
@@ -39,7 +46,11 @@ const Link = styled.a`
 const List = styled.li`
   margin: 10px;
   font-size: 20px;
-  color: black;
+  font-weight: bold;
+  color: #292A73;
+  text-decoration: none;
 `
 
-export { Navigatebar, Logo, Lists, Link, List }
+
+
+export { Navigatebar, Head, Logo, Lists, LinkStyled, List }

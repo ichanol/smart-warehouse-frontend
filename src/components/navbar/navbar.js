@@ -1,18 +1,19 @@
 import React from 'react'
-import { Navigatebar, Logo, Lists, Link, List } from './navbarStyle'
+import { Navigatebar, Head, Logo, Lists, LinkStyled, List } from './navbarStyle'
+import { Link } from 'react-router-dom'
 
 function Navbar() {
 
   return (
     <Navigatebar>
-      <Logo>
-        <a><label>Smart Warehouse</label></a>
-      </Logo>
+      <Head>
+        <Logo to='/menu' >Smart Warehouse</Logo>
+      </Head>
       <Lists>
-        <Link href='#'><List>Import - Export</List></Link>
-        <Link href='#'><List>IPS Tracking</List></Link>
-        <Link href='#'><List>History</List></Link>
-        <Link href='#'><List>Inventory</List></Link>
+        <List><LinkStyled to='/import-export'>Import - Export</LinkStyled></List>
+        <List><LinkStyled>IPS Tracking</LinkStyled></List>
+        <List><LinkStyled to='/history'>History</LinkStyled></List>
+        <List><LinkStyled to='/inventory'>Inventory</LinkStyled></List>
       </Lists>
     </Navigatebar>
   )

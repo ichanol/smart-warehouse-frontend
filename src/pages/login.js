@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Dots } from 'react-activity'
 import io from 'socket.io-client'
 import 'react-activity/dist/react-activity.css'
-import { Form, Header, Head, Input, Button } from './loginStyle.js'
+import { Container, Form, Header, Head, Input, Button } from './loginStyle.js'
 import { useHistory } from 'react-router-dom'
 
 const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
@@ -98,30 +98,32 @@ const Login = () => {
     }
   }, [])
   return (
-    <Form>
-      {isLoading && <Dots />}
-      <Header>
-        <Head>LOG IN</Head>
-      </Header>
-      <form className='login-form' onSubmit={submitLogIn}>
-        <Input
-          id='username'
-          placeholder='Username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <Input
-          id='password'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <Button type='submit'>Log in</Button>
-      </form>
-    </Form>
+    <Container>
+      <Form>
+        {isLoading && <Dots />}
+        <Header>
+          <Head>LOG IN</Head>
+        </Header>
+        <form className='login-form' onSubmit={submitLogIn}>
+          <Input
+            id='username'
+            placeholder='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Input
+            id='password'
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type='submit'>Log in</Button>
+        </form>
+      </Form>
+    </Container>
   )
 }
 

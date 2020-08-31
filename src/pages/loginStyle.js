@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 
+const Container = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #292A73;
+`
+
 const Form = styled.div`
   display: block;
   position: absolute;
@@ -22,7 +28,7 @@ const Header = styled.div`
 
 const Head = styled.div`
   font-weight: 900;
-  color: lightcoral
+  color: #292A73;
 `
 
 const Input = styled.input`
@@ -38,7 +44,7 @@ const Input = styled.input`
 `
 
 const Button = styled.button`
-  background-color: lightcoral;
+  background-color: #5CB85C;
   color: #FFFFFF;
   outline: 0;
   width: 100%;
@@ -52,4 +58,4 @@ const Button = styled.button`
   align-content: center;
 `
 
-export { Form, Header, Head, Input, Button }
+export { Container, Form, Header, Head, Input, Button }

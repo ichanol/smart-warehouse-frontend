@@ -1,30 +1,27 @@
 import React from 'react'
-import { EditBtn } from '../../components'
-import PropTypes from 'prop-types'
-
 import {
   Wrapper,
   Table,
   Top,
-  Body,
   Head,
+  Body,
   Trow,
   Row,
-} from './IETableStyle'
+} from './HistorytableStyle'
+import { data } from '../../components'
 
-const ImportExportTable = ({ selected, data, select }) => {
+function HistoryTable() {
 
   return (
     <Wrapper>
       <Table cellSpacing='0'>
         <Top>
           <tr>
-            <Head>No.</Head>
-            <Head>Product_ID</Head>
-            <Head>Product_Name</Head>
+            <Head>No</Head>
+            <Head>Product ID</Head>
+            <Head>Product Name</Head>
             <Head>Amount</Head>
             <Head>Time</Head>
-            <Head>Action</Head>
           </tr>
         </Top>
         <Body>
@@ -36,7 +33,6 @@ const ImportExportTable = ({ selected, data, select }) => {
                 <Row>{a.productname}</Row>
                 <Row>{a.amount}</Row>
                 <Row>{a.time}</Row>
-                <Row><EditBtn selected={selected} select={select} row={(a.no)} /></Row>
               </Trow>
             )
           })}
@@ -46,14 +42,4 @@ const ImportExportTable = ({ selected, data, select }) => {
   )
 }
 
-ImportExportTable.defaultProps = {
-  data: {},
-  select: () => { },
-}
-
-ImportExportTable.propTypes = {
-  data: PropTypes.object,
-  select: PropTypes.func,
-}
-
-export default ImportExportTable
+export default HistoryTable

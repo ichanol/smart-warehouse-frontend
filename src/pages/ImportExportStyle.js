@@ -10,6 +10,7 @@ const Header = styled.div`
 const Head = styled.label`
   font-size: 30px;
   font-weight: bold;
+  color: #FFF;
 `
 
 const BlockBtn = styled.div`
@@ -20,6 +21,7 @@ const BlockBtn = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   justify-content: space-around;
+  width: 100%;
 `
 
 export { Header, Head, BlockBtn }

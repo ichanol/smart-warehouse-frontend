@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  EditBtn,
   RetryBtn,
   CancelBtn,
   SubmitBtn,
@@ -9,36 +8,48 @@ import {
   data,
 } from '../components'
 import { Header, Head, BlockBtn } from './ImportExportStyle'
+import { useHistory } from 'react-router-dom'
 
 function ImportExportProduct() {
 
+  const history = useHistory()
   const [selected, setSelected] = useState([])
 
   const select = (value) => {
     data.find((v, index) => {
       if (value === data[index].no) {
         setSelected(data[index])
+        history.push({
+          pathname: '/edit-product',
+          state: {
+            selected: data[index],
+          },
+        })
       }
     })
   }
 
   return (
-    <div className='ie-container'>
+    <container>
       <Navbar />
       <Header>
         <Head>Import - Export</Head>
       </Header>
       <ImportExportTable
+        selected={selected}
         data={data}
         select={select}
       />
       <BlockBtn>
-        <EditBtn />
-        <RetryBtn />
-        <CancelBtn />
-        <SubmitBtn />
+        <div >
+          <RetryBtn />
+        </div>
+        <div style={{ display: "flex" }}>
+          <CancelBtn />
+          <SubmitBtn />
+        </div>
       </BlockBtn>
-    </div>
+    </container>
   )
 }
 
