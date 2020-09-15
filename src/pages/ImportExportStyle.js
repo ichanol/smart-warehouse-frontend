@@ -1,5 +1,10 @@
 import styled from 'styled-components'
 
+const Container = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+`
+
 const Header = styled.div`
   display: flex;
   align-items: center;
@@ -13,15 +18,16 @@ const Head = styled.label`
   color: #FFF;
 `
 
-const BlockBtn = styled.div`
+const BlockTable = styled.div`
+  padding: 20px;
+  height: 100%;
+`
+
+const BlockBtn = styled.form`
   display: flex;
   flex-direction: row;
-  position: fixed;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   justify-content: space-around;
   width: 100%;
 `
 
-export { Header, Head, BlockBtn }
+export { Container, Header, Head, BlockTable, BlockBtn }

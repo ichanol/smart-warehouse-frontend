@@ -24,7 +24,6 @@ const Content = styled.div`
 `
 
 const FilterBlock = styled.div`
-  margin-left: 20px;
   padding: 20px;
   flex: 0.2;
 `

@@ -1,37 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Wrapper,
   Table,
   Top,
-  Head,
+  No,
+  Id,
+  Name,
+  Amount,
+  Company,
+  Time,
+  Description,
   Body,
   Trow,
   Row,
-} from './HistorytableStyle'
-import { data } from '../../components'
+} from './TableStyle'
 
-function InventoryTable() {
+function InventoryTable({ data }) {
 
   return (
     <Wrapper>
       <Table cellSpacing='0'>
         <Top>
           <tr>
-            <Head>No</Head>
-            <Head>Product ID</Head>
-            <Head>Product Name</Head>
-            <Head>Amount</Head>
-            <Head>Description</Head>
+            <No>No</No>
+            <Id>Product ID</Id>
+            <Name>Product Name</Name>
+            <Amount>Balance</Amount>
+            <Description>Description</Description>
           </tr>
         </Top>
         <Body>
           {data.map((a, index) => {
             return (
               <Trow key={index}>
-                <Row>{a.no}</Row>
-                <Row>{a.productid}</Row>
-                <Row>{a.productname}</Row>
-                <Row>{a.amount}</Row>
+                <Row>{a.id}</Row>
+                <Row>{a.product_id}</Row>
+                <Row>{a.product_name}</Row>
+                <Row>{a.balance}</Row>
                 <Row>{a.time}</Row>
               </Trow>
             )

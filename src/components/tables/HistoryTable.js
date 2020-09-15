@@ -3,34 +3,37 @@ import {
   Wrapper,
   Table,
   Top,
-  Head,
+  No,
+  Id,
+  Name,
+  Amount,
+  Time,
   Body,
   Trow,
   Row,
-} from './HistorytableStyle'
-import { data } from '../../components'
+} from './TableStyle'
 
-function HistoryTable() {
+function HistoryTable({ data }) {
 
   return (
     <Wrapper>
       <Table cellSpacing='0'>
         <Top>
           <tr>
-            <Head>No</Head>
-            <Head>Product ID</Head>
-            <Head>Product Name</Head>
-            <Head>Amount</Head>
-            <Head>Time</Head>
+            <No>No</No>
+            <Id>Product ID</Id>
+            <Name>Product Name</Name>
+            <Amount>Amount</Amount>
+            <Time>Time</Time>
           </tr>
         </Top>
         <Body>
           {data.map((a, index) => {
             return (
               <Trow key={index}>
-                <Row>{a.no}</Row>
-                <Row>{a.productid}</Row>
-                <Row>{a.productname}</Row>
+                <Row>{a.id}</Row>
+                <Row>{a.product_id}</Row>
+                <Row>{a.product_name}</Row>
                 <Row>{a.amount}</Row>
                 <Row>{a.time}</Row>
               </Trow>

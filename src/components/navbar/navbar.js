@@ -1,6 +1,5 @@
 import React from 'react'
 import { Navigatebar, Head, Logo, Lists, LinkStyled, List } from './navbarStyle'
-import { Link } from 'react-router-dom'
 
 function Navbar() {
 

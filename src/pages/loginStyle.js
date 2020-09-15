@@ -14,7 +14,7 @@ const Form = styled.div`
   transform: translate(-50%, -50%);
   background-color: #FFFFFF;
   width: 330px;
-  padding: 30px 30px 45px 30px;
+  padding: 30px 30px 30px 30px;
   border-radius: 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `
@@ -36,26 +36,38 @@ const Input = styled.input`
   outline: 0;
   font-size: 16px;
   width: 90%;
-  margin-bottom: 15px;
   padding: 10px;
   padding-left: 20px;
   border: 0;
   border-radius: 20px;
 `
 
+const Error = styled.div`
+  margin-bottom: 10px; 
+  padding-left: 20px;
+  height: 20px; 
+  color: red;
+`
+
 const Button = styled.button`
-  background-color: #5CB85C;
   color: #FFFFFF;
-  outline: 0;
+  background-color: #5CB85C;
   width: 100%;
   height: 50px;
   border: 0;
-  padding: 18px;
+  outline: 0;
   border-radius: 30px;
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
-  align-content: center;
+
+  &:hover { 
+      background-color: #2EA22E;
+      transition: 0.3s;
+    }
+    &:active {
+      background-color: #5CB85C;
+    }
 `
 
-export { Container, Form, Header, Head, Input, Button }
+export { Container, Form, Header, Head, Input, Error, Button }

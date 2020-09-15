@@ -1,5 +1,5 @@
 import React from 'react'
-import { EditBtn } from '../../components'
+import { EditBtn, DeleteBtn } from '../../components'
 import PropTypes from 'prop-types'
 
 import {
@@ -7,24 +7,34 @@ import {
   Table,
   Top,
   Body,
-  Head,
+  No,
+  Id,
+  Name,
+  Amount,
+  Company,
+  Time,
+  Description,
+  Actions,
   Trow,
   Row,
-} from './IETableStyle'
+  Action,
+} from './TableStyle'
 
-const ImportExportTable = ({ selected, data, select }) => {
+const ImportExportTable = ({ data, select }) => {
 
   return (
     <Wrapper>
       <Table cellSpacing='0'>
         <Top>
           <tr>
-            <Head>No.</Head>
-            <Head>Product_ID</Head>
-            <Head>Product_Name</Head>
-            <Head>Amount</Head>
-            <Head>Time</Head>
-            <Head>Action</Head>
+            <No>No.</No>
+            <Id>Product_ID</Id>
+            <Name>Product_Name</Name>
+            <Amount>Amount</Amount>
+            <Company>Company</Company>
+            <Time>Time</Time>
+            <Description>Description</Description>
+            <Actions>Action</Actions>
           </tr>
         </Top>
         <Body>
@@ -35,8 +45,10 @@ const ImportExportTable = ({ selected, data, select }) => {
                 <Row>{a.productid}</Row>
                 <Row>{a.productname}</Row>
                 <Row>{a.amount}</Row>
+                <Row>{a.company}</Row>
                 <Row>{a.time}</Row>
-                <Row><EditBtn selected={selected} select={select} row={(a.no)} /></Row>
+                <Row>{a.description}</Row>
+                <Row><Action><EditBtn select={select} row={(a.no)} /><DeleteBtn /></Action></Row>
               </Trow>
             )
           })}

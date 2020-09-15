@@ -5,18 +5,19 @@ import {
   EditButton,
   SubmitButton,
   ExportButton,
+  DeleteButton,
 } from './buttonStyle'
 
 function CancelBtn() {
 
   return (
     <div className='btn'>
-      <CancelButton>Cancel</CancelButton>
+      <CancelButton type='button'>Cancel</CancelButton>
     </div>
   )
 }
 
-function EditBtn({ selected, select, row }) {
+function EditBtn({ select, row }) {
 
   return (
     <div className='btn'>
@@ -29,11 +30,16 @@ function EditBtn({ selected, select, row }) {
   )
 }
 
-function RetryBtn() {
+function RetryBtn({ retry }) {
 
   return (
     <div className='btn'>
-      <RetryButton>Retry</RetryButton>
+      <RetryButton
+        type='button'
+        onClick={() => {
+          retry()
+        }}>
+        Retry</RetryButton>
     </div>
   )
 }
@@ -42,7 +48,9 @@ function SubmitBtn() {
 
   return (
     <div className='btn'>
-      <SubmitButton>Submit</SubmitButton>
+      <SubmitButton
+        type='submit'
+      >Submit</SubmitButton>
     </div>
   )
 }
@@ -56,4 +64,15 @@ function ExportBtn() {
   )
 }
 
-export { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn }
+function DeleteBtn() {
+
+
+
+  return (
+    <div className='btn'>
+      <DeleteButton>Delete</DeleteButton>
+    </div>
+  )
+}
+
+export { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn }

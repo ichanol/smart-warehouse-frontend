@@ -3,8 +3,9 @@ import axios from 'axios'
 import { Dots } from 'react-activity'
 import io from 'socket.io-client'
 import 'react-activity/dist/react-activity.css'
-import { Container, Form, Header, Head, Input, Button } from './loginStyle.js'
+import { Container, Form, Header, Head, Input, Error, Button } from './loginStyle.js'
 import { useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
 const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
 
@@ -15,9 +16,9 @@ const Login = () => {
   const [token, setToken] = useState({ accessToken: '', refreshToken: '' })
   const [isLoading, setIsloading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const { register, handleSubmit, errors, watch } = useForm()
 
   const submitLogIn = (e) => {
-    e.preventDefault()
     const request = {
       username: username,
       password: password,
@@ -42,6 +43,7 @@ const Login = () => {
         //  If login failed, server will response with status code 404
         setIsError(true)
       })
+    return false
   }
 
   const requestNewToken = () => {
@@ -97,6 +99,7 @@ const Login = () => {
       socket.off('USER_GRANTED')
     }
   }, [])
+
   return (
     <Container>
       <Form>
@@ -104,22 +107,38 @@ const Login = () => {
         <Header>
           <Head>LOG IN</Head>
         </Header>
-        <form className='login-form' onSubmit={submitLogIn}>
+        <form className='login-form' onSubmit={handleSubmit(submitLogIn)}>
           <Input
             id='username'
+            name='username'
+            ref={register({
+              required: true,
+              maxLength: 15,
+            })}
             placeholder='Username'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
+          <Error>
+            {errors.username?.type === 'required' && 'Username is require'}
+            {errors.username?.type === 'maxLength' && 'Max'}
+          </Error>
           <Input
             id='password'
+            name='password'
+            ref={register({
+              required: true,
+              maxLength: 15,
+            })}
             type='password'
             placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          <Error>
+            {errors.password?.type === 'required' && 'Password is require'}
+            {errors.password?.type === 'maxLength' && 'Max'}
+          </Error>
           <Button type='submit'>Log in</Button>
         </form>
       </Form>

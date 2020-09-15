@@ -1,4 +1,4 @@
-import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn } from './Button'
+import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn } from './Button'
 
 export {
   CancelBtn,
@@ -6,4 +6,5 @@ export {
   RetryBtn,
   SubmitBtn,
   ExportBtn,
+  DeleteBtn,
 }

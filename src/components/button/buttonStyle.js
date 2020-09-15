@@ -116,4 +116,22 @@ const ExportButton = styled.button`
     }
 `
 
-export { CancelButton, RetryButton, EditButton, SubmitButton, ExportButton }
+const DeleteButton = styled.button`
+    text-decoration: none;
+    background-color: #d9534f;
+    font-size: 14px;
+    padding: 5px 15px;
+    border: 0;
+    border-radius: 30px;
+    outline: 0;
+
+    &:hover {
+      background-color: #bc4543;
+      transition: 0.3s;
+    }
+    &:active {
+      background: #d9534f;
+    }
+`
+
+export { CancelButton, RetryButton, EditButton, SubmitButton, ExportButton, DeleteButton }

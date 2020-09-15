@@ -1,8 +1,43 @@
-import React from 'react'
-import { Wrapper, Header, Head, DateBlock, DateStart, DateEnd, FilterBlock, Form, Dropdown, Choice, ButtonBlock } from './FilterStyle'
-import { SubmitBtn } from '../../components'
+import React, { useState } from 'react'
+import {
+  Wrapper,
+  Header,
+  Head,
+  DateBlock,
+  FilterBlock,
+  Form,
+  Input,
+  Block,
+} from './FilterStyle'
+import { Datepicker, DropdownFilter, SubmitBtn } from '../../components'
 
-function Filter() {
+function Filter({ start, end, setStart, setEnd, submitFilter }) {
+  const [filterSelected, setFilterSelected] = useState('')
+  const [keyword, setKeyword] = useState('')
+
+  // const month = [
+  //   'January',
+  //   'February',
+  //   'March',
+  //   'April',
+  //   'May',
+  //   'June',
+  //   'July',
+  //   'August',
+  //   'September',
+  //   'October',
+  //   'November',
+  //   'December',
+  // ]
+
+  const search = (e) => {
+    setKeyword(e.target.value)
+    console.log(keyword)
+  }
+
+  const dropdownFilter = (e) => {
+    setFilterSelected(e.target.value)
+  }
 
   return (
     <Wrapper>
@@ -10,25 +45,26 @@ function Filter() {
         <Head>Select Date</Head>
       </Header>
       <DateBlock>
-        <DateStart type='date' />
-        <DateEnd type='date' />
+        <Datepicker start={start} end={end} setStart={setStart} setEnd={setEnd} />
       </DateBlock>
       <FilterBlock>
         <Header>
           <Head>Filter</Head>
         </Header>
-        <Form>
-          <Dropdown>
-            <Choice value='id' selected>Product ID</Choice>
-            <Choice value='name'>Product Name</Choice>
-            <Choice value='amount'>Amount</Choice>
-            <Choice value='time'>Time</Choice>
-          </Dropdown>
+        <Form onSubmit={submitFilter}>
+          <Block>
+            <DropdownFilter filterSelected={filterSelected} dropdownFilter={dropdownFilter} />
+            <Input
+              onChange={search}
+            />
+          </Block>
+          <Block>
+            <SubmitBtn />
+          </Block>
         </Form>
+
+
       </FilterBlock>
-      <ButtonBlock>
-        <SubmitBtn />
-      </ButtonBlock>
     </Wrapper>
   )
 }
