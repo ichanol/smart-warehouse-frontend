@@ -16,28 +16,34 @@ import {
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
-
-function EditProduct(props) {
-  const selected = props.location.state
-
+const EditProduct = (props) => {
   const history = useHistory()
+  const { productData, username } = props.location.state
+  const [selectedProductInfo, setSelectedProductInfo] = useState(
+    props.location.state.selectedProduct,
+  )
   const { register, handleSubmit } = useForm()
 
-  const [no] = useState(selected.value.no)
-  const [id, setId] = useState(selected.value.productid)
-  const [name, setName] = useState(selected.value.productname)
-  const [amount, setAmount] = useState(selected.value.amount)
-  const [company, setCompany] = useState(selected.value.company)
-  const [description, setDescription] = useState('')
+  const textInputHandler = (value, field) => {
+    const temp = { ...selectedProductInfo }
+    temp[field] = value
+    setSelectedProductInfo(temp)
+  }
 
+  const cancleEditProduct = () => {
+    history.push({
+      pathname: '/import-export',
+      state: {
+        data: productData,
+      },
+    })
+  }
 
-
-  const Edit = () => {
-    const temp = selected.data
-    console.log('clone:', temp)
-    const x = temp.map((value) => {
-      if (value.no === no) {
-        return { no: no, productid: id, productname: name, amount: amount, description: description }
+  const saveChanges = () => {
+    const accumulator = [...productData]
+    const newProductData = accumulator.map((value, key) => {
+      if (value.id === selectedProductInfo.id) {
+        return selectedProductInfo
       } else {
         return value
       }
@@ -45,7 +51,8 @@ function EditProduct(props) {
     history.push({
       pathname: '/import-export',
       state: {
-        data: x,
+        data: newProductData,
+        username,
       },
     })
   }
@@ -53,7 +60,7 @@ function EditProduct(props) {
   return (
     <Container>
       <Navbar />
-      <Form onSubmit={handleSubmit(Edit)}>
+      <Form onSubmit={handleSubmit(saveChanges)}>
         <Header>
           <Head>Edit Product</Head>
         </Header>
@@ -61,22 +68,28 @@ function EditProduct(props) {
           <TopicBlock>
             <Topic>Product ID</Topic>
             <Topic>Product Name</Topic>
-            <Topic>Amount</Topic>
             <Topic>Company Name</Topic>
+            <Topic>Amount</Topic>
             <Topic>Discription</Topic>
           </TopicBlock>
           <InputBlock>
             <Input
               name='id'
               ref={register}
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={selectedProductInfo.product_serial_number}
+              disabled
             />
             <Input
               name='name'
               ref={register}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={selectedProductInfo.product_name}
+              disabled
+            />
+            <Input
+              name='company'
+              ref={register}
+              value={selectedProductInfo.company_name}
+              disabled
             />
             <Input
               name='amount'
@@ -84,29 +97,23 @@ function EditProduct(props) {
                 min: 1,
                 max: 9999,
               })}
-              value={amount}
+              value={selectedProductInfo.amount}
               type='number'
-              onChange={(e) => setAmount(e.target.value)}
-            />
-            <Input
-              name='company'
-              ref={register}
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
+              onChange={(e) => textInputHandler(e.target.value, 'amount')}
             />
             <Textarea
               name='discription'
               ref={register}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => textInputHandler(e.target.value, 'detail')}
             />
           </InputBlock>
         </Content>
         <BlockBtn>
-          <CancelBtn />
-          <SubmitBtn />
+          <CancelBtn action={cancleEditProduct} />
+          <SubmitBtn action={() => {}} />
         </BlockBtn>
       </Form>
-    </Container >
+    </Container>
   )
 }
 

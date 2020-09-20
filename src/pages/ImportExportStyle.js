@@ -48,4 +48,4 @@ const Content = styled.div`
   filter: blur(${(props) => props.blur ? 10 : 0}px);
 `
 
-export { Header, Head, BlockBtn, Container, Content }
+export { Header, Head, BlockBtn, Container, Content, BlockTable }

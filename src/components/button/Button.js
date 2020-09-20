@@ -8,30 +8,25 @@ import {
   DeleteButton,
 } from './buttonStyle'
 
-function CancelBtn() {
-
+function CancelBtn({ action }) {
   return (
     <div className='btn'>
-      <CancelButton type='button'>Cancel</CancelButton>
+      <CancelButton type='button' onClick={() => action()}>
+        Cancel
+      </CancelButton>
     </div>
   )
 }
 
-function EditBtn({ select, row }) {
-
+function EditBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <EditButton
-        onClick={() => {
-          select(row)
-        }}
-      >Edit</EditButton>
+      <EditButton onClick={() => action(rowID)}>Edit</EditButton>
     </div>
   )
 }
 
 function RetryBtn({ retry }) {
-
   return (
     <div className='btn'>
       <RetryButton
@@ -39,24 +34,23 @@ function RetryBtn({ retry }) {
         onClick={() => {
           retry()
         }}>
-        Retry</RetryButton>
+        Retry
+      </RetryButton>
     </div>
   )
 }
 
-function SubmitBtn() {
-
+function SubmitBtn({ action }) {
   return (
     <div className='btn'>
-      <SubmitButton
-        type='submit'
-      >Submit</SubmitButton>
+      <SubmitButton type='submit' onClick={(event) => action(event)}>
+        Submit
+      </SubmitButton>
     </div>
   )
 }
 
 function ExportBtn() {
-
   return (
     <div className='btn'>
       <ExportButton>Export</ExportButton>
@@ -64,13 +58,10 @@ function ExportBtn() {
   )
 }
 
-function DeleteBtn() {
-
-
-
+function DeleteBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <DeleteButton>Delete</DeleteButton>
+      <DeleteButton onClick={() => action(rowID)}>Delete</DeleteButton>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import ImportExportTable from './IETable'
+import ImportExportTable from './ImportExportTable'
 import Historytable from './HistoryTable'
 import InventoryTable from './InventoryTable'
 

@@ -2,19 +2,19 @@ import styled, { keyframes } from 'styled-components'
 
 const fadeIn = keyframes`
     from {
-      background-color: rgba(255,255,255,0);
+      background-color: rgba(0,0,0,0);
     }
     to {
-      background-color: rgba(255,255,255,0.5);
+      background-color: rgba(0,0,0,0.5);
     }
 `
 
 const fadeOut = keyframes`
     from {
-      background-color: rgba(255,255,255,0.5);
+      background-color: rgba(0,0,0,0.5);
     }
     to {
-      background-color: rgba(255,255,255,0);
+      background-color: rgba(0,0,0,0);
     }
 `
 
@@ -50,29 +50,30 @@ export const Container = styled.div`
   overflow: hidden;
   z-index: 1;
 
-  background-color: rgba(255, 255, 255, 0.5);
-  visibility: ${(props) => props.isShow ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isShow ? fadeIn : fadeOut} 0.25s linear;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: ${(props) => (props.isShow ? 'visible' : 'hidden')};
+  animation: ${(props) => (props.isShow ? fadeIn : fadeOut)} 0.25s linear;
   transition: visibility 0.25s linear;
 `
 
 export const ModalBox = styled.div`
-  width: ${(props) => props.isIndicator ? 100 : 450}px;
-  ${(props) => props.isIndicator ? 'height: 100px;' : null}
+  width: ${(props) => (props.isIndicator ? 100 : 450)}px;
+  ${(props) => (props.isIndicator ? 'height: 100px;' : null)}
   display: flex;
   flex-direction: column;
   background-color: white;
   border-radius: 18px;
   padding: 25px;
-  padding-top: ${(props) => props.paddingTop ? 50 : 25}px;
+  padding-top: ${(props) => (props.paddingTop ? 50 : 25)}px;
   position: relative;
   box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
     0 -10px 15px 0 rgba(255, 255, 255, 0.35);
 
-  visibility: ${(props) => props.isShow ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isShow ? slideIn : slideOut} 0.25s linear;
+  visibility: ${(props) => (props.isShow ? 'visible' : 'hidden')};
+  animation: ${(props) => (props.isShow ? slideIn : slideOut)} 0.25s linear;
   transition: visibility 0.25s linear;
 `
+
 export const Header = styled.div`
   width: 100%;
   justify-content: center;

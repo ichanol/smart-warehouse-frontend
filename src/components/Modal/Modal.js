@@ -12,7 +12,7 @@ const Modal = (props) => {
         paddingTop={props.dismissButton}
         isIndicator={props.isIndicator}>
         {props.dismissButton && (
-          <Button type='button' onClick={props.dismissModal}>
+          <Button type='button' onClick={() => props.dismissModal()}>
             <span>X</span>
           </Button>
         )}
