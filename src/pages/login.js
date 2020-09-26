@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import io from 'socket.io-client'
+import { useRecoilCallback, useRecoilValue } from 'recoil'
+import { useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import 'react-activity/dist/react-activity.css'
 import {
   Container,
@@ -11,11 +13,9 @@ import {
   Error,
   Button,
 } from './loginStyle.js'
-import { useHistory } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
 
 import Modal from '../components/Modal/Modal'
-import checkLogin from '../middleware/CheckLogin'
+import atomState from '../Atoms/Atoms'
 
 const Login = () => {
   const history = useHistory()
@@ -29,46 +29,30 @@ const Login = () => {
   })
   const { register, handleSubmit, errors } = useForm()
 
-  const submitLogIn = async (e) => {
+  const userState = useRecoilValue(atomState.userState)
+
+  const submitLogIn = useRecoilCallback(({ set }) => async () => {
     try {
       const request = {
         username: username,
         password: password,
       }
 
-      //  If user's login is successfully, server will response with access token and refresh token
+
       const response = await axios.post(process.env.REACT_APP_LOGIN, request)
       const { data } = response
 
-      const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
-
-      setIsloading(true)
-
-      localStorage.setItem('accessToken', data.accessToken)
-      localStorage.setItem('refreshToken', data.refreshToken)
-
-      //  Then user will join a specific room to real time communicate with server
-      //  User has to waiting for server to send USER_GRANTED event
-      socket.emit('join_room', { room: username })
-
-      //  Add socket event listener to observe for USER_GRANTED event from server
-      //  If server has received a request from HARDWARE and the process is succe
-      //  Server will fire USER_GRANTED event and send information to user
-      //  If access's granted user will successfully login
-      //  then navigate to another page
-      socket.on('USER_GRANTED', ({ message, granted, room }) => {
-        //  Remove socket event listener
-        socket.off('USER_GRANTED')
-
-        setIsloading(!granted)
-
-        //  Navigate to other page
-        history.push('/menu')
+      set(atomState.userState, (oldState) => {
+        const newUserState = { ...oldState }
+        newUserState.username = username
+        newUserState.accessToken = data.accessToken
+        newUserState.refreshToken = data.refreshToken
+        newUserState.isLogin = data.success
+        return newUserState
       })
+
+      history.push('/menu')
     } catch (error) {
-      //  If login failed, server will response with status code 404
-      //  And if server's down, error will occur
-      //  Show the error modal with error message
       if (error.message === 'Request failed with status code 404') {
         setErrorMsg({
           header: 'Login failed',
@@ -80,20 +64,16 @@ const Login = () => {
           message: "Can't connect to the server",
         })
       }
-      setIsError(true)
       setIsloading(false)
+      setIsError(true)
     }
-  }
+  })
 
   useEffect(() => {
-    (async () => {
-      const credential = await checkLogin()
-      if (credential) {
-        history.push('/menu')
-      } else {
-        localStorage.clear()
-      }
-    })()
+    if (userState.isLogin) {
+      history.push('/menu')
+    } else {
+    }
   }, [])
 
   const dismissError = () => setIsError(false)

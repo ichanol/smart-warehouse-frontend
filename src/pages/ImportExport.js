@@ -3,6 +3,8 @@ import axios from 'axios'
 import io from 'socket.io-client'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useResetRecoilState, useRecoilState } from 'recoil'
+import atomState from '../Atoms/Atoms'
 
 import {
   RetryBtn,
@@ -20,19 +22,28 @@ import {
   BlockBtn,
   Content,
 } from './ImportExportStyle'
-import checkLogin from '../middleware/CheckLogin'
 
-const ImportExportProduct = (props) => {
-  const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+const ImportExportProduct = () => {
   const { handleSubmit } = useForm()
   const history = useHistory()
-  const [username, setUsername] = useState('')
-  const [isLoading, setIsLoading] = useState(
-    props.location.state ? false : true,
+  const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+  const [readProductListState, setReadProductListState] = useRecoilState(
+    atomState.readProductListState,
+  )
+  const [userState, setUserState] = useRecoilState(atomState.userState)
+  const resetReadProductListDefaultValue = useResetRecoilState(
+    atomState.readProductListState,
+  )
+
+  const [isWaitForProduct, setIsWaitForProduct] = useState(
+    readProductListState.length ? false : true,
+  )
+  const [isWaitForUser, setIsWaitForUser] = useState(
+    !userState.isUserCardVerify,
   )
   const [isError, setIsError] = useState(false)
+
   const [action, setAction] = useState('')
-  const [productList, setProductList] = useState(null)
 
   const dropdownSelect = (e) => {
     setAction(e.target.value)
@@ -41,22 +52,23 @@ const ImportExportProduct = (props) => {
   const submit = async () => {
     try {
       const body = {
-        referenceNumber: 788,
+        referenceNumber: Math.random() * 1000,
         actionType: 1,
-        username: username,
-        productList: productList,
+        username: userState.username,
+        productList: readProductListState,
       }
       const response = await axios.post(
         process.env.REACT_APP_CREATE_TRANSACTION,
         body,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${userState.accessToken}`,
           },
         },
       )
       const { success } = response.data
       if (success) {
+        resetReadProductListDefaultValue()
         console.log(success)
       }
     } catch (error) {
@@ -65,14 +77,14 @@ const ImportExportProduct = (props) => {
   }
 
   const editSelectedList = (selectedKey) => {
-    productList.find((value, key) => {
+    readProductListState.find((value, key) => {
       if (selectedKey === key) {
         history.push({
           pathname: '/edit-product',
           state: {
             selectedProduct: value,
-            productData: productList,
-            username,
+            productData: readProductListState,
+            username: userState.username,
           },
         })
       }
@@ -80,21 +92,41 @@ const ImportExportProduct = (props) => {
   }
 
   const deleteSelectedList = (selectedKey) => {
-    const accumulator = [...productList]
+    const accumulator = [...readProductListState]
     const updatedProductList = accumulator.filter(
       (value, key) => key !== selectedKey,
-    )
-    setProductList(updatedProductList)
+    ) /**UPDATE */
+    setReadProductListState(updatedProductList)
   }
 
   const dismissError = () => setIsError(false)
 
   useEffect(() => {
-    if (props.location.state) {
+    if (readProductListState.length === 0) {
+      socket.emit('join_room', { room: userState.username })
+
+      socket.on('USER_GRANTED', ({ message, granted, room }) => {
+        socket.off('USER_GRANTED')
+        setUserState((oldState) => {
+          const newUserState = { ...oldState }
+          newUserState.isUserCardVerify = true
+          console.log('IE  page:', newUserState)
+          return newUserState
+        })
+        setIsWaitForUser(!granted)
+        socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
+          setIsWaitForProduct(!success)
+          setReadProductListState(productData)
+        })
+      })
+    } else {
+      setIsWaitForUser(false)
+    }
+    /* if (props.location.state) {
       setProductList(props.location.state.data)
       setUsername(props.location.state.username)
     } else {
-      ;(async () => {
+      (async () => {
         const credential = await checkLogin()
         if (credential) {
           setUsername(credential.username)
@@ -109,7 +141,7 @@ const ImportExportProduct = (props) => {
           localStorage.clear()
         }
       })()
-    }
+    } */
     return () => {
       socket.off('PRODUCT_SCANNER')
     }
@@ -126,7 +158,8 @@ const ImportExportProduct = (props) => {
   //add toast
   return (
     <Container>
-      <Modal isShow={isLoading} dismissButton={false} />
+      <Modal isShow={isWaitForProduct} dismissButton={false} />
+      <Modal isShow={isWaitForUser} dismissButton={false} />
       <Modal
         isShow={isError}
         dismissModal={dismissError}
@@ -135,15 +168,15 @@ const ImportExportProduct = (props) => {
         detail='sdsd'
       />
       <Navbar />
-      <Content blur={isLoading || isError}>
+      <Content blur={isWaitForProduct || isError || isWaitForUser}>
         <Header>
           <Head>Import - Export</Head>
         </Header>
 
         <BlockTable>
-          {productList && (
+          {readProductListState && (
             <ImportExportTable
-              data={productList}
+              data={readProductListState}
               editFN={editSelectedList}
               deleteFN={deleteSelectedList}
             />
