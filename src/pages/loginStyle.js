@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
-  width: 100vw;
-  min-height: 100vh;
+  flex: 1;
   background-color: #292a73;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
 `
 
 const Form = styled.div`

@@ -1,10 +1,37 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil'
-import './App.css'
-import { Login, Menu, ImportExportProduct, EditProduct } from './pages'
 import atomState from './Atoms/Atoms'
 import PrivateRoute from './components/Routes/PrivateRoute'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  useHistory,
+} from 'react-router-dom'
+import './App.css'
+import {
+  Login,
+  Menu,
+  /* , ImportExportProduct */
+  EditProduct,
+  NewMenu,
+} from './pages'
+
+import {
+  ImportExportProduct,
+  Map,
+  Overview,
+  ProductList,
+  ProductManagement,
+  RoleManagement,
+  Transaction,
+  UserManagement,
+  NotFound,
+  ProfileSettings,
+} from './components/newPages'
+
+import NavBar from './components/newComponents/NavBar'
 
 const App = () => {
   const PersistenceObserver = () => {
@@ -41,18 +68,54 @@ const App = () => {
     }
   }
 
+  const RedirectNotFound = () => {
+    return <Redirect to='/not-found' />
+  }
+
+  const DefaultRoutes = () => {
+    const history = useHistory()
+    return (
+      <div className='wrapper'>
+        <NavBar />
+        <div className='content'>
+          <div className='top-panel'>
+            <div className='profile' onClick={() => history.push('/settings')}>
+              <div className='thumbnail' />
+              <span>USERNAME</span>
+            </div>
+          </div>
+          <Switch>
+            <PrivateRoute path='/menu' component={Menu} />
+            <PrivateRoute path='/edit-product' component={EditProduct} />
+            <PrivateRoute path='/import-export' component={ImportExportProduct} />
+            <PrivateRoute path='/map' component={Map} />
+            <PrivateRoute path='/overview' component={Overview} />
+            <PrivateRoute path='/product-list' component={ProductList} />
+            <PrivateRoute path='/product-management' component={ProductManagement} />
+            <PrivateRoute path='/role-management' component={RoleManagement} />
+            <PrivateRoute path='/transaction' component={Transaction} />
+            <PrivateRoute path='/user-management' component={UserManagement} />
+            <PrivateRoute path='/settings' component={ProfileSettings} />
+            <Route component={RedirectNotFound} />
+          </Switch>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <RecoilRoot initializeState={initializeState}>
-      <PersistenceObserver />
-      <Router>
-        <Switch>
-          <Route path='/' exact component={Login} />
-          <PrivateRoute path='/menu' component={Menu} />
-          <PrivateRoute path='/import-export' component={ImportExportProduct} />
-          <PrivateRoute path='/edit-product' component={EditProduct} />
-        </Switch>
-      </Router>
-    </RecoilRoot>
+    <div className='app'>
+      <RecoilRoot initializeState={initializeState}>
+        <PersistenceObserver />
+        <Router>
+          <Switch>
+            <PrivateRoute path='/' component={Login} exact />
+            <PrivateRoute path='/not-found' component={NotFound} />
+            <Route component={DefaultRoutes} />
+          </Switch>
+        </Router>
+      </RecoilRoot>
+    </div>
   )
 }
 

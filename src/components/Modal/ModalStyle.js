@@ -41,11 +41,13 @@ const slideOut = keyframes`
 `
 
 export const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
   justify-content: center;
   align-items: center;
   position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   display: flex;
   overflow: hidden;
   z-index: 1;
@@ -102,9 +104,9 @@ export const Button = styled.button`
   height: 60px;
   position: absolute;
   background-color: white;
-  top: 0%;
+  bottom: 0%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 30px);
   border-radius: 75px;
   box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
     0 -10px 15px 0 rgba(255, 255, 255, 0.35);
