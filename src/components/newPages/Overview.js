@@ -1,5 +1,10 @@
 import React from 'react'
 import { Container } from './OverviewStyle'
+import {
+  SubmitButton,
+  CancelButton,
+  RetryButton,
+} from '../../components/newComponents/Button'
 
 const Overview = () => {
   return (
@@ -8,6 +13,9 @@ const Overview = () => {
         <span>Overview</span>
       </div>
       <div className='content'>
+        <SubmitButton />
+        <CancelButton />
+        <RetryButton />
         Elit elit deserunt ipsum Lorem nulla excepteur labore officia sit
         reprehenderit fugiat dolor culpa. Irure sunt amet nostrud nostrud magna
         sit ea consequat pariatur veniam exercitation. Magna ad eiusmod

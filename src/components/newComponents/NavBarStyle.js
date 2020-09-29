@@ -4,7 +4,6 @@ const SideBar = styled.div`
   box-sizing: border-box;
   min-width: 275px;
   min-height: 100vh;
-  height: 100vh;
   background-color: #1c1c1c;
   display: flex;
   flex-direction: column;
@@ -61,9 +60,11 @@ const SideBar = styled.div`
     margin-left: 25px;
   }
   @media (max-width: 1024px) {
-    min-width: ${(props) => (props.open ? '100%' : '65px')};
-    position: ${(props) => (props.open ? 'absolute' : 'relative')};
+    width: ${(props) => (props.open ? '100%' : '65px')};
+    min-width: 65px;
+    position: fixed;
     overflow-y: auto;
+    height: 100%;
     .menu span {
       transition: all 0.2s ease-in-out;
       opacity: ${(props) => (props.open ? 1 : 0)};

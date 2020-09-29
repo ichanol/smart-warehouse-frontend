@@ -85,17 +85,17 @@ const App = () => {
             </div>
           </div>
           <Switch>
-            <PrivateRoute path='/menu' component={Menu} />
-            <PrivateRoute path='/edit-product' component={EditProduct} />
-            <PrivateRoute path='/import-export' component={ImportExportProduct} />
-            <PrivateRoute path='/map' component={Map} />
-            <PrivateRoute path='/overview' component={Overview} />
-            <PrivateRoute path='/product-list' component={ProductList} />
-            <PrivateRoute path='/product-management' component={ProductManagement} />
-            <PrivateRoute path='/role-management' component={RoleManagement} />
-            <PrivateRoute path='/transaction' component={Transaction} />
-            <PrivateRoute path='/user-management' component={UserManagement} />
-            <PrivateRoute path='/settings' component={ProfileSettings} />
+            <Route path='/menu' component={Menu} />
+            <Route path='/edit-product' component={EditProduct} />
+            <Route path='/import-export' component={ImportExportProduct} />
+            <Route path='/map' component={Map} />
+            <Route path='/overview' component={Overview} />
+            <Route path='/product-list' component={ProductList} />
+            <Route path='/product-management' component={ProductManagement} />
+            <Route path='/role-management' component={RoleManagement} />
+            <Route path='/transaction' component={Transaction} />
+            <Route path='/user-management' component={UserManagement} />
+            <Route path='/settings' component={ProfileSettings} />
             <Route component={RedirectNotFound} />
           </Switch>
         </div>
@@ -109,8 +109,8 @@ const App = () => {
         <PersistenceObserver />
         <Router>
           <Switch>
-            <PrivateRoute path='/' component={Login} exact />
-            <PrivateRoute path='/not-found' component={NotFound} />
+            <Route path='/' component={Login} exact />
+            <Route path='/not-found' component={NotFound} />
             <Route component={DefaultRoutes} />
           </Switch>
         </Router>
