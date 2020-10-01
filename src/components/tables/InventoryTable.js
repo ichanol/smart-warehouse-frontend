@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Wrapper,
   Table,
@@ -7,37 +8,72 @@ import {
   Id,
   Name,
   Amount,
-  Company,
-  Time,
   Description,
   Body,
   Trow,
   Row,
+  Button,
+  Time,
 } from './TableStyle'
+const moment = require('moment')
 
-function InventoryTable({ data }) {
+function InventoryTable({ data, handleSort }) {
 
   return (
     <Wrapper>
       <Table cellSpacing='0'>
         <Top>
           <tr>
-            <No>No</No>
-            <Id>Product ID</Id>
-            <Name>Product Name</Name>
-            <Amount>Balance</Amount>
-            <Description>Description</Description>
+            <No>
+              <Button>
+                No
+              </Button>
+            </No>
+            <Id>
+              <Button
+                onClick={() => handleSort('product_id')}
+              >
+                Product ID
+              </Button>
+            </Id>
+            <Name>
+              <Button
+                onClick={() => handleSort('product_name')}
+              >
+                Product Name
+              </Button>
+            </Name>
+            <Amount>
+              <Button
+                onClick={() => handleSort('balance')}
+              >
+                Balance
+              </Button>
+            </Amount>
+            <Time>
+              <Button
+                onClick={() => handleSort('timestamp')}
+              >
+                DateTime
+              </Button>
+            </Time>
+            <Description>
+              <Button>
+                Remark
+              </Button>
+            </Description>
           </tr>
         </Top>
         <Body>
           {data.map((a, index) => {
             return (
               <Trow key={index}>
-                <Row>{a.id}</Row>
+                <Row>{index + 1}</Row>
                 <Row>{a.product_id}</Row>
                 <Row>{a.product_name}</Row>
                 <Row>{a.balance}</Row>
-                <Row>{a.time}</Row>
+                <Row>{moment(a.timestamp).format('DD-MM-yyyy hh:mm:ss')}</Row>
+                <Row>{a.detail}</Row>
               </Trow>
             )
           })}
@@ -45,6 +81,16 @@ function InventoryTable({ data }) {
       </Table>
     </Wrapper>
   )
+}
+
+InventoryTable.defaultProps = {
+  data: {},
+  handleSort: () => { },
+}
+
+InventoryTable.propTypes = {
+  data: PropTypes.object,
+  handleSort: PropTypes.func,
 }
 
 export default InventoryTable

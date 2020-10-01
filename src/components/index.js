@@ -1,4 +1,4 @@
-import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn } from './button'
+import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn, ClearBtn, FilterBtn } from './button'
 import { ImportExportTable, Historytable, InventoryTable } from './tables'
 import { Navbar } from './navbar'
 import { data } from './mockData'
@@ -13,6 +13,8 @@ export {
   SubmitBtn,
   ExportBtn,
   DeleteBtn,
+  ClearBtn,
+  FilterBtn,
   ImportExportTable,
   Historytable,
   InventoryTable,

@@ -8,29 +8,48 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100px;
 `
 
+const Empty = styled.div`
+  flex: 0.2;
+  /* background-color: lightcoral; */
+`
+
 const Head = styled.label`
+  flex: 0.6;
   font-size: 30px;
   font-weight: bold;
+  text-align: center;
   color: #FFF;
+  /* background-color: lightblue; */
 `
 
 const Content = styled.div`
   display: flex;
+  flex-direction: column;
+`
+
+const ButtonBlock = styled.div`
+  display: flex;
+  flex: 0.2;
   flex-direction: row;
+  justify-content: flex-end;
+  /* background-color: green; */
 `
 
 const FilterBlock = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 20px;
-  flex: 0.2;
+  width: 25%;
 `
 
 const TableBlock = styled.div`
-  flex: 0.8;
   padding: 20px;
 `
 
-export { Container, Header, Head, Content, FilterBlock, TableBlock }
+
+export { Container, Header, Head, Content, FilterBlock, TableBlock, ButtonBlock, Empty }

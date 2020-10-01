@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Dropdown,
   Choice,
@@ -11,12 +12,23 @@ const DropdownFilter = ({ filterSelected, dropdownFilter }) => {
       onChange={dropdownFilter}
     >
       <Choice value='' disabled selected hidden>Select Column</Choice>
-      <Choice value='id' selected>Product ID</Choice>
-      <Choice value='name'>Product Name</Choice>
+      {/* <Choice value='productid' selected>Product ID</Choice> */}
+      <Choice value='responsable'>Reporter</Choice>
+      <Choice value='ref'>Reference_number</Choice>
+      <Choice value='action'>Action type</Choice>
       <Choice value='amount'>Amount</Choice>
-      <Choice value='time'>Time</Choice>
     </Dropdown>
   )
 }
 
-export default DropdownFilter
+DropdownFilter.defaultProps = {
+  filterSelected: '',
+  dropdownFilter: () => { },
+}
+
+DropdownFilter.propTypes = {
+  filterSelected: PropTypes.string,
+  dropdownFilter: PropTypes.func,
+}
+
+export { DropdownFilter }

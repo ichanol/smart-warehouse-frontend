@@ -78,21 +78,13 @@ function ImportExportProduct(props) {
     })
   }
 
-  // const removeRow = (rowNumber) => {
-  //   data.find((v, index) => {
-  //     if (rowNumber === v.no) {
-  //       setData()
-  //     }
-  //   })
-  // }
-
   const dropdownSelect = (e) => {
     setAction(e.target.value)
   }
 
   return (
     <Container>
-      <Navbar />
+      <Navbar selectedMenu={1} />
       <Header>
         <Head>Import -Export</Head>
       </Header>
@@ -111,17 +103,6 @@ function ImportExportProduct(props) {
           <CancelBtn />
           <SubmitBtn />
         </div>
-        <select
-          value={action}
-          required
-          onChange={dropdownSelect}
-        >
-          <option value='' disabled selected hidden>Select Type</option>
-          <option value='1'>Import</option>
-          <option value='2'>Export</option>
-          <option value='3'>Expired</option>
-          <option value='4'>Damaged</option>
-        </select>
       </BlockBtn>
     </Container>
   )

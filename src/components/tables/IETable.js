@@ -41,13 +41,13 @@ const ImportExportTable = ({ data, select }) => {
           {data.map((a, index) => {
             return (
               <Trow key={index}>
-                <Row>{a.no}</Row>
-                <Row>{a.productid}</Row>
-                <Row>{a.productname}</Row>
+                <Row>{a.id}</Row>
+                <Row>{a.product_id}</Row>
+                <Row>{a.product_name}</Row>
                 <Row>{a.amount}</Row>
-                <Row>{a.company}</Row>
+                <Row>{a.company_name}</Row>
                 <Row>{a.time}</Row>
-                <Row>{a.description}</Row>
+                <Row>{a.detail}</Row>
                 <Row><Action><EditBtn select={select} row={(a.no)} /><DeleteBtn /></Action></Row>
               </Trow>
             )

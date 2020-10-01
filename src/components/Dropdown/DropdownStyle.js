@@ -5,8 +5,7 @@ const Dropdown = styled.select`
   padding: 10px;
   font-size: 20px;
   outline: 0;
-  border: 0px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+  border: 1px solid lightgray;
 `
 
 const Choice = styled.option`

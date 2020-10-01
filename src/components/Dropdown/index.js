@@ -1,3 +1,3 @@
-import DropdownFilter from './Dropdown'
+import { DropdownFilter } from './Dropdown'
 
 export { DropdownFilter }

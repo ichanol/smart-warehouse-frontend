@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Wrapper,
   Header,
@@ -9,35 +10,20 @@ import {
   Input,
   Block,
 } from './FilterStyle'
-import { Datepicker, DropdownFilter, SubmitBtn } from '../../components'
+import { Datepicker, DropdownFilter, SubmitBtn, ClearBtn } from '../../components'
 
-function Filter({ start, end, setStart, setEnd, submitFilter }) {
-  const [filterSelected, setFilterSelected] = useState('')
-  const [keyword, setKeyword] = useState('')
-
-  // const month = [
-  //   'January',
-  //   'February',
-  //   'March',
-  //   'April',
-  //   'May',
-  //   'June',
-  //   'July',
-  //   'August',
-  //   'September',
-  //   'October',
-  //   'November',
-  //   'December',
-  // ]
-
-  const search = (e) => {
-    setKeyword(e.target.value)
-    console.log(keyword)
-  }
-
-  const dropdownFilter = (e) => {
-    setFilterSelected(e.target.value)
-  }
+function Filter({
+  start,
+  end,
+  setStart,
+  setEnd,
+  keyword,
+  submitFilter,
+  filterSelected,
+  dropdownFilter,
+  search,
+  clear,
+}) {
 
   return (
     <Wrapper>
@@ -45,28 +31,59 @@ function Filter({ start, end, setStart, setEnd, submitFilter }) {
         <Head>Select Date</Head>
       </Header>
       <DateBlock>
-        <Datepicker start={start} end={end} setStart={setStart} setEnd={setEnd} />
+        <Datepicker
+          start={start}
+          end={end}
+          setStart={setStart}
+          setEnd={setEnd}
+        />
       </DateBlock>
       <FilterBlock>
         <Header>
           <Head>Filter</Head>
         </Header>
-        <Form onSubmit={submitFilter}>
+        <Form>
           <Block>
             <DropdownFilter filterSelected={filterSelected} dropdownFilter={dropdownFilter} />
             <Input
+              value={keyword}
               onChange={search}
             />
           </Block>
           <Block>
-            <SubmitBtn />
+            <ClearBtn clear={clear} />
+            <SubmitBtn submitFilter={submitFilter} />
           </Block>
         </Form>
-
-
       </FilterBlock>
-    </Wrapper>
+    </Wrapper >
   )
+}
+
+Filter.defaultProps = {
+  start: {},
+  end: {},
+  setStart: () => { },
+  setEnd: () => { },
+  keyword: '',
+  submitFIlter: () => { },
+  filterSelected: '',
+  dropfownFilter: () => { },
+  search: () => { },
+  clear: () => { },
+}
+
+Filter.propTypes = {
+  start: PropTypes.object,
+  end: PropTypes.object,
+  setStart: PropTypes.func,
+  setEnd: PropTypes.func,
+  keyword: PropTypes.string,
+  submitFIlter: PropTypes.func,
+  filterSelected: PropTypes.string,
+  dropfownFilter: PropTypes.func,
+  search: PropTypes.func,
+  clear: PropTypes.func,
 }
 
 export default Filter

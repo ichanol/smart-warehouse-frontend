@@ -11,7 +11,6 @@ const CancelButton = styled.button`
     cursor: pointer;
     font-weight: bold;
     background-color: #D5D5D5;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 
     &:hover { 
       background-color: #C2C1C1;
@@ -51,6 +50,9 @@ const EditButton = styled.button`
   `
 
 const SubmitButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 0;
     margin: 20px;
     border-radius: 30px;
@@ -60,8 +62,7 @@ const SubmitButton = styled.button`
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    background-color: #5CB85C;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background-color: #3E4491;
 
     &:hover { 
       background-color: #2EA22E;
@@ -70,6 +71,10 @@ const SubmitButton = styled.button`
     &:active {
       background-color: #5CB85C;
     }
+
+    .submit {
+    color: blue;
+  }
   `
 
 const RetryButton = styled.button`
@@ -83,7 +88,6 @@ const RetryButton = styled.button`
     cursor: pointer;
     font-weight: bold;
     background-color: #F8FF3B;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 
     &:hover { 
       background-color: #D6DC31;
@@ -95,24 +99,27 @@ const RetryButton = styled.button`
 `
 
 const ExportButton = styled.button`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     border: 0;
     margin: 20px;
     border-radius: 30px;
     outline: 0;
-    width: 150px;
+    width: 200px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    background-color: #3A9EFD;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background-color: #3082CF;
 
     &:hover { 
-      background-color: #3082CF;
+      background-color: #3A9EFD;
       transition: 0.3s;
     }
     &:active {
-      background-color: #3A9EFD;
+      background-color: #3082CF;
     }
 `
 
@@ -134,4 +141,62 @@ const DeleteButton = styled.button`
     }
 `
 
-export { CancelButton, RetryButton, EditButton, SubmitButton, ExportButton, DeleteButton }
+const ClearButton = styled.button`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    margin: 20px;
+    border-radius: 30px;
+    outline: 0;
+    width: 150px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color:  #C2C1C1;
+
+    &:hover { 
+      background-color: #D5D5D5;
+      transition: 0.3s;
+    }
+    &:active {
+      background-color: #C2C1C1;
+    }
+  `
+
+const FilterButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  margin: 20px;
+  border-radius: 15px;
+  outline: 0;
+  /* width: 150px; */
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #FFFFFF;
+
+  &:hover { 
+    background-color: #D5D5D5;
+    transition: 0.3s;
+  }
+  &:active {
+    background-color: #FFFFFF;
+  }
+`
+
+const TextButton = styled.label`
+  padding: 0px 10px;
+  color: #FFF;
+
+  &.clear {
+    color: black;
+  }
+`
+
+export { CancelButton, RetryButton, EditButton, SubmitButton, ExportButton, DeleteButton, ClearButton, FilterButton, TextButton }
