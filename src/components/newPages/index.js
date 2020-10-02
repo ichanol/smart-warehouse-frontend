@@ -8,6 +8,8 @@ import Transaction from './Transaction'
 import UserManagement from './UserManagement'
 import NotFound from './NotFound'
 import ProfileSettings from './ProfileSettings'
+import EditImportExportProduct from './EditImportExportProduct'
+import ImportExportMenu from './ImportExportMenu'
 
 export {
   ImportExportProduct,
@@ -20,4 +22,6 @@ export {
   UserManagement,
   NotFound,
   ProfileSettings,
+  EditImportExportProduct,
+  ImportExportMenu,
 }

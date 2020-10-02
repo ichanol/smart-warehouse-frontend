@@ -3,7 +3,7 @@ import {
   CancelButton,
   RetryButton,
   EditButton,
-  SubmitButton,
+  secondaryButton,
   ExportButton,
   DeleteButton,
 } from './buttonStyle'
@@ -43,9 +43,9 @@ function RetryBtn({ retry }) {
 function SubmitBtn({ action }) {
   return (
     <div className='btn'>
-      <SubmitButton type='submit' onClick={(event) => action(event)}>
+      <secondaryButton type='submit' onClick={(event) => action(event)}>
         Submit
-      </SubmitButton>
+      </secondaryButton>
     </div>
   )
 }

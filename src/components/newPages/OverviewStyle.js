@@ -20,6 +20,7 @@ const Container = styled.div`
   }
   .content {
     flex: 1;
+    display: flex;
     background-color: white;
     padding: 25px;
   }

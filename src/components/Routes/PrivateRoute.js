@@ -64,6 +64,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     console.log('///')
     console.log({ ...rest })
 
+
     const isAccessTokenValid = verifyAccessToken()
     const isRefreshTokenValid = verifyRefreshToken()
     if (!isAccessTokenValid && isRefreshTokenValid) {

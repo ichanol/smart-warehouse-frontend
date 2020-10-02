@@ -50,7 +50,7 @@ const EditButton = styled.button`
     }
   `
 
-const SubmitButton = styled.button`
+const secondaryButton = styled.button`
     border: 0;
     margin: 20px;
     border-radius: 30px;
@@ -134,4 +134,4 @@ const DeleteButton = styled.button`
     }
 `
 
-export { CancelButton, RetryButton, EditButton, SubmitButton, ExportButton, DeleteButton }
+export { CancelButton, RetryButton, EditButton, secondaryButton, ExportButton, DeleteButton }

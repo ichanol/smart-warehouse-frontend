@@ -69,7 +69,6 @@ const ImportExportProduct = () => {
       const { success } = response.data
       if (success) {
         resetReadProductListDefaultValue()
-        console.log(success)
       }
     } catch (error) {
       setIsError(true)
@@ -110,7 +109,6 @@ const ImportExportProduct = () => {
         setUserState((oldState) => {
           const newUserState = { ...oldState }
           newUserState.isUserCardVerify = true
-          console.log('IE  page:', newUserState)
           return newUserState
         })
         setIsWaitForUser(!granted)
@@ -158,11 +156,11 @@ const ImportExportProduct = () => {
   //add toast
   return (
     <Container>
-      <Modal isShow={isWaitForProduct} dismissButton={false} />
-      <Modal isShow={isWaitForUser} dismissButton={false} />
+      <Modal isDisplay={isWaitForProduct} primaryButton={false} />
+      <Modal isDisplay={isWaitForUser} primaryButton={false} />
       <Modal
-        isShow={isError}
-        dismissModal={dismissError}
+        isDisplay={isError}
+        primaryButtonFN={dismissError}
         header='Error'
         isIndicator={false}
         detail='sdsd'

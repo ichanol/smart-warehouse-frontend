@@ -38,7 +38,6 @@ const Login = () => {
         password: password,
       }
 
-
       const response = await axios.post(process.env.REACT_APP_LOGIN, request)
       const { data } = response
 
@@ -76,18 +75,34 @@ const Login = () => {
     }
   }, [])
 
-  const dismissError = () => setIsError(false)
+  const onTryAgain = () => setIsError(false)
+  const onForgotPassword = () => setIsError(false)
 
   return (
     <Container>
       <Modal
-        isShow={isError}
-        dismissModal={dismissError}
+        isDisplay={isError}
+        isFlex={false}
         header={errorMsg.header}
         detail={errorMsg.message}
         isIndicator={false}
+        primaryButton={{
+          display: true,
+          text: 'Forgot password ?',
+          color: 'gray',
+          fill: 'white',
+          stroke: 'transparent',
+        }}
+        primaryButtonFN={onForgotPassword}
+        secondaryButton={{
+          display: true,
+          text: 'Try again',
+          color: 'white',
+          fill: '#1fe073',
+          stroke: '#1fe073',
+        }}
+        secondaryButtonFN={onTryAgain}
       />
-      <Modal isShow={isLoading} dismissButton={false} />
       <Form blur={isLoading || isError}>
         <Header>
           <Head>LOG IN</Head>

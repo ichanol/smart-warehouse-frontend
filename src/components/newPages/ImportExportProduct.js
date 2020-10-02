@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import io from 'socket.io-client'
 import { useHistory } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { useResetRecoilState, useRecoilState } from 'recoil'
+import { useResetRecoilState, useRecoilState, useSetRecoilState } from 'recoil'
 import atomState from '../../Atoms/Atoms'
-import { Container } from './OverviewStyle'
 
-import {
-  RetryBtn,
-  CancelBtn,
-  SubmitBtn,
-  ImportExportTable,
-  Navbar,
-  Modal,
-} from '../../components'
-import {
-  Header,
-  Head,
-  BlockTable,
-  BlockBtn,
-  Content,
-} from '../../pages/ImportExportStyle'
-
+import { Container } from './ImportExportProductStyle'
+import ImportExportTable from '../newComponents/Table/ImportExportTable'
 import {
   CancelButton,
   RetryButton,
@@ -30,9 +14,8 @@ import {
 } from '../newComponents/Button'
 
 const ImportExportProduct = () => {
-  const { handleSubmit } = useForm()
-  const history = useHistory()
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+  const history = useHistory()
   const [readProductListState, setReadProductListState] = useRecoilState(
     atomState.readProductListState,
   )
@@ -40,26 +23,178 @@ const ImportExportProduct = () => {
   const resetReadProductListDefaultValue = useResetRecoilState(
     atomState.readProductListState,
   )
+  const setToastState = useSetRecoilState(atomState.toastState)
+  const [modalState, setModalState] = useRecoilState(atomState.modalState)
+  const resetModalState = useResetRecoilState(atomState.modalState)
+  const resetUserAction = useSetRecoilState(atomState.userActionSelector())
 
-  const [isWaitForProduct, setIsWaitForProduct] = useState(
-    readProductListState.length ? false : true,
-  )
-  const [isWaitForUser, setIsWaitForUser] = useState(
-    !userState.isUserCardVerify,
-  )
-  const [isError, setIsError] = useState(false)
-
-  const [action, setAction] = useState('')
-
-  const dropdownSelect = (e) => {
-    setAction(e.target.value)
+  const onCancleScanning = () => {
+    resetUserAction()
+    resetModalState()
+    history.push('/import-export')
   }
 
-  const submit = async () => {
+  useEffect(() => {
+    socket.emit('join_room', { room: userState.username })
+    if (!userState.isUserCardVerify && !readProductListState.length) {
+      setModalState((oldState) => {
+        const temp = { ...oldState }
+        temp.isDisplay = true
+        temp.header = 'Please scan your card'
+        temp.isIndicator = true
+        temp.detail = 'Scan your card to proceed next step'
+        temp.primaryButton = {
+          display: true,
+          text: 'cancel',
+          color: 'white',
+          fill: '#eb2d2d',
+          stroke: '#eb2d2d',
+        }
+        temp.primaryButtonFN = onCancleScanning
+        return temp
+      })
+      socket.on('USER_GRANTED', ({ message, granted, room }) => {
+        socket.off('USER_GRANTED')
+        setUserState((oldState) => {
+          const newUserState = { ...oldState }
+          newUserState.isUserCardVerify = true
+          return newUserState
+        })
+        setModalState((oldState) => {
+          const temp = { ...oldState }
+          temp.isDisplay = true
+          temp.header = 'Please wait'
+          temp.isIndicator = true
+          temp.detail = 'Device is scanning for products'
+          temp.primaryButton = {
+            display: true,
+            text: 'cancel',
+            color: 'white',
+            fill: '#eb2d2d',
+            stroke: '#eb2d2d',
+          }
+          temp.primaryButtonFN = onCancleScanning
+          return temp
+        })
+        socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
+          socket.off('PRODUCT_SCANNER')
+          resetModalState()
+          setReadProductListState(productData)
+        })
+      })
+    } else if (!userState.isUserCardVerify) {
+      setModalState((oldState) => {
+        const temp = { ...oldState }
+        temp.isDisplay = true
+        temp.header = 'Please scan your card'
+        temp.isIndicator = true
+        temp.detail = 'Scan your card to proceed next step'
+        temp.primaryButton = {
+          display: true,
+          text: 'cancel',
+          color: 'white',
+          fill: '#eb2d2d',
+          stroke: '#eb2d2d',
+        }
+        temp.primaryButtonFN = onCancleScanning
+        return temp
+      })
+      socket.on('USER_GRANTED', ({ message, granted, room }) => {
+        socket.off('USER_GRANTED')
+        setUserState((oldState) => {
+          const newUserState = { ...oldState }
+          newUserState.isUserCardVerify = true
+          return newUserState
+        })
+        resetModalState()
+      })
+    } else if (!readProductListState.length) {
+      setModalState((oldState) => {
+        const temp = { ...oldState }
+        temp.isDisplay = true
+        temp.header = 'Please wait'
+        temp.isIndicator = true
+        temp.detail = 'Device is scanning for products'
+        temp.primaryButton = {
+          display: true,
+          text: 'cancel',
+          color: 'white',
+          fill: '#eb2d2d',
+          stroke: '#eb2d2d',
+        }
+        temp.primaryButtonFN = onCancleScanning
+        return temp
+      })
+      socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
+        socket.off('PRODUCT_SCANNER')
+        resetModalState()
+        setReadProductListState(productData)
+      })
+    }
+    return () => {
+      resetModalState()
+      socket.removeAllListeners()
+      socket.disconnect()
+    }
+  }, [readProductListState])
+
+  const onEdit = (selectedList) =>
+    history.push(
+      '/import-export/edit-product/' + selectedList.product_serial_number,
+    )
+
+  const onDismissModal = () => resetModalState()
+
+  const cancleTransaction = () => {
+    resetUserAction()
+    resetReadProductListDefaultValue()
+    onDismissModal()
+    history.push('/import-export')
+  }
+
+  const onCancle = () => {
+    setModalState((oldState) => {
+      const temp = { ...oldState }
+      temp.isDisplay = true
+      temp.isFlex = true
+      temp.header = 'Are you sure ?'
+      temp.detail = 'You are going back to menu'
+      temp.isIndicator = false
+      temp.primaryButton = {
+        display: true,
+        text: 'no',
+        color: 'gray',
+        fill: 'transparent',
+        stroke: 'transparent',
+      }
+      temp.primaryButtonFN = onDismissModal
+      temp.secondaryButton = {
+        display: true,
+        text: 'yes',
+        color: 'white',
+        fill: '#eb2d2d',
+        stroke: '#eb2d2d',
+      }
+      temp.secondaryButtonFN = cancleTransaction
+      temp.dismissFN = onDismissModal
+      return temp
+    })
+  }
+
+  const confirmDeleteSelectedList = (selectedList) => {
+    const accumulator = [...readProductListState]
+    const updatedProductList = accumulator.filter(
+      (value, key) => value.id !== selectedList.id,
+    )
+    setReadProductListState(updatedProductList)
+    onDismissModal()
+  }
+
+  const onSubmit = async () => {
     try {
       const body = {
         referenceNumber: Math.random() * 1000,
-        actionType: 1,
+        actionType: userState.action.id,
         username: userState.username,
         productList: readProductListState,
       }
@@ -75,149 +210,122 @@ const ImportExportProduct = () => {
       const { success } = response.data
       if (success) {
         resetReadProductListDefaultValue()
-        console.log(success)
+        setToastState((oldState) => {
+          const temp = { ...oldState }
+          temp.display = true
+          temp.title = 'Success'
+          temp.message = 'Save Successfully'
+          return temp
+        })
+        history.push('/import-export')
       }
     } catch (error) {
-      setIsError(true)
+      setModalState((oldState) => {
+        const temp = { ...oldState }
+        temp.isDisplay = true
+        temp.header = 'Submit failed'
+        temp.isIndicator = false
+        temp.detail = 'Something went wrong. Please try again'
+        temp.primaryButton = {
+          display: true,
+          text: 'Try again',
+          color: 'white',
+          fill: '#eb2d2d',
+          stroke: '#eb2d2d',
+        }
+        temp.primaryButtonFN = onDismissModal
+        return temp
+      })
     }
   }
 
-  const editSelectedList = (selectedKey) => {
-    readProductListState.find((value, key) => {
-      if (selectedKey === key) {
-        history.push({
-          pathname: '/edit-product',
-          state: {
-            selectedProduct: value,
-            productData: readProductListState,
-            username: userState.username,
-          },
-        })
+  const onDelete = (selectedList) => {
+    const DetailForConfirmDeleteModal = (
+      <span>
+        You are going to remove
+        <br />
+        <span className='hightlight'>
+          {selectedList ? selectedList.product_name : null}{' '}
+        </span>
+        from the list.
+      </span>
+    )
+    setModalState((oldState) => {
+      const temp = { ...oldState }
+      temp.isDisplay = true
+      temp.isFlex = true
+      temp.header = 'Are you sure ?'
+      temp.detail = DetailForConfirmDeleteModal
+      temp.isIndicator = false
+      temp.primaryButton = {
+        display: true,
+        text: 'cancle',
+        color: 'gray',
+        fill: 'transparent',
+        stroke: 'transparent',
       }
+      temp.primaryButtonFN = onDismissModal
+      temp.secondaryButton = {
+        display: true,
+        text: 'delete',
+        color: 'white',
+        fill: '#eb2d2d',
+        stroke: '#eb2d2d',
+      }
+      temp.secondaryButtonFN = () => confirmDeleteSelectedList(selectedList)
+      temp.dismissFN = onDismissModal
+      return temp
     })
   }
 
-  const deleteSelectedList = (selectedKey) => {
-    const accumulator = [...readProductListState]
-    const updatedProductList = accumulator.filter(
-      (value, key) => key !== selectedKey,
-    ) /**UPDATE */
-    setReadProductListState(updatedProductList)
+  const onRetry = () => {
+    setModalState((oldState) => {
+      const temp = { ...oldState }
+      temp.isDisplay = true
+      temp.isFlex = true
+      temp.header = 'Are you sure ?'
+      temp.detail = 'You are going to scan for product again'
+      temp.isIndicator = false
+      temp.primaryButton = {
+        display: true,
+        text: 'cancle',
+        color: 'gray',
+        fill: 'transparent',
+        stroke: 'transparent',
+      }
+      temp.primaryButtonFN = onDismissModal
+      temp.secondaryButton = {
+        display: true,
+        text: 'retry',
+        color: 'white',
+        fill: '#04adf6',
+        stroke: '#04adf6',
+      }
+      temp.secondaryButtonFN = () => resetReadProductListDefaultValue()
+      temp.dismissFN = onDismissModal
+      return temp
+    })
   }
 
-  const dismissError = () => setIsError(false)
-
-  useEffect(() => {
-    if (readProductListState.length === 0) {
-      socket.emit('join_room', { room: userState.username })
-
-      socket.on('USER_GRANTED', ({ message, granted, room }) => {
-        socket.off('USER_GRANTED')
-        setUserState((oldState) => {
-          const newUserState = { ...oldState }
-          newUserState.isUserCardVerify = true
-          console.log('IE  page:', newUserState)
-          return newUserState
-        })
-        setIsWaitForUser(!granted)
-        socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
-          setIsWaitForProduct(!success)
-          setReadProductListState(productData)
-        })
-      })
-    } else {
-      setIsWaitForUser(false)
-    }
-    /* if (props.location.state) {
-      setProductList(props.location.state.data)
-      setUsername(props.location.state.username)
-    } else {
-      (async () => {
-        const credential = await checkLogin()
-        if (credential) {
-          setUsername(credential.username)
-          socket.emit('join_room', { room: credential.username })
-
-          socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
-            setProductList(productData)
-            setIsLoading(!success)
-          })
-        } else {
-          history.push('/')
-          localStorage.clear()
-        }
-      })()
-    } */
-    return () => {
-      socket.off('PRODUCT_SCANNER')
-    }
-  }, [])
-  //add information while loading in login page
-  //dismiss button change to bottom position
-  //eye icon weird behavior
-  //logo
-  //active menu
-  //multiple delete?
-  //description => remark/note
-  //padding textarea
-  //validate input
-  //add toast
   return (
-    <Container>
-      <Modal isShow={isWaitForProduct} dismissButton={false} />
-      <Modal isShow={isWaitForUser} dismissButton={false} />
-      <Modal
-        isShow={isError}
-        dismissModal={dismissError}
-        header='Error'
-        isIndicator={false}
-        detail='sdsd'
-      />
+    <Container blur={modalState.isDisplay}>
       <div className='header'>
-        <span>Import - Export Product</span>
+        <span>{userState.action.actionType}</span>
       </div>
       <div className='content'>
-        <Content blur={isWaitForProduct || isError || isWaitForUser}>
-          <BlockTable>
-            {readProductListState && (
-              <ImportExportTable
-                data={readProductListState}
-                editFN={editSelectedList}
-                deleteFN={deleteSelectedList}
-              />
-            )}
-          </BlockTable>
-          <BlockBtn
-            onSubmit={handleSubmit(submit)}
-            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-            <div>
-              <RetryBtn />
+        <ImportExportTable editFN={onEdit} deleteFN={onDelete} />
+        <div className='button-wrapper'>
+          <div className='list-manipulate-button'>
+            <RetryButton action={onRetry} />
+            <div className='cancle-button-wrapper'>
+              <CancelButton action={onCancle} />
             </div>
-            <div style={{ display: 'flex' }}>
-              <CancelBtn />
-              <SubmitBtn action={() => {}} />
-            </div>
-            {/* <select value={action} required onChange={dropdownSelect}>
-            <option value='' disabled selected hidden>
-              Select Type
-            </option>
-            <option value='1'>Import</option>
-            <option value='2'>Export</option>
-            <option value='3'>Expired</option>
-            <option value='4'>Damaged</option>
-          </select> */}
-          </BlockBtn>
-        </Content>
-        <RetryButton />
-        <CancelButton />
-        <SubmitButton />
+          </div>
+          <SubmitButton action={onSubmit} />
+        </div>
       </div>
     </Container>
   )
 }
 
 export default ImportExportProduct
-/*
-<Container>
-      
-    </Container> */

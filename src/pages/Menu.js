@@ -25,12 +25,10 @@ const Menu = () => {
       const { data } = response
       set(atomState.userState, data)
     } catch (error) {
-      console.log(error)
     }
   })
 
   useEffect(() => {
-    //console.log('menu', username)
   }, [username])
 
   return (
@@ -40,7 +38,6 @@ const Menu = () => {
       <button
         type='button'
         onClick={() => {
-          //test()
         }}>
         enter
       </button>

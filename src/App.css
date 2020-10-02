@@ -15,6 +15,7 @@
   display: flex;
 }
 .content {
+  padding-left: 275px;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -27,6 +28,7 @@
   position: relative;
   padding: 15px 30px;
   box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.125);
+  z-index: 3;
 }
 .profile {
   position: absolute;

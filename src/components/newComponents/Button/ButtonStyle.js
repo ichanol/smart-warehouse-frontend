@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const Submit = styled.button`
-  width: 75px;
-  height: 35px;
+  width: 100px;
+  height: 45px;
   outline: none;
   border: none;
   border-radius: 8px;

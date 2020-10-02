@@ -21,7 +21,6 @@ import {
 } from './TableStyle'
 
 const ImportExportTable = ({ data, editFN, deleteFN }) => {
-  console.log('table', data)
   return (
     <Wrapper>
       <Table cellSpacing='0'>

@@ -15,24 +15,8 @@ function Filter({ start, end, setStart, setEnd, submitFilter }) {
   const [filterSelected, setFilterSelected] = useState('')
   const [keyword, setKeyword] = useState('')
 
-  // const month = [
-  //   'January',
-  //   'February',
-  //   'March',
-  //   'April',
-  //   'May',
-  //   'June',
-  //   'July',
-  //   'August',
-  //   'September',
-  //   'October',
-  //   'November',
-  //   'December',
-  // ]
-
   const search = (e) => {
     setKeyword(e.target.value)
-    console.log(keyword)
   }
 
   const dropdownFilter = (e) => {
@@ -45,7 +29,12 @@ function Filter({ start, end, setStart, setEnd, submitFilter }) {
         <Head>Select Date</Head>
       </Header>
       <DateBlock>
-        <Datepicker start={start} end={end} setStart={setStart} setEnd={setEnd} />
+        <Datepicker
+          start={start}
+          end={end}
+          setStart={setStart}
+          setEnd={setEnd}
+        />
       </DateBlock>
       <FilterBlock>
         <Header>
@@ -53,17 +42,16 @@ function Filter({ start, end, setStart, setEnd, submitFilter }) {
         </Header>
         <Form onSubmit={submitFilter}>
           <Block>
-            <DropdownFilter filterSelected={filterSelected} dropdownFilter={dropdownFilter} />
-            <Input
-              onChange={search}
+            <DropdownFilter
+              filterSelected={filterSelected}
+              dropdownFilter={dropdownFilter}
             />
+            <Input onChange={search} />
           </Block>
           <Block>
             <SubmitBtn />
           </Block>
         </Form>
-
-
       </FilterBlock>
     </Wrapper>
   )

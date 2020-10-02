@@ -2,16 +2,15 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   height: 600px;
-  overflow: auto;
+  max-width: 100%;
+  display: flex;
 `
 
 const Table = styled.table`
-  width: 100%;
-  border: 1px solid #3E4491;
 `
 
 const Top = styled.thead`
-  background-color: #3E4491;
+  background-color: #3e4491;
 `
 
 const No = styled.th`
@@ -19,8 +18,9 @@ const No = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
+  background-color: red;
 `
 
 const Id = styled.th`
@@ -28,7 +28,7 @@ const Id = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -37,7 +37,7 @@ const Name = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -46,7 +46,7 @@ const Amount = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -55,7 +55,7 @@ const Company = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -64,7 +64,7 @@ const Time = styled.th`
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -73,7 +73,7 @@ const Description = styled.th`
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
@@ -82,12 +82,12 @@ const Actions = styled.th`
   padding: 20px 15px;
   text-align: left;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   text-transform: uppercase;
 `
 
 const Body = styled.tbody`
-  background-color: #FFF;
+  background-color: #fff;
 `
 
 const Row = styled.td`
@@ -96,8 +96,8 @@ const Row = styled.td`
   vertical-align: middle;
   font-size: 14px;
   font-weight: bold;
-  color: #292A73;
-  border-bottom: solid 2px rgba(62,68,145,0.1);
+  color: #292a73;
+  border-bottom: solid 2px rgba(62, 68, 145, 0.1);
 `
 
 const Trow = styled.tr`
@@ -115,4 +115,20 @@ const Action = styled.div`
   flex-direction: row;
 `
 
-export { Wrapper, Table, Top, Body, No, Id, Name, Amount, Company, Time, Description, Actions, Trow, Row, Action }
+export {
+  Wrapper,
+  Table,
+  Top,
+  Body,
+  No,
+  Id,
+  Name,
+  Amount,
+  Company,
+  Time,
+  Description,
+  Actions,
+  Trow,
+  Row,
+  Action,
+}

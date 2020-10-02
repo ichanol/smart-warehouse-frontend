@@ -42,7 +42,6 @@ const Container = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   align-items: center;
   height: calc(100vh - 80px);
   filter: blur(${(props) => props.blur ? 10 : 0}px);

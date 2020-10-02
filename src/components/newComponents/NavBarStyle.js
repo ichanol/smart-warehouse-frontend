@@ -2,13 +2,14 @@ import styled from 'styled-components'
 
 const SideBar = styled.div`
   box-sizing: border-box;
-  min-width: 275px;
-  min-height: 100vh;
+  width: 275px;
+  height: 100%;
   background-color: #1c1c1c;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-in;
-  z-index: 1;
+  z-index: 4;
+  position: fixed;
   .menu {
     display: flex;
     padding: 15px 20px;
@@ -60,15 +61,17 @@ const SideBar = styled.div`
     margin-left: 25px;
   }
   @media (max-width: 1024px) {
-    width: ${(props) => (props.open ? '100%' : '65px')};
+    width: ${(props) => props.open ? '100%' : '65px'};
     min-width: 65px;
     position: fixed;
     overflow-y: auto;
+    overflow-x: hidden;
     height: 100%;
+    z-index: 4;
     .menu span {
       transition: all 0.2s ease-in-out;
-      opacity: ${(props) => (props.open ? 1 : 0)};
-      display: ${(props) => (props.open ? 'flex' : 'none')};
+      opacity: ${(props) => props.open ? 1 : 0};
+      display: ${(props) => props.open ? 'flex' : 'none'};
     }
     .menu {
       padding: 0;
@@ -97,18 +100,18 @@ const SideBar = styled.div`
       align-items: center;
     }
     .line:nth-of-type(2) {
-      transform: rotate(${(props) => (props.open ? '-45deg' : 0)});
+      transform: rotate(${(props) => props.open ? '-45deg' : 0});
       transition: all 0.2s ease-in-out;
     }
     .line:nth-of-type(1) {
-      transform: translateY(${(props) => (props.open ? '10px' : 0)})
-        rotate(${(props) => (props.open ? '45deg' : 0)});
+      transform: translateY(${(props) => props.open ? '10px' : 0})
+        rotate(${(props) => props.open ? '45deg' : 0});
       transform-origin: center;
       transition: all 0.2s ease-in-out;
     }
     .line:nth-of-type(3) {
-      transform: translateY(${(props) => (props.open ? '-10px' : 0)})
-        rotate(${(props) => (props.open ? '-225deg' : 0)});
+      transform: translateY(${(props) => props.open ? '-10px' : 0})
+        rotate(${(props) => props.open ? '-225deg' : 0});
       transform-origin: center;
       transition: all 0.2s ease-in-out;
     }
