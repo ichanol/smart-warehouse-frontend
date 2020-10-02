@@ -1,5 +1,5 @@
 import React from 'react'
-import { EditBtn, DeleteBtn } from '../../components'
+import { EditBtn, DeleteBtn } from '..'
 import PropTypes from 'prop-types'
 
 import {
@@ -12,7 +12,6 @@ import {
   Name,
   Amount,
   Company,
-  Time,
   Description,
   Actions,
   Trow,
@@ -20,8 +19,8 @@ import {
   Action,
 } from './TableStyle'
 
-const ImportExportTable = ({ data, select }) => {
-
+const ImportExportTable = ({ data, editFN, deleteFN }) => {
+  console.log('table', data)
   return (
     <Wrapper>
       <Table cellSpacing='0'>
@@ -32,23 +31,26 @@ const ImportExportTable = ({ data, select }) => {
             <Name>Product_Name</Name>
             <Amount>Amount</Amount>
             <Company>Company</Company>
-            <Time>Time</Time>
             <Description>Description</Description>
             <Actions>Action</Actions>
           </tr>
         </Top>
         <Body>
-          {data.map((a, index) => {
+          {data.map((value, key) => {
             return (
-              <Trow key={index}>
-                <Row>{a.id}</Row>
-                <Row>{a.product_id}</Row>
-                <Row>{a.product_name}</Row>
-                <Row>{a.amount}</Row>
-                <Row>{a.company_name}</Row>
-                <Row>{a.time}</Row>
-                <Row>{a.detail}</Row>
-                <Row><Action><EditBtn select={select} row={(a.no)} /><DeleteBtn /></Action></Row>
+              <Trow key={key}>
+                <Row>{key + 1}</Row>
+                <Row>{value.product_serial_number}</Row>
+                <Row>{value.product_name}</Row>
+                <Row>{value.amount}</Row>
+                <Row>{value.company_name}</Row>
+                <Row>{value.detail}</Row>
+                <Row>
+                  <Action>
+                    <EditBtn action={editFN} rowID={key} />
+                    <DeleteBtn action={deleteFN} rowID={key} />
+                  </Action>
+                </Row>
               </Trow>
             )
           })}
@@ -59,12 +61,12 @@ const ImportExportTable = ({ data, select }) => {
 }
 
 ImportExportTable.defaultProps = {
-  data: {},
+  data: [],
   select: () => { },
 }
 
 ImportExportTable.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   select: PropTypes.func,
 }
 

@@ -1,10 +1,10 @@
 import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn, ClearBtn, FilterBtn } from './button'
 import { ImportExportTable, Historytable, InventoryTable } from './tables'
 import { Navbar } from './navbar'
-import { data } from './mockData'
 import { Filter } from './Filter'
 import { Datepicker } from './Datepicker'
 import { DropdownFilter } from './Dropdown'
+import { Modal } from './Modal'
 
 export {
   CancelBtn,
@@ -19,8 +19,8 @@ export {
   Historytable,
   InventoryTable,
   Navbar,
-  data,
   Filter,
   Datepicker,
   DropdownFilter,
+  Modal,
 }

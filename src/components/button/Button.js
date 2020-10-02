@@ -12,28 +12,20 @@ import {
   TextButton,
 } from './buttonStyle'
 
-function CancelBtn() {
+function CancelBtn({ action }) {
   return (
     <div className='btn'>
-      <CancelButton
-        type='button'
-      >
+      <CancelButton type='button' onClick={() => action()}>
         Cancel
       </CancelButton>
     </div>
   )
 }
 
-function EditBtn({ select, row }) {
+function EditBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <EditButton
-        onClick={() => {
-          select(row)
-        }}
-      >
-        Edit
-        </EditButton>
+      <EditButton onClick={() => action(rowID)}>Edit</EditButton>
     </div>
   )
 }
@@ -45,22 +37,18 @@ function RetryBtn({ retry }) {
         type='button'
         onClick={() => {
           retry()
-        }}
-      >
+        }}>
         Retry
-        </RetryButton>
+      </RetryButton>
     </div>
   )
 }
 
-function SubmitBtn({ submitFilter }) {
+function SubmitBtn({ action }) {
   return (
     <div className='btn'>
-      <SubmitButton
-        type='submit'
-        onClick={submitFilter}
-      >
-        <TextButton>Submit</TextButton>
+      <SubmitButton type='submit' onClick={(event) => action(event)}>
+        Submit
       </SubmitButton>
     </div>
   )
@@ -76,16 +64,13 @@ function ExportBtn() {
   )
 }
 
-function DeleteBtn() {
+function DeleteBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <DeleteButton>
-        Delete
-      </DeleteButton>
+      <DeleteButton onClick={() => action(rowID)}>Delete</DeleteButton>
     </div>
   )
 }
-
 function ClearBtn({ clear }) {
   return (
     <div className='btn'>
@@ -111,6 +96,7 @@ function FilterBtn({ toggle }) {
     </div>
   )
 }
+
 
 EditBtn.defaultProps = {
   select: () => { },

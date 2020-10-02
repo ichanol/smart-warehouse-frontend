@@ -1,26 +1,25 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background-color: #292A73;
+  flex: 1;
+  background-color: #292a73;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
 `
 
 const Form = styled.div`
   display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 330px;
-  padding: 30px 30px 30px 30px;
+  padding: 30px;
   border-radius: 30px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  filter: blur(${(props) => (props.blur ? 5 : 0)}px);
 `
 
 const Header = styled.div`
-  margin: 20px;
   margin-bottom: 20px;
   font-size: 30px;
   text-align: center;
@@ -28,14 +27,14 @@ const Header = styled.div`
 
 const Head = styled.div`
   font-weight: 900;
-  color: #292A73;
+  color: #292a73;
 `
 
 const Input = styled.input`
   background-color: #f2f2f2;
   outline: 0;
   font-size: 16px;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   padding-left: 20px;
   border: 0;
@@ -43,15 +42,15 @@ const Input = styled.input`
 `
 
 const Error = styled.div`
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
   padding-left: 20px;
-  height: 20px; 
+  height: 20px;
   color: red;
 `
 
 const Button = styled.button`
-  color: #FFFFFF;
-  background-color: #5CB85C;
+  color: #ffffff;
+  background-color: #5cb85c;
   width: 100%;
   height: 50px;
   border: 0;
@@ -61,13 +60,13 @@ const Button = styled.button`
   font-size: 20px;
   font-weight: bold;
 
-  &:hover { 
-      background-color: #2EA22E;
-      transition: 0.3s;
-    }
-    &:active {
-      background-color: #5CB85C;
-    }
+  &:hover {
+    background-color: #2ea22e;
+    transition: 0.3s;
+  }
+  &:active {
+    background-color: #5cb85c;
+  }
 `
 
 export { Container, Form, Header, Head, Input, Error, Button }

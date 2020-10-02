@@ -4,7 +4,8 @@ import io from 'socket.io-client'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useResetRecoilState, useRecoilState } from 'recoil'
-import atomState from '../Atoms/Atoms'
+import atomState from '../../Atoms/Atoms'
+import { Container } from './OverviewStyle'
 
 import {
   RetryBtn,
@@ -13,15 +14,20 @@ import {
   ImportExportTable,
   Navbar,
   Modal,
-} from '../components'
+} from '../../components'
 import {
-  Container,
   Header,
   Head,
   BlockTable,
   BlockBtn,
   Content,
-} from './ImportExportStyle'
+} from '../../pages/ImportExportStyle'
+
+import {
+  CancelButton,
+  RetryButton,
+  SubmitButton,
+} from '../newComponents/Button'
 
 const ImportExportProduct = () => {
   const { handleSubmit } = useForm()
@@ -42,6 +48,12 @@ const ImportExportProduct = () => {
     !userState.isUserCardVerify,
   )
   const [isError, setIsError] = useState(false)
+
+  const [action, setAction] = useState('')
+
+  const dropdownSelect = (e) => {
+    setAction(e.target.value)
+  }
 
   const submit = async () => {
     try {
@@ -161,32 +173,31 @@ const ImportExportProduct = () => {
         isIndicator={false}
         detail='sdsd'
       />
-      <Navbar />
-      <Content blur={isWaitForProduct || isError || isWaitForUser}>
-        <Header>
-          <Head>Import - Export</Head>
-        </Header>
-
-        <BlockTable>
-          {readProductListState && (
-            <ImportExportTable
-              data={readProductListState}
-              editFN={editSelectedList}
-              deleteFN={deleteSelectedList}
-            />
-          )}
-        </BlockTable>
-        <BlockBtn
-          onSubmit={handleSubmit(submit)}
-          style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <div>
-            <RetryBtn />
-          </div>
-          <div style={{ display: 'flex' }}>
-            <CancelBtn />
-            <SubmitBtn action={() => { }} />
-          </div>
-          {/* <select value={action} required onChange={dropdownSelect}>
+      <div className='header'>
+        <span>Import - Export Product</span>
+      </div>
+      <div className='content'>
+        <Content blur={isWaitForProduct || isError || isWaitForUser}>
+          <BlockTable>
+            {readProductListState && (
+              <ImportExportTable
+                data={readProductListState}
+                editFN={editSelectedList}
+                deleteFN={deleteSelectedList}
+              />
+            )}
+          </BlockTable>
+          <BlockBtn
+            onSubmit={handleSubmit(submit)}
+            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            <div>
+              <RetryBtn />
+            </div>
+            <div style={{ display: 'flex' }}>
+              <CancelBtn />
+              <SubmitBtn action={() => {}} />
+            </div>
+            {/* <select value={action} required onChange={dropdownSelect}>
             <option value='' disabled selected hidden>
               Select Type
             </option>
@@ -195,10 +206,18 @@ const ImportExportProduct = () => {
             <option value='3'>Expired</option>
             <option value='4'>Damaged</option>
           </select> */}
-        </BlockBtn>
-      </Content>
+          </BlockBtn>
+        </Content>
+        <RetryButton />
+        <CancelButton />
+        <SubmitButton />
+      </div>
     </Container>
   )
 }
 
 export default ImportExportProduct
+/*
+<Container>
+      
+    </Container> */
