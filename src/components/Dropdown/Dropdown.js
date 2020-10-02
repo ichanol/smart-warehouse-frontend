@@ -8,6 +8,7 @@ import {
 const DropdownFilter = ({ filterSelected, dropdownFilter }) => {
   return (
     <Dropdown
+      defaultValue=''
       value={filterSelected}
       onChange={dropdownFilter}
     >

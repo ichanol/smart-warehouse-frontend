@@ -1,9 +1,8 @@
 import styled from 'styled-components'
 
 const Dropdown = styled.select`
-  width: 50%;
-  padding: 10px;
-  font-size: 20px;
+  height: 40px;
+  font-size: 15px;
   outline: 0;
   border: 1px solid lightgray;
 `

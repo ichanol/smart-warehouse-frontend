@@ -27,9 +27,13 @@ function Filter({
 
   return (
     <Wrapper>
-      <Header>
-        <Head>Select Date</Head>
-      </Header>
+      <Block>
+        <DropdownFilter filterSelected={filterSelected} dropdownFilter={dropdownFilter} />
+        <Input
+          value={keyword}
+          onChange={search}
+        />
+      </Block>
       <DateBlock>
         <Datepicker
           start={start}
@@ -39,21 +43,9 @@ function Filter({
         />
       </DateBlock>
       <FilterBlock>
-        <Header>
-          <Head>Filter</Head>
-        </Header>
         <Form>
-          <Block>
-            <DropdownFilter filterSelected={filterSelected} dropdownFilter={dropdownFilter} />
-            <Input
-              value={keyword}
-              onChange={search}
-            />
-          </Block>
-          <Block>
-            <ClearBtn clear={clear} />
-            <SubmitBtn submitFilter={submitFilter} />
-          </Block>
+          <ClearBtn clear={clear} />
+          <SubmitBtn submitFilter={submitFilter} />
         </Form>
       </FilterBlock>
     </Wrapper >
@@ -66,7 +58,7 @@ Filter.defaultProps = {
   setStart: () => { },
   setEnd: () => { },
   keyword: '',
-  submitFIlter: () => { },
+  submitFilter: () => { },
   filterSelected: '',
   dropfownFilter: () => { },
   search: () => { },
@@ -79,7 +71,7 @@ Filter.propTypes = {
   setStart: PropTypes.func,
   setEnd: PropTypes.func,
   keyword: PropTypes.string,
-  submitFIlter: PropTypes.func,
+  submitFilter: PropTypes.func,
   filterSelected: PropTypes.string,
   dropfownFilter: PropTypes.func,
   search: PropTypes.func,

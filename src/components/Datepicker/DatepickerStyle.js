@@ -8,8 +8,8 @@ const Wrapper = styled.div`
 const DateStart = styled.input`
   padding: 0;
   outline: 0;
-  font-size: 20px;
-  width: 80%;
+  font-size: 16px;
+  width: 100%;
   height: 40px;
   border: 3px solid lightgray; 
   text-align: center; 
@@ -25,8 +25,8 @@ const DateStart = styled.input`
 const DateEnd = styled.input`
   padding: 0;
   outline: 0;
-  font-size: 20px;
-  width: 80%;
+  font-size: 16px;
+  width: 100%;
   height: 40px;
   border: 3px solid lightgray;
   text-align: center; 

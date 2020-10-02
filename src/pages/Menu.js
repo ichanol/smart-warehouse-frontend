@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
 
-import { Navbar } from '../components'
 import { Container } from './MenuStyle'
 import {
   useRecoilValue,
@@ -36,7 +35,6 @@ const Menu = () => {
   return (
     <Container>
       {username.username}
-      <Navbar />
       <button
         type='button'
         onClick={() => {

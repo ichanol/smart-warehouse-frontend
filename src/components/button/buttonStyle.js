@@ -54,19 +54,22 @@ const SubmitButton = styled.button`
     justify-content: center;
     align-items: center;
     border: 0;
-    margin: 20px;
+    margin: 0 20px;
     border-radius: 30px;
     outline: 0;
-    width: 150px;
+    width: 100px;
+    height: 40px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    background-color: #3E4491;
+    border: 5px solid #2EA22E;
+    color: #2EA22E;
 
     &:hover { 
       background-color: #2EA22E;
       transition: 0.3s;
+      color: #FFFFFF;
     }
     &:active {
       background-color: #5CB85C;
@@ -143,26 +146,26 @@ const DeleteButton = styled.button`
 
 const ClearButton = styled.button`
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     border: 0;
-    margin: 20px;
     border-radius: 30px;
     outline: 0;
-    width: 150px;
+    width: 100px;
+    height: 40px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    background-color:  #C2C1C1;
+    /* background-color:  #C2C1C1; */
+    border: 5px solid #C2C1C1;
 
     &:hover { 
-      background-color: #D5D5D5;
+      background-color: #C2C1C1;
       transition: 0.3s;
     }
     &:active {
-      background-color: #C2C1C1;
+      background-color: #FFFFFF;
     }
   `
 

@@ -7,7 +7,7 @@ const Wrapper = styled.div`
 
 const Table = styled.table`
   width: 100%;
-  border: 1px solid #3E4491;
+  border: solid 2px rgba(62,68,145,0.1);
 `
 
 const Top = styled.thead`
@@ -43,7 +43,7 @@ const Name = styled.th`
 `
 
 const Amount = styled.th`
-  width: 5%;
+  width: 10%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -61,7 +61,7 @@ const Company = styled.th`
 `
 
 const Time = styled.th`
-  width: 10%;
+  width: 15%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -70,7 +70,7 @@ const Time = styled.th`
 `
 
 const Description = styled.th`
-  width: 20%;
+  width: 15%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -79,7 +79,7 @@ const Description = styled.th`
 `
 
 const Actions = styled.th`
-  width: 10%;
+  /* width: 10%; */
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -88,7 +88,7 @@ const Actions = styled.th`
 `
 
 const Ref = styled.th`
-  width: 10%;
+  /* width: 10%; */
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -97,7 +97,7 @@ const Ref = styled.th`
 `
 
 const Reporter = styled.th`
-  width: 10%;
+  /* width: 10%; */
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -116,8 +116,8 @@ const Row = styled.td`
   font-size: 14px;
   font-weight: bold;
   color: #292A73;
-  border-bottom: solid 2px rgba(62,68,145,0.1);
-  border-right: solid 2px rgba(62,68,145,0.1);
+  border: solid 2px rgba(62,68,145,0.1);
+  /* border-right: solid 2px rgba(62,68,145,0.1); */
 `
 
 const Trow = styled.tr`

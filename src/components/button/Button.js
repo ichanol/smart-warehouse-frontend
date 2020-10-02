@@ -44,10 +44,15 @@ function RetryBtn({ retry }) {
   )
 }
 
-function SubmitBtn({ action }) {
+function SubmitBtn({ action, submitFilter }) {
   return (
     <div className='btn'>
-      <SubmitButton type='submit' onClick={(event) => action(event)}>
+      <SubmitButton
+        type='button'
+        onClick={(event) => {
+          // action(event)
+          submitFilter()
+        }}>
         Submit
       </SubmitButton>
     </div>
@@ -67,7 +72,11 @@ function ExportBtn() {
 function DeleteBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <DeleteButton onClick={() => action(rowID)}>Delete</DeleteButton>
+      <DeleteButton
+        onClick={() => action(rowID)}
+      >
+        Delete
+      </DeleteButton>
     </div>
   )
 }
