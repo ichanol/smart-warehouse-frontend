@@ -1,5 +1,5 @@
 import React from 'react'
-import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil'
+import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE as recoilObserver } from 'recoil'
 import atomState from './Atoms/Atoms'
 import PrivateRoute from './components/Routes/PrivateRoute'
 import {
@@ -32,7 +32,7 @@ import { Modal } from './components/Modal'
 
 const App = () => {
   const PersistenceObserver = () => {
-    useRecoilTransactionObserver_UNSTABLE(({ snapshot }) => {
+    recoilObserver(({ snapshot }) => {
       for (const modifiedAtom of snapshot.getNodes_UNSTABLE({
         isModified: true,
       })) {
