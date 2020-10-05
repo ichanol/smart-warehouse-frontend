@@ -1,8 +1,8 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import atomState from '../../../Atoms/Atoms'
+import atomState from '../../Atoms/Atoms'
 import { Table } from './ImportExportTableStyle'
-import { Edit, Delete } from '../../Icon'
+import { Edit, Delete } from '../Icon'
 
 const ImportExportProduct = (props) => {
   const readProductListState = useRecoilValue(atomState.readProductListState)

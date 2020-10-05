@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useRecoilCallback, useRecoilValue } from 'recoil'
+import {
+  useRecoilCallback,
+  useRecoilValue,
+  useRecoilState,
+  useResetRecoilState,
+} from 'recoil'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import 'react-activity/dist/react-activity.css'
@@ -12,24 +17,24 @@ import {
   Input,
   Error,
   Button,
-} from './loginStyle.js'
+} from './LoginStyle.js'
 
-import Modal from '../components/Modal/Modal'
+import { Modal } from '../components/Modal'
 import atomState from '../Atoms/Atoms'
 
 const Login = () => {
   const history = useHistory()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [isLoading, setIsloading] = useState(false)
-  const [isError, setIsError] = useState(false)
-  const [errorMsg, setErrorMsg] = useState({
-    header: 'Error',
-    message: "Can't connect to the server",
-  })
   const { register, handleSubmit, errors } = useForm()
 
   const userState = useRecoilValue(atomState.userState)
+  const [modalState, setModalState] = useRecoilState(atomState.modalState)
+  const resetDefaultModalState = useResetRecoilState(atomState.modalState)
+
+  const onTryAgain = () => resetDefaultModalState()
+
+  const onForgotPassword = () => resetDefaultModalState()
 
   const submitLogIn = useRecoilCallback(({ set }) => async () => {
     try {
@@ -50,60 +55,56 @@ const Login = () => {
         return newUserState
       })
 
-      history.push('/menu')
+      history.push('/overview')
     } catch (error) {
       if (error.message === 'Request failed with status code 404') {
-        setErrorMsg({
-          header: 'Login failed',
-          message: 'Username or password incorrect',
+        setModalState((oldState) => {
+          const temp = { ...oldState }
+          temp.isDisplay = true
+          temp.modalType = 'confirm'
+          temp.title = 'Login failed'
+          temp.isIndicator = false
+          temp.detail = 'Username or password incorrect'
+          temp.negativeButtonFN = onForgotPassword
+          temp.positiveButtonFN = onTryAgain
+          temp.positiveButton = {
+            text: 'Try again',
+          }
+          temp.negativeButton = {
+            text: 'Forgot password ?',
+          }
+          return temp
         })
       } else if (error.message === 'Network Error') {
-        setErrorMsg({
-          header: 'Error',
-          message: "Can't connect to the server",
+        setModalState((oldState) => {
+          const temp = { ...oldState }
+          temp.isDisplay = true
+          temp.modalType = 'error'
+          temp.title = 'Network error'
+          temp.isIndicator = false
+          temp.detail = "Can't connect to the server"
+          temp.negativeButtonFN = onForgotPassword
+          temp.positiveButtonFN = onTryAgain
+          temp.positiveButton = {
+            text: 'Try again',
+          }
+          return temp
         })
       }
-      setIsloading(false)
-      setIsError(true)
     }
   })
 
   useEffect(() => {
     if (userState.isLogin) {
-      history.push('/menu')
+      history.push('/overview')
     } else {
     }
   }, [])
 
-  const onTryAgain = () => setIsError(false)
-  const onForgotPassword = () => setIsError(false)
-
   return (
     <Container>
-      <Modal
-        isDisplay={isError}
-        isFlex={false}
-        header={errorMsg.header}
-        detail={errorMsg.message}
-        isIndicator={false}
-        primaryButton={{
-          display: true,
-          text: 'Forgot password ?',
-          color: 'gray',
-          fill: 'white',
-          stroke: 'transparent',
-        }}
-        primaryButtonFN={onForgotPassword}
-        secondaryButton={{
-          display: true,
-          text: 'Try again',
-          color: 'white',
-          fill: '#1fe073',
-          stroke: '#1fe073',
-        }}
-        secondaryButtonFN={onTryAgain}
-      />
-      <Form blur={isLoading || isError}>
+      <Modal />
+      <Form blur={modalState.isDisplay}>
         <Header>
           <Head>LOG IN</Head>
         </Header>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import atomState from '../../../Atoms/Atoms'
+import atomState from '../../Atoms/Atoms'
 
 import { ToastContainer } from './ToastStyle'
 

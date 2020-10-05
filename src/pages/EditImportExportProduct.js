@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import atomState from '../../Atoms/Atoms'
+import atomState from '../Atoms/Atoms'
 
 import { Container } from './EditImportExportProductStyle'
 import {
   CancelButton,
   SubmitButton,
-} from '../newComponents/Button'
+} from '../components/Button'
 
 const EditImportExportProduct = () => {
   const { productid } = useParams()
@@ -60,7 +60,6 @@ const EditImportExportProduct = () => {
           onChange={(e) => {
             const temp = { ...editInformation }
             temp.amount = parseInt(e.target.value, 10)
-            console.log(typeof e.target.value)
             setEditInformation(temp)
           }}
         />

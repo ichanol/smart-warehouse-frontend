@@ -56,25 +56,24 @@ export const Container = styled.div`
   visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
   animation: ${(props) => props.isDisplay ? fadeIn : fadeOut} 0.25s linear;
   transition: visibility 0.25s linear;
-`
 
-export const ModalBox = styled.div`
-  min-width: 350px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  padding: 30px;
-  position: relative;
-  box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
-    0 -10px 15px 0 rgba(255, 255, 255, 0.35);
+  .modal {
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
+      0 -10px 15px 0 rgba(255, 255, 255, 0.35);
 
-  visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isDisplay ? slideIn : slideOut} 0.25s linear;
-  transition: visibility 0.25s linear;
+    visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
+    animation: ${(props) => props.isDisplay ? slideIn : slideOut} 0.25s linear;
+    transition: visibility 0.25s linear;
+  }
 
   .button-wrapper {
     display: flex;
@@ -82,12 +81,18 @@ export const ModalBox = styled.div`
     width: 100%;
   }
 
-  .primary-button,
-  .secondary-button {
-    background-color: ${(props) => props.primaryButtonFill};
-    border: 2px solid ${(props) => props.primaryButtonStroke};
-    color: ${(props) => props.primaryButtonColor};
-    ${(props) => props.flex ? 'flex:1;' : null}
+  .activity-wrapper {
+    margin: 15px 0;
+  }
+
+  .confirm-positive-button,
+  .warnning-positive-button,
+  .success-positive-button,
+  .error-positive-button,
+  .confirm-negative-button,
+  .warnning-negative-button,
+  .success-negative-button,
+  .error-negative-button {
     padding: 0 20px;
     height: 45px;
     border-radius: 8px;
@@ -100,120 +105,70 @@ export const ModalBox = styled.div`
     outline: none;
   }
 
-  .secondary-button {
-    background-color: ${(props) => props.secondaryButtonFill};
-    border: 2px solid ${(props) => props.secondaryButtonStroke};
-    color: ${(props) => props.secondaryButtonColor};
+  .warnning-negative-button,
+  .success-negative-button,
+  .error-negative-button {
+    display: none;
   }
 
-  .activity-wrapper {
-    margin: 15px 0;
+  .confirm-negative-button {
+    color: gray;
+    background-color: transparent;
+    border: 2px solid transparent;
+    flex: 1;
   }
-`
 
-export const Header = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
+  .confirm-positive-button,
+  .error-positive-button,
+  .warnning-positive-button,
+  .success-positive-button {
+    color: white;
+    background-color: ${(props) => props.color ? props.color : '#eb2d2d'};
+    border: 2px solid ${(props) => props.color ? props.color : '#eb2d2d'};
+    flex: 1;
+  }
 
-  span {
+  .warnning-positive-button {
+    background-color: #ffd138;
+    border: 2px solid #ffd138;
+  }
+
+  .success-positive-button {
+    background-color: #5ceb89;
+    border: 2px solid #5ceb89;
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+
+  .header span {
     font-size: 22px;
     font-weight: bold;
   }
-`
 
-export const Detail = styled.div`
-  width: 100%;
-  max-height: 200px;
-  overflow: auto;
-  display: flex;
-  margin-bottom: 25px;
-  padding: 10px;
+  .detail {
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+    display: flex;
+    margin-bottom: 25px;
+    padding: 10px;
+  }
 
-  span {
+  .detail span {
     text-align: center;
     width: 100%;
     font-size: 12pt;
     color: rgba(0, 0, 0, 0.75);
   }
-  .hightlight {
+
+  .detail .hightlight {
     font-weight: bold;
     font-size: 14pt;
     color: red;
-  }
-`
-
-const Modal = styled.div`
-  min-width: 350px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  padding: 30px;
-  position: relative;
-  box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
-    0 -10px 15px 0 rgba(255, 255, 255, 0.35);
-  visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isDisplay ? slideIn : slideOut} 0.25s linear;
-  transition: visibility 0.25s linear;
-
-  .button-wrapper {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .activity-wrapper {
-    margin: 15px 0;
-  }
-`
-
-const ConfirmModal = styled(Modal)`
-  .primary-button,
-  .secondary-button {
-    background-color: ${(props) => props.primaryButtonFill};
-    border: 2px solid ${(props) => props.primaryButtonStroke};
-    color: ${(props) => props.primaryButtonColor};
-    flex: 1;
-    padding: 0 20px;
-    height: 45px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-transform: uppercase;
-    margin: 10px;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .secondary-button {
-    background-color: transparent;
-    border: 2px solid transparent;
-    color: gray;
-  }
-
-  .modal-warning, .modal-success, .modal-retry, .modal-error;
-`
-const LoadingModal = styled(Modal)`
-  .primary-button {
-    background-color: ${(props) => props.primaryButtonFill};
-    border: 2px solid ${(props) => props.primaryButtonStroke};
-    color: ${(props) => props.primaryButtonColor};
-    flex: 1;
-    padding: 0 20px;
-    height: 45px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-transform: uppercase;
-    margin: 10px;
-    cursor: pointer;
-    outline: none;
   }
 `

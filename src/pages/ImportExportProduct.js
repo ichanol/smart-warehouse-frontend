@@ -3,15 +3,15 @@ import axios from 'axios'
 import io from 'socket.io-client'
 import { useHistory } from 'react-router-dom'
 import { useResetRecoilState, useRecoilState, useSetRecoilState } from 'recoil'
-import atomState from '../../Atoms/Atoms'
+import atomState from '../Atoms/Atoms'
 
 import { Container } from './ImportExportProductStyle'
-import ImportExportTable from '../newComponents/Table/ImportExportTable'
+import ImportExportTable from '../components/Table/ImportExportTable'
 import {
   CancelButton,
   RetryButton,
   SubmitButton,
-} from '../newComponents/Button'
+} from '../components/Button'
 
 const ImportExportProduct = () => {
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
@@ -39,18 +39,16 @@ const ImportExportProduct = () => {
     if (!userState.isUserCardVerify && !readProductListState.length) {
       setModalState((oldState) => {
         const temp = { ...oldState }
+        temp.modalType = 'error'
         temp.isDisplay = true
-        temp.header = 'Please scan your card'
+        temp.title = 'Please scan your card'
         temp.isIndicator = true
         temp.detail = 'Scan your card to proceed next step'
-        temp.primaryButton = {
+        temp.positiveButton = {
           display: true,
           text: 'cancel',
-          color: 'white',
-          fill: '#eb2d2d',
-          stroke: '#eb2d2d',
         }
-        temp.primaryButtonFN = onCancleScanning
+        temp.positiveButtonFN = onCancleScanning
         return temp
       })
       socket.on('USER_GRANTED', ({ message, granted, room }) => {
@@ -62,18 +60,15 @@ const ImportExportProduct = () => {
         })
         setModalState((oldState) => {
           const temp = { ...oldState }
+          temp.modalType = 'error'
           temp.isDisplay = true
-          temp.header = 'Please wait'
+          temp.title = 'Please wait'
           temp.isIndicator = true
           temp.detail = 'Device is scanning for products'
-          temp.primaryButton = {
-            display: true,
+          temp.positiveButton = {
             text: 'cancel',
-            color: 'white',
-            fill: '#eb2d2d',
-            stroke: '#eb2d2d',
           }
-          temp.primaryButtonFN = onCancleScanning
+          temp.positiveButtonFN = onCancleScanning
           return temp
         })
         socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
@@ -85,18 +80,16 @@ const ImportExportProduct = () => {
     } else if (!userState.isUserCardVerify) {
       setModalState((oldState) => {
         const temp = { ...oldState }
+        temp.modalType = 'error'
         temp.isDisplay = true
-        temp.header = 'Please scan your card'
+        temp.title = 'Please scan your card'
         temp.isIndicator = true
         temp.detail = 'Scan your card to proceed next step'
-        temp.primaryButton = {
+        temp.positiveButton = {
           display: true,
           text: 'cancel',
-          color: 'white',
-          fill: '#eb2d2d',
-          stroke: '#eb2d2d',
         }
-        temp.primaryButtonFN = onCancleScanning
+        temp.positiveButtonFN = onCancleScanning
         return temp
       })
       socket.on('USER_GRANTED', ({ message, granted, room }) => {
@@ -111,18 +104,15 @@ const ImportExportProduct = () => {
     } else if (!readProductListState.length) {
       setModalState((oldState) => {
         const temp = { ...oldState }
+        temp.modalType = 'error'
         temp.isDisplay = true
-        temp.header = 'Please wait'
+        temp.title = 'Please wait'
         temp.isIndicator = true
         temp.detail = 'Device is scanning for products'
-        temp.primaryButton = {
-          display: true,
+        temp.positiveButton = {
           text: 'cancel',
-          color: 'white',
-          fill: '#eb2d2d',
-          stroke: '#eb2d2d',
         }
-        temp.primaryButtonFN = onCancleScanning
+        temp.positiveButtonFN = onCancleScanning
         return temp
       })
       socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
@@ -155,27 +145,19 @@ const ImportExportProduct = () => {
   const onCancle = () => {
     setModalState((oldState) => {
       const temp = { ...oldState }
+      temp.modalType = 'confirm'
       temp.isDisplay = true
-      temp.isFlex = true
-      temp.header = 'Are you sure ?'
+      temp.title = 'Are you sure ?'
       temp.detail = 'You are going back to menu'
       temp.isIndicator = false
-      temp.primaryButton = {
-        display: true,
+      temp.negativeButton = {
         text: 'no',
-        color: 'gray',
-        fill: 'transparent',
-        stroke: 'transparent',
       }
-      temp.primaryButtonFN = onDismissModal
-      temp.secondaryButton = {
-        display: true,
+      temp.negativeButtonFN = onDismissModal
+      temp.positiveButton = {
         text: 'yes',
-        color: 'white',
-        fill: '#eb2d2d',
-        stroke: '#eb2d2d',
       }
-      temp.secondaryButtonFN = cancleTransaction
+      temp.positiveButtonFN = cancleTransaction
       temp.dismissFN = onDismissModal
       return temp
     })
@@ -223,17 +205,14 @@ const ImportExportProduct = () => {
       setModalState((oldState) => {
         const temp = { ...oldState }
         temp.isDisplay = true
-        temp.header = 'Submit failed'
+        temp.modalType = 'error'
+        temp.title = 'Submit failed'
         temp.isIndicator = false
         temp.detail = 'Something went wrong. Please try again'
-        temp.primaryButton = {
-          display: true,
+        temp.positiveButton = {
           text: 'Try again',
-          color: 'white',
-          fill: '#eb2d2d',
-          stroke: '#eb2d2d',
         }
-        temp.primaryButtonFN = onDismissModal
+        temp.positiveButtonFN = onDismissModal
         return temp
       })
     }
@@ -252,27 +231,21 @@ const ImportExportProduct = () => {
     )
     setModalState((oldState) => {
       const temp = { ...oldState }
+      temp.modalType = 'confirm'
       temp.isDisplay = true
-      temp.isFlex = true
-      temp.header = 'Are you sure ?'
+      temp.title = 'Are you sure ?'
       temp.detail = DetailForConfirmDeleteModal
       temp.isIndicator = false
-      temp.primaryButton = {
+      temp.negativeButton = {
         display: true,
         text: 'cancle',
-        color: 'gray',
-        fill: 'transparent',
-        stroke: 'transparent',
       }
-      temp.primaryButtonFN = onDismissModal
-      temp.secondaryButton = {
+      temp.negativeButtonFN = onDismissModal
+      temp.positiveButton = {
         display: true,
         text: 'delete',
-        color: 'white',
-        fill: '#eb2d2d',
-        stroke: '#eb2d2d',
       }
-      temp.secondaryButtonFN = () => confirmDeleteSelectedList(selectedList)
+      temp.positiveButtonFN = () => confirmDeleteSelectedList(selectedList)
       temp.dismissFN = onDismissModal
       return temp
     })
@@ -281,27 +254,20 @@ const ImportExportProduct = () => {
   const onRetry = () => {
     setModalState((oldState) => {
       const temp = { ...oldState }
+      temp.modalType = 'confirm'
       temp.isDisplay = true
-      temp.isFlex = true
-      temp.header = 'Are you sure ?'
+      temp.title = 'Are you sure ?'
       temp.detail = 'You are going to scan for product again'
       temp.isIndicator = false
-      temp.primaryButton = {
-        display: true,
+      temp.negativeButton = {
         text: 'cancle',
-        color: 'gray',
-        fill: 'transparent',
-        stroke: 'transparent',
       }
-      temp.primaryButtonFN = onDismissModal
-      temp.secondaryButton = {
-        display: true,
+      temp.negativeButtonFN = onDismissModal
+      temp.positiveButton = {
         text: 'retry',
-        color: 'white',
-        fill: '#04adf6',
-        stroke: '#04adf6',
+        color: '#04adf6',
       }
-      temp.secondaryButtonFN = () => resetReadProductListDefaultValue()
+      temp.positiveButtonFN = () => resetReadProductListDefaultValue()
       temp.dismissFN = onDismissModal
       return temp
     })

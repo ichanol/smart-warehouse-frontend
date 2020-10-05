@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container } from './ImportExportMenuStyle'
 import { useSetRecoilState } from 'recoil'
-import atomState from '../../Atoms/Atoms'
+import atomState from '../Atoms/Atoms'
 
 const ImportExportMenu = () => {
   const history = useHistory()

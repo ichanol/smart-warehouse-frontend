@@ -61,10 +61,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }
 
   useEffect(() => {
-    console.log('///')
-    console.log({ ...rest })
-
-
     const isAccessTokenValid = verifyAccessToken()
     const isRefreshTokenValid = verifyRefreshToken()
     if (!isAccessTokenValid && isRefreshTokenValid) {

@@ -2,29 +2,23 @@ import React from 'react'
 import { Sentry } from 'react-activity'
 import { useRecoilValue } from 'recoil'
 import atomState from '../../Atoms/Atoms'
-import 'react-activity/dist/react-activity.css'
+import '../../../node_modules/react-activity/dist/react-activity.css'
 
-import { ModalBox, Header, Detail, Container } from './ModalStyle'
+import { Container } from './ModalStyle'
 const Modal = () => {
   const modalState = useRecoilValue(atomState.modalState)
 
   return (
-    <Container isDisplay={modalState.isDisplay} onClick={modalState.dismissFN}>
-      <ModalBox
-        isDisplay={modalState.isDisplay }
-        paddingTop={modalState.primaryButton}
-        isIndicator={modalState.isIndicator}
-        primaryButtonColor={modalState.primaryButton.color}
-        primaryButtonFill={modalState.primaryButton.fill}
-        primaryButtonStroke={modalState.primaryButton.stroke}
-        secondaryButtonColor={modalState.secondaryButton.color}
-        secondaryButtonFill={modalState.secondaryButton.fill}
-        secondaryButtonStroke={modalState.secondaryButton.stroke}
-        flex={modalState.isFlex}>
-        {modalState.header && (
-          <Header>
-            <span>{modalState.header}</span>
-          </Header>
+    <Container
+      isDisplay={modalState.isDisplay}
+      isIndicator={modalState.isIndicator}
+      color={modalState.positiveButton.color}
+      onClick={modalState.dismissFN}>
+      <div className='modal'>
+        {modalState.title && (
+          <div className='header'>
+            <span>{modalState.title}</span>
+          </div>
         )}
         {modalState.isIndicator && (
           <div className='activity-wrapper'>
@@ -32,29 +26,26 @@ const Modal = () => {
           </div>
         )}
         {modalState.detail && (
-          <Detail>
+          <div className='detail'>
             <span>{modalState.detail}</span>
-          </Detail>
+          </div>
         )}
+
         <div className='button-wrapper'>
-          {modalState.primaryButton.display ? (
-            <button
-              type='button'
-              onClick={modalState.primaryButtonFN}
-              className='primary-button'>
-              {modalState.primaryButton.text}
-            </button>
-          ) : null}
-          {modalState.secondaryButton.display ? (
-            <button
-              type='button'
-              onClick={modalState.secondaryButtonFN}
-              className='secondary-button'>
-              {modalState.secondaryButton.text}
-            </button>
-          ) : null}
+          <button
+            type='button'
+            onClick={modalState.negativeButtonFN}
+            className={`${modalState.modalType}-negative-button`}>
+            {modalState.negativeButton.text}
+          </button>
+          <button
+            type='button'
+            onClick={modalState.positiveButtonFN}
+            className={`${modalState.modalType}-positive-button`}>
+            {modalState.positiveButton.text}
+          </button>
         </div>
-      </ModalBox>
+      </div>
     </Container>
   )
 }

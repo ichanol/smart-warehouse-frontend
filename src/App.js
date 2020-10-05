@@ -11,11 +11,6 @@ import {
 } from 'react-router-dom'
 import './App.css'
 import {
-  Login,
-  Menu,
-} from './pages'
-
-import {
   ImportExportProduct,
   Map,
   Overview,
@@ -28,10 +23,11 @@ import {
   ProfileSettings,
   EditImportExportProduct,
   ImportExportMenu,
-} from './components/newPages'
+  Login,
+} from './Pages'
 
 import NavBar from './components/newComponents/NavBar'
-import Toast from './components/newComponents/Toast/Toast'
+import Toast from './components/Toast/Toast'
 import { Modal } from './components/Modal'
 
 const App = () => {
@@ -41,7 +37,8 @@ const App = () => {
         isModified: true,
       })) {
         const atomLoadable = snapshot.getLoadable(modifiedAtom)
-        if (atomLoadable.state === 'hasValue') {
+        if (modifiedAtom.key === 'modalState') {
+        } else if (atomLoadable.state === 'hasValue') {
           window.localStorage.setItem(
             modifiedAtom.key,
             JSON.stringify({ value: atomLoadable.contents }),
@@ -88,14 +85,22 @@ const App = () => {
           </div>
 
           <Switch>
-            <PrivateRoute path='/menu' component={Menu} />
-            <PrivateRoute path='/import-export/edit-product/:productid' component={EditImportExportProduct} />
-            <PrivateRoute path='/import-export/in-progress' component={ImportExportProduct} />
+            <PrivateRoute
+              path='/import-export/edit-product/:productid'
+              component={EditImportExportProduct}
+            />
+            <PrivateRoute
+              path='/import-export/in-progress'
+              component={ImportExportProduct}
+            />
             <PrivateRoute path='/import-export' component={ImportExportMenu} />
             <PrivateRoute path='/map' component={Map} />
             <PrivateRoute path='/overview' component={Overview} />
             <PrivateRoute path='/product-list' component={ProductList} />
-            <PrivateRoute path='/product-management' component={ProductManagement} />
+            <PrivateRoute
+              path='/product-management'
+              component={ProductManagement}
+            />
             <PrivateRoute path='/role-management' component={RoleManagement} />
             <PrivateRoute path='/transaction' component={Transaction} />
             <PrivateRoute path='/user-management' component={UserManagement} />

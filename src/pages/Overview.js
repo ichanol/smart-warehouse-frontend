@@ -4,7 +4,7 @@ import {
   SubmitButton,
   CancelButton,
   RetryButton,
-} from '../../components/newComponents/Button'
+} from '../components/Button'
 
 const Overview = () => {
   return (

@@ -27,15 +27,15 @@ atomState.modalState = atom({
   key: 'modalState',
   default: {
     isDisplay: false,
-    header: null,
+    title: null,
     isIndicator: false,
     detail: null,
-    isFlex: true,
-    primaryButtonFN: () => {},
-    secondaryButtonFN: () => {},
+    negativeButtonFN: () => {},
+    positiveButtonFN: () => {},
     dismissFN: () => {},
-    primaryButton: {},
-    secondaryButton: {},
+    negativeButton: {},
+    positiveButton: {},
+    modalType: 'error',
   },
 })
 
