@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Filter, InventoryTable, FilterBtn } from '../../components'
+import { Datepicker, InventoryTable, SearchDropdown, ClearBtn, SubmitBtn } from '../../components'
 import {
   Container,
   Header,
   Content,
   FilterBlock,
   TableBlock,
-  ButtonBlock,
+  Input,
+  Form,
 } from '../../pages/InventoryStyle'
 
 function ProductList() {
-  const tableName = 'inventory'
   const [data, setData] = useState([])
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [toggleFilter, setToggleFilter] = useState(false) // TRUE || FALSE
   const [filterSelected, setFilterSelected] = useState('')
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' })
+
+  const filter = `${filterSelected}=${keyword}`
 
   const handleSort = (name) => {
     return sort.column === name ?
@@ -34,14 +35,6 @@ function ProductList() {
       })
   }
 
-  const handlerToggleFilter = () => {
-    return toggleFilter ? setToggleFilter(false) : setToggleFilter(true)
-  }
-
-  const search = (e) => {
-    setKeyword(e.target.value)
-  }
-
   const clear = () => {
     setStartDate('')
     setEndDate('')
@@ -49,12 +42,12 @@ function ProductList() {
     setKeyword('')
   }
 
-  const dropdownFilter = (e) => {
+  const dropdownSelected = (e) => {
     setFilterSelected(e.target.value)
   }
 
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&table=${tableName}`
+    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}`
     axios({
       url: URL,
       method: 'get',
@@ -88,9 +81,9 @@ function ProductList() {
       })
   }
 
-  const submitFilter = (e) => {
+  const submitFilter = () => {
     axios({
-      url: `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}`,
+      url: `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&${filter}`,
       method: 'get',
     })
       .then(res => {
@@ -99,7 +92,6 @@ function ProductList() {
       .catch(err => {
         throw err
       })
-    // setToggleFilter(false)
     setFilterSelected(filterSelected)
     setKeyword(keyword)
     setStart(startDate)
@@ -114,29 +106,28 @@ function ProductList() {
   return (
     <Container>
       <Header>
-        <ButtonBlock>
-          <FilterBtn
-            toggle={handlerToggleFilter}
+        <FilterBlock>
+          <div>
+            <SearchDropdown
+              selected={dropdownSelected}
+              filterSelected={filterSelected}
+            />
+            <Input
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+          </div>
+          <Datepicker
+            start={startDate}
+            end={endDate}
+            setStart={setStart}
+            setEnd={setEnd}
           />
-          {toggleFilter &&
-            (
-              <FilterBlock>
-                <Filter
-                  start={startDate}
-                  end={endDate}
-                  setStart={setStart}
-                  setEnd={setEnd}
-                  submitFilter={submitFilter}
-                  filterSelected={filterSelected}
-                  keyword={keyword}
-                  search={search}
-                  dropdownFilter={dropdownFilter}
-                  clear={clear}
-                />
-              </FilterBlock>
-            )
-          }
-        </ButtonBlock>
+          <Form>
+            <ClearBtn clear={clear} />
+            <SubmitBtn submitFilter={submitFilter} />
+          </Form>
+        </FilterBlock>
       </Header>
       <Content>
         <TableBlock>

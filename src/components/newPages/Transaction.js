@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Filter, Historytable, ExportBtn, FilterBtn } from '../../components'
+import { Filter, Historytable, ExportBtn } from '../../components'
 import {
   Container,
   Header,
   Content,
   FilterBlock,
   TableBlock,
-  ButtonBlock,
 } from '../../pages/HistoryStyle'
 
 const moment = require('moment')
 
 function Transaction() {
-  const tableName = 'history'
   const [data, setData] = useState([])
   const [startDate, setStartDate] = useState('') // StartDate
   const [endDate, setEndDate] = useState('') // EndDate
   const [filterSelected, setFilterSelected] = useState('')
   const [keyword, setKeyword] = useState('')
-  const [toggleFilter, setToggleFilter] = useState(false) // TRUE || FALSE
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' }) // DESC === Down || ASC === UP
 
   const today = moment()
@@ -56,7 +53,7 @@ function Transaction() {
   }
 
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&table=${tableName}&${filter}`
+    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&${filter}`
     axios({
       url: URL,
       method: 'get',
@@ -67,12 +64,6 @@ function Transaction() {
       .catch(err => {
         throw err
       })
-  }
-
-  const handlerToggleFilter = () => {
-    return toggleFilter
-      ? setToggleFilter(false)
-      : setToggleFilter(true)
   }
 
   const setStart = (date) => {
@@ -126,30 +117,20 @@ function Transaction() {
   return (
     <Container>
       <Header>
-        <ButtonBlock>
-          <FilterBtn
-            toggle={handlerToggleFilter}
+        <FilterBlock>
+          <Filter
+            start={startDate}
+            end={endDate}
+            setStart={setStart}
+            setEnd={setEnd}
+            submitFilter={submitFilter}
+            filterSelected={filterSelected}
+            keyword={keyword}
+            search={search}
+            dropdownFilter={dropdownFilter}
+            clear={clear}
           />
-          {toggleFilter &&
-            (
-              <FilterBlock>
-                <Filter
-                  start={startDate}
-                  end={endDate}
-                  setStart={setStart}
-                  setEnd={setEnd}
-                  submitFilter={submitFilter}
-                  filterSelected={filterSelected}
-                  keyword={keyword}
-                  search={search}
-                  dropdownFilter={dropdownFilter}
-                  clear={clear}
-                />
-              </FilterBlock>
-            )
-          }
-          {/* <ExportBtn /> */}
-        </ButtonBlock>
+        </FilterBlock>
       </Header>
       <Content>
         <TableBlock>

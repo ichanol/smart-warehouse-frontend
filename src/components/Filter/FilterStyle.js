@@ -10,9 +10,6 @@ const DateBlock = styled.div`
   width: 400px;
 `
 
-const FilterBlock = styled.div`
-`
-
 const Form = styled.form`
   display: flex;
   flex-direction: row;
@@ -28,12 +25,11 @@ const Input = styled.input`
   font-size: 16px;
   width: 50%;
   padding-left: 10px;
-  background-color: #F8F8F8;
   color: #292A73;
 
   &&:focus {
     transition: 0.7s;
-    border-bottom: 3px solid #292A73;
+    border-bottom: 3px solid #ff9e1f;
   } 
 `
 
@@ -43,4 +39,4 @@ const Block = styled.div`
   margin: 0 5px;
 `
 
-export { Wrapper, DateBlock, FilterBlock, Form, Input, Block }
+export { Wrapper, DateBlock, Form, Input, Block }

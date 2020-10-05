@@ -22,6 +22,20 @@ const DropdownFilter = ({ filterSelected, dropdownFilter }) => {
   )
 }
 
+const SearchDropdown = ({ filterSelected, selected }) => {
+  return (
+    <Dropdown
+      defaultValue=''
+      value={filterSelected}
+      onChange={selected}
+    >
+      <Choice value='' disabled selected hidden>Select Column</Choice>
+      {/* <Choice value='product_name'>Product Name</Choice> */}
+      <Choice value='balance'>Balance</Choice>
+    </Dropdown>
+  )
+}
+
 DropdownFilter.defaultProps = {
   filterSelected: '',
   dropdownFilter: () => { },
@@ -32,4 +46,14 @@ DropdownFilter.propTypes = {
   dropdownFilter: PropTypes.func,
 }
 
-export { DropdownFilter }
+SearchDropdown.defaultProps = {
+  filterSelected: '',
+  selected: () => { },
+}
+
+SearchDropdown.propTypes = {
+  filterSelected: PropTypes.string,
+  selected: PropTypes.func,
+}
+
+export { DropdownFilter, SearchDropdown }

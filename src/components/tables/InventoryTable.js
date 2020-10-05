@@ -71,7 +71,7 @@ function InventoryTable({ data, handleSort }) {
                 <Row>{index + 1}</Row>
                 <Row>{a.product_id}</Row>
                 <Row>{a.product_name}</Row>
-                <Row>{a.balance}</Row>
+                <Row>{a.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Row>
                 <Row>{moment(a.timestamp).format('DD-MM-yyyy hh:mm:ss')}</Row>
                 <Row>{a.detail}</Row>
               </Trow>

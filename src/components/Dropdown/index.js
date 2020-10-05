@@ -1,3 +1,3 @@
-import { DropdownFilter } from './Dropdown'
+import { DropdownFilter, SearchDropdown } from './Dropdown'
 
-export { DropdownFilter }
+export { DropdownFilter, SearchDropdown }

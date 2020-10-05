@@ -2,10 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Wrapper,
-  Header,
-  Head,
   DateBlock,
-  FilterBlock,
   Form,
   Input,
   Block,
@@ -42,12 +39,10 @@ function Filter({
           setEnd={setEnd}
         />
       </DateBlock>
-      <FilterBlock>
-        <Form>
-          <ClearBtn clear={clear} />
-          <SubmitBtn submitFilter={submitFilter} />
-        </Form>
-      </FilterBlock>
+      <Form>
+        <ClearBtn clear={clear} />
+        <SubmitBtn submitFilter={submitFilter} />
+      </Form>
     </Wrapper >
   )
 }

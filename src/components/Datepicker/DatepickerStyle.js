@@ -11,14 +11,15 @@ const DateStart = styled.input`
   font-size: 16px;
   width: 100%;
   height: 40px;
-  border: 3px solid lightgray; 
+  border: 0;
+  border-bottom: 3px solid lightgray; 
   text-align: center; 
   color: #292A73;
   font-weight: bold;
 
   &&:focus {
     transition: 1s;
-    border: 3px solid #292A73;
+    border-bottom: 3px solid #ff9e1f;
   }
 `
 
@@ -28,14 +29,15 @@ const DateEnd = styled.input`
   font-size: 16px;
   width: 100%;
   height: 40px;
-  border: 3px solid lightgray;
+  border: 0;
+  border-bottom: 3px solid lightgray;
   text-align: center; 
   color: #292A73;
   font-weight: bold;
 
   &&:focus {
-    transition: 1s;
-    border: 3px solid #292A73;
+    transition: 0.5s;
+    border-bottom: 3px solid #ff9e1f;
   }
 `
 

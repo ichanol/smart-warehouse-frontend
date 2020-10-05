@@ -3,7 +3,7 @@ import { ImportExportTable, Historytable, InventoryTable } from './tables'
 import { Navbar } from './navbar'
 import { Filter } from './Filter'
 import { Datepicker } from './Datepicker'
-import { DropdownFilter } from './Dropdown'
+import { DropdownFilter, SearchDropdown } from './Dropdown'
 import { Modal } from './Modal'
 
 export {
@@ -22,5 +22,6 @@ export {
   Filter,
   Datepicker,
   DropdownFilter,
+  SearchDropdown,
   Modal,
 }

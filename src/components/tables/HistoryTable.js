@@ -90,7 +90,7 @@ function HistoryTable({ data, handleSort }) {
                 <Row>{index + 1}</Row>
                 <Row>{a.product_id}</Row>
                 <Row>{a.product_name}</Row>
-                <Row>{a.amount}</Row>
+                <Row>{a.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Row>
                 <Row>{moment(a.timestamp).format('DD-MM-yyyy hh:mm:ss')}</Row>
                 <Row>{a.action_type}</Row>
                 <Row>{a.reference_number}</Row>

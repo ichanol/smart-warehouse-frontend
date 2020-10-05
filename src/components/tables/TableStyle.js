@@ -11,7 +11,7 @@ const Table = styled.table`
 `
 
 const Top = styled.thead`
-  background-color: #3E4491;
+  background-color: #1C1C1C;
 `
 
 const No = styled.th`
@@ -115,9 +115,7 @@ const Row = styled.td`
   vertical-align: middle;
   font-size: 14px;
   font-weight: bold;
-  color: #292A73;
   border: solid 2px rgba(62,68,145,0.1);
-  /* border-right: solid 2px rgba(62,68,145,0.1); */
 `
 
 const Trow = styled.tr`
@@ -142,7 +140,7 @@ const Button = styled.button`
   width: 100%;
   height: 100%; 
   /* background-color: red; */
-  background-color: #3E4491;
+  background-color: #1C1C1C;
   color: #FFFFFF;
   text-transform: uppercase;
   font-weight: bold;
