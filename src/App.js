@@ -19,14 +19,13 @@ const App = () => {
       })) {
         const atomLoadable = snapshot.getLoadable(modifiedAtom)
         const isBlackList = blacklistSearcher(modifiedAtom.key)
-
-        if (isBlackList) {
-        } else if (atomLoadable.state === 'hasValue') {
-          window.localStorage.setItem(
-            modifiedAtom.key,
-            JSON.stringify({ value: atomLoadable.contents }),
-          )
+        if (isBlackList || atomLoadable.state !== 'hasValue') {
+          return false
         }
+        window.localStorage.setItem(
+          modifiedAtom.key,
+          JSON.stringify({ value: atomLoadable.contents }),
+        )
       }
     })
     return null
