@@ -1,3 +1,4 @@
+import { COLORS } from '../Constant'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -7,7 +8,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background-color: #e6eff0;
+  background-color: ${COLORS.gray[200]};
+
   .header {
     height: 35px;
     align-items: center;
@@ -15,29 +17,36 @@ const Container = styled.div`
     margin-bottom: 20px;
     font-weight: bold;
     letter-spacing: 1px;
-    filter: blur(${(props) => (props.blur ? 10 : 0)}px);
+    filter: blur(${({ blur }) => blur ? 10 : 0}px);
   }
+
   .header span {
     font-size: 22px;
   }
+
   .content {
     flex: 1;
     display: flex;
-    background-color: white;
+    flex-direction: column;
+    background-color: ${COLORS.natural.white};
     padding: 0px;
-
     min-width: 100%;
     overflow: auto;
-    filter: blur(${(props) => (props.blur ? 10 : 0)}px);
+    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    position: relative;
+    
   }
+
   .button-wrapper {
     display: flex;
     justify-content: space-between;
     padding: 10px;
   }
+
   .list-manipulate-button {
     display: flex;
   }
+
   .list-manipulate-button .cancle-button-wrapper {
     margin-left: 10px;
   }

@@ -1,17 +1,13 @@
+import { CancelButton, RetryButton, SubmitButton } from '../components/Button'
 import React, { useEffect } from 'react'
-import axios from 'axios'
-import io from 'socket.io-client'
-import { useHistory } from 'react-router-dom'
-import { useResetRecoilState, useRecoilState, useSetRecoilState } from 'recoil'
-import atomState from '../Atoms/Atoms'
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ImportExportProductStyle'
 import ImportExportTable from '../components/Table/ImportExportTable'
-import {
-  CancelButton,
-  RetryButton,
-  SubmitButton,
-} from '../components/Button'
+import atomState from '../Atoms/Atoms'
+import io from 'socket.io-client'
+import { postRequest } from '../Services'
+import { useHistory } from 'react-router-dom'
 
 const ImportExportProduct = () => {
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
@@ -28,6 +24,12 @@ const ImportExportProduct = () => {
   const resetModalState = useResetRecoilState(atomState.modalState)
   const resetUserAction = useSetRecoilState(atomState.userActionSelector())
 
+  const SOCKET_EVENT = {
+    joinRoom: 'join_room',
+    userGranted: 'USER_GRANTED',
+    productScanner: 'PRODUCT_SCANNER',
+  }
+
   const onCancleScanning = () => {
     resetUserAction()
     resetModalState()
@@ -35,88 +37,82 @@ const ImportExportProduct = () => {
   }
 
   useEffect(() => {
-    socket.emit('join_room', { room: userState.username })
+    socket.emit(SOCKET_EVENT.joinRoom, { room: userState.username })
     if (!userState.isUserCardVerify && !readProductListState.length) {
-      setModalState((oldState) => {
-        const temp = { ...oldState }
-        temp.modalType = 'error'
-        temp.isDisplay = true
-        temp.title = 'Please scan your card'
-        temp.isIndicator = true
-        temp.detail = 'Scan your card to proceed next step'
-        temp.positiveButton = {
+      setModalState((oldState) => ({
+        ...oldState,
+        modalType: 'error',
+        isDisplay: true,
+        title: 'Please scan your card',
+        isIndicator: true,
+        detail: 'Scan your card to proceed next step',
+        positiveButton: {
           display: true,
           text: 'cancel',
-        }
-        temp.positiveButtonFN = onCancleScanning
-        return temp
-      })
-      socket.on('USER_GRANTED', ({ message, granted, room }) => {
-        socket.off('USER_GRANTED')
-        setUserState((oldState) => {
-          const newUserState = { ...oldState }
-          newUserState.isUserCardVerify = true
-          return newUserState
-        })
-        setModalState((oldState) => {
-          const temp = { ...oldState }
-          temp.modalType = 'error'
-          temp.isDisplay = true
-          temp.title = 'Please wait'
-          temp.isIndicator = true
-          temp.detail = 'Device is scanning for products'
-          temp.positiveButton = {
+        },
+        onClickPositiveButton: onCancleScanning,
+      }))
+      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+        socket.off(SOCKET_EVENT.userGranted)
+        setUserState((oldState) => ({
+          ...oldState,
+          isUserCardVerify: true,
+        }))
+        setModalState((oldState) => ({
+          ...oldState,
+          modalType: 'error',
+          isDisplay: true,
+          title: 'Please wait',
+          isIndicator: true,
+          detail: 'Device is scanning for products',
+          positiveButton: {
             text: 'cancel',
-          }
-          temp.positiveButtonFN = onCancleScanning
-          return temp
-        })
-        socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
-          socket.off('PRODUCT_SCANNER')
+          },
+          onClickPositiveButton: onCancleScanning,
+        }))
+        socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
+          socket.off(SOCKET_EVENT.productScanner)
           resetModalState()
           setReadProductListState(productData)
         })
       })
     } else if (!userState.isUserCardVerify) {
-      setModalState((oldState) => {
-        const temp = { ...oldState }
-        temp.modalType = 'error'
-        temp.isDisplay = true
-        temp.title = 'Please scan your card'
-        temp.isIndicator = true
-        temp.detail = 'Scan your card to proceed next step'
-        temp.positiveButton = {
+      setModalState((oldState) => ({
+        ...oldState,
+        modalType: 'error',
+        isDisplay: true,
+        title: 'Please scan your card',
+        isIndicator: true,
+        detail: 'Scan your card to proceed next step',
+        positiveButton: {
           display: true,
           text: 'cancel',
-        }
-        temp.positiveButtonFN = onCancleScanning
-        return temp
-      })
-      socket.on('USER_GRANTED', ({ message, granted, room }) => {
-        socket.off('USER_GRANTED')
-        setUserState((oldState) => {
-          const newUserState = { ...oldState }
-          newUserState.isUserCardVerify = true
-          return newUserState
-        })
+        },
+        onClickPositiveButton: onCancleScanning,
+      }))
+      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+        socket.off(SOCKET_EVENT.userGranted)
+        setUserState((oldState) => ({
+          ...oldState,
+          isUserCardVerify: true,
+        }))
         resetModalState()
       })
     } else if (!readProductListState.length) {
-      setModalState((oldState) => {
-        const temp = { ...oldState }
-        temp.modalType = 'error'
-        temp.isDisplay = true
-        temp.title = 'Please wait'
-        temp.isIndicator = true
-        temp.detail = 'Device is scanning for products'
-        temp.positiveButton = {
+      setModalState((oldState) => ({
+        ...oldState,
+        modalType: 'error',
+        isDisplay: true,
+        title: 'Please wait',
+        isIndicator: true,
+        detail: 'Device is scanning for products',
+        positiveButton: {
           text: 'cancel',
-        }
-        temp.positiveButtonFN = onCancleScanning
-        return temp
-      })
-      socket.on('PRODUCT_SCANNER', ({ success, productData }) => {
-        socket.off('PRODUCT_SCANNER')
+        },
+        onClickPositiveButton: onCancleScanning,
+      }))
+      socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
+        socket.off(SOCKET_EVENT.productScanner)
         resetModalState()
         setReadProductListState(productData)
       })
@@ -143,30 +139,28 @@ const ImportExportProduct = () => {
   }
 
   const onCancle = () => {
-    setModalState((oldState) => {
-      const temp = { ...oldState }
-      temp.modalType = 'confirm'
-      temp.isDisplay = true
-      temp.title = 'Are you sure ?'
-      temp.detail = 'You are going back to menu'
-      temp.isIndicator = false
-      temp.negativeButton = {
+    setModalState((oldState) => ({
+      ...oldState,
+      modalType: 'confirm',
+      isDisplay: true,
+      title: 'Are you sure ?',
+      detail: 'You are going back to menu',
+      isIndicator: false,
+      negativeButton: {
         text: 'no',
-      }
-      temp.negativeButtonFN = onDismissModal
-      temp.positiveButton = {
+      },
+      onClickNegativeButton: onDismissModal,
+      positiveButton: {
         text: 'yes',
-      }
-      temp.positiveButtonFN = cancleTransaction
-      temp.dismissFN = onDismissModal
-      return temp
-    })
+      },
+      onClickPositiveButton: cancleTransaction,
+      dismissFN: onDismissModal,
+    }))
   }
 
   const confirmDeleteSelectedList = (selectedList) => {
-    const accumulator = [...readProductListState]
-    const updatedProductList = accumulator.filter(
-      (value, key) => value.id !== selectedList.id,
+    const updatedProductList = readProductListState.filter(
+      (value, index) => value.id !== selectedList.id,
     )
     setReadProductListState(updatedProductList)
     onDismissModal()
@@ -180,41 +174,34 @@ const ImportExportProduct = () => {
         username: userState.username,
         productList: readProductListState,
       }
-      const response = await axios.post(
-        process.env.REACT_APP_CREATE_TRANSACTION,
+      const response = await postRequest(
+        `${process.env.REACT_APP_API}/import-export-product`,
         body,
-        {
-          headers: {
-            Authorization: `Bearer ${userState.accessToken}`,
-          },
-        },
+        userState.accessToken,
       )
-      const { success } = response.data
-      if (success) {
+      if (response.success) {
         resetReadProductListDefaultValue()
-        setToastState((oldState) => {
-          const temp = { ...oldState }
-          temp.display = true
-          temp.title = 'Success'
-          temp.message = 'Save Successfully'
-          return temp
-        })
+        setToastState((oldState) => ({
+          ...oldState,
+          display: true,
+          title: 'Success',
+          message: 'Save Successfully',
+        }))
         history.push('/import-export')
       }
     } catch (error) {
-      setModalState((oldState) => {
-        const temp = { ...oldState }
-        temp.isDisplay = true
-        temp.modalType = 'error'
-        temp.title = 'Submit failed'
-        temp.isIndicator = false
-        temp.detail = 'Something went wrong. Please try again'
-        temp.positiveButton = {
+      setModalState((oldState) => ({
+        ...oldState,
+        isDisplay: true,
+        modalType: 'error',
+        title: 'Submit failed',
+        isIndicator: false,
+        detail: 'Something went wrong. Please try again',
+        positiveButton: {
           text: 'Try again',
-        }
-        temp.positiveButtonFN = onDismissModal
-        return temp
-      })
+        },
+        onClickPositiveButton: onDismissModal,
+      }))
     }
   }
 
@@ -224,53 +211,51 @@ const ImportExportProduct = () => {
         You are going to remove
         <br />
         <span className='hightlight'>
-          {selectedList ? selectedList.product_name : null}{' '}
+          {selectedList && selectedList.product_name}{' '}
         </span>
         from the list.
       </span>
     )
-    setModalState((oldState) => {
-      const temp = { ...oldState }
-      temp.modalType = 'confirm'
-      temp.isDisplay = true
-      temp.title = 'Are you sure ?'
-      temp.detail = DetailForConfirmDeleteModal
-      temp.isIndicator = false
-      temp.negativeButton = {
+    setModalState((oldState) => ({
+      ...oldState,
+      modalType: 'confirm',
+      isDisplay: true,
+      title: 'Are you sure ?',
+      detail: DetailForConfirmDeleteModal,
+      isIndicator: false,
+      negativeButton: {
         display: true,
         text: 'cancle',
-      }
-      temp.negativeButtonFN = onDismissModal
-      temp.positiveButton = {
+      },
+      onClickNegativeButton: onDismissModal,
+      positiveButton: {
         display: true,
         text: 'delete',
-      }
-      temp.positiveButtonFN = () => confirmDeleteSelectedList(selectedList)
-      temp.dismissFN = onDismissModal
-      return temp
-    })
+      },
+      onClickPositiveButton: () => confirmDeleteSelectedList(selectedList),
+      dismissFN: onDismissModal,
+    }))
   }
 
   const onRetry = () => {
-    setModalState((oldState) => {
-      const temp = { ...oldState }
-      temp.modalType = 'confirm'
-      temp.isDisplay = true
-      temp.title = 'Are you sure ?'
-      temp.detail = 'You are going to scan for product again'
-      temp.isIndicator = false
-      temp.negativeButton = {
+    setModalState((oldState) => ({
+      ...oldState,
+      modalType: 'confirm',
+      isDisplay: true,
+      title: 'Are you sure ?',
+      detail: 'You are going to scan for product again',
+      isIndicator: false,
+      negativeButton: {
         text: 'cancle',
-      }
-      temp.negativeButtonFN = onDismissModal
-      temp.positiveButton = {
+      },
+      onClickNegativeButton: onDismissModal,
+      positiveButton: {
         text: 'retry',
         color: '#04adf6',
-      }
-      temp.positiveButtonFN = () => resetReadProductListDefaultValue()
-      temp.dismissFN = onDismissModal
-      return temp
-    })
+      },
+      onClickPositiveButton: () => resetReadProductListDefaultValue(),
+      dismissFN: onDismissModal,
+    }))
   }
 
   return (

@@ -1,37 +1,31 @@
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
-const Submit = styled.button`
+const PrimaryButton = styled.button`
   width: 100px;
   height: 45px;
-  outline: none;
-  border: none;
   border-radius: 8px;
-  color: white;
+  color: ${COLORS.natural.white};
   letter-spacing: 2px;
-  background-color: #1fe073;
+  background-color: ${COLORS.green[500]};
   font-weight: bold;
   transition: all 0.15s ease-in-out;
-  :active {
-    background-color: #15c15d;
+  border: 3px solid ${COLORS.green[500]};
+
+  &:active {
+    background-color: ${COLORS.green[600]};
+    border-color: ${COLORS.green[600]};
   }
 `
-const Cancel = styled(Submit)`
-  color: #eb2d2d;
+const OutlineButton = styled(PrimaryButton)`
+  color: ${({ color = COLORS.red[500] }) => color};
   background-color: transparent;
-  border: 3px solid #eb2d2d;
-  :active {
+  border: 3px solid ${({ color = COLORS.red[500] }) => color};
+  &:active {
     color: white;
-    background-color: #eb2d2d;
-  }
-`
-const Retry = styled(Submit)`
-  color: #04adf6;
-  background-color: transparent;
-  border: 3px solid #04adf6;
-  :active {
-    color: white;
-    background-color: #04adf6;
+    background-color: ${({ color = COLORS.red[600] }) => color};
+    border-color: ${({ color = COLORS.red[600] }) => color};
   }
 `
 
-export { Submit, Cancel, Retry }
+export { PrimaryButton, OutlineButton }

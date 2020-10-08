@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import {
+  Button,
+  Container,
+  Error,
+  Form,
+  Head,
+  Header,
+  Input,
+} from './LoginStyle'
+import React, { useEffect, useState } from 'react'
 import {
   useRecoilCallback,
-  useRecoilValue,
   useRecoilState,
+  useRecoilValue,
   useResetRecoilState,
 } from 'recoil'
-import { useHistory } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import 'react-activity/dist/react-activity.css'
-import {
-  Container,
-  Form,
-  Header,
-  Head,
-  Input,
-  Error,
-  Button,
-} from './LoginStyle.js'
 
 import { Modal } from '../components/Modal'
 import atomState from '../Atoms/Atoms'
+import { postRequest } from '../Services'
+import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const history = useHistory()
@@ -36,61 +35,64 @@ const Login = () => {
 
   const onForgotPassword = () => resetDefaultModalState()
 
+  const errorHandler = (error) => {
+    if (
+      error?.response?.status >= 400 &&
+      error?.response?.status < 500
+    ) {
+      setModalState((oldState) => ({
+        ...oldState,
+        isDisplay: true,
+        modalType: 'confirm',
+        title: 'Login failed',
+        isIndicator: false,
+        detail: 'Username or password incorrect',
+        onClickNegativeButton: onForgotPassword,
+        onClickPositiveButton: onTryAgain,
+        positiveButton: {
+          text: 'Try again',
+        },
+        negativeButton: {
+          text: 'Forgot password ?',
+        },
+      }))
+    } else {
+      setModalState((oldState) => ({
+        ...oldState,
+        isDisplay: true,
+        modalType: 'error',
+        title: 'Network error',
+        isIndicator: false,
+        detail: "Can't connect to the server",
+        onClickNegativeButton: onForgotPassword,
+        onClickPositiveButton: onTryAgain,
+        positiveButton: {
+          text: 'Try again',
+        },
+      }))
+    }
+  }
+
   const submitLogIn = useRecoilCallback(({ set }) => async () => {
     try {
-      const request = {
+      const requestBody = {
         username: username,
         password: password,
       }
-
-      const response = await axios.post(process.env.REACT_APP_LOGIN, request)
-      const { data } = response
-
-      set(atomState.userState, (oldState) => {
-        const newUserState = { ...oldState }
-        newUserState.username = username
-        newUserState.accessToken = data.accessToken
-        newUserState.refreshToken = data.refreshToken
-        newUserState.isLogin = data.success
-        return newUserState
-      })
-
+      const response = await postRequest(
+        `${process.env.REACT_APP_API}/login`,
+        requestBody,
+      )
+      set(atomState.userState, (oldState) => ({
+        ...oldState,
+        username: username,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        isLogin: response.success,
+      }))
       history.push('/overview')
     } catch (error) {
-      if (error.message === 'Request failed with status code 404') {
-        setModalState((oldState) => {
-          const temp = { ...oldState }
-          temp.isDisplay = true
-          temp.modalType = 'confirm'
-          temp.title = 'Login failed'
-          temp.isIndicator = false
-          temp.detail = 'Username or password incorrect'
-          temp.negativeButtonFN = onForgotPassword
-          temp.positiveButtonFN = onTryAgain
-          temp.positiveButton = {
-            text: 'Try again',
-          }
-          temp.negativeButton = {
-            text: 'Forgot password ?',
-          }
-          return temp
-        })
-      } else if (error.message === 'Network Error') {
-        setModalState((oldState) => {
-          const temp = { ...oldState }
-          temp.isDisplay = true
-          temp.modalType = 'error'
-          temp.title = 'Network error'
-          temp.isIndicator = false
-          temp.detail = "Can't connect to the server"
-          temp.negativeButtonFN = onForgotPassword
-          temp.positiveButtonFN = onTryAgain
-          temp.positiveButton = {
-            text: 'Try again',
-          }
-          return temp
-        })
-      }
+      errorHandler(error)
     }
   })
 
@@ -119,7 +121,7 @@ const Login = () => {
             })}
             placeholder='Username'
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
           />
           <Error>
             {errors.username?.type === 'required' && 'Username is require'}
@@ -135,7 +137,7 @@ const Login = () => {
             type='password'
             placeholder='Password'
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <Error>
             {errors.password?.type === 'required' && 'Password is require'}

@@ -1,8 +1,9 @@
+import { COLORS, FONT } from '../../Constant'
 import styled, { keyframes } from 'styled-components'
 
 const fadeIn = keyframes`
     from {
-      background-color: rgba(0,0,0,0);
+      background-color: transparent;
     }
     to {
       background-color: rgba(0,0,0,0.5);
@@ -14,7 +15,7 @@ const fadeOut = keyframes`
       background-color: rgba(0,0,0,0.5);
     }
     to {
-      background-color: rgba(0,0,0,0);
+      background-color: transparent;
     }
 `
 
@@ -51,10 +52,9 @@ export const Container = styled.div`
   display: flex;
   overflow: hidden;
   z-index: 5;
-
   background-color: rgba(0, 0, 0, 0.5);
-  visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isDisplay ? fadeIn : fadeOut} 0.25s linear;
+  visibility: ${({ isDisplay }) => isDisplay ? 'visible' : 'hidden'};
+  animation: ${({ isDisplay }) => isDisplay ? fadeIn : fadeOut} 0.25s linear;
   transition: visibility 0.25s linear;
 
   .modal {
@@ -69,9 +69,9 @@ export const Container = styled.div`
     position: relative;
     box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
       0 -10px 15px 0 rgba(255, 255, 255, 0.35);
-
-    visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
-    animation: ${(props) => props.isDisplay ? slideIn : slideOut} 0.25s linear;
+    visibility: ${({ isDisplay }) => isDisplay ? 'visible' : 'hidden'};
+    animation: ${({ isDisplay }) => isDisplay ? slideIn : slideOut} 0.25s
+      linear;
     transition: visibility 0.25s linear;
   }
 
@@ -101,8 +101,6 @@ export const Container = styled.div`
     align-items: center;
     text-transform: uppercase;
     margin: 10px;
-    cursor: pointer;
-    outline: none;
   }
 
   .warnning-negative-button,
@@ -123,19 +121,19 @@ export const Container = styled.div`
   .warnning-positive-button,
   .success-positive-button {
     color: white;
-    background-color: ${(props) => props.color ? props.color : '#eb2d2d'};
-    border: 2px solid ${(props) => props.color ? props.color : '#eb2d2d'};
+    background-color: ${({ color }) => color ? color : COLORS.red[500]};
+    border: 2px solid ${({ color }) => color ? color : COLORS.red[500]};
     flex: 1;
   }
 
   .warnning-positive-button {
-    background-color: #ffd138;
-    border: 2px solid #ffd138;
+    background-color: ${COLORS.yellow[500]};
+    border: 2px solid ${COLORS.yellow[500]};
   }
 
   .success-positive-button {
-    background-color: #5ceb89;
-    border: 2px solid #5ceb89;
+    background-color: ${COLORS.green[500]};
+    border: 2px solid ${COLORS.green[500]};
   }
 
   .header {
@@ -162,13 +160,13 @@ export const Container = styled.div`
   .detail span {
     text-align: center;
     width: 100%;
-    font-size: 12pt;
+    font-size: ${FONT.s};
     color: rgba(0, 0, 0, 0.75);
   }
 
   .detail .hightlight {
     font-weight: bold;
-    font-size: 14pt;
-    color: red;
+    font-size: ${FONT.m};
+    color: ${COLORS.red[500]};
   }
 `

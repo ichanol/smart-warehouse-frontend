@@ -1,23 +1,23 @@
-import History from './History'
-import Overview from './Overview'
-import Map from './Map'
-import ImportExportProduct from './ImportExportProduct'
-import ProductList from './ProductList'
-import Product from './Product'
-import Permission from './Permission'
-import User from './User'
-import Edit from './Edit'
-import Delete from './Delete'
+import DeleteIcon from './DeleteIcon'
+import EditIcon from './EditIcon'
+import HistoryIcon from './HistoryIcon'
+import ImportExportProductIcon from './ImportExportProductIcon'
+import MapIcon from './MapIcon'
+import OverviewIcon from './OverviewIcon'
+import PermissionIcon from './PermissionIcon'
+import ProductIcon from './ProductIcon'
+import ProductListIcon from './ProductListIcon'
+import UserIcon from './UserIcon'
 
 export {
-  History,
-  Overview,
-  Map,
-  ImportExportProduct,
-  ProductList,
-  Product,
-  Permission,
-  User,
-  Edit,
-  Delete,
+  HistoryIcon,
+  OverviewIcon,
+  MapIcon,
+  ImportExportProductIcon,
+  ProductListIcon,
+  ProductIcon,
+  PermissionIcon,
+  UserIcon,
+  EditIcon,
+  DeleteIcon,
 }

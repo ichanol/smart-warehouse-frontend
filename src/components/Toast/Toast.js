@@ -11,17 +11,16 @@ const Toast = () => {
   useEffect(() => {
     if (toastState.display) {
       setDisplay(true)
-      const timer1 = setTimeout(() => {
+      const setDisplayTimer = setTimeout(() => {
         setDisplay(false)
-        clearTimeout(timer1)
+        clearTimeout(setDisplayTimer)
       }, 2500)
-      const timer2 = setTimeout(() => {
-        setToastState((oldState) => {
-          const temp = { ...oldState }
-          temp.display = false
-          return temp
-        })
-        clearTimeout(timer2)
+      const setToastStateTimer = setTimeout(() => {
+        setToastState((oldState) => ({
+          ...oldState,
+          display: false,
+        }))
+        clearTimeout(setToastStateTimer)
       }, 3000)
     } else {
     }

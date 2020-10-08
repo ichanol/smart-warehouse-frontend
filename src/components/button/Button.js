@@ -1,24 +1,32 @@
-import React from 'react'
-import { Cancel, Retry, Submit } from './ButtonStyle'
+import { OutlineButton, PrimaryButton } from './ButtonStyle'
 
-export const SubmitButton = ({ action }) => {
+import { COLORS } from '../../Constant'
+import React from 'react'
+
+const SubmitButton = ({ action }) => {
   return (
-    <Submit type='button' onClick={action}>
+    <PrimaryButton type='button' onClick={action}>
       Submit
-    </Submit>
+    </PrimaryButton>
   )
 }
-export const CancelButton = ({ action }) => {
+const CancelButton = ({ action }) => {
   return (
-    <Cancel type='button' onClick={action}>
+    <OutlineButton type='button' onClick={action}>
       Cancel
-    </Cancel>
+    </OutlineButton>
   )
 }
-export const RetryButton = ({ action }) => {
+const RetryButton = ({ action }) => {
   return (
-    <Retry type='button' onClick={action}>
+    <OutlineButton
+      type='button'
+      onClick={action}
+      color={COLORS.blue[500]}
+      activeColor={COLORS.blue[500]}>
       Retry
-    </Retry>
+    </OutlineButton>
   )
 }
+
+export { SubmitButton, CancelButton, RetryButton }

@@ -1,13 +1,12 @@
+import { CancelButton, SubmitButton } from '../components/Button'
 import React, { useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
-import atomState from '../Atoms/Atoms'
+import { useHistory, useParams } from 'react-router-dom'
 
 import { Container } from './EditImportExportProductStyle'
-import {
-  CancelButton,
-  SubmitButton,
-} from '../components/Button'
+import TextArea from '../components/Input/TextArea/TextArea'
+import TextInput from '../components/Input/TextInput/TextInput'
+import atomState from '../Atoms/Atoms'
+import { useRecoilState } from 'recoil'
 
 const EditImportExportProduct = () => {
   const { productid } = useParams()
@@ -22,20 +21,30 @@ const EditImportExportProduct = () => {
 
   const goBack = () => history.goBack()
 
+  const updatedProductList = () => {
+    const index = readProductListState.findIndex(
+      (value) =>
+        value.product_serial_number === editInformation.product_serial_number,
+    )
+    const newReadProductlistState = [...readProductListState]
+    newReadProductlistState[index] = editInformation
+    return newReadProductlistState
+  }
+
   const submitChanges = () => {
-    const temp = [...readProductListState]
-    const updateState = temp.map((value, key) => {
-      if (
-        value.product_serial_number === editInformation.product_serial_number
-      ) {
-        return editInformation
-      } else {
-        return value
-      }
-    })
-    setReadProductListState(updateState)
+    setReadProductListState(updatedProductList())
     goBack()
   }
+
+  const inputHandler = (value, type) => {
+    if (type === 'amount') {
+      value = parseInt(value, 10)
+    }
+    const temp = { ...editInformation }
+    temp[type] = value
+    setEditInformation(temp)
+  }
+
   return (
     <Container>
       <div className='header'>
@@ -51,28 +60,20 @@ const EditImportExportProduct = () => {
         <div className='title'>Product Serial number</div>
         <div className='value'>{editInformation.product_serial_number}</div>
         <div className='title'>Amount</div>
-        <input
-          id='amount'
+        <TextInput
+          width={100}
           type='number'
           min='0'
-          step='1'
           value={editInformation.amount}
-          onChange={(e) => {
-            const temp = { ...editInformation }
-            temp.amount = parseInt(e.target.value, 10)
-            setEditInformation(temp)
-          }}
+          valueType='amount'
+          onValueChange={inputHandler}
         />
         <div className='title'>Detail</div>
-        <textarea
-          id='remark'
+        <TextArea
           type='text'
           value={editInformation.detail}
-          onChange={(e) => {
-            const temp = { ...editInformation }
-            temp.detail = e.target.value
-            setEditInformation(temp)
-          }}
+          valueType='detail'
+          onValueChange={inputHandler}
         />
         <div className='button-wrapper'>
           <div className='cancle-button-wrapper'>

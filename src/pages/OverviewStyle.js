@@ -23,6 +23,8 @@ const Container = styled.div`
     display: flex;
     background-color: white;
     padding: 25px;
+    flex-direction: column;
+    position: relative;
   }
 `
 

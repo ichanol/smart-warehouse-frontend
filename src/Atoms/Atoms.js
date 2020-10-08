@@ -1,7 +1,6 @@
 import { atom, selectorFamily } from 'recoil'
-const atomState = {}
 
-atomState.userState = atom({
+const userState = atom({
   key: 'userState',
   default: {
     username: null,
@@ -13,25 +12,25 @@ atomState.userState = atom({
   },
 })
 
-atomState.readProductListState = atom({
+const readProductListState = atom({
   key: 'readProductListState',
   default: [],
 })
 
-atomState.toastState = atom({
+const toastState = atom({
   key: 'toastState',
   default: [],
 })
 
-atomState.modalState = atom({
+const modalState = atom({
   key: 'modalState',
   default: {
     isDisplay: false,
     title: null,
     isIndicator: false,
     detail: null,
-    negativeButtonFN: () => {},
-    positiveButtonFN: () => {},
+    onClickNegativeButton: () => {},
+    onClickPositiveButton: () => {},
     dismissFN: () => {},
     negativeButton: {},
     positiveButton: {},
@@ -39,19 +38,26 @@ atomState.modalState = atom({
   },
 })
 
-atomState.userActionSelector = selectorFamily({
+const userActionSelector = selectorFamily({
   key: 'userActionSelector',
   get: () => ({ get }) => {
-    const userState = get(atomState.userState)
-    return userState.action
+    const user = get(userState)
+    return user.action
   },
   set: () => ({ set }) => {
-    set(atomState.userState, (oldState) => {
-      const temp = { ...oldState }
-      temp.action = { id: null, actionType: null }
-      return temp
-    })
+    set(userState, (oldState) => ({
+      ...oldState,
+      action: { id: null, actionType: null },
+    }))
   },
 })
+
+const atomState = {
+  userState,
+  readProductListState,
+  toastState,
+  modalState,
+  userActionSelector,
+}
 
 export default atomState

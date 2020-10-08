@@ -1,3 +1,4 @@
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const Table = styled.div`
@@ -10,11 +11,12 @@ const Table = styled.div`
   .fixed-container {
     padding: 0 10px;
     position: fixed;
-    background-color: white;
+    background-color: ${COLORS.natural.white};
     top: 0;
     left: 0;
     right: 0;
   }
+
   .data-container {
     margin-top: 65px;
     overflow: auto;
@@ -27,18 +29,22 @@ const Table = styled.div`
     flex: 1;
     background-color: rgba(209, 218, 220, 0.1);
   }
+
   .table-title-wrapper {
-    background-color: white;
+    background-color: ${COLORS.natural.white};
     font-weight: bold;
     height: 65px;
     text-overflow: ellipsis;
   }
+
   .table-data-wrapper {
     color: rgba(0, 0, 0, 0.7);
   }
+
   .table-data-wrapper:nth-child(odd) {
     background-color: rgba(186, 205, 207, 0.2);
   }
+
   .table-title {
     display: flex;
     justify-content: center;
@@ -60,32 +66,38 @@ const Table = styled.div`
     max-width: 75px;
   }
 
-  #no,
-  #data-no {
+  .no,
+  .data-no {
     flex: 0.5;
   }
-  #id,
-  #data-id {
+
+  .id,
+  .data-id {
     flex: 2;
   }
-  #name,
-  #data-name {
+
+  .name,
+  .data-name {
     flex: 2;
   }
-  #company,
-  #data-company {
+
+  .company,
+  .data-company {
     flex: 2;
   }
-  #amount,
-  #data-amount {
+
+  .amount,
+  .data-amount {
     flex: 1.5;
   }
-  #description,
-  #data-description {
+
+  .description,
+  .data-description {
     flex: 2;
   }
-  #action,
-  #data-action {
+
+  .action,
+  .data-action {
     flex: 2;
   }
 `

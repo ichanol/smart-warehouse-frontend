@@ -1,3 +1,4 @@
+import { COLORS, FONT } from '../../Constant'
 import styled, { keyframes } from 'styled-components'
 
 const slideIn = keyframes`
@@ -28,17 +29,16 @@ const ToastContainer = styled.div`
   bottom: 60px;
   margin-left: 20px;
   padding: 10px 25px;
-  background-color: rgb(56, 240, 145);
+  background-color: ${COLORS.green[500]};
   color: white;
   border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-left: 7px solid rgb(24, 201, 109);
+  border-left: 7px solid ${COLORS.green[600]};
   box-shadow: 0 7px 7px rgba(0, 0, 0, 0.15);
-
-  visibility: ${(props) => props.isDisplay ? 'visible' : 'hidden'};
-  animation: ${(props) => props.isDisplay ? slideIn : slideOut} 0.25s linear;
+  visibility: ${({ isDisplay }) => isDisplay ? 'visible' : 'hidden'};
+  animation: ${({ isDisplay }) => isDisplay ? slideIn : slideOut} 0.25s linear;
   transition: all 0.25s linear;
 
   .toast-detail {
@@ -47,7 +47,7 @@ const ToastContainer = styled.div`
   }
   .toast-header {
     font-weight: bold;
-    font-size: 14pt;
+    font-size: ${FONT.m};
     letter-spacing: 1px;
   }
   .toast-dismiss {

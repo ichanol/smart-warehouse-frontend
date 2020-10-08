@@ -1,8 +1,9 @@
+import { COLORS } from '../Constant'
 import styled from 'styled-components'
 
 const Container = styled.div`
   flex: 1;
-  background-color: #292a73;
+  background-color: ${COLORS.gray[400]};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,12 +12,11 @@ const Container = styled.div`
 
 const Form = styled.div`
   display: block;
-  background-color: #ffffff;
+  background-color: ${COLORS.natural.white};
   width: 330px;
   padding: 30px;
   border-radius: 30px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  filter: blur(${(props) => props.blur ? 5 : 0}px);
+  filter: blur(${({ blur }) => blur ? 5 : 0}px);
 `
 
 const Header = styled.div`
@@ -27,11 +27,11 @@ const Header = styled.div`
 
 const Head = styled.div`
   font-weight: 900;
-  color: #292a73;
+  color: ${COLORS.natural.black};
 `
 
 const Input = styled.input`
-  background-color: #f2f2f2;
+  background-color: ${COLORS.gray[100]};
   outline: 0;
   font-size: 16px;
   width: 100%;
@@ -45,27 +45,24 @@ const Error = styled.div`
   margin-bottom: 10px;
   padding-left: 20px;
   height: 20px;
-  color: red;
+  color: ${COLORS.natural.red};
 `
 
 const Button = styled.button`
-  color: #ffffff;
-  background-color: #5cb85c;
+  color: ${COLORS.natural.white};
+  background-color: ${COLORS.green[500]};
   width: 100%;
   height: 50px;
-  border: 0;
-  outline: 0;
   border-radius: 30px;
-  cursor: pointer;
   font-size: 20px;
   font-weight: bold;
 
   &:hover {
-    background-color: #2ea22e;
+    background-color: ${COLORS.green[600]};
     transition: 0.3s;
   }
   &:active {
-    background-color: #5cb85c;
+    background-color: #${COLORS.green[700]};
   }
 `
 
