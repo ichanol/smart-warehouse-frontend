@@ -68,7 +68,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   useEffect(() => {
     const isAccessTokenValid = verifyAccessToken()
     const isRefreshTokenValid = verifyRefreshToken()
-    console.log(isAccessTokenValid, isRefreshTokenValid)
     verifyUserToken(isAccessTokenValid, isRefreshTokenValid)
   }, [])
 

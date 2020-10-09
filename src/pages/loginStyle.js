@@ -1,4 +1,5 @@
-import { COLORS } from '../Constant'
+import { COLORS, FONT } from '../Constant'
+
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const Form = styled.div`
 
 const Header = styled.div`
   margin-bottom: 20px;
-  font-size: 30px;
+  font-size: ${FONT.xl};
   text-align: center;
 `
 
@@ -33,7 +34,7 @@ const Head = styled.div`
 const Input = styled.input`
   background-color: ${COLORS.gray[100]};
   outline: 0;
-  font-size: 16px;
+  font-size: ${FONT.l};
   width: 100%;
   padding: 10px;
   padding-left: 20px;
@@ -54,7 +55,7 @@ const Button = styled.button`
   width: 100%;
   height: 50px;
   border-radius: 30px;
-  font-size: 20px;
+  font-size: ${FONT.xl};
   font-weight: bold;
 
   &:hover {

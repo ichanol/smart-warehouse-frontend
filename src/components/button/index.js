@@ -1,2 +1,5 @@
 import { CancelButton, RetryButton, SubmitButton } from './Button'
-export { CancelButton, RetryButton, SubmitButton }
+
+import ModalButton from './ModalButton'
+
+export { CancelButton, RetryButton, SubmitButton, ModalButton }

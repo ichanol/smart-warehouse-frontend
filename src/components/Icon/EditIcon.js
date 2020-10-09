@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 const EditIcon = ({ width = 35, fill = 'rgba(0,0,0,0.65)' }) => (
   <svg viewBox='-7 -2 110 110' width={width}>

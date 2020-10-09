@@ -1,6 +1,7 @@
+import { COLORS } from '../../Constant'
 import React from 'react'
 
-const ProductListIcon = ({ width = 40, fill = 'white' }) => (
+const ProductListIcon = ({ width = 40, fill = COLORS.natural.white }) => (
   <svg viewBox='-7 -7 40 40' width={width}>
     <path
       fill={fill}

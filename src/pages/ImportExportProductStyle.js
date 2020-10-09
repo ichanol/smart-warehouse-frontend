@@ -1,4 +1,5 @@
-import { COLORS } from '../Constant'
+import { COLORS, FONT } from '../Constant'
+
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const Container = styled.div`
   }
 
   .header span {
-    font-size: 22px;
+    font-size: ${FONT.xl};
   }
 
   .content {

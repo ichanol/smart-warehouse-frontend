@@ -1,3 +1,5 @@
+import { COLORS, FONT } from '../Constant'
+
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -6,7 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background-color: #e6eff0;
+  background-color: ${COLORS.gray[300]};
   .header {
     height: 35px;
     align-items: center;
@@ -16,12 +18,12 @@ const Container = styled.div`
     letter-spacing: 1px;
   }
   .header span {
-    font-size: 22px;
+    font-size: ${FONT.xl};
   }
   .content {
     flex: 1;
     display: flex;
-    background-color: white;
+    background-color: ${COLORS.natural.white};
     padding: 25px;
     flex-direction: column;
     position: relative;

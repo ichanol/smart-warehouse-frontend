@@ -61,7 +61,7 @@ export const Container = styled.div`
     min-width: 350px;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: ${COLORS.natural.white};
     justify-content: center;
     align-items: center;
     border-radius: 8px;
@@ -120,7 +120,7 @@ export const Container = styled.div`
   .error-positive-button,
   .warnning-positive-button,
   .success-positive-button {
-    color: white;
+    color: ${COLORS.natural.white};
     background-color: ${({ color }) => color ? color : COLORS.red[500]};
     border: 2px solid ${({ color }) => color ? color : COLORS.red[500]};
     flex: 1;
@@ -144,7 +144,7 @@ export const Container = styled.div`
   }
 
   .header span {
-    font-size: 22px;
+    font-size: ${FONT.xl};
     font-weight: bold;
   }
 
@@ -160,7 +160,7 @@ export const Container = styled.div`
   .detail span {
     text-align: center;
     width: 100%;
-    font-size: ${FONT.s};
+    font-size: ${FONT.l};
     color: rgba(0, 0, 0, 0.75);
   }
 

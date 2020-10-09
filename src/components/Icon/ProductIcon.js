@@ -1,6 +1,7 @@
-import * as React from 'react'
+import { COLORS } from '../../Constant'
+import React from 'react'
 
-const ProductIcon = ({ width = 40, fill = 'white' }) => (
+const ProductIcon = ({ width = 40, fill = COLORS.natural.white }) => (
   <svg
     viewBox='0 0 850 850'
     fillRule='evenodd'

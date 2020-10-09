@@ -45,15 +45,8 @@ const App = () => {
         <Modal />
         <Router>
           <Switch>
-            <Route
-              path={ROUTER_PATH.notInNavBar.login}
-              component={Login}
-              exact
-            />
-            <Route
-              path={ROUTER_PATH.notInNavBar.notFound}
-              component={NotFound}
-            />
+            <Route path={ROUTER_PATH.login.path} component={Login} exact />
+            <Route path={ROUTER_PATH.notFound.path} component={NotFound} />
             <Route component={DefaultRoutes} />
           </Switch>
         </Router>

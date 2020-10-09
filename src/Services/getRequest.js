@@ -14,7 +14,7 @@ const getRequest = async (URL, TOKEN = false) => {
       return response.data
     }
   } catch (error) {
-    throw error
+    throw new Error(error)
   }
 }
 

@@ -1,6 +1,7 @@
+import { COLORS } from '../../Constant'
 import React from 'react'
 
-const HistoryIcon = ({ width = 40, fill = 'white' }) => (
+const HistoryIcon = ({ width = 40, fill = COLORS.natural.white }) => (
   <svg viewBox='-47 -45 190 190' width={width}>
     <switch>
       <g>

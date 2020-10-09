@@ -10,14 +10,14 @@ import ProductListIcon from './ProductListIcon'
 import UserIcon from './UserIcon'
 
 export {
-  HistoryIcon,
-  OverviewIcon,
-  MapIcon,
-  ImportExportProductIcon,
-  ProductListIcon,
-  ProductIcon,
-  PermissionIcon,
-  UserIcon,
-  EditIcon,
   DeleteIcon,
+  EditIcon,
+  HistoryIcon,
+  ImportExportProductIcon,
+  MapIcon,
+  OverviewIcon,
+  PermissionIcon,
+  ProductIcon,
+  ProductListIcon,
+  UserIcon,
 }

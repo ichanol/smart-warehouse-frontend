@@ -2,7 +2,6 @@ import { COLORS } from '../Constant'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-
   * {
     box-sizing: border-box;
     margin: 0;
@@ -42,7 +41,6 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
     cursor: pointer;
   }
-  
 `
 
 export default GlobalStyle

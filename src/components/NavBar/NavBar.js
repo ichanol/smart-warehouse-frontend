@@ -12,6 +12,7 @@ import { Logo, SideBar } from './NavBarStyle'
 import React, { useState } from 'react'
 
 import { NavLink } from 'react-router-dom'
+import { ROUTER_PATH } from '../../Constant'
 
 const NavBar = () => {
   const [openMenu, setOpenMenu] = useState(false)
@@ -29,7 +30,7 @@ const NavBar = () => {
         <div className='line' />
       </div>
       <NavLink
-        to='/overview'
+        to={ROUTER_PATH.overview.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -37,7 +38,7 @@ const NavBar = () => {
         <span>Overview</span>
       </NavLink>
       <NavLink
-        to='/product-list'
+        to={ROUTER_PATH.currentProductBalance.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -45,7 +46,7 @@ const NavBar = () => {
         <span>Product list</span>
       </NavLink>
       <NavLink
-        to='/import-export'
+        to={ROUTER_PATH.importExportMenu.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -53,7 +54,7 @@ const NavBar = () => {
         <span>Import - Export Product</span>
       </NavLink>
       <NavLink
-        to='/transaction'
+        to={ROUTER_PATH.transaction.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -61,7 +62,7 @@ const NavBar = () => {
         <span>Transaction</span>
       </NavLink>
       <NavLink
-        to='/map'
+        to={ROUTER_PATH.map.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -70,7 +71,7 @@ const NavBar = () => {
       </NavLink>
       <span className='header-text'>ADMIN</span>
       <NavLink
-        to='/user-management'
+        to={ROUTER_PATH.userManagement.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -78,7 +79,7 @@ const NavBar = () => {
         <span>User management</span>
       </NavLink>
       <NavLink
-        to='/product-management'
+        to={ROUTER_PATH.productManagement.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>
@@ -86,7 +87,7 @@ const NavBar = () => {
         <span>Product management</span>
       </NavLink>
       <NavLink
-        to='/role-management'
+        to={ROUTER_PATH.roleManagement.path}
         className='menu'
         activeClassName='active-menu'
         onClick={closeMenu}>

@@ -10,7 +10,7 @@ const TopPanel = () => {
       <div className='wrapper'>
         <div
           className='profile'
-          onClick={() => history.push(ROUTER_PATH.notInNavBar.userSettings)}>
+          onClick={() => history.push(ROUTER_PATH.userSettings.path)}>
           <div className='thumbnail' />
           <span>USERNAME</span>
         </div>
