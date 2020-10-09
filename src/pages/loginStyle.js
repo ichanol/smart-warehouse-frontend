@@ -1,55 +1,70 @@
+import { COLORS, FONT } from '../Constant'
+
 import styled from 'styled-components'
+
+const Container = styled.div`
+  flex: 1;
+  background-color: ${COLORS.gray[400]};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+`
 
 const Form = styled.div`
   display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #FFFFFF;
+  background-color: ${COLORS.natural.white};
   width: 330px;
-  padding: 30px 30px 45px 30px;
+  padding: 30px;
   border-radius: 30px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  filter: blur(${({ blur }) => blur ? 5 : 0}px);
 `
 
 const Header = styled.div`
-  margin: 20px;
   margin-bottom: 20px;
-  font-size: 30px;
+  font-size: ${FONT.xl};
   text-align: center;
 `
 
 const Head = styled.div`
   font-weight: 900;
-  color: lightcoral
+  color: ${COLORS.natural.black};
 `
 
 const Input = styled.input`
-  background-color: #f2f2f2;
+  background-color: ${COLORS.gray[100]};
   outline: 0;
-  font-size: 16px;
-  width: 90%;
-  margin-bottom: 15px;
+  font-size: ${FONT.l};
+  width: 100%;
   padding: 10px;
   padding-left: 20px;
   border: 0;
   border-radius: 20px;
 `
 
-const Button = styled.button`
-  background-color: lightcoral;
-  color: #FFFFFF;
-  outline: 0;
-  width: 100%;
-  height: 50px;
-  border: 0;
-  padding: 18px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-  align-content: center;
+const Error = styled.div`
+  margin-bottom: 10px;
+  padding-left: 20px;
+  height: 20px;
+  color: ${COLORS.natural.red};
 `
 
-export { Form, Header, Head, Input, Button }
+const Button = styled.button`
+  color: ${COLORS.natural.white};
+  background-color: ${COLORS.green[500]};
+  width: 100%;
+  height: 50px;
+  border-radius: 30px;
+  font-size: ${FONT.xl};
+  font-weight: bold;
+
+  &:hover {
+    background-color: ${COLORS.green[600]};
+    transition: 0.3s;
+  }
+  &:active {
+    background-color: #${COLORS.green[700]};
+  }
+`
+
+export { Container, Form, Header, Head, Input, Error, Button }

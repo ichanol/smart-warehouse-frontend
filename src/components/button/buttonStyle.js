@@ -1,24 +1,31 @@
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
-const Button = styled.button`
-  border: 1px solid white;
-  margin: 20px;
-  border-radius: 30px;
-  outline: 0;
-  width: 150px;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
+const PrimaryButton = styled.button`
+  width: 100px;
+  height: 45px;
+  border-radius: 8px;
+  color: ${COLORS.natural.white};
+  letter-spacing: 2px;
+  background-color: ${COLORS.green[500]};
   font-weight: bold;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  transition: all 0.15s ease-in-out;
+  border: 3px solid ${COLORS.green[500]};
 
-  &:hover { 
-    background-color: lightpink;
-    transition: 0.3s;
-  }
   &:active {
-    background-color: lightcoral;
+    background-color: ${COLORS.green[600]};
+    border-color: ${COLORS.green[600]};
+  }
+`
+const OutlineButton = styled(PrimaryButton)`
+  color: ${({ color = COLORS.red[500] }) => color};
+  background-color: transparent;
+  border: 3px solid ${({ color = COLORS.red[500] }) => color};
+  &:active {
+    color: white;
+    background-color: ${({ color = COLORS.red[600] }) => color};
+    border-color: ${({ color = COLORS.red[600] }) => color};
   }
 `
 
-export default Button
+export { PrimaryButton, OutlineButton }
