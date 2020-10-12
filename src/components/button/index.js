@@ -1,12 +1,5 @@
-import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn, ClearBtn, FilterBtn } from './Button'
+import { CancelButton, RetryButton, SubmitButton } from './Button'
 
-export {
-  CancelBtn,
-  EditBtn,
-  RetryBtn,
-  SubmitBtn,
-  ExportBtn,
-  DeleteBtn,
-  ClearBtn,
-  FilterBtn,
-}
+import ModalButton from './ModalButton'
+
+export { CancelButton, RetryButton, SubmitButton, ModalButton }

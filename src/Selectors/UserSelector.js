@@ -9,10 +9,8 @@ export const userLoginSelector = selectorFamily({
   },
   set: (data) => async ({ set, get }) => {
     try {
-      console.log(data)
       set(atomState.userState, data)
     } catch (error) {
-      console.log('error:', error)
     }
   },
 })

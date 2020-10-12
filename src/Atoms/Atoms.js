@@ -1,7 +1,6 @@
-import { atom } from 'recoil'
-const atomState = {}
+import { atom, selectorFamily } from 'recoil'
 
-atomState.userState = atom({
+const userState = atom({
   key: 'userState',
   default: {
     username: null,
@@ -9,12 +8,56 @@ atomState.userState = atom({
     refreshToken: null,
     isLogin: false,
     isUserCardVerify: false,
+    action: { id: null, actionType: null },
   },
 })
 
-atomState.readProductListState = atom({
+const readProductListState = atom({
   key: 'readProductListState',
   default: [],
 })
+
+const toastState = atom({
+  key: 'toastState',
+  default: [],
+})
+
+const modalState = atom({
+  key: 'modalState',
+  default: {
+    isDisplay: false,
+    title: null,
+    isIndicator: false,
+    detail: null,
+    onClickNegativeButton: () => {},
+    onClickPositiveButton: () => {},
+    dismissFN: () => {},
+    negativeButton: {},
+    positiveButton: {},
+    modalType: 'error',
+  },
+})
+
+const userActionSelector = selectorFamily({
+  key: 'userActionSelector',
+  get: () => ({ get }) => {
+    const user = get(userState)
+    return user.action
+  },
+  set: () => ({ set }) => {
+    set(userState, (oldState) => ({
+      ...oldState,
+      action: { id: null, actionType: null },
+    }))
+  },
+})
+
+const atomState = {
+  userState,
+  readProductListState,
+  toastState,
+  modalState,
+  userActionSelector,
+}
 
 export default atomState

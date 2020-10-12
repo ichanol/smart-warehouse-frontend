@@ -1,50 +1,54 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Dots } from 'react-activity'
-import 'react-activity/dist/react-activity.css'
+import '../../../node_modules/react-activity/dist/react-activity.css'
 
-import { ModalBox, Header, Detail, Container, Button } from './ModalStyle'
-const Modal = (props) => {
+import { COLORS } from '../../Constant'
+import { Container } from './ModalStyle'
+import ModalButton from '../Button/ModalButton'
+import React from 'react'
+import { Sentry } from 'react-activity'
+import atomState from '../../Atoms/Atoms'
+import { useRecoilValue } from 'recoil'
+
+const Modal = () => {
+  const modalState = useRecoilValue(atomState.modalState)
+
   return (
-    <Container isShow={props.isShow}>
-      <ModalBox
-        isShow={props.isShow}
-        paddingTop={props.dismissButton}
-        isIndicator={props.isIndicator}>
-        {props.dismissButton && (
-          <Button type='button' onClick={() => props.dismissModal()}>
-            <span>X</span>
-          </Button>
+    <Container
+      isDisplay={modalState.isDisplay}
+      isIndicator={modalState.isIndicator}
+      color={modalState.positiveButton.color}
+      onClick={modalState.dismissFN}>
+      <div className='modal'>
+        {modalState.title && (
+          <div className='header'>
+            <span>{modalState.title}</span>
+          </div>
         )}
-        {props.header && (
-          <Header>
-            <span>{props.header}</span>
-          </Header>
+        {modalState.isIndicator && (
+          <div className='activity-wrapper'>
+            <Sentry size={50} color={COLORS.blue[500]} speed={0.75} />
+          </div>
         )}
-        {(props.detail || props.isIndicator) && (
-          <Detail>{props.isIndicator ? <Dots /> : props.detail}</Detail>
+        {modalState.detail && (
+          <div className='detail'>
+            <span>{modalState.detail}</span>
+          </div>
         )}
-      </ModalBox>
+
+        <div className='button-wrapper'>
+          <ModalButton
+            value={modalState.negativeButton.text}
+            action={modalState.onClickNegativeButton}
+            className={`${modalState.modalType}-negative-button`}
+          />
+          <ModalButton
+            value={modalState.positiveButton.text}
+            action={modalState.onClickPositiveButton}
+            className={`${modalState.modalType}-positive-button`}
+          />
+        </div>
+      </div>
     </Container>
   )
-}
-
-Modal.defaultProps = {
-  isShow: false,
-  dismissButton: true,
-  dismissModal: () => {},
-  header: null,
-  detail: null,
-  isIndicator: true,
-}
-
-Modal.propTypes = {
-  isShow: PropTypes.bool,
-  dismissButton: PropTypes.bool,
-  dismissModal: PropTypes.func,
-  header: PropTypes.string,
-  detail: PropTypes.any,
-  isIndicator: PropTypes.bool,
 }
 
 export default Modal
