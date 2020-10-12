@@ -1,9 +1,9 @@
 import { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn, ClearBtn, FilterBtn } from './button'
-import { ImportExportTable, Historytable, InventoryTable } from './tables'
+import { ImportExportTable, TransactionTable, ProductListTable } from './tables'
 import { Navbar } from './navbar'
 import { Filter } from './Filter'
 import { Datepicker } from './Datepicker'
-import { DropdownFilter, SearchDropdown } from './Dropdown'
+import { DropdownFilter, ActionsDropdown } from './Dropdown'
 import { Modal } from './Modal'
 
 export {
@@ -16,12 +16,12 @@ export {
   ClearBtn,
   FilterBtn,
   ImportExportTable,
-  Historytable,
-  InventoryTable,
+  TransactionTable,
+  ProductListTable,
   Navbar,
   Filter,
   Datepicker,
   DropdownFilter,
-  SearchDropdown,
+  ActionsDropdown,
   Modal,
 }

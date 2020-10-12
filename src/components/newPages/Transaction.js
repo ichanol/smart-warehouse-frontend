@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Filter, Historytable, ExportBtn } from '../../components'
+import React, { useEffect, useState } from 'react'
+import {
+  ActionsDropdown,
+  ClearBtn,
+  ExportBtn,
+  FilterBtn,
+  TransactionTable,
+} from '../../components'
 import {
   Container,
-  Header,
   Content,
   FilterBlock,
+  Header,
+  Input,
   TableBlock,
+  AmountInput,
 } from '../../pages/HistoryStyle'
+
+import { Datepicker } from '../Datepicker'
+import axios from 'axios'
 
 const moment = require('moment')
 
@@ -15,14 +25,17 @@ function Transaction() {
   const [data, setData] = useState([])
   const [startDate, setStartDate] = useState('') // StartDate
   const [endDate, setEndDate] = useState('') // EndDate
-  const [filterSelected, setFilterSelected] = useState('')
+  const [dropdownSelected, setDropdownSelected] = useState('')
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' }) // DESC === Down || ASC === UP
+  const [column, setColumn] = useState('')
+  const [amount, setAmount] = useState({ start: '', end: '' })
+
 
   const today = moment()
-  const filter = `${filterSelected}=${keyword}` // Column=value
+  const filter = `${column}=${dropdownSelected}` // Column=value
 
-  const listHistory = async () => {
+  const transactionList = async () => {
     const start = moment('1998-11-09')
     const URL = `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${start}&enddate=${today}`
     axios({
@@ -53,7 +66,7 @@ function Transaction() {
   }
 
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&${filter}`
+    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&${filter}&keyword=${keyword}&start=${amount.start}&end=${amount.end}`
     axios({
       url: URL,
       method: 'get',
@@ -74,23 +87,26 @@ function Transaction() {
     setEndDate(date)
   }
 
-  const dropdownFilter = (e) => {
-    setFilterSelected(e.target.value)
+  const handleDropdownSelect = (e) => {
+    setDropdownSelected(e.target.value)
+    setColumn('action')
   }
 
-  const search = (e) => {
-    setKeyword(e.target.value)
+  const search = (event) => {
+    setKeyword(event.target.value)
   }
 
   const clear = () => {
     setStartDate('')
     setEndDate('')
-    setFilterSelected('')
+    setDropdownSelected('')
     setKeyword('')
+    setAmount({ start: '', end: '' })
   }
 
   const submitFilter = (e) => {
-    const URL = `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&${filter}`
+    e.preventDefault()
+    const URL = `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&${filter}&start=${amount.start}&end=${amount.end}`
     axios({
       url: URL,
       method: 'get',
@@ -103,38 +119,82 @@ function Transaction() {
       .catch(err => {
         throw err
       })
-    setFilterSelected(filterSelected)
+    setDropdownSelected(dropdownSelected)
     setKeyword(keyword)
     setStart(startDate)
     setEndDate(endDate)
   }
 
   useEffect(() => {
-    listHistory()
+    transactionList()
     sortApi()
-  }, [sort])
+  }, [sort, keyword, dropdownSelected])
 
   return (
     <Container>
       <Header>
+        <label>Transaction</label>
         <FilterBlock>
-          <Filter
-            start={startDate}
-            end={endDate}
-            setStart={setStart}
-            setEnd={setEnd}
-            submitFilter={submitFilter}
-            filterSelected={filterSelected}
-            keyword={keyword}
-            search={search}
-            dropdownFilter={dropdownFilter}
-            clear={clear}
-          />
+          <div className='filter'>
+            <div>
+              <label>Search</label>
+              <Input
+                placeholder='Search ID, Name or Reporter'
+                value={keyword}
+                onChange={search}
+              />
+            </div>
+            <div className='amount' >
+              <label>Amount</label>
+              <AmountInput>
+                <Input
+                  placeholder='Min'
+                  value={amount.start}
+                  onChange={(event) => {
+                    setAmount({
+                      start: event.target.value,
+                      end: amount.end,
+                    })
+                  }}
+                />
+                <Input
+                  placeholder='Max'
+                  value={amount.end}
+                  onChange={(event) => {
+                    setAmount({
+                      start: amount.start,
+                      end: event.target.value,
+                    })
+                  }}
+                />
+              </AmountInput>
+            </div>
+            <div>
+              <label>Date</label>
+              <Datepicker
+                start={startDate}
+                end={endDate}
+                setStart={setStart}
+                setEnd={setEnd}
+              />
+            </div>
+            <div className='action'>
+              <label>Action</label>
+              <ActionsDropdown
+                handleSelect={handleDropdownSelect}
+                selected={dropdownSelected}
+              />
+            </div>
+          </div>
+          <div className='button'>
+            <ClearBtn clear={clear} />
+            <FilterBtn submitFilter={submitFilter} />
+          </div>
         </FilterBlock>
       </Header>
       <Content>
         <TableBlock>
-          <Historytable
+          <TransactionTable
             data={data}
             handleSort={handleSort}
             sort={sort}

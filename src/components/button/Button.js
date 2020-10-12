@@ -1,6 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
+  Check,
+  Cross,
+} from '../Icon'
+import {
   CancelButton,
   RetryButton,
   EditButton,
@@ -8,14 +12,17 @@ import {
   ExportButton,
   DeleteButton,
   ClearButton,
-  FilterButton,
   TextButton,
+  FilterButton,
 } from './buttonStyle'
 
 function CancelBtn({ action }) {
   return (
     <div className='btn'>
-      <CancelButton type='button' onClick={() => action()}>
+      <CancelButton
+        type='button'
+        onClick={() => action()}
+      >
         Cancel
       </CancelButton>
     </div>
@@ -25,7 +32,11 @@ function CancelBtn({ action }) {
 function EditBtn({ action, rowID }) {
   return (
     <div className='btn'>
-      <EditButton onClick={() => action(rowID)}>Edit</EditButton>
+      <EditButton
+        onClick={() => action(rowID)}
+      >
+        Edit
+      </EditButton>
     </div>
   )
 }
@@ -87,25 +98,24 @@ function ClearBtn({ clear }) {
         type='button'
         onClick={() => clear()}
       >
-        <TextButton className='clear'>Clear</TextButton>
+        <Cross />
       </ClearButton>
     </div>
   )
 }
 
-function FilterBtn({ toggle }) {
+function FilterBtn({ submitFilter }) {
   return (
     <div>
       <FilterButton
         type='button'
-        onClick={toggle}
+        onClick={submitFilter}
       >
-        Filter
+        <Check />
       </FilterButton>
     </div>
   )
 }
-
 
 EditBtn.defaultProps = {
   select: () => { },
@@ -142,11 +152,11 @@ ClearBtn.propTypes = {
 }
 
 FilterBtn.defaultProps = {
-  toggle: () => { },
+  submitFilter: () => { },
 }
 
 FilterBtn.propTypes = {
-  toggle: PropTypes.func,
+  submitFilter: PropTypes.func,
 }
 
 export { CancelBtn, EditBtn, RetryBtn, SubmitBtn, ExportBtn, DeleteBtn, ClearBtn, FilterBtn }

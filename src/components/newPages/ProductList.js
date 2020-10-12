@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Datepicker, InventoryTable, SearchDropdown, ClearBtn, SubmitBtn } from '../../components'
+import { Datepicker, ProductListTable, ClearBtn, FilterBtn } from '../../components'
 import {
   Container,
   Header,
+  Head,
   Content,
   FilterBlock,
   TableBlock,
@@ -15,11 +16,8 @@ function ProductList() {
   const [data, setData] = useState([])
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [filterSelected, setFilterSelected] = useState('')
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' })
-
-  const filter = `${filterSelected}=${keyword}`
 
   const handleSort = (name) => {
     return sort.column === name ?
@@ -38,16 +36,11 @@ function ProductList() {
   const clear = () => {
     setStartDate('')
     setEndDate('')
-    setFilterSelected('')
     setKeyword('')
   }
 
-  const dropdownSelected = (e) => {
-    setFilterSelected(e.target.value)
-  }
-
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}`
+    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
     axios({
       url: URL,
       method: 'get',
@@ -83,7 +76,7 @@ function ProductList() {
 
   const submitFilter = () => {
     axios({
-      url: `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&${filter}`,
+      url: `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}`,
       method: 'get',
     })
       .then(res => {
@@ -92,7 +85,6 @@ function ProductList() {
       .catch(err => {
         throw err
       })
-    setFilterSelected(filterSelected)
     setKeyword(keyword)
     setStart(startDate)
     setEndDate(endDate)
@@ -101,37 +93,41 @@ function ProductList() {
   useEffect(() => {
     listBalance()
     sortApi()
-  }, [sort])
+  }, [sort, keyword])
 
   return (
     <Container>
       <Header>
+        <Head>Product List</Head>
         <FilterBlock>
-          <div>
-            <SearchDropdown
-              selected={dropdownSelected}
-              filterSelected={filterSelected}
-            />
+          <div className='filter'>
+            <div className='search'>
+              Search
             <Input
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
+                placeholder='Search ID or Name'
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+            </div>
+            <div>
+              Date
+              <Datepicker
+                start={startDate}
+                end={endDate}
+                setStart={setStart}
+                setEnd={setEnd}
+              />
+            </div>
           </div>
-          <Datepicker
-            start={startDate}
-            end={endDate}
-            setStart={setStart}
-            setEnd={setEnd}
-          />
           <Form>
             <ClearBtn clear={clear} />
-            <SubmitBtn submitFilter={submitFilter} />
+            <FilterBtn submitFilter={submitFilter} />
           </Form>
         </FilterBlock>
       </Header>
       <Content>
         <TableBlock>
-          <InventoryTable
+          <ProductListTable
             data={data}
             handleSort={handleSort}
           />

@@ -157,41 +157,18 @@ const ClearButton = styled.button`
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    /* background-color:  #C2C1C1; */
-    border: 5px solid #C2C1C1;
+    border: 5px solid #5A6268;
+    fill: #5A6268;
 
     &:hover { 
-      background-color: #C2C1C1;
+      background-color: #5A6268;
       transition: 0.3s;
+      fill: #FFFFFF;
     }
     &:active {
       background-color: #FFFFFF;
     }
   `
-
-const FilterButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0;
-  margin: 20px;
-  border-radius: 15px;
-  outline: 0;
-  /* width: 150px; */
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: bold;
-  background-color: #FFFFFF;
-
-  &:hover { 
-    background-color: #D5D5D5;
-    transition: 0.3s;
-  }
-  &:active {
-    background-color: #FFFFFF;
-  }
-`
 
 const TextButton = styled.label`
   padding: 0px 10px;
@@ -199,6 +176,37 @@ const TextButton = styled.label`
 
   &.clear {
     color: black;
+  }
+`
+
+const FilterButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  margin: 0 20px;
+  border-radius: 30px;
+  outline: 0;
+  width: 100px;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 5px solid #28A745;
+  fill: #28A745;
+
+  &:hover { 
+    background-color: #28A745;
+    transition: 0.3s;
+    fill: #FFFFFF;  
+  }
+  &:active {
+    background-color: #5CB85C;
+  }
+
+  .submit {
+  color: blue;
   }
 `
 

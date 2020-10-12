@@ -1,5 +1,5 @@
 import ImportExportTable from './ImportExportTable'
-import Historytable from './HistoryTable'
-import InventoryTable from './InventoryTable'
+import TransactionTable from './TransactionTable'
+import ProductListTable from './ProductListTable'
 
-export { ImportExportTable, Historytable, InventoryTable }
+export { ImportExportTable, TransactionTable, ProductListTable }

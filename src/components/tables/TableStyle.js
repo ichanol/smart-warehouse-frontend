@@ -15,7 +15,7 @@ const Top = styled.thead`
 `
 
 const No = styled.th`
-  width: 5%;
+  width: 3%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -79,7 +79,7 @@ const Description = styled.th`
 `
 
 const Actions = styled.th`
-  /* width: 10%; */
+  width: 15%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -88,7 +88,7 @@ const Actions = styled.th`
 `
 
 const Ref = styled.th`
-  /* width: 10%; */
+  width: 10%;
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
@@ -120,11 +120,8 @@ const Row = styled.td`
 
 const Trow = styled.tr`
   &:hover {
-    background-color: lightgray;
+    background-color: #f5f5f5;
     cursor: pointer;
-  }
-  &:focus {
-    background-color: lightgray;
   }
 `
 
@@ -133,17 +130,4 @@ const Action = styled.div`
   flex-direction: row;
 `
 
-const Button = styled.button`
-  font-size: 16px;
-  border: 0;
-  outline: 0;
-  width: 100%;
-  height: 100%; 
-  /* background-color: red; */
-  background-color: #1C1C1C;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  font-weight: bold;
-`
-
-export { Wrapper, Table, Top, Body, No, Id, Name, Amount, Company, Time, Description, Actions, Ref, Reporter, Trow, Row, Action, Button }
+export { Wrapper, Table, Top, Body, No, Id, Name, Amount, Company, Time, Description, Actions, Ref, Reporter, Trow, Row, Action }

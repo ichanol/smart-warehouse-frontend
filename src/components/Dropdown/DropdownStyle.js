@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
 const Dropdown = styled.select`
-  height: 40px;
+  height: 50px;
   font-size: 15px;
   outline: 0;
-  border: 1px solid lightgray;
+  border: 0;
 `
 
 const Choice = styled.option`

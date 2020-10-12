@@ -22,16 +22,18 @@ const DropdownFilter = ({ filterSelected, dropdownFilter }) => {
   )
 }
 
-const SearchDropdown = ({ filterSelected, selected }) => {
+const ActionsDropdown = ({ selected, handleSelect }) => {
   return (
     <Dropdown
       defaultValue=''
-      value={filterSelected}
-      onChange={selected}
+      value={selected}
+      onChange={handleSelect}
     >
-      <Choice value='' disabled selected hidden>Select Column</Choice>
-      {/* <Choice value='product_name'>Product Name</Choice> */}
-      <Choice value='balance'>Balance</Choice>
+      <Choice value='' disabled selected hidden>Select Action</Choice>
+      <Choice value='import'>Import</Choice>
+      <Choice value='export'>Export</Choice>
+      <Choice value='expired'>Expired</Choice>
+      <Choice value='damaged'>Damaged</Choice>
     </Dropdown>
   )
 }
@@ -46,14 +48,14 @@ DropdownFilter.propTypes = {
   dropdownFilter: PropTypes.func,
 }
 
-SearchDropdown.defaultProps = {
-  filterSelected: '',
-  selected: () => { },
+ActionsDropdown.defaultProps = {
+  selected: '',
+  handleSelect: () => { },
 }
 
-SearchDropdown.propTypes = {
-  filterSelected: PropTypes.string,
-  selected: PropTypes.func,
+ActionsDropdown.propTypes = {
+  selected: PropTypes.string,
+  handleSelect: PropTypes.func,
 }
 
-export { DropdownFilter, SearchDropdown }
+export { DropdownFilter, ActionsDropdown }

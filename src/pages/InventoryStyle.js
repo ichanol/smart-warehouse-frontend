@@ -1,11 +1,40 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background-color: #e6eff0;
+  .header {
+    height: 35px;
+    align-items: center;
+    display: flex;
+    margin-bottom: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .header span {
+    font-size: 22px;
+  }
+  .content {
+    flex: 1;
+    background-color: white;
+    padding: 25px;
+  }
 `
 
 const Header = styled.div`
   display: flex;
-  /* align-items: center; */
+  align-items: left;
+  flex-direction: column;
+  padding: 0 20px;
+  font-size: 18px;
+`
+
+const Head = styled.label`
+  font-size: 30px;
 `
 
 const Content = styled.div`
@@ -16,10 +45,17 @@ const Content = styled.div`
 const FilterBlock = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  position: relative;
-  padding: 20px;
-  width: 100%;
+  padding: 20px 0;
+
+  .filter {
+    display: flex;
+    flex-direction: row;
+  }
+  .search { 
+    padding-right: 20px;
+  }
 `
 
 const TableBlock = styled.div`
@@ -27,15 +63,13 @@ const TableBlock = styled.div`
 `
 
 const Input = styled.input`
-  /* margin-right: 5px; */
-  /* width: 500px; */
-  height: 40px;
+  height: 50px;
   outline: 0;
   border: 0;
   border-bottom: 3px solid lightgray;
   outline: 0;
   font-size: 16px;
-  width: 50%;
+  width: 100%;
   padding-left: 10px;
 
   &&:focus {
@@ -47,6 +81,8 @@ const Input = styled.input`
 const Form = styled.form`
   display: flex;
   flex-direction: row;
+  position: relative;
+  top: 15px;
 `
 
 const Block = styled.div`
@@ -59,4 +95,13 @@ const DateBlock = styled.div`
   width: 400px;
 `
 
-export { Container, Header, Content, FilterBlock, TableBlock, Input, Form, Block, DateBlock }
+const Empty = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* top: 50%;
+  left: 50%; */
+  /* transform: translate(-50%, -50%) */
+`
+
+export { Container, Header, Head, Content, FilterBlock, TableBlock, Input, Form, Block, DateBlock, Empty }

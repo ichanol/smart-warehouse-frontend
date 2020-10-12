@@ -6,6 +6,8 @@ import ProductList from './ProductList'
 import Product from './Product'
 import Permission from './Permission'
 import User from './User'
+import Check from './Check'
+import Cross from './Cross'
 
 export {
   History,
@@ -16,4 +18,6 @@ export {
   Product,
   Permission,
   User,
+  Check,
+  Cross,
 }
