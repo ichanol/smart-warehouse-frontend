@@ -8,6 +8,9 @@ import PermissionIcon from './PermissionIcon'
 import ProductIcon from './ProductIcon'
 import ProductListIcon from './ProductListIcon'
 import UserIcon from './UserIcon'
+import ArrowIcon from './ArrowIcon'
+import SearchIcon from './SearchIcon'
+import CrossIcon from './CrossIcon'
 
 export {
   DeleteIcon,
@@ -20,4 +23,7 @@ export {
   ProductIcon,
   ProductListIcon,
   UserIcon,
+  ArrowIcon,
+  SearchIcon,
+  CrossIcon,
 }

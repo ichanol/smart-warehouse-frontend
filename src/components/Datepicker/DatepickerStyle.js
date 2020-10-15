@@ -1,43 +1,55 @@
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  margin: 0;
-  padding: 0;
   display: flex;
-  /* flex-direction: row;  */
+  align-items: center;
+  position: relative;
+  padding-right: 20px;
+
+  .clear-start {
+    position: absolute;
+    top: 25%;
+    left: 40%;
+  }
+
+  .clear-end {
+    position: absolute;
+    top: 25%;
+    left: 88%;
+  }
+  
 `
 
 const DateStart = styled.input`
-  /* padding: 0; */
   outline: 0;
   font-size: 16px;
-  width: 90%;
+  width: 100%;
   height: 50px;
   border: 0;
-  border-bottom: 3px solid lightgray; 
+  border-bottom: 3px solid ${COLORS.gray[500]}; 
   text-align: center; 
   font-weight: bold;
 
   &&:focus {
     transition: 1s;
-    border-bottom: 3px solid #ff9e1f;
+    border-bottom: 3px solid ${COLORS.orange[500]};
   }
 `
 
 const DateEnd = styled.input`
-  /* padding: 0; */
   outline: 0;
   font-size: 16px;
-  width: 90%;
+  width: 100%;
   height: 50px;
   border: 0;
-  border-bottom: 3px solid lightgray;
+  border-bottom: 3px solid ${COLORS.gray[500]};
   text-align: center; 
   font-weight: bold;
 
   &&:focus {
-    transition: 0.5s;
-    border-bottom: 3px solid #ff9e1f;
+    transition: 1s;
+    border-bottom: 3px solid ${COLORS.orange[500]};
   }
 `
 

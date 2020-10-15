@@ -7,47 +7,48 @@ import {
 } from './DatepickerStyle'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { CrossIcon } from '../Icon'
 
-const Datepicker = ({ start, end, setStart, setEnd }) => {
+const Datepicker = ({ date, setStart, setEnd }) => {
   return (
     <Wrapper>
       <DatePicker
-        selected={start}
-        onChange={date => setStart(date)}
+        selected={date.start}
+        onChange={dateStart => setStart(dateStart)}
         selectsStart
-        startDate={start}
-        endDate={end}
-        maxDate={end || new Date()}
+        startDate={date.start}
+        endDate={date.end}
+        maxDate={date.end || new Date()}
         placeholderText='StartDate'
         dateFormat='dd-MM-yyyy'
         customInput={<DateStart />}
       />
+      {date.start === '' ? <></> : <div className='clear-start' onClick={() => setStart('')}><CrossIcon /></div>}
       <DatePicker
-        selected={end}
-        onChange={date => setEnd(date)}
+        selected={date.end}
+        onChange={dateEnd => setEnd(dateEnd)}
         selectsEnd
-        startDate={start}
-        endDate={end}
-        minDate={start}
+        startDate={date.start}
+        endDate={date.end}
+        minDate={date.start}
         maxDate={new Date()}
         placeholderText='EndDate'
         dateFormat='dd-MM-yyyy'
         customInput={<DateEnd />}
       />
+      {date.end === '' ? <></> : <div className='clear-end' onClick={() => setEnd('')}><CrossIcon /></div>}
     </Wrapper>
   )
 }
 
 Datepicker.defaultProps = {
-  start: {},
-  end: {},
+  date: {},
   setStart: () => { },
   setEnd: () => { },
 }
 
 Datepicker.propTypes = {
-  start: PropTypes.object,
-  end: PropTypes.object,
+  date: PropTypes.object,
   setStart: PropTypes.func,
   setEnd: PropTypes.func,
 }

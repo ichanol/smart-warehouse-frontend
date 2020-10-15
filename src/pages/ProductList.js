@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Datepicker, ProductListTable } from '../components'
+import {
+  Datepicker,
+  ProductListTable,
+} from '../components'
 import {
   Container,
-  Header,
-  Head,
-  Content,
-  FilterBlock,
-  TableBlock,
   Input,
-  Form,
 } from '../Pages/ProductListStyle'
+import { CrossIcon, SearchIcon } from '../components/Icon'
 
 function ProductList() {
   const [data, setData] = useState([])
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [date, setDate] = useState({ start: '', end: '' })
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' })
 
@@ -33,14 +30,8 @@ function ProductList() {
       })
   }
 
-  const clear = () => {
-    setStartDate('')
-    setEndDate('')
-    setKeyword('')
-  }
-
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
+    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
     axios({
       url: URL,
       method: 'get',
@@ -53,13 +44,9 @@ function ProductList() {
       })
   }
 
-  const setStart = (date) => {
-    setStartDate(date)
-  }
+  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
 
-  const setEnd = (date) => {
-    setEndDate(date)
-  }
+  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
   const listBalance = async () => {
     const URL = 'http://localhost:8000/api/smart-warehouse/product-balance'
@@ -74,63 +61,40 @@ function ProductList() {
       })
   }
 
-  const submitFilter = () => {
-    axios({
-      url: `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${startDate}&enddate=${endDate}`,
-      method: 'get',
-    })
-      .then(res => {
-        setData(res.data.result)
-      })
-      .catch(err => {
-        throw err
-      })
-    setKeyword(keyword)
-    setStart(startDate)
-    setEndDate(endDate)
-  }
-
   useEffect(() => {
     listBalance()
     sortApi()
-  }, [sort, keyword])
+  }, [sort, keyword, date])
 
   return (
     <Container>
-      <Header>
-        <Head>Product List</Head>
-        <FilterBlock>
-          <div className='filter'>
-            <div className='search'>
-              <Input
-                placeholder='Search ID or Name'
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-            </div>
-            <div>
-              <Datepicker
-                start={startDate}
-                end={endDate}
-                setStart={setStart}
-                setEnd={setEnd}
-              />
-            </div>
+      <div className='header'>
+        <span>Product List</span>
+        <div className='filter'>
+          <div className='search'>
+            <Input
+              placeholder='Search ID or Name'
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            {keyword === '' ? <></> : <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
+            <div className='search-icon'><SearchIcon /></div>
           </div>
-          <Form>
-            {/* <ClearBtn clear={clear} />
-            <FilterBtn submitFilter={submitFilter} /> */}
-          </Form>
-        </FilterBlock>
-      </Header>
-      <Content>
-        <TableBlock>
-          <ProductListTable
-            data={data}
-            handleSort={handleSort}
-          />
-        </TableBlock>
-      </Content>
+          <div>
+            <Datepicker
+              date={date}
+              setStart={setStart}
+              setEnd={setEnd}
+            />
+          </div>
+        </div>
+      </div>
+      <div className='content'>
+        <ProductListTable
+          data={data}
+          handleSort={handleSort}
+        />
+      </div>
     </Container>
   )
 }

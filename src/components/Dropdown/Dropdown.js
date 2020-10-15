@@ -1,61 +1,56 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { DropdownLists } from '../../Constant'
+import { ArrowIcon } from '../Icon'
 import {
   Dropdown,
-  Choice,
 } from './DropdownStyle'
 
-const DropdownFilter = ({ filterSelected, dropdownFilter }) => {
+const ActionsDropdown = ({ handleSelect, selected, open, handleToggle }) => {
   return (
-    <Dropdown
-      defaultValue=''
-      value={filterSelected}
-      onChange={dropdownFilter}
-    >
-      <Choice value='' disabled selected hidden>Select Column</Choice>
-      {/* <Choice value='productid' selected>Product ID</Choice> */}
-      <Choice value='responsable'>Reporter</Choice>
-      <Choice value='ref'>Reference_number</Choice>
-      <Choice value='action'>Action type</Choice>
-      <Choice value='amount'>Amount</Choice>
+    <Dropdown open={open}>
+      <div
+        className='dd-title'
+        onClick={handleToggle}
+      >
+        <p>{selected === '' ? 'Select Actions' : selected}</p>
+        <div className='arrow'>
+          <ArrowIcon />
+        </div>
+      </div>
+
+      {open && (
+        <div className='dd-items'>
+          {DropdownLists.map((value, key) => {
+            return (
+              <ul
+                key={key}
+                onClick={() => handleSelect(value.value)}
+              >
+                <li>{value.value}</li>
+              </ul>
+            )
+          })}
+        </div>
+      )
+      }
+
     </Dropdown>
   )
-}
-
-const ActionsDropdown = ({ selected, handleSelect }) => {
-  return (
-    <Dropdown
-      defaultValue=''
-      value={selected}
-      onChange={handleSelect}
-    >
-      <Choice value='' disabled selected hidden>Select Action</Choice>
-      <Choice value='import'>Import</Choice>
-      <Choice value='export'>Export</Choice>
-      <Choice value='expired'>Expired</Choice>
-      <Choice value='damaged'>Damaged</Choice>
-    </Dropdown>
-  )
-}
-
-DropdownFilter.defaultProps = {
-  filterSelected: '',
-  dropdownFilter: () => { },
-}
-
-DropdownFilter.propTypes = {
-  filterSelected: PropTypes.string,
-  dropdownFilter: PropTypes.func,
 }
 
 ActionsDropdown.defaultProps = {
   selected: '',
   handleSelect: () => { },
+  open: false,
+  handleToggle: () => { },
 }
 
 ActionsDropdown.propTypes = {
   selected: PropTypes.string,
   handleSelect: PropTypes.func,
+  open: PropTypes.bool,
+  handleToggle: PropTypes.func,
 }
 
-export { DropdownFilter, ActionsDropdown }
+export default ActionsDropdown

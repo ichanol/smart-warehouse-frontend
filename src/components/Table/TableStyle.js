@@ -1,133 +1,117 @@
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
-  height: 600px;
-  overflow: auto;
-`
+const Table = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+  padding: 10px;
+  position: relative;
 
-const Table = styled.table`
-  width: 100%;
-  border: solid 2px rgba(62,68,145,0.1);
-`
+  .fixed-container {
+    padding: 0 10px;
+    position: fixed;
+    background-color: ${COLORS.natural.white};
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 
-const Top = styled.thead`
-  background-color: #1C1C1C;
-`
+  .data-container {
+    margin-top: 65px;
+    overflow: auto;
+  }
 
-const No = styled.th`
-  width: 3%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-  cursor: pointer;
-`
+  .table-title-wrapper,
+  .table-data-wrapper {
+    height: 55px;
+    display: flex;
+    flex: 1;
+    background-color: rgba(209, 218, 220, 0.1);
+  }
 
-const Id = styled.th`
-  width: 10%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-title-wrapper {
+    background-color: ${COLORS.natural.white};
+    font-weight: bold;
+    height: 65px;
+    text-overflow: ellipsis;
+  }
 
-const Name = styled.th`
-  width: 15%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-data-wrapper {
+    color: rgba(0, 0, 0, 0.7);
+  }
 
-const Amount = styled.th`
-  width: 10%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-data-wrapper:nth-child(odd) {
+    background-color: rgba(186, 205, 207, 0.2);
+  }
 
-const Company = styled.th`
-  width: 10%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-const Time = styled.th`
-  width: 15%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-title span {
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-const Description = styled.th`
-  width: 15%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .table-data-wrapper .table-title span {
+    position: relative;
+    top: 10%
+    max-width: 75px;
+  }
 
-const Actions = styled.th`
-  width: 15%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .no,
+  .data-no {
+    flex: 0.5;
+  }
 
-const Ref = styled.th`
-  width: 10%;
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .id,
+  .data-id {
+    flex: 2;
+  }
 
-const Reporter = styled.th`
-  /* width: 10%; */
-  padding: 20px 15px;
-  text-align: center;
-  font-size: 16px;
-  color: #FFF;
-  text-transform: uppercase;
-`
+  .name,
+  .data-name {
+    flex: 2;
+  }
 
-const Body = styled.tbody`
-  background-color: #FFF;
-`
+  .timestamp,
+  .data-timestamp {
+    flex: 2;
+  }
 
-const Row = styled.td`
-  padding: 15px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 14px;
-  font-weight: bold;
-  border: solid 2px rgba(62,68,145,0.1);
-`
+  .amount,
+  .data-amount {
+    flex: 1.5;
+  }
 
-const Trow = styled.tr`
-  &:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
+  .description,
+  .data-description {
+    flex: 2;
+  }
+
+  .action,
+  .data-action {
+    flex: 2;
+  }
+
+  .empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 65px;
+    text-align: center;
+    background-color: rgba(186, 205, 207, 0.2);
   }
 `
 
-const Action = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-
-export { Wrapper, Table, Top, Body, No, Id, Name, Amount, Company, Time, Description, Actions, Ref, Reporter, Trow, Row, Action }
+export { Table }

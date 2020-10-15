@@ -1,3 +1,4 @@
+import { COLORS } from '../Constant'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -6,33 +7,32 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background-color: #e6eff0;
+  background-color: ${COLORS.gray[200]};
+
   .header {
-    height: 35px;
-    align-items: center;
+    height: 100px;
     display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
     font-weight: bold;
     letter-spacing: 1px;
   }
+
   .header span {
     font-size: 22px;
   }
+
   .content {
     flex: 1;
-    background-color: white;
-    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    background-color: ${COLORS.natural.white};
+    padding: 0px;
+    min-width: 100%;
+    overflow: auto;
+    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    position: relative;  
   }
-  label {
-    font-size: 30px;
-  }
-`
-
-const Header = styled.div`
-  display: flex;
-  align-items: left;
-  flex-direction: column;
-  padding: 0 20px;
 `
 
 const FilterBlock = styled.div`
@@ -45,13 +45,36 @@ const FilterBlock = styled.div`
   .filter {
     display: flex;
     flex-direction: row; 
+    width: 100%;
+
+    
   }
-  .filter label {
-    font-size: 18px;
-  }
-  .amount { 
+  .amount-wrap { 
     width: 20%; 
     padding: 0 20px;
+
+    .amount {
+      display: flex;
+      flex-direction: row;
+      position: relative; 
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      }
+
+      .amount-start {
+        position: absolute;
+        top: 25%;
+        left: 35%;
+      }
+
+      .amount-end {
+        position: absolute;
+        top: 25%;
+        left: 85%;
+      }
   }
   .action {
     display: flex; 
@@ -63,37 +86,44 @@ const FilterBlock = styled.div`
   position: relative;
   top: 15px;
   }
+  .search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 30%;
+    height: 0%;
+    
+
+    .searchIcon {
+      position: absolute;
+      top: 25%;
+      left: 90%;
+    }
+    
+    .clearIcon {
+      position: absolute;
+      top: 25%;
+      left: 80%;
+    }
+  }
 `
 
 const Input = styled.input`
+  width: 100%;
   height: 50px;
+  padding-left: 10px;
   outline: 0;
   border: 0;
-  border-bottom: 3px solid lightgray;
+  border-bottom: 3px solid ${COLORS.gray[500]};
   outline: 0;
   font-size: 16px;
-  width: 100%;
-  padding-left: 10px;
 
   &&:focus {
-    transition: 0.7s;
-    border-bottom: 3px solid #ff9e1f;
+    transition: 1s;
+    border-bottom: 3px solid ${COLORS.orange[500]};
   } 
 `
 
-const AmountInput = styled.div`
-  display: flex;
-  flex-direction: row;
-  /* width: 50%; */
-`
+const Content = styled.div``
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const TableBlock = styled.div`
-  padding: 0 20px;
-`
-
-export { Container, Header, Content, FilterBlock, TableBlock, Input, AmountInput }
+export { Container, Content, FilterBlock, Input }

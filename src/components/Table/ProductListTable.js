@@ -1,76 +1,78 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Wrapper,
   Table,
-  Top,
-  No,
-  Id,
-  Name,
-  Amount,
-  Description,
-  Body,
-  Trow,
-  Row,
-  Time,
 } from './TableStyle'
 const moment = require('moment')
 
 function ProductListTable({ data, handleSort }) {
 
   return (
-    <Wrapper>
-      <Table cellSpacing='0'>
-        <Top>
-          <tr>
-            <No>
-              No
-            </No>
-            <Id
-              onClick={() => handleSort('product_id')}
-            >
-              Product ID
-            </Id>
-            <Name
-              onClick={() => handleSort('product_name')}
-            >
-              Product Name
-            </Name>
-            <Amount
-              onClick={() => handleSort('balance')}
-            >
-              Balance
-            </Amount>
-            <Time
-              onClick={() => handleSort('timestamp')}
-            >
-              DateTime
-            </Time>
-            <Description>
-              Remark
-            </Description>
-          </tr>
-        </Top>
-        <Body>
-          {data.length > 0 ?
-            data.map((value, index) => {
-              return (
-                <Trow key={index}>
-                  <Row>{index + 1}</Row>
-                  <Row>{value.product_id}</Row>
-                  <Row>{value.product_name}</Row>
-                  <Row>{value.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Row>
-                  <Row>{moment(value.timestamp).format('DD-MM-yyyy hh:mm:ss')}</Row>
-                  <Row>{value.detail}</Row>
-                </Trow>
-              )
-            }) :
-            <Row colSpan='6'><h2>No data</h2></Row>
-          }
-
-        </Body>
-      </Table>
-    </Wrapper>
+    <Table cellSpacing='0'>
+      <div className='fixed-container'>
+        <div className='table-title-wrapper'>
+          <div className='table-title no'>
+            No
+            </div>
+          <div
+            className='table-title id'
+            onClick={() => handleSort('product_id')}
+          >
+            Product ID
+            </div>
+          <div
+            className='table-title name'
+            onClick={() => handleSort('product_name')}
+          >
+            Product Name
+            </div>
+          <div
+            className='table-title amount'
+            onClick={() => handleSort('balance')}
+          >
+            Balance
+            </div>
+          <div
+            className='table-title timestamp'
+            onClick={() => handleSort('timestamp')}
+          >
+            DateTime
+            </div>
+          <div className='table-title description'>
+            Remark
+            </div>
+        </div>
+      </div>
+      <div className='data-container'>
+        {data.length > 0 ?
+          data.map((value, index) => {
+            return (
+              <div className='table-data-wrapper' key={index}>
+                <div className='table-title data-no'>
+                  <span>{index + 1}</span>
+                </div>
+                <div className='table-title data-id'>
+                  <span>{value.product_id}</span>
+                </div>
+                <div className='table-title data-id'>
+                  <span>{value.product_name}</span>
+                </div>
+                <div className='table-title data-amount'>
+                  <span>{value.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                </div>
+                <div className='table-title data-timestamp'>
+                  <span>{moment(value.timestamp).format('DD-MM-yyyy hh:mm:ss')}</span>
+                </div>
+                <div className='table-title data-description'>
+                  <span>{value.detail}</span>
+                </div>
+              </div>
+            )
+          }) :
+          <div className='empty'><h2>No data</h2></div>
+        }
+      </div>
+    </Table>
   )
 }
 
