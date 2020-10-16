@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Table,
 } from './TableStyle'
-const moment = require('moment')
+import moment from 'moment'
 
 function ProductListTable({ data, handleSort }) {
 
@@ -47,7 +47,7 @@ function ProductListTable({ data, handleSort }) {
         {data.length > 0 ?
           data.map((value, index) => {
             return (
-              <div className='table-data-wrapper' key={index}>
+              <div className='table-data-wrapper' key={value.product_id}>
                 <div className='table-title data-no'>
                   <span>{index + 1}</span>
                 </div>

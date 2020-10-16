@@ -8,13 +8,9 @@ import {
   FilterBlock,
   Input,
 } from '../Pages/TransactionStyle'
-
-import { Datepicker } from '../components/Datepicker'
 import axios from 'axios'
-
+import { Datepicker } from '../components/Datepicker'
 import { SearchIcon, CrossIcon } from '../components/Icon'
-
-const moment = require('moment')
 
 function Transaction() {
   const [data, setData] = useState([])
@@ -27,7 +23,6 @@ function Transaction() {
   const [selected, setSelected] = useState('')
   const [open, setOpen] = useState(false)
 
-  const today = moment()
   const filter = `${column}=${selected}` // Column=value
 
   const handleSelect = (option) => {
@@ -36,21 +31,6 @@ function Transaction() {
     setColumn('action')
   }
   const toggle = () => setOpen(!open)
-
-
-  const transactionList = async () => {
-    const start = moment('1998-11-09')
-    const URL = `http://localhost:8000/api/smart-warehouse/product-transaction?startdate=${start}&enddate=${today}`
-    axios({
-      url: URL,
-    })
-      .then(res => {
-        setData(res.data.result)
-      })
-      .catch(err => {
-        throw err
-      })
-  }
 
   const handleSort = (name) => {
     if (sort.column === name) {
@@ -69,7 +49,7 @@ function Transaction() {
   }
 
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&${filter}&keyword=${keyword}&start=${amount.start}&end=${amount.end}`
+    const URL = `${process.env.REACT_APP_API}/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&${filter}&keyword=${keyword}&start=${amount.start}&end=${amount.end}`
     axios({
       url: URL,
       method: 'get',
@@ -91,7 +71,6 @@ function Transaction() {
   const search = (event) => setKeyword(event.target.value)
 
   useEffect(() => {
-    transactionList()
     sortApi()
   }, [sort, keyword, selected, date, amount])
 
@@ -108,7 +87,7 @@ function Transaction() {
                 value={keyword}
                 onChange={search}
               />
-              {keyword === '' ? <></> : <i className='clearIcon' onClick={() => setKeyword('')}><CrossIcon /></i>}
+              {keyword !== '' && <i className='clearIcon' onClick={() => setKeyword('')}><CrossIcon /></i>}
 
               <div className='searchIcon'><SearchIcon /></div>
             </div>
@@ -125,7 +104,7 @@ function Transaction() {
                     })
                   }}
                 />
-                {amount.start === '' ? <></> : <div className='amount-start' onClick={() => setAmount({ start: '', end: amount.end })}><CrossIcon /></div>}
+                {amount.start !== '' && <div className='amount-start' onClick={() => setAmount({ start: '', end: amount.end })}><CrossIcon /></div>}
                 <Input
                   placeholder='Max'
                   value={amount.end}
@@ -137,7 +116,7 @@ function Transaction() {
                     })
                   }}
                 />
-                {amount.end === '' ? <></> : <div className='amount-end' onClick={() => setAmount({ start: amount.start, end: '' })}><CrossIcon /></div>}
+                {amount.end !== '' && <div className='amount-end' onClick={() => setAmount({ start: amount.start, end: '' })}><CrossIcon /></div>}
               </div>
             </div>
             <div>

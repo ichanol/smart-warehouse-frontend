@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Table,
 } from './TableStyle'
-const moment = require('moment')
+import moment from 'moment'
 
 function TransactionTable({ data, handleSort }) {
 

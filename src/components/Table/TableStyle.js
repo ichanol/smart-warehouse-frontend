@@ -64,7 +64,7 @@ const Table = styled.div`
 
   .table-data-wrapper .table-title span {
     position: relative;
-    top: 10%
+    top: 10%;
     max-width: 75px;
   }
 

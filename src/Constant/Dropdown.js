@@ -1,4 +1,4 @@
-const DropdownLists = [
+const Dropdown = [
   {
     id: 1,
     value: 'Import',
@@ -17,4 +17,4 @@ const DropdownLists = [
   },
 ]
 
-export default DropdownLists
+export default Dropdown

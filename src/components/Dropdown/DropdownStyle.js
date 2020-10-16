@@ -1,18 +1,15 @@
-import { COLORS } from '../../Constant'
+import { COLORS, FONT } from '../../Constant'
 import styled from 'styled-components'
 
-const Dropdown = styled.div`
+const DropDownContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  
 
   p {
-    padding-left: 10px;
-    
+    padding-left: 10px; 
   }
 
-  .dd-title {
+  .dropdown-title {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -21,9 +18,10 @@ const Dropdown = styled.div`
     outline: 0;
     border: 0;
     background: ${COLORS.natural.white};
+    font-size: ${FONT.l};
   }
 
-  .dd-items {
+  .dropdown-items {
     width: 100%;
     background: ${COLORS.natural.white};
     position: relative; 
@@ -32,7 +30,7 @@ const Dropdown = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
   }
 
-  .dd-items ul {
+  .dropdown-items ul {
     display: flex;
     align-items: center;
     height: 30px;
@@ -41,8 +39,9 @@ const Dropdown = styled.div`
     }
   }
 
-  .dd-items ul li { 
+  .dropdown-items ul li { 
     padding-left: 10px;
+    font-size: ${FONT.l};
     list-style: none;
   }
 
@@ -56,7 +55,6 @@ const Dropdown = styled.div`
     transform: rotate(${props => props.open ? '-180deg' : 0});
     transform-origin: center center;
   }
-
 `
 
-export { Dropdown }
+export { DropDownContainer }

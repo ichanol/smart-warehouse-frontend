@@ -10,6 +10,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { CrossIcon } from '../Icon'
 
 const Datepicker = ({ date, setStart, setEnd }) => {
+
+  const DATE_FORMAT = 'dd-MM-yyyy'
+
   return (
     <Wrapper>
       <DatePicker
@@ -20,10 +23,10 @@ const Datepicker = ({ date, setStart, setEnd }) => {
         endDate={date.end}
         maxDate={date.end || new Date()}
         placeholderText='StartDate'
-        dateFormat='dd-MM-yyyy'
+        dateFormat={DATE_FORMAT}
         customInput={<DateStart />}
       />
-      {date.start === '' ? <></> : <div className='clear-start' onClick={() => setStart('')}><CrossIcon /></div>}
+      {date.start !== '' && <div className='clear-start' onClick={() => setStart('')}><CrossIcon /></div>}
       <DatePicker
         selected={date.end}
         onChange={dateEnd => setEnd(dateEnd)}
@@ -33,10 +36,10 @@ const Datepicker = ({ date, setStart, setEnd }) => {
         minDate={date.start}
         maxDate={new Date()}
         placeholderText='EndDate'
-        dateFormat='dd-MM-yyyy'
+        dateFormat={DATE_FORMAT}
         customInput={<DateEnd />}
       />
-      {date.end === '' ? <></> : <div className='clear-end' onClick={() => setEnd('')}><CrossIcon /></div>}
+      {date.end !== '' && <div className='clear-end' onClick={() => setEnd('')}><CrossIcon /></div>}
     </Wrapper>
   )
 }

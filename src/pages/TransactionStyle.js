@@ -1,4 +1,4 @@
-import { COLORS } from '../Constant'
+import { COLORS, FONT } from '../Constant'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -19,7 +19,7 @@ const Container = styled.div`
   }
 
   .header span {
-    font-size: 22px;
+    font-size: ${FONT.xl};
   }
 
   .content {
@@ -116,14 +116,12 @@ const Input = styled.input`
   border: 0;
   border-bottom: 3px solid ${COLORS.gray[500]};
   outline: 0;
-  font-size: 16px;
+  font-size: ${FONT.l};
 
-  &&:focus {
+  &:focus {
     transition: 1s;
     border-bottom: 3px solid ${COLORS.orange[500]};
   } 
 `
 
-const Content = styled.div``
-
-export { Container, Content, FilterBlock, Input }
+export { Container, FilterBlock, Input }

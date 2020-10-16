@@ -31,7 +31,7 @@ function ProductList() {
   }
 
   const sortApi = () => {
-    const URL = `http://192.168.56.1:8000/api/smart-warehouse/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
+    const URL = `${process.env.REACT_APP_API}/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
     axios({
       url: URL,
       method: 'get',
@@ -49,7 +49,7 @@ function ProductList() {
   const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
   const listBalance = async () => {
-    const URL = 'http://localhost:8000/api/smart-warehouse/product-balance'
+    const URL = `${process.env.REACT_APP_API}/product-balance`
     axios({
       url: URL,
     })
@@ -77,7 +77,7 @@ function ProductList() {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
-            {keyword === '' ? <></> : <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
+            {keyword !== '' && <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
             <div className='search-icon'><SearchIcon /></div>
           </div>
           <div>

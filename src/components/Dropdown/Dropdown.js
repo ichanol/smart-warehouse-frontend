@@ -1,16 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DropdownLists } from '../../Constant'
 import { ArrowIcon } from '../Icon'
-import {
-  Dropdown,
-} from './DropdownStyle'
+import { DropDownContainer } from './DropdownStyle'
+import { Dropdown } from '../../Constant'
 
 const ActionsDropdown = ({ handleSelect, selected, open, handleToggle }) => {
   return (
-    <Dropdown open={open}>
+    <DropDownContainer open={open}>
       <div
-        className='dd-title'
+        className='dropdown-title'
         onClick={handleToggle}
       >
         <p>{selected === '' ? 'Select Actions' : selected}</p>
@@ -20,8 +18,8 @@ const ActionsDropdown = ({ handleSelect, selected, open, handleToggle }) => {
       </div>
 
       {open && (
-        <div className='dd-items'>
-          {DropdownLists.map((value, key) => {
+        <div className='dropdown-items'>
+          {Dropdown.map((value, key) => {
             return (
               <ul
                 key={key}
@@ -35,7 +33,7 @@ const ActionsDropdown = ({ handleSelect, selected, open, handleToggle }) => {
       )
       }
 
-    </Dropdown>
+    </DropDownContainer>
   )
 }
 

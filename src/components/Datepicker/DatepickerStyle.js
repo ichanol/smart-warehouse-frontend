@@ -1,4 +1,4 @@
-import { COLORS } from '../../Constant'
+import { COLORS, FONT } from '../../Constant'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 
 const DateStart = styled.input`
   outline: 0;
-  font-size: 16px;
+  font-size: ${FONT.l};
   width: 100%;
   height: 50px;
   border: 0;
@@ -31,7 +31,7 @@ const DateStart = styled.input`
   text-align: center; 
   font-weight: bold;
 
-  &&:focus {
+  &:focus {
     transition: 1s;
     border-bottom: 3px solid ${COLORS.orange[500]};
   }
@@ -39,7 +39,7 @@ const DateStart = styled.input`
 
 const DateEnd = styled.input`
   outline: 0;
-  font-size: 16px;
+  font-size: ${FONT.l};
   width: 100%;
   height: 50px;
   border: 0;
@@ -47,7 +47,7 @@ const DateEnd = styled.input`
   text-align: center; 
   font-weight: bold;
 
-  &&:focus {
+  &:focus {
     transition: 1s;
     border-bottom: 3px solid ${COLORS.orange[500]};
   }
