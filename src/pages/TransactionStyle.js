@@ -66,14 +66,22 @@ const FilterBlock = styled.div`
 
       .amount-start {
         position: absolute;
-        top: 25%;
+        top: 30%;
         left: 35%;
       }
 
       .amount-end {
         position: absolute;
-        top: 25%;
+        top: 30%;
         left: 85%;
+      }
+
+      .input-amount-min {
+        border-right: 1px solid ${COLORS.gray[500]};
+      }
+
+      .input-amount-max {
+        border-left: 1px solid ${COLORS.gray[500]};
       }
   }
   .action {
@@ -96,13 +104,13 @@ const FilterBlock = styled.div`
 
     .searchIcon {
       position: absolute;
-      top: 25%;
+      top: 30%;
       left: 90%;
     }
     
     .clearIcon {
       position: absolute;
-      top: 25%;
+      top: 30%;
       left: 80%;
     }
   }
@@ -114,14 +122,8 @@ const Input = styled.input`
   padding-left: 10px;
   outline: 0;
   border: 0;
-  border-bottom: 3px solid ${COLORS.gray[500]};
   outline: 0;
   font-size: ${FONT.l};
-
-  &:focus {
-    transition: 1s;
-    border-bottom: 3px solid ${COLORS.orange[500]};
-  } 
 `
 
 export { Container, FilterBlock, Input }

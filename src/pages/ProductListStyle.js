@@ -49,11 +49,13 @@ const Container = styled.div`
 
     .search-icon {
       position: absolute;
+      top: 15px;
       left: 85%;
     }
 
     .clear-icon {
       position: absolute;
+      top: 15px;
       left: 75%;
     }
   }
@@ -65,14 +67,8 @@ const Input = styled.input`
   padding-left: 10px;
   outline: 0;
   border: 0;
-  border-bottom: 3px solid ${COLORS.gray[500]};
   outline: 0;
   font-size: ${FONT.l};
-
-  &&:focus {
-    transition: 1s;
-    border-bottom: 3px solid ${COLORS.orange[500]};
-  } 
 `
 
 export { Container, Input }

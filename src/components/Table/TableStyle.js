@@ -26,8 +26,9 @@ const Table = styled.div`
   .table-data-wrapper {
     height: 55px;
     display: flex;
+    align-items: center;
     flex: 1;
-    background-color: rgba(209, 218, 220, 0.1);
+    background-color: ${COLORS.rgba[100]};
   }
 
   .table-title-wrapper {
@@ -42,7 +43,7 @@ const Table = styled.div`
   }
 
   .table-data-wrapper:nth-child(odd) {
-    background-color: rgba(186, 205, 207, 0.2);
+    background-color: ${COLORS.rgba[200]};
   }
 
   .table-title {
@@ -65,7 +66,7 @@ const Table = styled.div`
   .table-data-wrapper .table-title span {
     position: relative;
     top: 10%;
-    max-width: 75px;
+    max-width: 150px;
   }
 
   .no,
@@ -103,6 +104,11 @@ const Table = styled.div`
     flex: 2;
   }
 
+  .reporter,
+  .data-reporter {
+    flex: 2;
+  } 
+
   .empty {
     display: flex;
     justify-content: center;
@@ -110,7 +116,7 @@ const Table = styled.div`
     width: 100%;
     height: 65px;
     text-align: center;
-    background-color: rgba(186, 205, 207, 0.2);
+    background-color: ${COLORS.rgba[200]};
   }
 `
 

@@ -44,7 +44,7 @@ function ProductListTable({ data, handleSort }) {
         </div>
       </div>
       <div className='data-container'>
-        {data.length > 0 ?
+        {data.length > 0 &&
           data.map((value, index) => {
             return (
               <div className='table-data-wrapper' key={value.product_id}>
@@ -68,9 +68,9 @@ function ProductListTable({ data, handleSort }) {
                 </div>
               </div>
             )
-          }) :
-          <div className='empty'><h2>No data</h2></div>
+          })
         }
+        {!data.length && <div className='empty'><h2>No data</h2></div>}
       </div>
     </Table>
   )

@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useRecoilValue } from 'recoil'
 import {
   Datepicker,
   ProductListTable,
 } from '../components'
+import { atomState } from '../Atoms'
 import {
   Container,
   Input,
 } from '../Pages/ProductListStyle'
 import { CrossIcon, SearchIcon } from '../components/Icon'
+import { getRequest } from '../Services'
 
 function ProductList() {
   const [data, setData] = useState([])
   const [date, setDate] = useState({ start: '', end: '' })
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' })
+  const TOKEN = useRecoilValue(atomState.userState)
+
+  const params = {
+    startdate: `${date.start}`,
+    enddate: `${date.end}`,
+    column: `${sort.column}`,
+    sort: `${sort.sortDirection}`,
+    keyword: `${keyword}`,
+  }
 
   const handleSort = (name) => {
     return sort.column === name ?
@@ -31,14 +42,8 @@ function ProductList() {
   }
 
   const sortApi = () => {
-    const URL = `${process.env.REACT_APP_API}/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&keyword=${keyword}`
-    axios({
-      url: URL,
-      method: 'get',
-    })
-      .then(res => {
-        setData(res.data.result)
-      })
+    getRequest('/product-transaction', TOKEN, params)
+      .then(res => setData(res.result))
       .catch(err => {
         throw err
       })
@@ -48,21 +53,7 @@ function ProductList() {
 
   const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
-  const listBalance = async () => {
-    const URL = `${process.env.REACT_APP_API}/product-balance`
-    axios({
-      url: URL,
-    })
-      .then(res => {
-        setData(res.data.result)
-      })
-      .catch(err => {
-        throw err
-      })
-  }
-
   useEffect(() => {
-    listBalance()
     sortApi()
   }, [sort, keyword, date])
 
@@ -77,7 +68,7 @@ function ProductList() {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
-            {keyword !== '' && <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
+            {keyword && <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
             <div className='search-icon'><SearchIcon /></div>
           </div>
           <div>

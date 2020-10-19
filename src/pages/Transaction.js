@@ -8,27 +8,38 @@ import {
   FilterBlock,
   Input,
 } from '../Pages/TransactionStyle'
-import axios from 'axios'
 import { Datepicker } from '../components/Datepicker'
 import { SearchIcon, CrossIcon } from '../components/Icon'
+import { atomState } from '../Atoms'
+import { getRequest } from '../Services'
+import { useRecoilValue } from 'recoil'
 
 function Transaction() {
   const [data, setData] = useState([])
   const [date, setDate] = useState({ start: '', end: '' })
   const [keyword, setKeyword] = useState('')
   const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' }) // DESC === Down || ASC === UP
-  const [column, setColumn] = useState('')
   const [amount, setAmount] = useState({ start: '', end: '' })
 
   const [selected, setSelected] = useState('')
   const [open, setOpen] = useState(false)
 
-  const filter = `${column}=${selected}` // Column=value
+  const TOKEN = useRecoilValue(atomState.userState)
+
+  const params = {
+    startdate: `${date.start}`,
+    enddate: `${date.end}`,
+    column: `${sort.column}`,
+    sort: `${sort.sortDirection}`,
+    action: `${selected}`,
+    keyword: `${keyword}`,
+    start: `${amount.start}`,
+    end: `${amount.end}`,
+  }
 
   const handleSelect = (option) => {
     setSelected(option)
     setOpen(!open)
-    setColumn('action')
   }
   const toggle = () => setOpen(!open)
 
@@ -49,14 +60,8 @@ function Transaction() {
   }
 
   const sortApi = () => {
-    const URL = `${process.env.REACT_APP_API}/product-transaction?startdate=${date.start}&enddate=${date.end}&column=${sort.column}&sort=${sort.sortDirection}&${filter}&keyword=${keyword}&start=${amount.start}&end=${amount.end}`
-    axios({
-      url: URL,
-      method: 'get',
-    })
-      .then(res => {
-        setData(res.data.result)
-      })
+    getRequest('/product-transaction', TOKEN.accessToken, params)
+      .then(res => setData(res.result))
       .catch(err => {
         throw err
       })
@@ -64,9 +69,7 @@ function Transaction() {
 
   const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
 
-
   const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
-
 
   const search = (event) => setKeyword(event.target.value)
 
@@ -77,6 +80,9 @@ function Transaction() {
   return (
     <Container>
       <div className='header'>
+
+        {/* <button onClick={test}>Click</button> */}
+
         <span>Transaction</span>
         <FilterBlock>
           <div className='filter'>
@@ -87,14 +93,15 @@ function Transaction() {
                 value={keyword}
                 onChange={search}
               />
-              {keyword !== '' && <i className='clearIcon' onClick={() => setKeyword('')}><CrossIcon /></i>}
+              {keyword && <i className='clearIcon' onClick={() => setKeyword('')}><CrossIcon /></i>}
 
               <div className='searchIcon'><SearchIcon /></div>
             </div>
             <div className='amount-wrap'>
               <div className='amount'>
                 <Input
-                  placeholder='Min'
+                  placeholder='Min amount'
+                  className='input-amount-min'
                   value={amount.start}
                   type='number'
                   onChange={(event) => {
@@ -104,9 +111,10 @@ function Transaction() {
                     })
                   }}
                 />
-                {amount.start !== '' && <div className='amount-start' onClick={() => setAmount({ start: '', end: amount.end })}><CrossIcon /></div>}
+                {amount.start && <div className='amount-start' onClick={() => setAmount({ start: '', end: amount.end })}><CrossIcon /></div>}
                 <Input
-                  placeholder='Max'
+                  placeholder='Max amount'
+                  className='input-amount-max'
                   value={amount.end}
                   type='number'
                   onChange={(event) => {
@@ -116,7 +124,7 @@ function Transaction() {
                     })
                   }}
                 />
-                {amount.end !== '' && <div className='amount-end' onClick={() => setAmount({ start: amount.start, end: '' })}><CrossIcon /></div>}
+                {amount.end && <div className='amount-end' onClick={() => setAmount({ start: amount.start, end: '' })}><CrossIcon /></div>}
               </div>
             </div>
             <div>

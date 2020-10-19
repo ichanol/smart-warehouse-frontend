@@ -7,7 +7,7 @@ import {
 } from './DatepickerStyle'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { CrossIcon } from '../Icon'
+import { CrossIcon, CalendarIcon } from '../Icon'
 
 const Datepicker = ({ date, setStart, setEnd }) => {
 
@@ -17,7 +17,7 @@ const Datepicker = ({ date, setStart, setEnd }) => {
     <Wrapper>
       <DatePicker
         selected={date.start}
-        onChange={dateStart => setStart(dateStart)}
+        onChange={setStart}
         selectsStart
         startDate={date.start}
         endDate={date.end}
@@ -26,10 +26,13 @@ const Datepicker = ({ date, setStart, setEnd }) => {
         dateFormat={DATE_FORMAT}
         customInput={<DateStart />}
       />
-      {date.start !== '' && <div className='clear-start' onClick={() => setStart('')}><CrossIcon /></div>}
+      {date.start && <div className='clear-start' onClick={() => setStart('')}><CrossIcon /></div>}
+      <div className='calendar-start-icon'>
+        <CalendarIcon />
+      </div>
       <DatePicker
         selected={date.end}
-        onChange={dateEnd => setEnd(dateEnd)}
+        onChange={setEnd}
         selectsEnd
         startDate={date.start}
         endDate={date.end}
@@ -39,7 +42,10 @@ const Datepicker = ({ date, setStart, setEnd }) => {
         dateFormat={DATE_FORMAT}
         customInput={<DateEnd />}
       />
-      {date.end !== '' && <div className='clear-end' onClick={() => setEnd('')}><CrossIcon /></div>}
+      {date.end && <div className='clear-end' onClick={() => setEnd('')}><CrossIcon /></div>}
+      <div className='calendar-end-icon'>
+        <CalendarIcon />
+      </div>
     </Wrapper>
   )
 }

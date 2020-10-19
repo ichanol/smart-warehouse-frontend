@@ -7,6 +7,7 @@ const DropDownContainer = styled.div`
 
   p {
     padding-left: 10px; 
+    font-weight: normal;
   }
 
   .dropdown-title {
@@ -43,6 +44,7 @@ const DropDownContainer = styled.div`
     padding-left: 10px;
     font-size: ${FONT.l};
     list-style: none;
+    font-weight: normal;
   }
 
   .arrow {

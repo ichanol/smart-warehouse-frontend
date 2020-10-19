@@ -6,7 +6,6 @@ import {
 import moment from 'moment'
 
 function TransactionTable({ data, handleSort }) {
-
   return (
     <Table cellSpacing='0'>
       <div className='fixed-container'>
@@ -59,9 +58,9 @@ function TransactionTable({ data, handleSort }) {
         </div>
       </div>
       <div className='data-container'>
-        {data.length > 0 ?
-          data.map((value, index) => {
-            return (
+        {data.length > 0 && (
+          <React.Fragment>
+            {data.map((value, index) => (
               <div className='table-data-wrapper' key={index}>
                 <div className='table-title data-no'>
                   <span>{index + 1}</span>
@@ -88,10 +87,12 @@ function TransactionTable({ data, handleSort }) {
                   <span>{value.firstname}</span>
                 </div>
               </div>
-            )
-          }) :
-          <div className='empty'><h2>No data</h2></div>
-        }
+            ))
+            }
+          </React.Fragment>
+        )}
+
+        {!data.length && <div className='empty'><h2>No data</h2></div>}
       </div>
     </Table>
   )

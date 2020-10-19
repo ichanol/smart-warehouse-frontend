@@ -11,7 +11,7 @@ const ActionsDropdown = ({ handleSelect, selected, open, handleToggle }) => {
         className='dropdown-title'
         onClick={handleToggle}
       >
-        <p>{selected === '' ? 'Select Actions' : selected}</p>
+        <p>{selected === '' ? 'Action Type' : selected}</p>
         <div className='arrow'>
           <ArrowIcon />
         </div>
