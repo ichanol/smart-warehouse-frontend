@@ -1,10 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const ArrowIcon = ({ width = 18, height = 18, fill = COLORS.natural.black }) => (
+const ArrowIcon = ({ width = 18, fill = COLORS.natural.black }) => (
   <svg
     width={width}
-    height={height}
     fill={fill}
     viewBox='0 0 24 24'
   >

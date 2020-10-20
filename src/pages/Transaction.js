@@ -59,8 +59,8 @@ function Transaction() {
     }
   }
 
-  const sortApi = () => {
-    getRequest('/product-transaction', TOKEN.accessToken, params)
+  const transactionList = () => {
+    getRequest('/product-transaction', params, TOKEN.accessToken, 'get')
       .then(res => setData(res.result))
       .catch(err => {
         throw err
@@ -74,15 +74,13 @@ function Transaction() {
   const search = (event) => setKeyword(event.target.value)
 
   useEffect(() => {
-    sortApi()
+    transactionList()
   }, [sort, keyword, selected, date, amount])
+
 
   return (
     <Container>
       <div className='header'>
-
-        {/* <button onClick={test}>Click</button> */}
-
         <span>Transaction</span>
         <FilterBlock>
           <div className='filter'>

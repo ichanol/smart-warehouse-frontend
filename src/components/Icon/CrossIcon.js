@@ -1,10 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const CrossIcon = ({ width = 20, height = 20, fill = COLORS.gray[700] }) => (
+const CrossIcon = ({ width = 20, fill = COLORS.gray[700] }) => (
   <svg
     width={width}
-    height={height}
     fill={fill}
     viewBox='0 0 24 24'
   >

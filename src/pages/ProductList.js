@@ -41,8 +41,8 @@ function ProductList() {
       })
   }
 
-  const sortApi = () => {
-    getRequest('/product-transaction', TOKEN, params)
+  const productList = () => {
+    getRequest('/product-transaction', params, TOKEN, 'get')
       .then(res => setData(res.result))
       .catch(err => {
         throw err
@@ -54,7 +54,7 @@ function ProductList() {
   const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
   useEffect(() => {
-    sortApi()
+    productList()
   }, [sort, keyword, date])
 
   return (

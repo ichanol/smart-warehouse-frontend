@@ -1,10 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const CalendarIcon = ({ width = 18, height = 18, fill = COLORS.gray[600] }) => (
+const CalendarIcon = ({ width = 18, fill = COLORS.gray[600] }) => (
   <svg
     width={width}
-    height={height}
     fill={fill}
     viewBox='0 0 24 24'
   >

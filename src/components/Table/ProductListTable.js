@@ -58,7 +58,7 @@ function ProductListTable({ data, handleSort }) {
                   <span>{value.product_name}</span>
                 </div>
                 <div className='table-title data-amount'>
-                  <span>{value.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                  <span>{value.balance.toString()}</span>
                 </div>
                 <div className='table-title data-timestamp'>
                   <span>{moment(value.timestamp).format('DD-MM-yyyy hh:mm:ss')}</span>

@@ -1,10 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const SearchIcon = ({ width = 24, height = 24, fill = COLORS.gray[600] }) => (
+const SearchIcon = ({ width = 24, fill = COLORS.gray[600] }) => (
   <svg
     width={width}
-    height={height}
     viewBox='0 0 24 24'
   >
     <path
