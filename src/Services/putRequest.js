@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const postRequest = async (URL, BODY, TOKEN = false) => {
+const putRequest = async (URL, BODY, TOKEN = false) => {
   try {
     if (TOKEN) {
-      const response = await axios.post(URL, BODY, {
+      const response = await axios.put(URL, BODY, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
@@ -22,4 +22,4 @@ const postRequest = async (URL, BODY, TOKEN = false) => {
   }
 }
 
-export default postRequest
+export default putRequest

@@ -1,4 +1,4 @@
-import { OutlineButton, PrimaryButton } from './ButtonStyle'
+import { OutlineButton, PrimaryButton, ToggleSwitch } from './ButtonStyle'
 
 import { COLORS } from '../../Constant'
 import React from 'react'
@@ -29,4 +29,13 @@ const RetryButton = ({ action }) => {
   )
 }
 
-export { SubmitButton, CancelButton, RetryButton }
+const ToggleButton = ({ action, value }) => {
+  return (
+    <ToggleSwitch>
+      <input checked={value} type='checkbox' onChange={action} />
+      <span className='slider' />
+    </ToggleSwitch>
+  )
+}
+
+export { SubmitButton, CancelButton, RetryButton, ToggleButton }

@@ -1,5 +1,7 @@
 import {
+  CreateProduct,
   EditImportExportProduct,
+  EditProduct,
   ImportExportMenu,
   ImportExportProduct,
   Map,
@@ -48,6 +50,14 @@ const DefaultRoutes = () => {
           <PrivateRoute
             path={ROUTER_PATH.currentProductBalance.path}
             component={ProductList}
+          />
+          <PrivateRoute
+            path={ROUTER_PATH.createProduct.path}
+            component={CreateProduct}
+          />
+          <PrivateRoute
+            path={ROUTER_PATH.editProduct.path}
+            component={EditProduct}
           />
           <PrivateRoute
             path={ROUTER_PATH.productManagement.path}

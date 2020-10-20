@@ -1,3 +1,3 @@
-const blacklistRecoilState = ['modalState', 'readProductListState']
+const blacklistRecoilState = ['modalState', 'readProductListState', 'productListState']
 
 export default blacklistRecoilState

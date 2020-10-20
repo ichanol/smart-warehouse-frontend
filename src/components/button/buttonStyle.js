@@ -28,4 +28,47 @@ const OutlineButton = styled(PrimaryButton)`
   }
 `
 
-export { PrimaryButton, OutlineButton }
+const ToggleSwitch = styled.label`
+  width: 48px;
+  height: 24px;
+  position: relative;
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: ${COLORS.gray[200]};
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    border-radius: 24px;
+  }
+  .slider:before {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 4px;
+    background-color: ${COLORS.gray[400]};
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    border-radius: 24px;
+  }
+  input:checked + .slider {
+    background-color: ${COLORS.green[500]};
+  }
+  input:checked + .slider:before {
+    background-color: ${COLORS.gray[100]};
+    transform: translate(20px, -50%);
+  }
+`
+
+export { PrimaryButton, OutlineButton, ToggleSwitch }

@@ -1,4 +1,6 @@
+import CreateProduct from './CreateProduct'
 import EditImportExportProduct from './EditImportExportProduct'
+import EditProduct from './EditProduct'
 import ImportExportMenu from './ImportExportMenu'
 import ImportExportProduct from './ImportExportProduct'
 import Login from './Login'
@@ -13,7 +15,9 @@ import Transaction from './Transaction'
 import UserManagement from './UserManagement'
 
 export {
+  CreateProduct,
   EditImportExportProduct,
+  EditProduct,
   ImportExportMenu,
   ImportExportProduct,
   Login,

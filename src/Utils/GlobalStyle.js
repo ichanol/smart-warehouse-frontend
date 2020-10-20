@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
   .app-content {
     padding-left: 275px;
     display: flex;
-    width: 100%;
+    width: 100vw;
     flex-direction: column;
     position: relative;
     max-height: 100vh;

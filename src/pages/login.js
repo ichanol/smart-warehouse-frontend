@@ -37,8 +37,8 @@ const Login = () => {
 
   const errorHandler = (error) => {
     if (
-      error?.response?.status >= 400 &&
-      error?.response?.status < 500
+      parseInt(error?.message, 10) >= 400 &&
+      parseInt(error?.message, 10) < 500
     ) {
       setModalState((oldState) => ({
         ...oldState,

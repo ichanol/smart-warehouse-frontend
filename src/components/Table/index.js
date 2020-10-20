@@ -1,3 +1,4 @@
 import ImportExportTable from './ImportExportTable'
+import ResponsiveTable from './ResponsiveTable'
 
-export { ImportExportTable }
+export { ImportExportTable, ResponsiveTable }

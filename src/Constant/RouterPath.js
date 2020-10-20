@@ -26,6 +26,14 @@ const ROUTER_PATH = {
     path: '/product-management',
     title: 'Product Management',
   },
+  createProduct: {
+    path: '/product-management/create',
+    title: 'Create New Product',
+  },
+  editProduct: {
+    path: '/product-management/edit/:productid',
+    title: 'Edit Product Information',
+  },
   roleManagement: { path: '/role-management', title: 'Role management' },
 }
 

@@ -17,6 +17,11 @@ const readProductListState = atom({
   default: [],
 })
 
+const productListState = atom({
+  key: 'productListState',
+  default: [],
+})
+
 const toastState = atom({
   key: 'toastState',
   default: [],
@@ -58,6 +63,7 @@ const atomState = {
   toastState,
   modalState,
   userActionSelector,
+  productListState,
 }
 
 export default atomState
