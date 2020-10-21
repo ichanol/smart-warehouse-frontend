@@ -1,3 +1,6 @@
+import ArrowIcon from './ArrowIcon'
+import CalendarIcon from './CalendarIcon'
+import CrossIcon from './CrossIcon'
 import DeleteIcon from './DeleteIcon'
 import EditIcon from './EditIcon'
 import HistoryIcon from './HistoryIcon'
@@ -7,9 +10,13 @@ import OverviewIcon from './OverviewIcon'
 import PermissionIcon from './PermissionIcon'
 import ProductIcon from './ProductIcon'
 import ProductListIcon from './ProductListIcon'
+import SearchIcon from './SearchIcon'
 import UserIcon from './UserIcon'
 
 export {
+  ArrowIcon,
+  CalendarIcon,
+  CrossIcon,
   DeleteIcon,
   EditIcon,
   HistoryIcon,
@@ -19,5 +26,6 @@ export {
   PermissionIcon,
   ProductIcon,
   ProductListIcon,
+  SearchIcon,
   UserIcon,
 }

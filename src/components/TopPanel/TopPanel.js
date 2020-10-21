@@ -2,9 +2,13 @@ import { Container } from './TopPanelStyle'
 import { ROUTER_PATH } from '../../Constant'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { atomState } from '../../Atoms'
 
 const TopPanel = () => {
   const history = useHistory()
+  const username = useRecoilValue(atomState.userState)
+
   return (
     <Container>
       <div className='wrapper'>
@@ -12,7 +16,7 @@ const TopPanel = () => {
           className='profile'
           onClick={() => history.push(ROUTER_PATH.userSettings.path)}>
           <div className='thumbnail' />
-          <span>USERNAME</span>
+          <span>{username.username}</span>
         </div>
       </div>
     </Container>

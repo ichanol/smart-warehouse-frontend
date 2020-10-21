@@ -1,3 +1,9 @@
 import ImportExportTable from './ImportExportTable'
+import ProductListTable from './ProductListTable'
+import TransactionTable from './TransactionTable'
 
-export { ImportExportTable }
+export {
+  ImportExportTable,
+  TransactionTable,
+  ProductListTable,
+}

@@ -71,6 +71,10 @@ const COLORS = {
     800: '#2D3748',
     900: '#1A202C',
   },
+  rgba: {
+    100: 'rgba(209, 218, 220, 0.1)',
+    200: 'rgba(186, 205, 207, 0.2)',
+  },
 }
 
 export default COLORS
