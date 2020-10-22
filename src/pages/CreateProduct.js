@@ -42,16 +42,31 @@ const EditImportExportProduct = () => {
         <span>Create New Product</span>
       </div>
       <div className='content'>
-        <div className='title'>Serial number</div>
-        <TextInput onValueChange={onValueChange} valueType='product_id' />
-        <div className='title'>Product name</div>
-        <TextInput onValueChange={onValueChange} valueType='product_name' />
-        <div className='title'>Company name</div>
-        <TextInput onValueChange={onValueChange} valueType='company_name' />
-        <div className='title'>Location</div>
-        <TextInput onValueChange={onValueChange} valueType='location' />
-        <div className='title'>Detail</div>
-        <TextArea onValueChange={onValueChange} valueType='detail' />
+        <TextInput
+          placeholder='Serial number'
+          onValueChange={onValueChange}
+          valueType='product_id'
+        />
+        <TextInput
+          placeholder='Product name'
+          onValueChange={onValueChange}
+          valueType='product_name'
+        />
+        <TextInput
+          placeholder='Company name'
+          onValueChange={onValueChange}
+          valueType='company_name'
+        />
+        <TextInput
+          placeholder='Location'
+          onValueChange={onValueChange}
+          valueType='location'
+        />
+        <TextArea
+          placeholder='Detail'
+          onValueChange={onValueChange}
+          valueType='detail'
+        />
         <div className='button-wrapper'>
           <SubmitButton action={onSubmit} />
           <div className='cancel-button-wrapper'>

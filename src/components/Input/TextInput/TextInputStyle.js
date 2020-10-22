@@ -15,7 +15,6 @@ const Input = styled.input`
   ${({ height = 45 }) => `height: ${height}px;`}
   padding-right: 10px;
 
-  
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -26,6 +25,12 @@ const Input = styled.input`
     top: -50px;
     left: 0;
     opacity: 1;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.045);
+    color: rgba(0, 0, 0, 0.5);
   }
 `
 const Container = styled.div`

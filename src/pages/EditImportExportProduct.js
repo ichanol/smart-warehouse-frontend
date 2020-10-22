@@ -51,14 +51,26 @@ const EditImportExportProduct = () => {
         <span>Edit Product Information</span>
       </div>
       <div className='content'>
-        <div className='title'>Product name</div>
-        <div className='value'>{editInformation.product_name}</div>
-        <div className='title'>Company name</div>
-        <div className='value'>{editInformation.company_name}</div>
-        <div className='title'>Location</div>
-        <div className='value'>{editInformation.location}</div>
-        <div className='title'>Product Serial number</div>
-        <div className='value'>{editInformation.product_serial_number}</div>
+        <TextInput
+          value={editInformation.product_serial_number}
+          placeholder='Product Serial number'
+          disabled
+        />
+        <TextInput
+          value={editInformation.product_name}
+          placeholder='Product name'
+          disabled
+        />
+        <TextInput
+          value={editInformation.company_name}
+          placeholder='Company name'
+          disabled
+        />
+        <TextInput
+          value={editInformation.location}
+          placeholder='Location'
+          disabled
+        />
         <TextInput
           width={100}
           type='number'

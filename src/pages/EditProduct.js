@@ -56,31 +56,34 @@ const EditImportExportProduct = () => {
         <span>Edit Product Information</span>
       </div>
       <div className='content'>
-        <div className='title'>Serial number</div>
-        <div className='value'>{editedProductData.product_id}</div>
-        <div className='title'>Product name</div>
+        <TextInput
+          disabled
+          value={editedProductData.product_id}
+          placeholder='Serial number'
+        />
         <TextInput
           onValueChange={onValueChange}
           valueType='product_name'
           value={editedProductData.product_name}
+          placeholder='Productname'
         />
-        <div className='title'>Company name</div>
         <TextInput
           onValueChange={onValueChange}
           valueType='company_name'
           value={editedProductData.company_name}
+          placeholder='Company name'
         />
-        <div className='title'>Location</div>
         <TextInput
           onValueChange={onValueChange}
           valueType='location'
           value={editedProductData.location}
+          placeholder='Location'
         />
-        <div className='title'>Detail</div>
         <TextArea
           onValueChange={onValueChange}
           valueType='detail'
           value={editedProductData.detail}
+          placeholder='Detail'
         />
         <div className='button-wrapper'>
           <SubmitButton action={onSubmit} />
