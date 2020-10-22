@@ -22,6 +22,11 @@ const productListState = atom({
   default: [],
 })
 
+const roleListState = atom({
+  key: 'roleListState',
+  default: [],
+})
+
 const toastState = atom({
   key: 'toastState',
   default: [],
@@ -63,6 +68,7 @@ const atomState = {
   toastState,
   modalState,
   userActionSelector,
+  roleListState,
   productListState,
 }
 

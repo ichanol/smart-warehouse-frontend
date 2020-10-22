@@ -42,6 +42,62 @@ const ProductManagement = () => {
 
   const dismissModal = () => resetDefaultModalState()
 
+  const isSorting = (URL, sortingOptions, isFirstParam = false) => {
+    if (sortingOptions) {
+      URL = URL + (isFirstParam ? '' : '&') + sortingOptions
+      return URL
+    } else if (sort.status) {
+      URL =
+        URL +
+        (isFirstParam ? '' : '&') +
+        `sort=${sort.option.type},${sort.option.desc}`
+      return URL
+    } else {
+      return URL
+    }
+  }
+
+  const isFiltering = (URL, filterOptions, isFirstParam = false) => {
+    if (filterOptions?.available && filterOptions?.notAvailable) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
+      return URL
+    } else if (!filterOptions?.available && !filterOptions?.notAvailable) {
+      return URL
+    } else if (filterOptions?.available) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
+      return URL
+    } else if (filterOptions?.notAvailable) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
+      return URL
+    } else if (filter.available && filter.notAvailable) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
+      return URL
+    } else if (!filter.available && !filter.notAvailable) {
+      return URL
+    } else if (filter.available) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
+      return URL
+    } else if (filter.notAvailable) {
+      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
+      return URL
+    } else {
+      URL = URL
+      return URL
+    }
+  }
+
+  const isSearching = (URL, keyword, isFirstParam = false) => {
+    if (keyword) {
+      URL = URL + (isFirstParam ? '' : '&') + `search=${keyword}`
+      return URL
+    } else if (search.text) {
+      URL = URL + (isFirstParam ? '' : '&') + `search=${search.text}`
+      return URL
+    } else {
+      return URL
+    }
+  }
+
   const getProductsList = async (
     pageToFetch,
     sortingOptions,
@@ -59,184 +115,34 @@ const ProductManagement = () => {
         (filter.available || filter.notAvailable || filterOptions) &&
         (keyword || search.text)
       ) {
-        if (sortingOptions) {
-          URL = URL + sortingOptions
-        } else if (sort.status) {
-          URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-        } else {
-          URL = URL
-        }
-
-        if (filterOptions?.available && filterOptions?.notAvailable) {
-          URL = URL + '&status=2'
-        } else if (filterOptions?.available) {
-          URL = URL + '&status=1'
-        } else if (filterOptions?.notAvailable) {
-          URL = URL + '&status=0'
-        } else if (filter.available && filter.notAvailable) {
-          URL = URL + '&status=2'
-        } else if (filter.available) {
-          URL = URL + '&status=1'
-        } else if (filter.notAvailable) {
-          URL = URL + '&status=0'
-        } else if (
-          (!filter.available && !filter.notAvailable) ||
-          (!filterOptions?.available && !filterOptions?.notAvailable)
-        ) {
-          URL = `${
-            process.env.REACT_APP_API
-          }/products/${perPage}/${pageToFetch}?`
-          if (sortingOptions) {
-            URL = URL + sortingOptions
-          } else if (sort.status) {
-            URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-          } else {
-            URL = URL
-          }
-        } else {
-          URL = URL
-        }
-
-        if (keyword) {
-          URL = URL + `&search=${keyword}`
-        } else if (search.text) {
-          URL = URL + `&search=${search.text}`
-        } else {
-          URL = URL
-        }
+        const withSortURL = isSorting(URL, sortingOptions, true)
+        const withFilterURL = isFiltering(withSortURL, filterOptions)
+        const withSearchURL = isSearching(withFilterURL, keyword)
+        URL = withSearchURL
       } else if (
         (filter.available || filter.notAvailable || filterOptions) &&
         (keyword || search.text)
       ) {
-        console.log('HEREEEEEEEEEEEEEEEEEE')
-        if (filterOptions?.available && filterOptions?.notAvailable) {
-          URL = URL + 'status=2'
-        } else if (filterOptions?.available) {
-          URL = URL + 'status=1'
-        } else if (filterOptions?.notAvailable) {
-          URL = URL + 'status=0'
-        } else if (filter.available && filter.notAvailable) {
-          URL = URL + 'status=2'
-        } else if (filter.available) {
-          URL = URL + 'status=1'
-        } else if (filter.notAvailable) {
-          URL = URL + 'status=0'
-        } else if (
-          (!filter.available && !filter.notAvailable) ||
-          (!filterOptions?.available && !filterOptions?.notAvailable)
-        ) {
-          URL = `${
-            process.env.REACT_APP_API
-          }/products/${perPage}/${pageToFetch}?`
-          if (sortingOptions) {
-            URL = URL + sortingOptions
-          } else if (sort.status) {
-            URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-          } else {
-            URL = URL
-          }
-        } else {
-          URL = URL
-        }
-
-        if (keyword) {
-          URL = URL + `&search=${keyword}`
-        } else if (search.text) {
-          URL = URL + `&search=${search.text}`
-        } else {
-          URL = URL
-        }
+        const withFilterURL = isFiltering(URL, filterOptions, true)
+        const withSearchURL = isSearching(withFilterURL, keyword)
+        URL = withSearchURL
       } else if ((sortingOptions || sort.status) && (keyword || search.text)) {
-        if (sortingOptions) {
-          URL = URL + sortingOptions
-        } else if (sort.status) {
-          URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-        } else {
-          URL = URL
-        }
-
-        if (keyword) {
-          URL = URL + `&search=${keyword}`
-        } else if (search.text) {
-          URL = URL + `&search=${search.text}`
-        } else {
-          URL = URL
-        }
+        const withSortURL = isSorting(URL, sortingOptions, true)
+        const withSearchURL = isSearching(withSortURL, keyword)
+        URL = withSearchURL
       } else if (
         (sortingOptions || sort.status) &&
         (filter.available || filter.notAvailable || filterOptions)
       ) {
-        if (sortingOptions) {
-          URL = URL + sortingOptions
-        } else if (sort.status) {
-          URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-        } else {
-          URL = URL
-        }
-
-        if (filterOptions?.available && filterOptions?.notAvailable) {
-          URL = URL + '&status=2'
-        } else if (filterOptions?.available) {
-          URL = URL + '&status=1'
-        } else if (filterOptions?.notAvailable) {
-          URL = URL + '&status=0'
-        } else if (filter.available && filter.notAvailable) {
-          URL = URL + '&status=2'
-        } else if (filter.available) {
-          URL = URL + '&status=1'
-        } else if (filter.notAvailable) {
-          URL = URL + '&status=0'
-        } else if (
-          (!filter.available && !filter.notAvailable) ||
-          (!filterOptions?.available && !filterOptions?.notAvailable)
-        ) {
-          URL = `${
-            process.env.REACT_APP_API
-          }/products/${perPage}/${pageToFetch}?`
-          if (sortingOptions) {
-            URL = URL + sortingOptions
-          } else if (sort.status) {
-            URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-          } else {
-            URL = URL
-          }
-        } else {
-          URL = URL
-        }
-      } else if (keyword) {
-        URL = URL + `&search=${keyword}`
-      } else if (search.text) {
-        URL = URL + `&search=${search.text}`
-      } else if (sortingOptions) {
-        URL = URL + sortingOptions
-      } else if (sort.status) {
-        URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-      } else if (filterOptions?.available && filterOptions?.notAvailable) {
-        URL = URL + 'status=2'
-      } else if (filterOptions?.available) {
-        URL = URL + 'status=1'
-      } else if (filterOptions?.notAvailable) {
-        URL = URL + 'status=0'
-      } else if (filter.available && filter.notAvailable) {
-        URL = URL + 'status=2'
-      } else if (filter.available) {
-        URL = URL + 'status=1'
-      } else if (filter.notAvailable) {
-        URL = URL + 'status=0'
-      } else if (
-        (!filter.available && !filter.notAvailable) ||
-        (!filterOptions?.available && !filterOptions?.notAvailable)
-      ) {
-        URL = `${process.env.REACT_APP_API}/products/${perPage}/${pageToFetch}?`
-        if (sortingOptions) {
-          URL = URL + sortingOptions
-        } else if (sort.status) {
-          URL = URL + `sort=${sort.option.type},${sort.option.desc}`
-        } else {
-          URL = URL
-        }
+        const withSortURL = isSorting(URL, sortingOptions, true)
+        const withFilterURL = isFiltering(withSortURL, filterOptions)
+        URL = withFilterURL
+      } else if (keyword || search.text) {
+        URL = isSearching(URL, keyword, true)
+      } else if (sortingOptions || sort.status) {
+        URL = isSorting(URL, sortingOptions, true)
       } else {
-        URL = URL
+        URL = isFiltering(URL, filterOptions, true)
       }
       const { success, result, totalPages, totalRecords } = await getRequest(
         URL,
@@ -261,7 +167,7 @@ const ProductManagement = () => {
     try {
       const URL = `${process.env.REACT_APP_API}/products?search=${searchFor}`
       const { result } = await getRequest(URL, userState.accessToken)
-      if (result.length > 0) {
+      if (result && result.length > 0) {
         setSearch((oldState) => ({ ...oldState, status: true, data: result }))
       } else {
         setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
@@ -277,13 +183,15 @@ const ProductManagement = () => {
   }
 
   const onSortByColumn = (columnType) => {
-    setSort({
-      ...sort,
-      status: true,
-      option: { type: columnType, desc: !sort.option.desc },
-    })
-    const sortOptions = `sort=${columnType},${!sort.option.desc}`
-    getProductsList(activePage, sortOptions)
+    if (columnType) {
+      setSort({
+        ...sort,
+        status: true,
+        option: { type: columnType, desc: !sort.option.desc },
+      })
+      const sortOptions = `sort=${columnType},${!sort.option.desc}`
+      getProductsList(activePage, sortOptions)
+    }
   }
 
   const onChangeNumberPerPage = (number, primaryIndex) => {
@@ -345,7 +253,9 @@ const ProductManagement = () => {
   }
 
   const onEdit = (index) => {
-    history.push(`/product-management/edit/${productListState[index].product_id}`)
+    history.push(
+      `/product-management/edit/${productListState[index].product_id}`,
+    )
   }
 
   useEffect(() => {
@@ -360,15 +270,18 @@ const ProductManagement = () => {
     { title: 'Location', type: 'location', isSort: true },
     { title: 'Created at', type: 'created_at', isSort: true },
     { title: 'Updated at', type: 'updated_at', isSort: true },
-    { title: 'Actions', type: 'actions', isSort: false },
+    { title: 'Created by', type: 'created_by', isSort: true },
+    { title: 'Actions', type: null, isSort: false },
   ]
 
-  const fixedDataColumn = ['product_id', 'product_name', 'company_name']
+  const fixedDataColumn = ['product_id', 'product_name']
   const scrollDataColumn = [
+    'company_name',
     'detail',
     'location',
     'created_at',
     'updated_at',
+    'created_by',
     'status',
   ]
   const itemPerPageList = [20, 40, 60, 80, 100]

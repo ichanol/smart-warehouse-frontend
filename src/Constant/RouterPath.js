@@ -35,6 +35,14 @@ const ROUTER_PATH = {
     title: 'Edit Product Information',
   },
   roleManagement: { path: '/role-management', title: 'Role management' },
+  createRole: {
+    path: '/role-management/create',
+    title: 'Create New Role',
+  },
+  editRole: {
+    path: '/role-management/edit/:rolename',
+    title: 'Edit Role Information',
+  },
 }
 
 export default ROUTER_PATH

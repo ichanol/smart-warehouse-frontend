@@ -14,6 +14,7 @@ const SearchBox = forwardRef(
       text,
       data,
       status,
+      field = 'product_name',
     },
     searchRef,
   ) => {
@@ -43,7 +44,7 @@ const SearchBox = forwardRef(
           <div className='search-suggest'>
             {data.map((value, index) => (
               <div className='search-suggest-data' key={index}>
-                <span>{value.product_name}</span>
+                <span>{value[field]}</span>
               </div>
             ))}
           </div>

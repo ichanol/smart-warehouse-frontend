@@ -17,7 +17,7 @@ const DataSection = styled.div`
   .scroll-section {
     position: absolute;
     top: 0;
-    left: 420px;
+    left: ${({ multiplier }) => multiplier * 140}px;
     right: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -36,6 +36,7 @@ const DataSection = styled.div`
     height: 60px;
   }
   .cell {
+    width: 140px;
     min-width: 140px;
     display: flex;
     justify-content: center;
@@ -48,6 +49,9 @@ const DataSection = styled.div`
   }
   .data {
     background-color: rgba(186, 205, 207, 0.2);
+  }
+  .permission {
+    min-width: 750px;
   }
   .odd {
     background-color: rgba(209, 218, 220, 0.1);
@@ -65,7 +69,7 @@ const DataSection = styled.div`
     min-width: 200px;
   }
 
-  .edit-wrapper{
+  .edit-wrapper {
     margin-left: 12px;
   }
 `

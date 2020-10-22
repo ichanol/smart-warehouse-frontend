@@ -82,6 +82,26 @@ const ResponsiveTable = forwardRef(
                   <span>{formatDate(dataToRender[value])}</span>
                 </div>
               )
+            } else if (value === 'permission') {
+              console.log(dataToRender[value])
+              const temp = []
+              for (const [permission, isPermitted] of Object.entries(
+                dataToRender[value],
+              )) {
+                temp.push({ permission, isPermitted })
+              }
+              console.log('TEMP', temp)
+              return (
+                <div
+                  key={index}
+                  className={clsx(
+                    'cell data permission',
+                    primaryIndex % 2 && 'odd',
+                    !dataToRender.status && 'inactive',
+                  )}>
+                  {temp.map((value, index) => <div>{value.permission}<input type='checkbox' checked={value.isPermitted}/></div>)}
+                </div>
+              )
             } else if (actionColumn === value) {
               return (
                 <div
@@ -96,7 +116,7 @@ const ResponsiveTable = forwardRef(
                     action={() => onToggleSwitch(primaryIndex)}
                   />
                   <div
-                  className='edit-wrapper'
+                    className='edit-wrapper'
                     onClick={() => {
                       onEdit(primaryIndex)
                     }}>
@@ -124,7 +144,7 @@ const ResponsiveTable = forwardRef(
 
     return (
       <React.Fragment>
-        <TitleSection>
+        <TitleSection multiplier={fixedDataColumn.length}>
           <div className='fixed-section'>
             <div className='table-title-wrapper'>
               {title.map((value, index) => {
@@ -171,7 +191,7 @@ const ResponsiveTable = forwardRef(
                       className={clsx(
                         'cell',
                         'title',
-                        value.type === 'actions' && 'action',
+                        value.title === 'Actions' && 'action',
                       )}
                       onClick={() => onSortByColumn(value.type)}>
                       <span>{value.title}</span>
@@ -193,7 +213,7 @@ const ResponsiveTable = forwardRef(
             </div>
           </div>
         </TitleSection>
-        <DataSection>
+        <DataSection multiplier={fixedDataColumn.length}>
           <div
             className='fixed-section'
             ref={(ref) => (scrollRef.current[2] = ref)}>

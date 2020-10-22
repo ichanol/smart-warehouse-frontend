@@ -1,7 +1,9 @@
 import {
   CreateProduct,
+  CreateRole,
   EditImportExportProduct,
   EditProduct,
+  EditRole,
   ImportExportMenu,
   ImportExportProduct,
   Map,
@@ -62,6 +64,14 @@ const DefaultRoutes = () => {
           <PrivateRoute
             path={ROUTER_PATH.productManagement.path}
             component={ProductManagement}
+          />
+          <PrivateRoute
+            path={ROUTER_PATH.createRole.path}
+            component={CreateRole}
+          />
+          <PrivateRoute
+            path={ROUTER_PATH.editRole.path}
+            component={EditRole}
           />
           <PrivateRoute
             path={ROUTER_PATH.roleManagement.path}
