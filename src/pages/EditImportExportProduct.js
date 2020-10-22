@@ -59,7 +59,6 @@ const EditImportExportProduct = () => {
         <div className='value'>{editInformation.location}</div>
         <div className='title'>Product Serial number</div>
         <div className='value'>{editInformation.product_serial_number}</div>
-        <div className='title'>Amount</div>
         <TextInput
           width={100}
           type='number'
@@ -67,13 +66,14 @@ const EditImportExportProduct = () => {
           value={editInformation.amount}
           valueType='amount'
           onValueChange={inputHandler}
+          placeholder='Amount'
         />
-        <div className='title'>Detail</div>
         <TextArea
           type='text'
           value={editInformation.detail}
           valueType='detail'
           onValueChange={inputHandler}
+          placeholder='Product detail'
         />
         <div className='button-wrapper'>
           <div className='cancle-button-wrapper'>

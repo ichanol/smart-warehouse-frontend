@@ -28,21 +28,23 @@ const EditImportExportProduct = () => {
   })
   const [permissionCheckBox, setPermissionCheckBox] = useState([])
 
-  useEffect(() => {
-    ;(async () => {
-      const temp = []
-      for (const [key, value] of Object.entries(editedProductData.permission)) {
-        temp.push({ key, value, expand: false, showExpand: false })
+  const checkDetailElementHeight = async () => {
+    const temp = []
+    for (const [key, value] of Object.entries(editedProductData.permission)) {
+      temp.push({ key, value, expand: false, showExpand: false })
+    }
+    await setPermissionCheckBox(temp)
+    const acc = [...temp]
+    detailRef.current.map((value, index) => {
+      if (value.clientHeight >= 75) {
+        acc[index].showExpand = true
       }
-      await setPermissionCheckBox(temp)
-      const acc = [...temp]
-      await detailRef.current.map((value, index) => {
-        if (value.clientHeight >= 75) {
-          acc[index].showExpand = true
-        }
-      })
-      await setPermissionCheckBox(acc)
-    })()
+    })
+    setPermissionCheckBox(acc)
+  }
+
+  useEffect(() => {
+    checkDetailElementHeight()
   }, [])
 
   const onSubmit = async () => {
@@ -93,11 +95,17 @@ const EditImportExportProduct = () => {
         <span>Edit Role Information</span>
       </div>
       <div className='content'>
-        <div className='title'>Role name</div>
         <TextInput
           onValueChange={onValueChange}
           valueType='role_name'
           value={editedProductData.role_name}
+          placeholder='Role name'
+        />
+        <TextArea
+          onValueChange={onValueChange}
+          valueType='detail'
+          value={editedProductData.detail}
+          placeholder='Detail'
         />
         <div className='title'>Permission</div>
         <PermissionSection>
@@ -145,12 +153,6 @@ const EditImportExportProduct = () => {
             </div>
           ))}
         </PermissionSection>
-        <div className='title'>Detail</div>
-        <TextArea
-          onValueChange={onValueChange}
-          valueType='detail'
-          value={editedProductData.detail}
-        />
         <div className='button-wrapper'>
           <SubmitButton action={onSubmit} />
           <div className='cancel-button-wrapper'>

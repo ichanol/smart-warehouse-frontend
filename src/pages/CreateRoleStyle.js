@@ -18,11 +18,9 @@ const Container = styled.div`
     font-weight: bold;
     letter-spacing: 1px;
   }
-
   .header span {
     font-size: ${FONT.xl};
   }
-
   .content {
     flex: 1;
     display: flex;
@@ -31,12 +29,10 @@ const Container = styled.div`
     padding: 25px;
     position: relative;
   }
-
   .button-wrapper {
     display: flex;
     flex-direction: row-reverse;
   }
-
   .cancel-button-wrapper {
     margin-right: 20px;
   }
@@ -49,15 +45,13 @@ const Container = styled.div`
     background-color: transparent;
     color: ${COLORS.gray[500]};
   }
-
-  .title,
-  .value {
+  .value,
+  .title {
     width: 100%;
     display: flex;
     height: 45px;
     align-items: center;
   }
-
   .value {
     background-color: rgba(171, 206, 180, 0.25);
     padding-left: 15px;

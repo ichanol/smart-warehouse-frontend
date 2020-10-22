@@ -1,4 +1,5 @@
-import { Input } from './TextInputStyle'
+import { Container, Input } from './TextInputStyle'
+
 import React from 'react'
 
 const TextInput = ({
@@ -7,16 +8,20 @@ const TextInput = ({
   valueType,
   width,
   height,
+  placeholder = null,
   ...rest
 }) => {
   return (
-    <Input
-      {...rest}
-      width={width}
-      height={height}
-      value={value}
-      onChange={(event) => onValueChange(event.target.value, valueType)}
-    />
+    <Container>
+      <Input
+        {...rest}
+        width={width}
+        height={height}
+        value={value}
+        onChange={(event) => onValueChange(event.target.value, valueType)}
+      />
+      {placeholder && <span className='placeholder'>{placeholder}</span>}
+    </Container>
   )
 }
 

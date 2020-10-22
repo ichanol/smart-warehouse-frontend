@@ -1,13 +1,24 @@
-import React from 'react'
-import { TextAreaInput } from './TextAreaStyle'
+import { Container, TextAreaInput } from './TextAreaStyle'
 
-const TextArea = ({ onValueChange, value, valueType, ...rest }) => {
+import React from 'react'
+
+const TextArea = ({
+  onValueChange,
+  value,
+  valueType,
+  placeholder = null,
+  ...rest
+}) => {
   return (
-    <TextAreaInput
-      {...rest}
-      value={value}
-      onChange={(event) => onValueChange(event.target.value, valueType)}
-    />
+    <Container>
+      <TextAreaInput
+        placeholder='detail'
+        {...rest}
+        value={value}
+        onChange={(event) => onValueChange(event.target.value, valueType)}
+      />
+      {placeholder && <span className='placeholder'>{placeholder}</span>}
+    </Container>
   )
 }
 
