@@ -7,10 +7,12 @@ import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { postRequest } from '../Services'
+import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
-const EditImportExportProduct = () => {
+const CreateRole = () => {
+  const { register, handleSubmit, errors } = useForm()
   const history = useHistory()
   const detailRef = useRef([])
   const userState = useRecoilValue(atomState.userState)
@@ -91,74 +93,82 @@ const EditImportExportProduct = () => {
     <Container>
       <div className='header'>
         <span>Create New Role</span>
+        {errors.roleName?.type === 'required' && 'Rolename is require'}
+        {errors.roleName?.type === 'maxLength' && 'Rolename is over the limit'}
       </div>
       <div className='content'>
-        <TextInput
-          onValueChange={onValueChange}
-          valueType='role_name'
-          value={roleData.role_name}
-          placeholder='Role name'
-        />
-        <TextArea
-          onValueChange={onValueChange}
-          valueType='detail'
-          value={roleData.detail}
-          placeholder='Detail'
-        />
-        <div className='title'>Permission</div>
-        <PermissionSection>
-          {permissionCheckBox.map((value, index) => (
-            <div
-              key={index}
-              className={clsx('permission-list', value.expand && 'expand')}>
-              <div className='permission-title'>{value.key}</div>
-              <div className='permission-detail-container'>
-                <div
-                  ref={(ref) => (detailRef.current[index] = ref)}
-                  className={clsx(
-                    'permission-detail',
-                    value.showExpand && 'collapse',
-                    value.expand && 'expand',
-                  )}>
-                  Nostrud enim fugiat ipsum laboris cillum dolor minim
-                  consectetur. Ex nulla quis nulla consectetur anim labore dolor
-                  quis ad est non. Eiusmod cillum consequat Lorem fugiat ad.
-                  Dolor aliqua ea commodo nostrud veniam irure occaecat est
-                  exercitation. Ex do Lorem commodo officia eu incididunt ad
-                  veniam esse nostrud quis dolore duis excepteur. Ea ullamco eu
-                  ipsum aliquip aliquip exercitation amet. Labore pariatur esse
-                  culpa dolor occaecat consectetur officia esse laborum nisi
-                  deserunt. Id excepteur reprehenderit labore minim sit velit
-                  sunt laboris. Laboris anim velit culpa pariatur consectetur
-                  velit cupidatat esse qui adipisicing adipisicing ullamco. Ex
-                  ea duis ut exercitation. Pariatur ex ipsum nulla ipsum
-                  eiusmod.
+        <form onSubmit={handleSubmit(() => alert('test'))}>
+          <TextInput
+            name='roleName'
+            ref={register({ required: true, maxLength: 20 })}
+            //maxLength='10'
+            onValueChange={onValueChange}
+            valueType='role_name'
+            value={roleData.role_name}
+            placeholder='Role name'
+          />
+          <TextArea
+            onValueChange={onValueChange}
+            valueType='detail'
+            value={roleData.detail}
+            placeholder='Detail'
+          />
+          <div className='title'>Permission</div>
+          <PermissionSection>
+            {permissionCheckBox.map((value, index) => (
+              <div
+                key={index}
+                className={clsx('permission-list', value.expand && 'expand')}>
+                <div className='permission-title'>{value.key}</div>
+                <div className='permission-detail-container'>
+                  <div
+                    ref={(ref) => (detailRef.current[index] = ref)}
+                    className={clsx(
+                      'permission-detail',
+                      value.showExpand && 'collapse',
+                      value.expand && 'expand',
+                    )}>
+                    Nostrud enim fugiat ipsum laboris cillum dolor minim
+                    consectetur. Ex nulla quis nulla consectetur anim labore
+                    dolor quis ad est non. Eiusmod cillum consequat Lorem fugiat
+                    ad. Dolor aliqua ea commodo nostrud veniam irure occaecat
+                    est exercitation. Ex do Lorem commodo officia eu incididunt
+                    ad veniam esse nostrud quis dolore duis excepteur. Ea
+                    ullamco eu ipsum aliquip aliquip exercitation amet. Labore
+                    pariatur esse culpa dolor occaecat consectetur officia esse
+                    laborum nisi deserunt. Id excepteur reprehenderit labore
+                    minim sit velit sunt laboris. Laboris anim velit culpa
+                    pariatur consectetur velit cupidatat esse qui adipisicing
+                    adipisicing ullamco. Ex ea duis ut exercitation. Pariatur ex
+                    ipsum nulla ipsum eiusmod.
+                  </div>
                 </div>
-              </div>
-              <div className='toggle-button-wrapper'>
-                <ToggleButton
-                  action={() => onToggle(index)}
-                  value={value.value}
-                />
-              </div>
-              {value.showExpand && (
-                <div
-                  className='expand-button'
-                  onClick={() => onExpandDetail(index)}>
-                  {value.expand ? 'See less' : 'See more'}
+                <div className='toggle-button-wrapper'>
+                  <ToggleButton
+                    action={() => onToggle(index)}
+                    value={value.value}
+                  />
                 </div>
-              )}
+                {value.showExpand && (
+                  <div
+                    className='expand-button'
+                    onClick={() => onExpandDetail(index)}>
+                    {value.expand ? 'See less' : 'See more'}
+                  </div>
+                )}
+              </div>
+            ))}
+          </PermissionSection>
+          <div className='button-wrapper'>
+            {/* <SubmitButton action={onSubmit} /> */}
+            <button type='submit'>+</button>
+            <div className='cancel-button-wrapper'>
+              <CancelButton action={onCancel} />
             </div>
-          ))}
-        </PermissionSection>
-        <div className='button-wrapper'>
-          <SubmitButton action={onSubmit} />
-          <div className='cancel-button-wrapper'>
-            <CancelButton action={onCancel} />
           </div>
-        </div>
+        </form>
       </div>
     </Container>
   )
 }
-export default EditImportExportProduct
+export default CreateRole

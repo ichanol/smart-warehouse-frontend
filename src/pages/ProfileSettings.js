@@ -1,7 +1,10 @@
 import React from 'react'
+import { atomState } from '../Atoms'
 import axios from 'axios'
+import { useRecoilState } from 'recoil'
 
 const ProfileSettings = () => {
+  const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const onFileChange = (e) => {
     console.log(e.target.files[0])
   }
@@ -24,10 +27,21 @@ const ProfileSettings = () => {
     // Send formData object
     axios.post('api/uploadfile', formData)
   } */
+  const toastType = ['', 'success', 'error', 'warning', 'info']
   return (
     <React.Fragment>
       <h1>ProfileSettings</h1>
       <input type='file' onChange={onFileChange} />
+      <button
+        type='button'
+        onClick={() => {
+          setToastState([
+            ...toastState,
+            { title: 'Title', message: Math.random(), dismiss: false, type: toastType[Math.round(Math.random() * 4)] },
+          ])
+        }}>
+        add new toast
+      </button>
     </React.Fragment>
   )
 }

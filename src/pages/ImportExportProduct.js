@@ -181,12 +181,15 @@ const ImportExportProduct = () => {
       )
       if (response.success) {
         resetReadProductListDefaultValue()
-        setToastState((oldState) => ({
+        setToastState((oldState) => [
           ...oldState,
-          display: true,
-          title: 'Success',
-          message: 'Save Successfully',
-        }))
+          {
+            title: 'Success',
+            message: 'Save successfully',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
         history.push('/import-export')
       }
     } catch (error) {
