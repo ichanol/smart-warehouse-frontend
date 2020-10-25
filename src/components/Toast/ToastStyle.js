@@ -39,16 +39,16 @@ const Container = styled.div`
   flex-direction: column-reverse;
 
   .warning {
-    border-left: 5px solid ${COLORS.yellow[600]};
-    background-color: ${COLORS.yellow[300]};
+    border-left: 5px solid ${COLORS.yellow[500]};
+    background-color: ${COLORS.yellow[200]};
   }
   .error {
     border-left: 5px solid ${COLORS.red[600]};
-    background-color: ${COLORS.red[300]};
+    background-color: ${COLORS.red[200]};
   }
   .info {
     border-left: 5px solid ${COLORS.blue[600]};
-    background-color: ${COLORS.blue[300]};
+    background-color: ${COLORS.blue[200]};
   }
 `
 
@@ -65,13 +65,14 @@ const ToastContainer = styled.div`
   border-left: 5px solid ${COLORS.green[600]};
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
 
   opacity: 1;
-  background-color: ${COLORS.green[300]};
+  background-color: ${COLORS.green[200]};
   box-shadow: 0 7px 7px rgba(0, 0, 0, 0.15);
 
   transition: all 0.25s linear;
@@ -79,21 +80,32 @@ const ToastContainer = styled.div`
 
   .toast-detail {
     display: flex;
+    width: 100%;
     flex-direction: column;
+    padding-left: 30px;
   }
   .toast-header {
+    padding-left: 30px;
+    width: 100%;
     font-weight: bold;
-    font-size: ${FONT.m};
+    font-size: ${FONT.l};
     letter-spacing: 1px;
   }
   .toast-dismiss {
     position: absolute;
     cursor: pointer;
 
-    right: 20px;
+    top: 12px;
+    right: 12px;
   }
   &:first-child {
     margin-bottom: 0;
+  }
+
+  .toast-icon {
+    position: absolute;
+    top: 8px;
+    left: 12px;
   }
 `
 

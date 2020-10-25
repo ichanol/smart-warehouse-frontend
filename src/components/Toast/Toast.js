@@ -1,6 +1,14 @@
+import {
+  CancelIcon,
+  ErrorIcon,
+  InformationIcon,
+  SuccessIcon,
+  WarningIcon,
+} from '../Icon'
 import { Container, ToastContainer } from './ToastStyle'
 import React, { useEffect, useRef, useState } from 'react'
 
+import { COLORS } from '../../Constant'
 import atomState from '../../Atoms/Atoms'
 import { useRecoilState } from 'recoil'
 
@@ -67,6 +75,12 @@ const Toast = () => {
     }
   }, [toastState])
 
+  const toastIcon = {
+    success: { component: <SuccessIcon />, crossColor: COLORS.green[600] },
+    error: { component: <ErrorIcon />, crossColor: COLORS.red[600] },
+    warning: { component: <WarningIcon />, crossColor: COLORS.yellow[600] },
+    info: { component: <InformationIcon />, crossColor: COLORS.blue[600] },
+  }
   return (
     <Container>
       {toastState.map((value, index) => {
@@ -79,12 +93,15 @@ const Toast = () => {
             <div
               className='toast-dismiss'
               onClick={() => manualClearToastEffect(index)}>
-              X
+              <CancelIcon
+                width={20}
+                stroke={toastIcon[value.type].crossColor}
+                fill={toastIcon[value.type].crossColor}
+              />
             </div>
-            <div className='toast-detail'>
-              <span className='toast-header'>{value.title + ' ' + index}</span>
-              <span className='toast-detail'>{value.message}</span>
-            </div>
+            <div className='toast-icon'>{toastIcon[value.type].component}</div>
+            <div className='toast-header'>{value.title}</div>
+            <div className='toast-detail'>{value.message}</div>
           </ToastContainer>
         )
       })}

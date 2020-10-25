@@ -27,7 +27,7 @@ const ProfileSettings = () => {
     // Send formData object
     axios.post('api/uploadfile', formData)
   } */
-  const toastType = ['', 'success', 'error', 'warning', 'info']
+  const toastType = ['success', 'error', 'warning', 'info']
   return (
     <React.Fragment>
       <h1>ProfileSettings</h1>
@@ -37,7 +37,7 @@ const ProfileSettings = () => {
         onClick={() => {
           setToastState([
             ...toastState,
-            { title: 'Title', message: Math.random(), dismiss: false, type: toastType[Math.round(Math.random() * 4)] },
+            { title: 'Title', message: Math.random(), dismiss: false, type: toastType[Math.round(Math.random() * 3)] },
           ])
         }}>
         add new toast
