@@ -40,19 +40,12 @@ const Toast = () => {
     setToastState(temp)
   }
 
-  const clearToast = () => {
-    console.log('STATE')
-
-    //setEffectState(temp)
-    //setToastState(temp)
-  }
-
   useEffect(() => {
     console.log('mounted')
 
     const parentTimer = setInterval(() => {
       if (counter.current < toastState.length && toastState.length > 0) {
-        ;(async () => {
+        (async () => {
           await autoClearToastEffect(counter.current)
           const x = await setTimeout(() => {
             toastRef.current[counter.current - 1].style.display = 'none'
@@ -81,15 +74,21 @@ const Toast = () => {
     warning: { component: <WarningIcon />, crossColor: COLORS.yellow[600] },
     info: { component: <InformationIcon />, crossColor: COLORS.blue[600] },
   }
+
   return (
     <Container>
       {toastState.map((value, index) => {
         return (
           <ToastContainer
+            onClick={value.onClick}
             className={value.type}
             ref={(ref) => (toastRef.current[index] = ref)}
             key={index}
             dismiss={effectState[index]?.dismiss}>
+            <div className='toast-detail'>
+              <span>{value.message}</span>
+            </div>
+            <div className='toast-header'>{value.title}</div>
             <div
               className='toast-dismiss'
               onClick={() => manualClearToastEffect(index)}>
@@ -100,8 +99,6 @@ const Toast = () => {
               />
             </div>
             <div className='toast-icon'>{toastIcon[value.type].component}</div>
-            <div className='toast-header'>{value.title}</div>
-            <div className='toast-detail'>{value.message}</div>
           </ToastContainer>
         )
       })}

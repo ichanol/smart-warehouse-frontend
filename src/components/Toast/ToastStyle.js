@@ -65,9 +65,8 @@ const ToastContainer = styled.div`
   border-left: 5px solid ${COLORS.green[600]};
 
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
-  align-items: center;
 
   cursor: pointer;
 
@@ -75,14 +74,15 @@ const ToastContainer = styled.div`
   background-color: ${COLORS.green[200]};
   box-shadow: 0 7px 7px rgba(0, 0, 0, 0.15);
 
-  transition: all 0.25s linear;
+  transition: all 0.15s linear;
   animation: ${({ dismiss }) => (dismiss ? slideOut : slideIn)} 1.5s ease-in-out;
 
   .toast-detail {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    padding-left: 30px;
+    margin-left: 30px;
+    white-space: nowrap;
+    width: calc(100% - 30px);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .toast-header {
     padding-left: 30px;
@@ -100,6 +100,19 @@ const ToastContainer = styled.div`
   }
   &:first-child {
     margin-bottom: 0;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    height: fit-content;
+    min-height: 80px;
+  }
+  &:hover > .toast-detail {
+    white-space: initial;
+    overflow: initial;
+  }
+  &:hover > .toast-detail > span {
+    word-break: break-word;
   }
 
   .toast-icon {

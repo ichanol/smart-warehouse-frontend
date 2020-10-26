@@ -37,7 +37,13 @@ const ProfileSettings = () => {
         onClick={() => {
           setToastState([
             ...toastState,
-            { title: 'Title', message: Math.random(), dismiss: false, type: toastType[Math.round(Math.random() * 3)] },
+            {
+              onClick: () => {},
+              title: 'Title',
+              message: Math.random(),
+              dismiss: false,
+              type: toastType[Math.round(Math.random() * 3)],
+            },
           ])
         }}>
         add new toast
