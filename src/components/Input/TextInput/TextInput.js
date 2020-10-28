@@ -4,12 +4,12 @@ import React, { forwardRef } from 'react'
 const TextInput = forwardRef(
   (
     {
-      value,
       onValueChange,
       valueType,
       width,
       height,
       placeholder = null,
+      error = null,
       ...rest
     },
     inputRef,
@@ -17,14 +17,19 @@ const TextInput = forwardRef(
     return (
       <Container>
         <Input
+          id='custom-text-input'
           ref={inputRef}
           {...rest}
           width={width}
           height={height}
-          value={value}
           onChange={(event) => onValueChange(event.target.value, valueType)}
         />
-        {placeholder && <span className='placeholder'>{placeholder}</span>}
+        {placeholder && (
+          <label htmlFor='custom-text-input' className='placeholder'>
+            {placeholder}
+          </label>
+        )}
+        {error && <span className='input-error-suggestion'>{error}</span>}
       </Container>
     )
   },

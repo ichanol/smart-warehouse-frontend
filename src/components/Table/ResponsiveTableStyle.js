@@ -9,6 +9,7 @@ const DataSection = styled.div`
   overflow-x: hidden;
   position: relative;
   display: flex;
+
   .fixed-section {
     display: flex;
     flex-direction: column;
@@ -39,16 +40,25 @@ const DataSection = styled.div`
     width: 140px;
     min-width: 140px;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex: 1;
     position: relative;
   }
-  .title span {
-    margin-right: 5px;
+  .center,
+  .title {
+    justify-content: center;
   }
   .data {
     background-color: rgba(186, 205, 207, 0.2);
+    padding: 0 20px;
+    white-space: nowrap;
+  }
+  .time {
+    white-space: break-spaces;
+  }
+  .data span {
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .permission {
     min-width: 750px;
@@ -59,16 +69,14 @@ const DataSection = styled.div`
   .inactive {
     background-color: ${COLORS.red[100]};
   }
-
   .number-of-items-indicator {
     margin-top: 12px;
     color: ${COLORS.gray[600]};
   }
-
   .action {
     min-width: 200px;
+    justify-content: center;
   }
-
   .edit-wrapper {
     margin-left: 12px;
   }

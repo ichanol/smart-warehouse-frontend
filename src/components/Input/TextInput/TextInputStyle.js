@@ -21,7 +21,8 @@ const Input = styled.input`
     margin: 0;
   }
   &:focus + .placeholder,
-  &:not(:focus):not([value='']) + .placeholder {
+  &:disabled + .placeholder,
+  &:not(:focus):valid + .placeholder {
     top: -50px;
     left: 0;
     opacity: 1;
@@ -46,6 +47,14 @@ const Container = styled.div`
     transform: translateY(45%);
     transition: all 0.25s ease-in-out;
     opacity: 0.65;
+  }
+
+  .input-error-suggestion {
+    position: absolute;
+    top: -50px;
+    transform: translateY(45%);
+    right: 0;
+    color: ${COLORS.red[500]};
   }
 `
 

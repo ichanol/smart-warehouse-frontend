@@ -224,7 +224,7 @@ const ProductManagement = () => {
     }
     console.log(cloneProductList[primaryIndex])
     const temp = cloneProductList[primaryIndex]
-    const body = { id: temp.id, status: temp.status}
+    const body = { id: temp.id, status: temp.status }
     const URL = `${process.env.REACT_APP_API}/roles`
     console.log(cloneProductList[primaryIndex])
     console.log(URL, body)
@@ -279,7 +279,7 @@ const ProductManagement = () => {
     { title: 'Updated at', type: 'updated_at', isSort: true },
     { title: 'Actions', type: null, isSort: false },
   ]
-
+  const centerColumn = ['totalUser']
   /**
    * http://localhost:3000/role-management?orderby=id,name|desc
 id: 1
@@ -373,7 +373,9 @@ permission: "["new", "updated", "permission"]"
           onEdit={onEdit}
           fixedDataColumn={fixedDataColumn}
           scrollDataColumn={scrollDataColumn}
+          centerColumn={centerColumn}
           actionColumn='status'
+          deleteButton={false}
         />
         {roleListState.length > 0 && (
           <div className='number-of-items-indicator'>

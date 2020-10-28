@@ -3,9 +3,9 @@ import { OutlineButton, PrimaryButton, ToggleSwitch } from './ButtonStyle'
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const SubmitButton = ({ action }) => {
+const SubmitButton = ({ action = () => {}, type = 'button' }) => {
   return (
-    <PrimaryButton type='button' onClick={action}>
+    <PrimaryButton type={type} onClick={action}>
       Submit
     </PrimaryButton>
   )

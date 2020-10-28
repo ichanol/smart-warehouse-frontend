@@ -1,21 +1,24 @@
 import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
 import { Container, PermissionSection } from './CreateRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
+import { firstCharacterCantBeSpace, noSpecialCharacter } from '../Utils'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import TextArea from '../components/Input/TextArea/TextArea'
 import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
+import { debounce } from 'lodash'
 import { postRequest } from '../Services'
-import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
 
 const CreateRole = () => {
-  const { register, handleSubmit, errors } = useForm()
   const history = useHistory()
-  const detailRef = useRef([])
+  const choicesDetailRef = useRef([])
+  const inputRef = useRef(null)
+  const containerRef = useRef(null)
   const userState = useRecoilValue(atomState.userState)
+  const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const [roleData, setRoleData] = useState({
     role_name: '',
     detail: '',
@@ -32,21 +35,51 @@ const CreateRole = () => {
     },
   })
   const [permissionCheckBox, setPermissionCheckBox] = useState([])
+  const [inputError, setError] = useState({})
 
   const onSubmit = async () => {
-    const URL = `${process.env.REACT_APP_API}/roles`
-    const response = await postRequest(URL, roleData, userState.accessToken)
-    console.log(response)
+    try {
+      const URL = `${process.env.REACT_APP_API}/roles`
+      const { success } = await postRequest(
+        URL,
+        roleData,
+        userState.accessToken,
+      )
+      if (success) {
+        setToastState([
+          ...toastState,
+          {
+            onClick: () => {},
+            title: 'Success',
+            message: 'New role has been created',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
+        history.goBack()
+      }
+    } catch (error) {}
   }
 
   const onCancel = () => history.goBack()
 
-  const onValueChange = (value, TYPE) => {
+  const onValueChange = debounce((value, TYPE) => {
+    const tempError = { ...inputError }
+    if (TYPE === 'role_name') {
+      if (firstCharacterCantBeSpace(value)) {
+        tempError[TYPE] = 'First Character can not be a space'
+      } else if (noSpecialCharacter(value)) {
+        tempError[TYPE] = 'a-z, A-Z, ก-ฮ'
+      } else {
+        tempError[TYPE] = null
+      }
+    }
+    setError(tempError)
     const temp = { ...roleData }
     temp[TYPE] = value
-    console.log(TYPE, temp[TYPE])
     setRoleData(temp)
-  }
+    return true
+  }, 300)
 
   const onExpandDetail = (primaryIndex) => {
     const temp = permissionCheckBox.map((value, index) => {
@@ -77,7 +110,7 @@ const CreateRole = () => {
     }
     await setPermissionCheckBox(temp)
     const acc = [...temp]
-    detailRef.current.map((value, index) => {
+    choicesDetailRef.current.map((value, index) => {
       if (value.clientHeight >= 75) {
         acc[index].showExpand = true
       }
@@ -85,26 +118,39 @@ const CreateRole = () => {
     setPermissionCheckBox(acc)
   }
 
+  const validateInputForm = (event) => {
+    event.preventDefault()
+    let isError = 0
+    for (const [key, value] of Object.entries(inputError)) {
+      if (value) {
+        isError = isError + 1
+      }
+    }
+    if (isError) {
+      containerRef.current.scrollTop = inputRef.current.offsetParent.offsetTop
+    } else {
+      onSubmit()
+    }
+  }
+
   useEffect(() => {
     checkDetailElementHeight()
   }, [])
 
   return (
-    <Container>
+    <Container ref={(ref) => (containerRef.current = ref)}>
       <div className='header'>
         <span>Create New Role</span>
-        {errors.roleName?.type === 'required' && 'Rolename is require'}
-        {errors.roleName?.type === 'maxLength' && 'Rolename is over the limit'}
       </div>
       <div className='content'>
-        <form onSubmit={handleSubmit(() => alert('test'))}>
+        <form onSubmit={validateInputForm}>
           <TextInput
-            name='roleName'
-            ref={register({ required: true, maxLength: 20 })}
-            //maxLength='10'
+            required
+            ref={inputRef}
+            error={inputError.role_name}
+            maxLength='20'
             onValueChange={onValueChange}
             valueType='role_name'
-            value={roleData.role_name}
             placeholder='Role name'
           />
           <TextArea
@@ -122,7 +168,7 @@ const CreateRole = () => {
                 <div className='permission-title'>{value.key}</div>
                 <div className='permission-detail-container'>
                   <div
-                    ref={(ref) => (detailRef.current[index] = ref)}
+                    ref={(ref) => (choicesDetailRef.current[index] = ref)}
                     className={clsx(
                       'permission-detail',
                       value.showExpand && 'collapse',
@@ -160,8 +206,7 @@ const CreateRole = () => {
             ))}
           </PermissionSection>
           <div className='button-wrapper'>
-            {/* <SubmitButton action={onSubmit} /> */}
-            <button type='submit'>+</button>
+            <SubmitButton type='submit' />
             <div className='cancel-button-wrapper'>
               <CancelButton action={onCancel} />
             </div>

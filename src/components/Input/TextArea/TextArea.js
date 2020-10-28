@@ -1,25 +1,28 @@
 import { Container, TextAreaInput } from './TextAreaStyle'
+import React, { forwardRef } from 'react'
 
-import React from 'react'
-
-const TextArea = ({
-  onValueChange,
-  value,
-  valueType,
-  placeholder = null,
-  ...rest
-}) => {
-  return (
-    <Container>
-      <TextAreaInput
-        placeholder='detail'
-        {...rest}
-        value={value}
-        onChange={(event) => onValueChange(event.target.value, valueType)}
-      />
-      {placeholder && <span className='placeholder'>{placeholder}</span>}
-    </Container>
-  )
-}
+const TextArea = forwardRef(
+  (
+    { onValueChange, value, valueType, placeholder = null, ...rest },
+    inputRef,
+  ) => {
+    return (
+      <Container>
+        <TextAreaInput
+          ref={inputRef}
+          id='custom-text-area'
+          placeholder='detail'
+          {...rest}
+          onChange={(event) => onValueChange(event.target.value, valueType)}
+        />
+        {placeholder && (
+          <label htmlFor='custom-text-area' className='placeholder'>
+            {placeholder}
+          </label>
+        )}
+      </Container>
+    )
+  },
+)
 
 export default TextArea

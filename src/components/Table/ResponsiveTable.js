@@ -1,8 +1,8 @@
 import { DataSection, SortArrow, TitleSection } from './ResponsiveTableStyle'
+import { DeleteIcon, EditIcon } from '../Icon'
 import React, { forwardRef, useState } from 'react'
 
 import { ChevronDownIcon } from '../Icon'
-import { EditIcon } from '../Icon'
 import { ToggleButton } from '../Button'
 import clsx from 'clsx'
 import propTypes from 'prop-types'
@@ -19,6 +19,11 @@ const ResponsiveTable = forwardRef(
       scrollDataColumn,
       actionColumn,
       onEdit,
+      centerColumn,
+      toggleButton,
+      deleteButton,
+      editButton,
+      onDelete,
     },
     scrollRef,
   ) => {
@@ -69,37 +74,32 @@ const ResponsiveTable = forwardRef(
       return (
         <div className='table-data-wrapper' key={primaryIndex}>
           {scrollDataColumn.map((value, index) => {
+            const isCenter = centerColumn.filter(
+              (centerField) => value === centerField,
+            )
             const isDateType = value.split('_')
             if (isDateType[1] === 'at') {
               return (
                 <div
                   key={index}
                   className={clsx(
-                    'cell data',
+                    'cell data time',
                     primaryIndex % 2 && 'odd',
                     !dataToRender.status && 'inactive',
                   )}>
                   <span>{formatDate(dataToRender[value])}</span>
                 </div>
               )
-            } else if (value === 'permission') {
-              console.log(dataToRender[value])
-              const temp = []
-              for (const [permission, isPermitted] of Object.entries(
-                dataToRender[value],
-              )) {
-                temp.push({ permission, isPermitted })
-              }
-              console.log('TEMP', temp)
+            } else if (isCenter.length) {
               return (
                 <div
                   key={index}
                   className={clsx(
-                    'cell data permission',
+                    'cell data center',
                     primaryIndex % 2 && 'odd',
                     !dataToRender.status && 'inactive',
                   )}>
-                  {temp.map((value, index) => <div>{value.permission}<input type='checkbox' checked={value.isPermitted}/></div>)}
+                  <span>{dataToRender[value]}</span>
                 </div>
               )
             } else if (actionColumn === value) {
@@ -111,17 +111,26 @@ const ResponsiveTable = forwardRef(
                     primaryIndex % 2 && 'odd',
                     !dataToRender.status && 'inactive',
                   )}>
-                  <ToggleButton
-                    value={dataToRender.status}
-                    action={() => onToggleSwitch(primaryIndex)}
-                  />
-                  <div
-                    className='edit-wrapper'
-                    onClick={() => {
-                      onEdit(primaryIndex)
-                    }}>
-                    <EditIcon />
-                  </div>
+                  {toggleButton && (
+                    <ToggleButton
+                      value={dataToRender.status}
+                      action={() => onToggleSwitch(primaryIndex)}
+                    />
+                  )}
+                  {editButton && (
+                    <div
+                      className='edit-wrapper'
+                      onClick={() => {
+                        onEdit(primaryIndex)
+                      }}>
+                      <EditIcon />
+                    </div>
+                  )}
+                  {deleteButton && (
+                    <div onClick={() => onDelete(dataToRender)}>
+                      <DeleteIcon />
+                    </div>
+                  )}
                 </div>
               )
             } else {
@@ -214,9 +223,7 @@ const ResponsiveTable = forwardRef(
           </div>
         </TitleSection>
         <DataSection multiplier={fixedDataColumn.length}>
-          <div
-            className='fixed-section'
-            ref={(ref) => (scrollRef.current[2] = ref)}>
+          <div className='fixed-section'>
             {data.map((value, index) => renderFixedDataColumn(value, index))}
           </div>
           <div
@@ -243,10 +250,15 @@ ResponsiveTable.propTypes = {
   onSortByColumn: propTypes.func,
   sort: propTypes.object,
   onToggleSwitch: propTypes.func,
+  onDelete: propTypes.func,
   fixedDataColumn: propTypes.array,
   scrollDataColumn: propTypes.array,
   actionColumn: propTypes.string,
   onEdit: propTypes.func,
+  centerColumn: propTypes.array,
+  toggleButton: propTypes.bool,
+  deleteButton: propTypes.bool,
+  editButton: propTypes.bool,
 }
 ResponsiveTable.defaultProps = {
   title: [
@@ -266,9 +278,14 @@ ResponsiveTable.defaultProps = {
     option: { type: null, desc: false },
   },
   onToggleSwitch: () => {},
+  onDelete: () => {},
   fixedDataColumn: [],
   scrollDataColumn: [],
   actionColumn: '',
   onEdit: () => {},
+  centerColumn: [],
+  toggleButton: true,
+  deleteButton: true,
+  editButton: true,
 }
 export default ResponsiveTable

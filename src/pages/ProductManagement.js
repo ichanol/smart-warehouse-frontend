@@ -284,6 +284,7 @@ const ProductManagement = () => {
     'created_by',
     'status',
   ]
+  const centerColumn = ['created_by']
   const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
@@ -369,7 +370,9 @@ const ProductManagement = () => {
           onEdit={onEdit}
           fixedDataColumn={fixedDataColumn}
           scrollDataColumn={scrollDataColumn}
+          centerColumn={centerColumn}
           actionColumn='status'
+          deleteButton={false}
         />
         {productListState.length > 0 && (
           <div className='number-of-items-indicator'>
