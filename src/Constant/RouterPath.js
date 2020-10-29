@@ -5,10 +5,6 @@ const ROUTER_PATH = {
     path: '/import-export/edit-product/:productid',
     title: 'Edit Product',
   },
-  scanForProduct: {
-    path: '/import-export/in-progress',
-    title: 'Read Product List',
-  },
   userSettings: { path: '/settings', title: 'Settings' },
   overview: { path: '/overview', title: 'Overview' },
   currentProductBalance: { path: '/product-list', title: 'Product List' },

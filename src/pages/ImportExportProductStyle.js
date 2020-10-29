@@ -33,7 +33,7 @@ const Container = styled.div`
     border-top-right-radius: 8px;
     color: ${COLORS.gray[700]};
     background-color: ${COLORS.gray[100]};
-    opacity: 0.7;
+    opacity: 0.8;
     cursor: pointer;
     position: relative;
   }
@@ -66,9 +66,10 @@ const Container = styled.div`
   }
 
   .disable-tab {
-    color: ${COLORS.gray[600]};
-    background-color: ${COLORS.red[300]};
+    color: ${COLORS.gray[500]};
+    background-color: ${COLORS.gray[300]};
     cursor: not-allowed;
+    opacity: 0.65;
   }
   .header {
     height: 35px;

@@ -40,12 +40,8 @@ const DefaultRoutes = () => {
             component={EditImportExportProduct}
           />
           <PrivateRoute
-            path={ROUTER_PATH.scanForProduct.path}
-            component={ImportExportProduct}
-          />
-          <PrivateRoute
             path={ROUTER_PATH.importExportMenu.path}
-            component={ImportExportMenu}
+            component={ImportExportProduct}
           />
           <PrivateRoute path={ROUTER_PATH.map.path} component={Map} />
           <PrivateRoute path={ROUTER_PATH.overview.path} component={Overview} />
