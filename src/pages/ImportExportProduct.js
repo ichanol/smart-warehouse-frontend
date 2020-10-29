@@ -1,10 +1,11 @@
 import { CancelButton, RetryButton, SubmitButton } from '../components/Button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ImportExportProductStyle'
 import ImportExportTable from '../components/Table/ImportExportTable'
 import atomState from '../Atoms/Atoms'
+import clsx from 'clsx'
 import io from 'socket.io-client'
 import { postRequest } from '../Services'
 import { useHistory } from 'react-router-dom'
@@ -23,6 +24,7 @@ const ImportExportProduct = () => {
   const [modalState, setModalState] = useRecoilState(atomState.modalState)
   const resetModalState = useResetRecoilState(atomState.modalState)
   const resetUserAction = useSetRecoilState(atomState.userActionSelector())
+  const [actionTabs, setActionTabs] = useState({ id: 1, action_type: 'Import' })
 
   const SOCKET_EVENT = {
     joinRoom: 'join_room',
@@ -36,93 +38,93 @@ const ImportExportProduct = () => {
     history.push('/import-export')
   }
 
-  useEffect(() => {
-    socket.emit(SOCKET_EVENT.joinRoom, { room: userState.username })
-    if (!userState.isUserCardVerify && !readProductListState.length) {
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please scan your card',
-        isIndicator: true,
-        detail: 'Scan your card to proceed next step',
-        positiveButton: {
-          display: true,
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
-        socket.off(SOCKET_EVENT.userGranted)
-        setUserState((oldState) => ({
-          ...oldState,
-          isUserCardVerify: true,
-        }))
-        setModalState((oldState) => ({
-          ...oldState,
-          modalType: 'error',
-          isDisplay: true,
-          title: 'Please wait',
-          isIndicator: true,
-          detail: 'Device is scanning for products',
-          positiveButton: {
-            text: 'cancel',
-          },
-          onClickPositiveButton: onCancleScanning,
-        }))
-        socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
-          socket.off(SOCKET_EVENT.productScanner)
-          resetModalState()
-          setReadProductListState(productData)
-        })
-      })
-    } else if (!userState.isUserCardVerify) {
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please scan your card',
-        isIndicator: true,
-        detail: 'Scan your card to proceed next step',
-        positiveButton: {
-          display: true,
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
-        socket.off(SOCKET_EVENT.userGranted)
-        setUserState((oldState) => ({
-          ...oldState,
-          isUserCardVerify: true,
-        }))
-        resetModalState()
-      })
-    } else if (!readProductListState.length) {
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please wait',
-        isIndicator: true,
-        detail: 'Device is scanning for products',
-        positiveButton: {
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
-        socket.off(SOCKET_EVENT.productScanner)
-        resetModalState()
-        setReadProductListState(productData)
-      })
-    }
-    return () => {
-      resetModalState()
-      socket.removeAllListeners()
-      socket.disconnect()
-    }
-  }, [readProductListState])
+  // useEffect(() => {
+  //   socket.emit(SOCKET_EVENT.joinRoom, { room: userState.username })
+  //   if (!userState.isUserCardVerify && !readProductListState.length) {
+  //     setModalState((oldState) => ({
+  //       ...oldState,
+  //       modalType: 'error',
+  //       isDisplay: true,
+  //       title: 'Please scan your card',
+  //       isIndicator: true,
+  //       detail: 'Scan your card to proceed next step',
+  //       positiveButton: {
+  //         display: true,
+  //         text: 'cancel',
+  //       },
+  //       onClickPositiveButton: onCancleScanning,
+  //     }))
+  //     socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+  //       socket.off(SOCKET_EVENT.userGranted)
+  //       setUserState((oldState) => ({
+  //         ...oldState,
+  //         isUserCardVerify: true,
+  //       }))
+  //       setModalState((oldState) => ({
+  //         ...oldState,
+  //         modalType: 'error',
+  //         isDisplay: true,
+  //         title: 'Please wait',
+  //         isIndicator: true,
+  //         detail: 'Device is scanning for products',
+  //         positiveButton: {
+  //           text: 'cancel',
+  //         },
+  //         onClickPositiveButton: onCancleScanning,
+  //       }))
+  //       socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
+  //         socket.off(SOCKET_EVENT.productScanner)
+  //         resetModalState()
+  //         setReadProductListState(productData)
+  //       })
+  //     })
+  //   } else if (!userState.isUserCardVerify) {
+  //     setModalState((oldState) => ({
+  //       ...oldState,
+  //       modalType: 'error',
+  //       isDisplay: true,
+  //       title: 'Please scan your card',
+  //       isIndicator: true,
+  //       detail: 'Scan your card to proceed next step',
+  //       positiveButton: {
+  //         display: true,
+  //         text: 'cancel',
+  //       },
+  //       onClickPositiveButton: onCancleScanning,
+  //     }))
+  //     socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+  //       socket.off(SOCKET_EVENT.userGranted)
+  //       setUserState((oldState) => ({
+  //         ...oldState,
+  //         isUserCardVerify: true,
+  //       }))
+  //       resetModalState()
+  //     })
+  //   } else if (!readProductListState.length) {
+  //     setModalState((oldState) => ({
+  //       ...oldState,
+  //       modalType: 'error',
+  //       isDisplay: true,
+  //       title: 'Please wait',
+  //       isIndicator: true,
+  //       detail: 'Device is scanning for products',
+  //       positiveButton: {
+  //         text: 'cancel',
+  //       },
+  //       onClickPositiveButton: onCancleScanning,
+  //     }))
+  //     socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
+  //       socket.off(SOCKET_EVENT.productScanner)
+  //       resetModalState()
+  //       setReadProductListState(productData)
+  //     })
+  //   }
+  //   return () => {
+  //     resetModalState()
+  //     socket.removeAllListeners()
+  //     socket.disconnect()
+  //   }
+  // }, [readProductListState])
 
   const onEdit = (selectedList) =>
     history.push(
@@ -261,13 +263,48 @@ const ImportExportProduct = () => {
     }))
   }
 
+  const onClickActionTab = (action) => {
+    if (!action.disable) {
+      setActionTabs({ id: action.id, action_type: action.action_type })
+    }
+  }
+
+  const MOCK_CHOICES = [
+    { id: 1, action_type: 'Import', disable: false },
+    { id: 2, action_type: 'Export', disable: false },
+    { id: 3, action_type: 'Expired', disable: true },
+    { id: 4, action_type: 'Damaged', disable: false },
+  ]
+
   return (
     <Container blur={modalState.isDisplay}>
+      <div className='action-tabs'>
+        {MOCK_CHOICES.map((value, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => onClickActionTab(value)}
+              className={clsx(
+                'action-tabs-container',
+                actionTabs.id === value.id && 'focus-tab',
+                value.disable && 'disable-tab',
+              )}>
+              <span
+                className={clsx(
+                  'tab-title',
+                  actionTabs.id === value.id && 'focus-title',
+                )}>
+                {value.action_type}
+              </span>
+            </div>
+          )
+        })}
+      </div>
       <div className='header'>
-        <span>{userState.action.actionType}</span>
+        <span>{actionTabs.action_type}</span>
       </div>
       <div className='content'>
-        <ImportExportTable editFN={onEdit} deleteFN={onDelete} />
+        {/* <ImportExportTable editFN={onEdit} deleteFN={onDelete} /> */}
         <div className='button-wrapper'>
           <div className='list-manipulate-button'>
             <RetryButton action={onRetry} />

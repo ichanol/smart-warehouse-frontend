@@ -6,11 +6,70 @@ const Container = styled.div`
   position: relative;
   height: 100%;
   padding: 20px;
+  padding-top: 70px;
   display: flex;
   flex-direction: column;
   overflow: auto;
-  background-color: ${COLORS.gray[200]};
+  background-color: ${COLORS.natural.white};
 
+  .action-tabs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    background-color: ${COLORS.gray[400]};
+    padding-left: 12px;
+  }
+  .action-tabs-container {
+    height: 35px;
+    min-width: 90px;
+    display: flex;
+    padding: 0 10px;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: ${COLORS.gray[700]};
+    background-color: ${COLORS.gray[100]};
+    opacity: 0.7;
+    cursor: pointer;
+    position: relative;
+  }
+  .focus-tab {
+    opacity: 1;
+    color: ${COLORS.natural.black};
+    background-color: ${COLORS.natural.white};
+  }
+  .focus-title::after,
+  .focus-title::before {
+    content: '';
+    position: absolute;
+    height: 12px;
+    width: 20px;
+    bottom: 0;
+  }
+
+  .focus-title:after {
+    right: -20px;
+    border-radius: 0 0 0 12px;
+    box-shadow: -12px 0 0 0 #fff;
+    z-index: 1;
+  }
+
+  .focus-title::before {
+    left: -20px;
+    border-radius: 0 0 12px 0;
+    box-shadow: 12px 0 0 0 #fff;
+    z-index: 1;
+  }
+
+  .disable-tab {
+    color: ${COLORS.gray[600]};
+    background-color: ${COLORS.red[300]};
+    cursor: not-allowed;
+  }
   .header {
     height: 35px;
     align-items: center;
@@ -18,7 +77,7 @@ const Container = styled.div`
     margin-bottom: 20px;
     font-weight: bold;
     letter-spacing: 1px;
-    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
   }
 
   .header span {
@@ -33,9 +92,8 @@ const Container = styled.div`
     padding: 0px;
     min-width: 100%;
     overflow: auto;
-    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
     position: relative;
-    
   }
 
   .button-wrapper {

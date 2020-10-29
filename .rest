@@ -1,0 +1,27 @@
+POST http://localhost:3000/api/smart-warehouse/detect-user-rfid
+content-type: application/json
+
+{
+    "username": "tip"
+}
+
+###
+
+POST http://localhost:3000/api/smart-warehouse/detect-product-RFID/
+content-type: application/json
+
+{
+    "username": "tip",
+    "data": [
+        {"product_serial_number": "a3KEeZbXBx", "amount": 100},
+        {"product_serial_number": "xEBjTv2RhB", "amount": 200},
+        {"product_serial_number": "7i8xzdx1OO", "amount": 300},
+        {"product_serial_number": "7YcgFL8zb9", "amount": 400},
+        {"product_serial_number": "XmUwfOCzKv", "amount": 500},
+        {"product_serial_number": "Y3nSy3Wcsw", "amount": 600},
+        {"product_serial_number": "WWcQZYpEEw", "amount": 700},
+        {"product_serial_number": "BImPJwGAZE", "amount": 800},
+        {"product_serial_number": "4Eh8SiaaWK", "amount": 900},
+        {"product_serial_number": "Db6yY11WIj", "amount": 1000}
+    ]
+}
