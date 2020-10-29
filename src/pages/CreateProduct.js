@@ -1,5 +1,6 @@
 import { CancelButton, SubmitButton } from '../components/Button'
 import React, { useState } from 'react'
+import { getRequest, postRequest } from '../Services'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './CreateProductStyle'
@@ -7,7 +8,6 @@ import TextArea from '../components/Input/TextArea/TextArea'
 import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { postRequest } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const CreateProduct = () => {
@@ -66,6 +66,21 @@ const CreateProduct = () => {
     }
   }
 
+  const checkDuplicate = async (keyword) => {
+    try {
+      const URL = `${process.env.REACT_APP_API}/products?validate=${keyword}`
+      const { result } = await getRequest(URL, userState.accessToken)
+      if (result.length) {
+        setError((oldState) => ({
+          ...oldState,
+          product_id: 'This key is not available',
+        }))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
     if (/^\s.*$/.exec(value)) {
@@ -82,6 +97,9 @@ const CreateProduct = () => {
       tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
     } else {
       tempError[TYPE] = null
+    }
+    if (TYPE === 'product_id') {
+      checkDuplicate(value)
     }
     console.log(value)
     setError(tempError)

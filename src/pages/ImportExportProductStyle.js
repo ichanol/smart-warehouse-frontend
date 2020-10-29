@@ -20,7 +20,7 @@ const Container = styled.div`
     height: 50px;
     display: flex;
     align-items: flex-end;
-    background-color: ${COLORS.gray[400]};
+    background-color: ${COLORS.gray[300]};
     padding-left: 12px;
   }
   .action-tabs-container {
@@ -67,7 +67,7 @@ const Container = styled.div`
 
   .disable-tab {
     color: ${COLORS.gray[500]};
-    background-color: ${COLORS.gray[300]};
+    background-color: ${COLORS.gray[400]};
     cursor: not-allowed;
     opacity: 0.65;
   }
@@ -75,7 +75,6 @@ const Container = styled.div`
     height: 35px;
     align-items: center;
     display: flex;
-    margin-bottom: 20px;
     font-weight: bold;
     letter-spacing: 1px;
     filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
@@ -92,7 +91,6 @@ const Container = styled.div`
     background-color: ${COLORS.natural.white};
     padding: 0px;
     min-width: 100%;
-    overflow: auto;
     filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
     position: relative;
   }

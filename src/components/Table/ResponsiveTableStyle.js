@@ -1,5 +1,4 @@
-import { COLORS, FONT } from '../../Constant'
-
+import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const DataSection = styled.div`
@@ -18,7 +17,8 @@ const DataSection = styled.div`
   .scroll-section {
     position: absolute;
     top: 0;
-    left: ${({ multiplier }) => multiplier * 140}px;
+    left: ${({ multiplier, isShowIndex }) =>
+      isShowIndex ? multiplier * 140 + 75 : multiplier * 140}px;
     right: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -48,10 +48,18 @@ const DataSection = styled.div`
   .title {
     justify-content: center;
   }
+  .title {
+    color: ${({ darkHeader }) =>
+      darkHeader ? COLORS.natural.white : COLORS.natural.black};
+  }
   .data {
     background-color: rgba(186, 205, 207, 0.2);
     padding: 0 20px;
     white-space: nowrap;
+  }
+  .primarykey {
+    width: 75px;
+    min-width: 75px;
   }
   .time {
     white-space: break-spaces;
@@ -85,8 +93,8 @@ const DataSection = styled.div`
 const TitleSection = styled(DataSection)`
   margin-top: 25px;
   height: 60px;
-  background-color: ${COLORS.natural.white};
-  margin-top: 25px;
+  background-color: ${({ darkHeader }) =>
+    darkHeader ? COLORS.gray[900] : COLORS.natural.white};
   position: relative;
   display: flex;
 

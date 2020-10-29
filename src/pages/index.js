@@ -3,7 +3,6 @@ import CreateRole from './CreateRole'
 import EditImportExportProduct from './EditImportExportProduct'
 import EditProduct from './EditProduct'
 import EditRole from './EditRole'
-import ImportExportMenu from './ImportExportMenu'
 import ImportExportProduct from './ImportExportProduct'
 import Login from './Login'
 import Map from './Map'
@@ -22,7 +21,6 @@ export {
   EditImportExportProduct,
   EditProduct,
   EditRole,
-  ImportExportMenu,
   ImportExportProduct,
   Login,
   Map,

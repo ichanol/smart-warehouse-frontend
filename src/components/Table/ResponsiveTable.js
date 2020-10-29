@@ -24,6 +24,8 @@ const ResponsiveTable = forwardRef(
       deleteButton,
       editButton,
       onDelete,
+      indexCounter,
+      darkHeader,
     },
     scrollRef,
   ) => {
@@ -55,6 +57,16 @@ const ResponsiveTable = forwardRef(
             !dataToRender.status && 'inactive',
           )}
           key={primaryIndex}>
+          {indexCounter && (
+            <div
+              className={clsx(
+                'cell data primarykey',
+                primaryIndex % 2 && 'odd',
+                !dataToRender.status && 'inactive',
+              )}>
+              <span>{primaryIndex + 1}</span>
+            </div>
+          )}
           {fixedDataColumn.map((value, index) => (
             <div
               key={index}
@@ -153,9 +165,17 @@ const ResponsiveTable = forwardRef(
 
     return (
       <React.Fragment>
-        <TitleSection multiplier={fixedDataColumn.length}>
+        <TitleSection
+          multiplier={fixedDataColumn.length}
+          isShowIndex={indexCounter}
+          darkHeader={darkHeader}>
           <div className='fixed-section'>
             <div className='table-title-wrapper'>
+              {indexCounter && (
+                <div className='cell title primarykey'>
+                  <span>No.</span>
+                </div>
+              )}
               {title.map((value, index) => {
                 if (index < fixedDataColumn.length) {
                   return (
@@ -222,7 +242,10 @@ const ResponsiveTable = forwardRef(
             </div>
           </div>
         </TitleSection>
-        <DataSection multiplier={fixedDataColumn.length}>
+        <DataSection
+          multiplier={fixedDataColumn.length}
+          isShowIndex={indexCounter}
+          darkHeader={darkHeader}>
           <div className='fixed-section'>
             {data.map((value, index) => renderFixedDataColumn(value, index))}
           </div>
@@ -259,6 +282,8 @@ ResponsiveTable.propTypes = {
   toggleButton: propTypes.bool,
   deleteButton: propTypes.bool,
   editButton: propTypes.bool,
+  indexCounter: propTypes.bool,
+  darkHeader: propTypes.bool,
 }
 ResponsiveTable.defaultProps = {
   title: [
@@ -287,5 +312,7 @@ ResponsiveTable.defaultProps = {
   toggleButton: true,
   deleteButton: true,
   editButton: true,
+  indexCounter: false,
+  darkHeader: false,
 }
 export default ResponsiveTable

@@ -2,6 +2,7 @@ import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
 import { Container, PermissionSection } from './CreateRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
 import { firstCharacterCantBeSpace, noSpecialCharacter } from '../Utils'
+import { getRequest, postRequest } from '../Services'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import TextArea from '../components/Input/TextArea/TextArea'
@@ -9,7 +10,6 @@ import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
-import { postRequest } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const CreateRole = () => {
@@ -63,6 +63,21 @@ const CreateRole = () => {
 
   const onCancel = () => history.goBack()
 
+  const checkDuplicate = async (keyword) => {
+    try {
+      const URL = `${process.env.REACT_APP_API}/roles?validate=${keyword}`
+      const { result } = await getRequest(URL, userState.accessToken)
+      if (result.length) {
+        setError((oldState) => ({
+          ...oldState,
+          role_name: 'This key is not available',
+        }))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
     if (TYPE === 'role_name') {
@@ -73,6 +88,7 @@ const CreateRole = () => {
       } else {
         tempError[TYPE] = null
       }
+      checkDuplicate(value)
     }
     setError(tempError)
     const temp = { ...roleData }

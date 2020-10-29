@@ -4,7 +4,6 @@ import {
   EditImportExportProduct,
   EditProduct,
   EditRole,
-  ImportExportMenu,
   ImportExportProduct,
   Map,
   Overview,
