@@ -2,37 +2,32 @@ import React from 'react'
 import { atomState } from '../Atoms'
 import axios from 'axios'
 import { useRecoilState } from 'recoil'
+import { useState } from 'react'
 
 const ProfileSettings = () => {
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
+  const [uploadDocument, setUploadDocument] = useState()
+
   const onFileChange = (e) => {
+    setUploadDocument(e.target.files[0])
     console.log(e.target.files[0])
   }
 
-  /* const onFileUpload = () => {
-    // Create an object of formData
+  const onFileUpload = () => {
     const formData = new FormData()
-
-    // Update the formData object
-    formData.append(
-      'myFile',
-      this.state.selectedFile,
-      this.state.selectedFile.name,
-    )
-
-    // Details of the uploaded file
-    console.log(this.state.selectedFile)
-
-    // Request made to the backend api
-    // Send formData object
-    axios.post('api/uploadfile', formData)
-  } */
+    formData.append('uploadDocument', uploadDocument)
+    axios
+      .post(process.env.REACT_APP_API + '/uploadfile', formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  }
   const toastType = ['success', 'error', 'warning', 'info']
   return (
     <React.Fragment>
       <h1>ProfileSettings</h1>
-      <input type='file' onChange={onFileChange} />
-      <button
+      <input type='file' onChange={onFileChange} accept='.xlsx' />
+      <button onClick={onFileUpload}>submit</button>
+      {/* <button
         type='button'
         onClick={() => {
           setToastState([
@@ -47,7 +42,7 @@ const ProfileSettings = () => {
           ])
         }}>
         add new toast
-      </button>
+      </button> */}
     </React.Fragment>
   )
 }

@@ -292,14 +292,14 @@ const ImportExportProduct = () => {
   const centerColumn = ['amount']
   return (
     <Container blur={modalState.isDisplay}>
-      <div className='action-tabs'>
+      <div className='action-tabs-container'>
         {MOCK_CHOICES.map((value, index) => {
           return (
             <div
               key={index}
               onClick={() => onClickActionTab(value)}
               className={clsx(
-                'action-tabs-container',
+                'action-tabs',
                 actionTabs.id === value.id && 'focus-tab',
                 value.disable && 'disable-tab',
               )}>

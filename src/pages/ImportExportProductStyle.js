@@ -12,7 +12,7 @@ const Container = styled.div`
   overflow: auto;
   background-color: ${COLORS.natural.white};
 
-  .action-tabs {
+  .action-tabs-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -23,7 +23,7 @@ const Container = styled.div`
     background-color: ${COLORS.gray[300]};
     padding-left: 12px;
   }
-  .action-tabs-container {
+  .action-tabs {
     height: 35px;
     min-width: 90px;
     display: flex;
@@ -42,29 +42,6 @@ const Container = styled.div`
     color: ${COLORS.natural.black};
     background-color: ${COLORS.natural.white};
   }
-  .focus-title::after,
-  .focus-title::before {
-    content: '';
-    position: absolute;
-    height: 12px;
-    width: 20px;
-    bottom: 0;
-  }
-
-  .focus-title:after {
-    right: -20px;
-    border-radius: 0 0 0 12px;
-    box-shadow: -12px 0 0 0 #fff;
-    z-index: 1;
-  }
-
-  .focus-title::before {
-    left: -20px;
-    border-radius: 0 0 12px 0;
-    box-shadow: 12px 0 0 0 #fff;
-    z-index: 1;
-  }
-
   .disable-tab {
     color: ${COLORS.gray[500]};
     background-color: ${COLORS.gray[400]};
@@ -77,13 +54,11 @@ const Container = styled.div`
     display: flex;
     font-weight: bold;
     letter-spacing: 1px;
-    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
+    filter: blur(${({ blur }) => blur ? 10 : 0}px);
   }
-
   .header span {
     font-size: ${FONT.xl};
   }
-
   .content {
     flex: 1;
     display: flex;
@@ -91,20 +66,17 @@ const Container = styled.div`
     background-color: ${COLORS.natural.white};
     padding: 0px;
     min-width: 100%;
-    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
+    filter: blur(${({ blur }) => blur ? 10 : 0}px);
     position: relative;
   }
-
   .button-wrapper {
     display: flex;
     justify-content: space-between;
     padding: 10px;
   }
-
   .list-manipulate-button {
     display: flex;
   }
-
   .list-manipulate-button .cancle-button-wrapper {
     margin-left: 10px;
   }
