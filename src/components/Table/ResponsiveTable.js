@@ -5,6 +5,7 @@ import React, { forwardRef, useState } from 'react'
 import { ChevronDownIcon } from '../Icon'
 import { ToggleButton } from '../Button'
 import clsx from 'clsx'
+import moment from 'moment'
 import propTypes from 'prop-types'
 
 const ResponsiveTable = forwardRef(
@@ -30,24 +31,6 @@ const ResponsiveTable = forwardRef(
     scrollRef,
   ) => {
     const [scrollState, setScrollState] = useState('data')
-
-    const formatDate = (timeData) => {
-      const [time] = timeData.split('Z')
-      const newTime = new Date(time)
-      return (
-        newTime.getFullYear() +
-        '/' +
-        (newTime.getMonth() + 1) +
-        '/' +
-        newTime.getDate() +
-        ' ' +
-        newTime.getHours() +
-        ':' +
-        newTime.getMinutes() +
-        ':' +
-        newTime.getSeconds()
-      )
-    }
 
     const renderFixedDataColumn = (dataToRender, primaryIndex) => {
       return (
@@ -91,6 +74,7 @@ const ResponsiveTable = forwardRef(
             )
             const isDateType = value.split('_')
             if (isDateType[1] === 'at') {
+              console.log(dataToRender[value])
               return (
                 <div
                   key={index}
@@ -99,7 +83,10 @@ const ResponsiveTable = forwardRef(
                     primaryIndex % 2 && 'odd',
                     !dataToRender.status && 'inactive',
                   )}>
-                  <span>{formatDate(dataToRender[value])}</span>
+                  <span>
+                    {moment.utc(dataToRender[value]).format('L')}{' '}
+                    {moment.utc(dataToRender[value]).format('LTS')}
+                  </span>
                 </div>
               )
             } else if (isCenter.length) {
