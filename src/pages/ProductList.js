@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { useRecoilValue } from 'recoil'
-import {
-  Datepicker,
-  ProductListTable,
-} from '../components'
-import { atomState } from '../Atoms'
 import {
   Container,
   Input,
 } from '../Pages/ProductListStyle'
 import { CrossIcon, SearchIcon } from '../components/Icon'
-import { getRequest } from '../Services'
+import {
+  Datepicker,
+  ProductListTable,
+} from '../components'
+import React, { useEffect, useState } from 'react'
 
-function ProductList() {
+import { atomState } from '../Atoms'
+import { getRequest } from '../Services'
+import { useRecoilValue } from 'recoil'
+
+const ProductList = () => {
   const [data, setData] = useState([])
   const [date, setDate] = useState({ start: '', end: '' })
   const [keyword, setKeyword] = useState('')
