@@ -1,5 +1,8 @@
+import ArrowIcon from './ArrowIcon'
+import CalendarIcon from './CalendarIcon'
 import CancelIcon from './CancelIcon'
 import ChevronDownIcon from './ChevronDownIcon'
+import CrossIcon from './CrossIcon'
 import DeleteIcon from './DeleteIcon'
 import EditIcon from './EditIcon'
 import ErrorIcon from './ErrorIcon'
@@ -18,8 +21,11 @@ import UserIcon from './UserIcon'
 import WarningIcon from './WarningIcon'
 
 export {
+  ArrowIcon,
+  CalendarIcon,
   CancelIcon,
   ChevronDownIcon,
+  CrossIcon,
   DeleteIcon,
   EditIcon,
   ErrorIcon,
