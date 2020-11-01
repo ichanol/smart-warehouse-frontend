@@ -60,11 +60,11 @@ function Transaction() {
   }
 
   const transactionList = () => {
-    getRequest('/product-transaction', params, TOKEN.accessToken, 'get')
+    /* getRequest('/product-transaction', params, TOKEN.accessToken, 'get')
       .then(res => setData(res.result))
       .catch(err => {
         throw err
-      })
+      }) */
   }
 
   const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })

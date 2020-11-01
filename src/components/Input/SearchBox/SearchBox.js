@@ -12,7 +12,7 @@ const SearchBox = forwardRef(
       onSearchBoxFocus,
       onClearSearchBox,
       text,
-      data,
+      data = [],
       status,
       field = 'product_name',
     },

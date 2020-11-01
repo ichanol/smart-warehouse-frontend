@@ -1,24 +1,28 @@
-import {
-  Container,
-  Input,
-} from '../Pages/ProductListStyle'
-import { CrossIcon, SearchIcon } from '../components/Icon'
+import { Container, Input } from '../Pages/ProductListStyle'
 import {
   Datepicker,
   ProductListTable,
+  ResponsiveTable,
+  SearchBox,
 } from '../components'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { atomState } from '../Atoms'
 import { getRequest } from '../Services'
 import { useRecoilValue } from 'recoil'
 
 const ProductList = () => {
+  const searchRef = useRef()
+  const scrollRef = useRef([])
   const [data, setData] = useState([])
   const [date, setDate] = useState({ start: '', end: '' })
   const [keyword, setKeyword] = useState('')
-  const [sort, setSort] = useState({ column: '', isSortUp: false, sortDirection: '' })
-  const TOKEN = useRecoilValue(atomState.userState)
+  const [sort, setSort] = useState({
+    column: '',
+    isSortUp: false,
+    sortDirection: '',
+  })
+  const userState = useRecoilValue(atomState.userState)
 
   const params = {
     startdate: `${date.start}`,
@@ -29,25 +33,27 @@ const ProductList = () => {
   }
 
   const handleSort = (name) => {
-    return sort.column === name ?
-      setSort({
-        column: name,
-        isSortUp: !sort.isSortUp,
-        sortDirection: sort.isSortUp ? 'ASC' : 'DESC',
-      }) :
-      setSort({
-        column: name,
-        isSortUp: true,
-        sortDirection: 'DESC',
-      })
+    return sort.column === name
+      ? setSort({
+          column: name,
+          isSortUp: !sort.isSortUp,
+          sortDirection: sort.isSortUp ? 'ASC' : 'DESC',
+        })
+      : setSort({
+          column: name,
+          isSortUp: true,
+          sortDirection: 'DESC',
+        })
   }
 
-  const productList = () => {
-    getRequest('/product-transaction', params, TOKEN, 'get')
-      .then(res => setData(res.result))
-      .catch(err => {
-        throw err
-      })
+  const productList = async () => {
+    try {
+      const response = await getRequest(
+        `${process.env.REACT_APP_API}/product-balance`,
+        userState.accessToken,
+      )
+      console.log(response)
+    } catch (error) {}
   }
 
   const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
@@ -62,30 +68,29 @@ const ProductList = () => {
     <Container>
       <div className='header'>
         <span>Product List</span>
+        <SearchBox ref={searchRef} />
+
         <div className='filter'>
-          <div className='search'>
+          {/* <div className='search'>
             <Input
-              placeholder='Search ID or Name'
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+            placeholder='Search ID or Name'
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             />
-            {keyword && <i className='clear-icon' onClick={() => setKeyword('')}><CrossIcon /></i>}
-            <div className='search-icon'><SearchIcon /></div>
-          </div>
+            {keyword && (
+              <i className='clear-icon' onClick={() => setKeyword('')}>
+              <CrossIcon />
+              </i>
+              )}
+            </div> */}
           <div>
-            <Datepicker
-              date={date}
-              setStart={setStart}
-              setEnd={setEnd}
-            />
+            <Datepicker date={date} setStart={setStart} setEnd={setEnd} />
           </div>
         </div>
       </div>
       <div className='content'>
-        <ProductListTable
-          data={data}
-          handleSort={handleSort}
-        />
+            <ResponsiveTable ref={scrollRef} />
+        {/* <ProductListTable data={data} handleSort={handleSort} /> */}
       </div>
     </Container>
   )
