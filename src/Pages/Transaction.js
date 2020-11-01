@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import {
-  ActionsDropdown,
-  TransactionTable,
-} from '../components'
 import {
   Container,
   FilterBlock,
   Input,
 } from '../Pages/TransactionStyle'
+import { CrossIcon, SearchIcon } from '../components/Icon'
+import React, { useEffect, useState } from 'react'
+
 import { Datepicker } from '../components/Datepicker'
-import { SearchIcon, CrossIcon } from '../components/Icon'
+import {
+  TransactionTable,
+} from '../components'
 import { atomState } from '../Atoms'
 import { getRequest } from '../Services'
 import { useRecoilValue } from 'recoil'
@@ -133,12 +133,12 @@ function Transaction() {
               />
             </div>
             <div>
-              <ActionsDropdown
+              {/* <ActionsDropdown
                 handleSelect={handleSelect}
                 selected={selected}
                 handleToggle={toggle}
                 open={open}
-              />
+              /> */}
             </div>
           </div>
         </FilterBlock>
