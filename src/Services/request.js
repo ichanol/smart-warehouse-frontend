@@ -23,7 +23,6 @@ const getRequest = async (URL, BODY, TOKEN = false, METHOD) => {
       } catch (error) {
         throw new Error(error)
       }
-
     case 'post':
       try {
         if (TOKEN) {
@@ -51,6 +50,25 @@ const getRequest = async (URL, BODY, TOKEN = false, METHOD) => {
           return response.data
         } else {
           const response = await api.put(URL, BODY)
+          return response.data
+        }
+      } catch (error) {
+        throw error
+      }
+    case 'delete':
+      try {
+        if (TOKEN) {
+          const response = await api.delete(URL, {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+            data: {
+              source: BODY,
+            },
+          })
+          return response.data
+        } else {
+          const response = await api.delete(URL, BODY)
           return response.data
         }
       } catch (error) {

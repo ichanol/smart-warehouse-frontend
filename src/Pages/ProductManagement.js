@@ -1,6 +1,6 @@
 import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { getRequest, putRequest, request } from '../Services'
+import { getRequest, request } from '../Services'
 import {
   useRecoilState,
   useRecoilValue,
@@ -152,29 +152,22 @@ const ProductManagement = () => {
       } else {
         URL = isFiltering(URL, filterOptions, true)
       }
-      // const { success, result, totalPages, totalRecords } = await getRequest(
-      //   URL,
-      //   userState.accessToken,
-      // )
-      // const { success, result, totalPages, totalRecords } = await request(
-      const response = await request(
+
+      const { success, result, totalPages, totalRecords } = await request(
         '/products',
         queryParams,
         userState.accessToken,
         'get',
       )
-
-      console.log(response)
-      // console.log(URL)
-      // if (success) {
-      //   const temp = []
-      //   for (let i = 1; i <= totalPages; i = i + 1) {
-      //     temp.push(i)
-      //   }
-      //   setTotalPage(temp)
-      //   setProductListState(result)
-      //   setTotalRecord(totalRecords)
-      // }
+      if (success) {
+        const temp = []
+        for (let i = 1; i <= totalPages; i = i + 1) {
+          temp.push(i)
+        }
+        setTotalPage(temp)
+        setProductListState(result)
+        setTotalRecord(totalRecords)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -229,12 +222,14 @@ const ProductManagement = () => {
       ...cloneProductList[primaryIndex],
       status: !cloneProductList[primaryIndex].status,
     }
-    const URL = `${process.env.REACT_APP_API}/products`
-    const { success } = await putRequest(
-      URL,
+
+    const { success } = await request(
+      '/products',
       cloneProductList[primaryIndex],
       userState.accessToken,
+      'delete',
     )
+
     if (success) {
       setProductListState(cloneProductList)
     }
