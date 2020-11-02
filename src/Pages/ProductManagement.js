@@ -1,6 +1,6 @@
 import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { getRequest, putRequest } from '../Services'
+import { getRequest, putRequest, request } from '../Services'
 import {
   useRecoilState,
   useRecoilValue,
@@ -39,6 +39,14 @@ const ProductManagement = () => {
     status: false,
     option: { type: null, desc: false },
   })
+
+  const queryParams = {
+    column: sort.column,
+    desc: sort.desc,
+    search: search.text === '' ? null : search.text,
+    page: activePage,
+    numberPerPage,
+  }
 
   const dismissModal = () => resetDefaultModalState()
 
@@ -144,20 +152,29 @@ const ProductManagement = () => {
       } else {
         URL = isFiltering(URL, filterOptions, true)
       }
-      const { success, result, totalPages, totalRecords } = await getRequest(
-        URL,
+      // const { success, result, totalPages, totalRecords } = await getRequest(
+      //   URL,
+      //   userState.accessToken,
+      // )
+      // const { success, result, totalPages, totalRecords } = await request(
+      const response = await request(
+        '/products',
+        queryParams,
         userState.accessToken,
+        'get',
       )
-      console.log(URL)
-      if (success) {
-        const temp = []
-        for (let i = 1; i <= totalPages; i = i + 1) {
-          temp.push(i)
-        }
-        setTotalPage(temp)
-        setProductListState(result)
-        setTotalRecord(totalRecords)
-      }
+
+      console.log(response)
+      // console.log(URL)
+      // if (success) {
+      //   const temp = []
+      //   for (let i = 1; i <= totalPages; i = i + 1) {
+      //     temp.push(i)
+      //   }
+      //   setTotalPage(temp)
+      //   setProductListState(result)
+      //   setTotalRecord(totalRecords)
+      // }
     } catch (error) {
       console.log(error)
     }
