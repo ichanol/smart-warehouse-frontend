@@ -74,7 +74,6 @@ const ResponsiveTable = forwardRef(
             )
             const isDateType = value.split('_')
             if (isDateType[1] === 'at') {
-              console.log(dataToRender[value])
               return (
                 <div
                   key={index}
@@ -172,10 +171,10 @@ const ResponsiveTable = forwardRef(
                       onClick={() => onSortByColumn(value.type)}>
                       <span>{value.title}</span>
                       {value.isSort && (
-                        <SortArrow isActive={sort.option.desc}>
+                        <SortArrow isActive={sort.desc}>
                           <ChevronDownIcon
-                            isActive={sort.option.desc}
-                            activeType={sort.option.type}
+                            isActive={sort.desc}
+                            activeType={sort.column}
                             type={value.type}
                           />
                         </SortArrow>
@@ -212,10 +211,10 @@ const ResponsiveTable = forwardRef(
                       onClick={() => onSortByColumn(value.type)}>
                       <span>{value.title}</span>
                       {value.isSort && (
-                        <SortArrow isActive={sort.option.desc}>
+                        <SortArrow isActive={sort.desc}>
                           <ChevronDownIcon
-                            isActive={sort.option.desc}
-                            activeType={sort.option.type}
+                            isActive={sort.desc}
+                            activeType={sort.column}
                             type={value.type}
                           />
                         </SortArrow>

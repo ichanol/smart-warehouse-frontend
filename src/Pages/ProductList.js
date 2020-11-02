@@ -1,96 +1,187 @@
-import { Container, Input } from '../Pages/ProductListStyle'
 import {
-  Datepicker,
-  ProductListTable,
+  DropDown,
+  Pagination,
   ResponsiveTable,
   SearchBox,
 } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Container } from '../Pages/ProductListStyle'
 import { atomState } from '../Atoms'
-import { getRequest } from '../Services'
+import { debounce } from 'lodash'
+import { request } from '../Services'
 import { useRecoilValue } from 'recoil'
 
 const ProductList = () => {
   const searchRef = useRef()
+  const dropDownRef = useRef()
   const scrollRef = useRef([])
-  const [data, setData] = useState([])
-  const [date, setDate] = useState({ start: '', end: '' })
-  const [keyword, setKeyword] = useState('')
-  const [sort, setSort] = useState({
-    column: '',
-    isSortUp: false,
-    sortDirection: '',
-  })
+
   const userState = useRecoilValue(atomState.userState)
 
-  const params = {
-    startdate: `${date.start}`,
-    enddate: `${date.end}`,
-    column: `${sort.column}`,
-    sort: `${sort.sortDirection}`,
-    keyword: `${keyword}`,
+  const [productList, setProductList] = useState([])
+  const [activePage, setActivePage] = useState(1)
+  const [totalPage, setTotalPage] = useState([])
+  const [numberPerPage, setNumberPerPage] = useState(20)
+  const [search, setSearch] = useState({ status: false, data: [], text: '' })
+  const [sort, setSort] = useState({ column: null, desc: false })
+
+  const queryParams = {
+    column: sort.column,
+    desc: sort.desc,
+    search: search.text === '' ? null : search.text,
+    page: activePage,
+    numberPerPage,
   }
 
-  const handleSort = (name) => {
-    return sort.column === name
-      ? setSort({
-          column: name,
-          isSortUp: !sort.isSortUp,
-          sortDirection: sort.isSortUp ? 'ASC' : 'DESC',
-        })
-      : setSort({
-          column: name,
-          isSortUp: true,
-          sortDirection: 'DESC',
-        })
-  }
+  const onSortByColumn = (column) =>
+    setSort({ ...sort, column: column, desc: !sort.desc })
 
-  const productList = async () => {
+  const getCurrentProductBalanceList = async () => {
     try {
-      const response = await getRequest(
-        `${process.env.REACT_APP_API}/product-balance`,
+      const res = await request(
+        '/product-balance',
+        queryParams,
         userState.accessToken,
+        'get',
       )
-      console.log(response)
+      console.log(res)
+      if (res.success) {
+        const temp = []
+        for (let i = 1; i <= res.totalPages; i = i + 1) {
+          temp.push(i)
+        }
+        setTotalPage(temp)
+        setProductList(res.result)
+      }
     } catch (error) {}
   }
 
-  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
+  const searchCurrentProductBalanceList = async () => {
+    try {
+      if (search.text === '') {
+        setSearch({ ...search, data: [] })
+      } else {
+        const res = await request(
+          '/product-balance',
+          queryParams,
+          userState.accessToken,
+          'get',
+        )
+        console.log(res)
+        if (res.success) {
+          setSearch({ ...search, data: res.result })
+        }
+      }
+    } catch (error) {}
+  }
 
-  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
+  const onChangeNumberPerPage = (number, primaryIndex) => {
+    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+    setNumberPerPage(number)
+    // setActivePage(1)
+    // getProductsList(1, null, number)
+  }
+
+  const onSearchInputChange = debounce(
+    (text) => setSearch({ ...search, text }),
+    300,
+  )
+
+  const onSearchBoxBlur = () =>
+    setSearch((oldState) => ({
+      ...oldState,
+      status: false,
+      data: [],
+    }))
+
+  const onSearchBoxFocus = () =>
+    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
+
+  const onClearSearchBox = () => {
+    searchRef.current.value = ''
+    setSearch({ ...search, text: '' })
+  }
+
+  const onSubmitSearch = (event) => {
+    if (event.key === 'Enter') {
+      getCurrentProductBalanceList()
+      // setActivePage(1)
+      setSearch({ ...search, status: false })
+    }
+  }
+
+  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   useEffect(() => {
-    productList()
-  }, [sort, keyword, date])
+    getCurrentProductBalanceList()
+  }, [sort, numberPerPage, activePage])
+
+  useEffect(() => {
+    searchCurrentProductBalanceList()
+  }, [search.text])
+
+  const titleArray = [
+    { title: 'Serial number', type: 'product_id', isSort: true },
+    { title: 'Product name', type: 'product_name', isSort: true },
+    { title: 'Balance', type: 'balance', isSort: true },
+    { title: 'Company', type: 'company_name', isSort: true },
+    { title: 'Location', type: 'location', isSort: true },
+    { title: 'Updated at', type: 'updated_at', isSort: true },
+  ]
+  const fixedDataColumn = ['product_id', 'product_name', 'balance']
+  const scrollDataColumn = ['company_name', 'location', 'updated_at']
+  const centerColumn = ['balance']
+  const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>
       <div className='header'>
         <span>Product List</span>
-        <SearchBox ref={searchRef} />
-
-        <div className='filter'>
-          {/* <div className='search'>
-            <Input
-            placeholder='Search ID or Name'
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            />
-            {keyword && (
-              <i className='clear-icon' onClick={() => setKeyword('')}>
-              <CrossIcon />
-              </i>
-              )}
-            </div> */}
-          <div>
-            <Datepicker date={date} setStart={setStart} setEnd={setEnd} />
-          </div>
-        </div>
       </div>
       <div className='content'>
-            <ResponsiveTable ref={scrollRef} />
-        {/* <ProductListTable data={data} handleSort={handleSort} /> */}
+        <div className='tools-bar-wrapper'>
+          <div className='tools-bar'>
+            <SearchBox
+              ref={searchRef}
+              onSearchInputChange={onSearchInputChange}
+              onSubmitSearch={onSubmitSearch}
+              onSearchBoxBlur={onSearchBoxBlur}
+              onSearchBoxFocus={onSearchBoxFocus}
+              onClearSearchBox={onClearSearchBox}
+              text={search.text}
+              data={search.data}
+              status={search.status}
+            />
+          </div>
+          <div className='tools-bar'>
+            <div className='item-per-page-placeholder'>
+              <span>Shows: </span>
+            </div>
+            <DropDown
+              ref={dropDownRef}
+              selectedValue={numberPerPage}
+              choices={itemPerPageList}
+              onSelect={onChangeNumberPerPage}
+            />
+          </div>
+        </div>
+
+        <ResponsiveTable
+          ref={scrollRef}
+          title={titleArray}
+          data={productList}
+          onSortByColumn={onSortByColumn}
+          sort={sort}
+          fixedDataColumn={fixedDataColumn}
+          scrollDataColumn={scrollDataColumn}
+          centerColumn={centerColumn}
+        />
+        <Pagination
+          activePage={activePage}
+          totalPage={totalPage}
+          onChangePage={onClickPageNumber}
+        />
       </div>
     </Container>
   )
