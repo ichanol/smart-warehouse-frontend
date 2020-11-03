@@ -1,6 +1,5 @@
 import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { getRequest, request } from '../Services'
 import {
   useRecoilState,
   useRecoilValue,
@@ -12,6 +11,7 @@ import { Container } from './ProductManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
 import { debounce } from 'lodash'
+import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
@@ -35,124 +35,35 @@ const ProductManagement = () => {
     notAvailable: false,
   })
   const [search, setSearch] = useState({ status: false, data: [], text: '' })
-  const [sort, setSort] = useState({
-    status: false,
-    option: { type: null, desc: false },
-  })
+  const [sort, setSort] = useState({ column: null, desc: false })
 
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
     search: search.text === '' ? null : search.text,
+    status: (() => {
+      if (
+        (filter.available && filter.notAvailable) ||
+        (!filter.available && !filter.notAvailable)
+      ) {
+        console.log('both')
+        return null
+      } else if (filter.available) {
+        return '1'
+      } else if (filter.notAvailable) {
+        return '0'
+      } else {
+        return null
+      }
+    })(),
     page: activePage,
     numberPerPage,
   }
 
   const dismissModal = () => resetDefaultModalState()
 
-  const isSorting = (URL, sortingOptions, isFirstParam = false) => {
-    if (sortingOptions) {
-      URL = URL + (isFirstParam ? '' : '&') + sortingOptions
-      return URL
-    } else if (sort.status) {
-      URL =
-        URL +
-        (isFirstParam ? '' : '&') +
-        `sort=${sort.option.type},${sort.option.desc}`
-      return URL
-    } else {
-      return URL
-    }
-  }
-
-  const isFiltering = (URL, filterOptions, isFirstParam = false) => {
-    if (filterOptions?.available && filterOptions?.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
-      return URL
-    } else if (!filterOptions?.available && !filterOptions?.notAvailable) {
-      return URL
-    } else if (filterOptions?.available) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
-      return URL
-    } else if (filterOptions?.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
-      return URL
-    } else if (filter.available && filter.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
-      return URL
-    } else if (!filter.available && !filter.notAvailable) {
-      return URL
-    } else if (filter.available) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
-      return URL
-    } else if (filter.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
-      return URL
-    } else {
-      URL = URL
-      return URL
-    }
-  }
-
-  const isSearching = (URL, keyword, isFirstParam = false) => {
-    if (keyword) {
-      URL = URL + (isFirstParam ? '' : '&') + `search=${keyword}`
-      return URL
-    } else if (search.text) {
-      URL = URL + (isFirstParam ? '' : '&') + `search=${search.text}`
-      return URL
-    } else {
-      return URL
-    }
-  }
-
-  const getProductsList = async (
-    pageToFetch,
-    sortingOptions,
-    perPage = numberPerPage,
-    filterOptions,
-    keyword,
-  ) => {
+  const getProductsList = async () => {
     try {
-      let URL = `${
-        process.env.REACT_APP_API
-      }/products/${perPage}/${pageToFetch}?`
-
-      if (
-        (sortingOptions || sort.status) &&
-        (filter.available || filter.notAvailable || filterOptions) &&
-        (keyword || search.text)
-      ) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withFilterURL = isFiltering(withSortURL, filterOptions)
-        const withSearchURL = isSearching(withFilterURL, keyword)
-        URL = withSearchURL
-      } else if (
-        (filter.available || filter.notAvailable || filterOptions) &&
-        (keyword || search.text)
-      ) {
-        const withFilterURL = isFiltering(URL, filterOptions, true)
-        const withSearchURL = isSearching(withFilterURL, keyword)
-        URL = withSearchURL
-      } else if ((sortingOptions || sort.status) && (keyword || search.text)) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withSearchURL = isSearching(withSortURL, keyword)
-        URL = withSearchURL
-      } else if (
-        (sortingOptions || sort.status) &&
-        (filter.available || filter.notAvailable || filterOptions)
-      ) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withFilterURL = isFiltering(withSortURL, filterOptions)
-        URL = withFilterURL
-      } else if (keyword || search.text) {
-        URL = isSearching(URL, keyword, true)
-      } else if (sortingOptions || sort.status) {
-        URL = isSorting(URL, sortingOptions, true)
-      } else {
-        URL = isFiltering(URL, filterOptions, true)
-      }
-
       const { success, result, totalPages, totalRecords } = await request(
         '/products',
         queryParams,
@@ -160,6 +71,7 @@ const ProductManagement = () => {
         'get',
       )
       if (success) {
+        console.log(result)
         const temp = []
         for (let i = 1; i <= totalPages; i = i + 1) {
           temp.push(i)
@@ -173,14 +85,23 @@ const ProductManagement = () => {
     }
   }
 
-  const searchProductList = async (searchFor) => {
+  const searchProductList = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/products?search=${searchFor}`
-      const { result } = await getRequest(URL, userState.accessToken)
-      if (result && result.length > 0) {
-        setSearch((oldState) => ({ ...oldState, status: true, data: result }))
+      if (search.text === '') {
+        setSearch({ ...search, data: [] })
       } else {
-        setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+        const { result } = await request(
+          '/products',
+          queryParams,
+          userState.accessToken,
+          'get',
+        )
+
+        if (result && result.length > 0) {
+          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
+        } else {
+          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+        }
       }
     } catch (error) {
       console.log(error)
@@ -211,11 +132,6 @@ const ProductManagement = () => {
     getProductsList(1, null, number)
   }
 
-  const onSearchInputChange = debounce((text) => {
-    setSearch((oldState) => ({ ...oldState, text: text }))
-    searchProductList(text)
-  }, 500)
-
   const onToggleSwitch = async (primaryIndex) => {
     const cloneProductList = [...productListState]
     cloneProductList[primaryIndex] = {
@@ -235,33 +151,10 @@ const ProductManagement = () => {
     }
   }
 
-  const onSearchBoxBlur = () =>
-    setSearch((oldState) => ({
-      ...oldState,
-      status: false,
-      data: [],
-    }))
-
-  const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true }))
-
   const onCheckBoxChange = (filterType) => {
     const filterOptions = { ...filter }
     filterOptions[filterType] = !filterOptions[filterType]
     setFilter(filterOptions)
-    getProductsList(activePage, null, numberPerPage, filterOptions)
-  }
-
-  const onSubmitSearch = (event) => {
-    if (event.key === 'Enter') {
-      getProductsList(1, null, numberPerPage, null, search.text)
-      setActivePage(1)
-    }
-  }
-
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch((oldState) => ({ ...oldState, text: '' }))
   }
 
   const onEdit = (index) => {
@@ -270,9 +163,41 @@ const ProductManagement = () => {
     )
   }
 
+  const onSearchInputChange = debounce(
+    (text) => setSearch({ ...search, text }),
+    300,
+  )
+
+  const onSearchBoxBlur = () =>
+    setSearch((oldState) => ({
+      ...oldState,
+      status: false,
+      data: [],
+    }))
+
+  const onSearchBoxFocus = () =>
+    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
+
+  const onClearSearchBox = () => {
+    searchRef.current.value = ''
+    setSearch({ ...search, text: '' })
+  }
+
+  const onSubmitSearch = (event) => {
+    if (event.key === 'Enter') {
+      getProductsList()
+      // setActivePage(1)
+      setSearch({ ...search, status: false })
+    }
+  }
+
   useEffect(() => {
-    getProductsList(1)
-  }, [])
+    getProductsList()
+  }, [sort, activePage, numberPerPage, filter])
+
+  useEffect(() => {
+    searchProductList()
+  }, [search.text])
 
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: true },
@@ -300,7 +225,8 @@ const ProductManagement = () => {
   const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
-    <Container isSort={sort.status} sortType={sort.option.type}>
+    <Container //isSort={sort.status} sortType={sort.option.type}
+    >
       <div className='header'>
         <span>Product Management</span>
       </div>
