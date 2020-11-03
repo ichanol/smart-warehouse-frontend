@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/smart-warehouse/detect-user-rfid
+POST http://localhost:8000/api/smart-warehouse/detect-user-rfid
 content-type: application/json
 
 {
@@ -7,7 +7,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/api/smart-warehouse/detect-product-RFID/
+POST http://localhost:8000/api/smart-warehouse/detect-product-RFID/
 content-type: application/json
 
 {
@@ -25,3 +25,18 @@ content-type: application/json
         {"product_serial_number": "Db6yY11WIj", "amount": 1000}
     ]
 }
+
+###
+
+POST http://localhost:8000/api/smart-warehouse/login
+content-type: application/json
+
+{
+    "username": "tip",
+    "password": "tip"
+}
+
+###
+
+GET http://localhost:8000/api/smart-warehouse/roles?numberPerPage=10&page=1&column=role_name&desc=true&search=admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoidGlwIiwiaWF0IjoxNjA0Mzg1MzE4LCJleHAiOjE2MDQzODU2MTh9.sR0cnehfIiaJWV0nt5n4gLxfVQybGnSsbBzbiKm-wAY
