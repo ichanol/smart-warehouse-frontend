@@ -1,164 +1,82 @@
 import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { getRequest, putRequest } from '../Services'
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { Container } from './ProductManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
 import { debounce } from 'lodash'
+import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
   const history = useHistory()
+
   const userState = useRecoilValue(atomState.userState)
-  const setModalState = useSetRecoilState(atomState.modalState)
-  const resetDefaultModalState = useResetRecoilState(atomState.modalState)
+  const setToastState = useSetRecoilState(atomState.toastState)
+  const [roleListState, setRoleListState] = useRecoilState(
+    atomState.roleListState,
+  )
+
+  const scrollRef = useRef([])
+  const searchRef = useRef()
+  const dropDownRef = useRef()
+
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
-  const [roleListState, setRoleListState] = useRecoilState(
-    atomState.roleListState,
-  )
-  const scrollRef = useRef([])
-  const searchRef = useRef()
-  const dropDownRef = useRef()
+  const [refreshFlag, setRefreshFlag] = useState(false)
+  const [search, setSearch] = useState({ status: false, data: [], text: '' })
+  const [sort, setSort] = useState({ column: null, desc: false })
   const [filter, setFilter] = useState({
     available: false,
     notAvailable: false,
   })
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
-  const [sort, setSort] = useState({
-    status: false,
-    option: { type: null, desc: false },
-  })
 
-  const dismissModal = () => resetDefaultModalState()
-
-  const isSorting = (URL, sortingOptions, isFirstParam = false) => {
-    if (sortingOptions) {
-      URL = URL + (isFirstParam ? '' : '&') + sortingOptions
-      return URL
-    } else if (sort.status) {
-      URL =
-        URL +
-        (isFirstParam ? '' : '&') +
-        `sort=${sort.option.type},${sort.option.desc}`
-      return URL
-    } else {
-      return URL
-    }
-  }
-
-  const isFiltering = (URL, filterOptions, isFirstParam = false) => {
-    if (filterOptions?.available && filterOptions?.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
-      return URL
-    } else if (!filterOptions?.available && !filterOptions?.notAvailable) {
-      return URL
-    } else if (filterOptions?.available) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
-      return URL
-    } else if (filterOptions?.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
-      return URL
-    } else if (filter.available && filter.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=2'
-      return URL
-    } else if (!filter.available && !filter.notAvailable) {
-      return URL
+  const statusFilterHandler = () => {
+    if (
+      (filter.available && filter.notAvailable) ||
+      (!filter.available && !filter.notAvailable)
+    ) {
+      return null
     } else if (filter.available) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=1'
-      return URL
+      return '1'
     } else if (filter.notAvailable) {
-      URL = URL + (isFirstParam ? '' : '&') + 'status=0'
-      return URL
+      return '0'
     } else {
-      URL = URL
-      return URL
+      return null
     }
   }
 
-  const isSearching = (URL, keyword, isFirstParam = false) => {
-    if (keyword) {
-      URL = URL + (isFirstParam ? '' : '&') + `search=${keyword}`
-      return URL
-    } else if (search.text) {
-      URL = URL + (isFirstParam ? '' : '&') + `search=${search.text}`
-      return URL
-    } else {
-      return URL
-    }
+  const queryParams = {
+    column: sort.column,
+    desc: sort.desc,
+    search: search.text === '' ? null : search.text,
+    status: statusFilterHandler(),
+    page: activePage,
+    numberPerPage,
   }
 
-  const getRoleList = async (
-    pageToFetch,
-    sortingOptions,
-    perPage = numberPerPage,
-    filterOptions,
-    keyword,
-  ) => {
+  const getRoleList = async () => {
     try {
-      let URL = `${process.env.REACT_APP_API}/roles/${perPage}/${pageToFetch}?`
-
-      if (
-        (sortingOptions || sort.status) &&
-        (filter.available || filter.notAvailable || filterOptions) &&
-        (keyword || search.text)
-      ) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withFilterURL = isFiltering(withSortURL, filterOptions)
-        const withSearchURL = isSearching(withFilterURL, keyword)
-        URL = withSearchURL
-      } else if (
-        (filter.available || filter.notAvailable || filterOptions) &&
-        (keyword || search.text)
-      ) {
-        const withFilterURL = isFiltering(URL, filterOptions, true)
-        const withSearchURL = isSearching(withFilterURL, keyword)
-        URL = withSearchURL
-      } else if ((sortingOptions || sort.status) && (keyword || search.text)) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withSearchURL = isSearching(withSortURL, keyword)
-        URL = withSearchURL
-      } else if (
-        (sortingOptions || sort.status) &&
-        (filter.available || filter.notAvailable || filterOptions)
-      ) {
-        const withSortURL = isSorting(URL, sortingOptions, true)
-        const withFilterURL = isFiltering(withSortURL, filterOptions)
-        URL = withFilterURL
-      } else if (keyword || search.text) {
-        URL = isSearching(URL, keyword, true)
-      } else if (sortingOptions || sort.status) {
-        URL = isSorting(URL, sortingOptions, true)
-      } else {
-        URL = isFiltering(URL, filterOptions, true)
-      }
-      const { success, result, totalPages, totalRecords } = await getRequest(
-        URL,
+      const { success, result, totalPages, totalRecords } = await request(
+        '/roles',
+        queryParams,
         userState.accessToken,
+        'get',
       )
-
-      console.log('URL', URL)
-
-      const parseData = result.map((value, index) => {
-        const temp = { ...value }
-        temp.permission = JSON.parse(temp.permission)
-        for (const [permissionName, isPermitted] of Object.entries(
-          temp.permission,
-        )) {
-          temp.permission[permissionName] = isPermitted
-        }
-        return temp
-      })
       if (success) {
+        const parseData = result.map((value, index) => {
+          const temp = { ...value }
+          temp.permission = JSON.parse(temp.permission)
+          for (const [permissionName, isPermitted] of Object.entries(
+            temp.permission,
+          )) {
+            temp.permission[permissionName] = isPermitted
+          }
+          return temp
+        })
         const temp = []
         for (let i = 1; i <= totalPages; i = i + 1) {
           temp.push(i)
@@ -166,73 +84,105 @@ const ProductManagement = () => {
         setTotalPage(temp)
         setRoleListState(parseData)
         setTotalRecord(totalRecords)
-        console.log('parseData', parseData)
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const searchRoleList = async (searchFor) => {
+  const searchRoleList = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/roles?search=${searchFor}`
-      const { result } = await getRequest(URL, userState.accessToken)
-      if (result && result.length > 0) {
-        setSearch((oldState) => ({ ...oldState, status: true, data: result }))
+      if (search.text === '') {
+        setSearch({ ...search, data: [] })
       } else {
-        setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+        const { result } = await request(
+          '/roles',
+          queryParams,
+          userState.accessToken,
+          'get',
+        )
+
+        if (result && result.length > 0) {
+          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
+        } else {
+          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+        }
       }
     } catch (error) {
+      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
       console.log(error)
     }
   }
 
-  const onClickPageNumber = (pageNumber) => {
-    setActivePage(pageNumber)
-    getRoleList(pageNumber)
-  }
+  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
-  const onSortByColumn = (columnType) => {
-    if (columnType) {
-      setSort({
-        ...sort,
-        status: true,
-        option: { type: columnType, desc: !sort.option.desc },
-      })
-      const sortOptions = `sort=${columnType},${!sort.option.desc}`
-      getRoleList(activePage, sortOptions)
-    }
-  }
+  const onSortByColumn = (columnType) =>
+    setSort({ column: columnType, desc: !sort.desc })
 
   const onChangeNumberPerPage = (number, primaryIndex) => {
     dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
     setNumberPerPage(number)
     setActivePage(1)
-    getRoleList(1, null, number)
   }
-
-  const onSearchInputChange = debounce((text) => {
-    setSearch((oldState) => ({ ...oldState, text: text }))
-    searchRoleList(text)
-  }, 500)
 
   const onToggleSwitch = async (primaryIndex) => {
-    const cloneProductList = [...roleListState]
-    cloneProductList[primaryIndex] = {
-      ...cloneProductList[primaryIndex],
-      status: !cloneProductList[primaryIndex].status,
-    }
-    console.log(cloneProductList[primaryIndex])
-    const temp = cloneProductList[primaryIndex]
-    const body = { id: temp.id, status: temp.status }
-    const URL = `${process.env.REACT_APP_API}/roles`
-    console.log(cloneProductList[primaryIndex])
-    console.log(URL, body)
-    const { success } = await putRequest(URL, body, userState.accessToken)
-    if (success) {
-      setRoleListState(cloneProductList)
+    try {
+      const cloneProductList = [...roleListState]
+      cloneProductList[primaryIndex] = {
+        ...cloneProductList[primaryIndex],
+        status: !cloneProductList[primaryIndex].status,
+      }
+
+      const temp = cloneProductList[primaryIndex]
+      const body = { role_name: temp.role_name, status: temp.status }
+      const { success } = await request(
+        '/roles',
+        body,
+        userState.accessToken,
+        'delete',
+      )
+
+      if (success) {
+        setRoleListState(cloneProductList)
+        setToastState((oldState) => [
+          ...oldState,
+          {
+            onClick: () => {},
+            title: 'Success',
+            message: 'Update role successfully',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
+      }
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to update. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
     }
   }
+
+  const onCheckBoxChange = (filterType) => {
+    const filterOptions = { ...filter }
+    filterOptions[filterType] = !filterOptions[filterType]
+    setFilter(filterOptions)
+    setActivePage(1)
+  }
+
+  const onEdit = (index) =>
+    history.push(`/role-management/edit/${roleListState[index].role_name}`)
+
+  const onSearchInputChange = debounce(
+    (text) => setSearch({ ...search, text }),
+    300,
+  )
 
   const onSearchBoxBlur = () =>
     setSearch((oldState) => ({
@@ -242,34 +192,29 @@ const ProductManagement = () => {
     }))
 
   const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true }))
+    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
 
-  const onCheckBoxChange = (filterType) => {
-    const filterOptions = { ...filter }
-    filterOptions[filterType] = !filterOptions[filterType]
-    setFilter(filterOptions)
-    getRoleList(activePage, null, numberPerPage, filterOptions)
+  const onClearSearchBox = () => {
+    searchRef.current.value = ''
+    setSearch({ ...search, text: '' })
+    setRefreshFlag(!refreshFlag)
   }
 
   const onSubmitSearch = (event) => {
     if (event.key === 'Enter') {
-      getRoleList(1, null, numberPerPage, null, search.text)
       setActivePage(1)
+      setSearch({ ...search, status: false })
+      setRefreshFlag(!refreshFlag)
     }
   }
 
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch((oldState) => ({ ...oldState, text: '' }))
-  }
-
-  const onEdit = (index) => {
-    history.push(`/role-management/edit/${roleListState[index].role_name}`)
-  }
+  useEffect(() => {
+    getRoleList()
+  }, [sort, activePage, numberPerPage, filter, refreshFlag])
 
   useEffect(() => {
-    getRoleList(1)
-  }, [])
+    searchRoleList()
+  }, [search.text])
 
   const titleArray = [
     { title: 'Role name', type: 'role_name', isSort: true },
@@ -280,17 +225,12 @@ const ProductManagement = () => {
     { title: 'Actions', type: null, isSort: false },
   ]
   const centerColumn = ['totalUser']
-  /**
-   * http://localhost:3000/role-management?orderby=id,name|desc
-id: 1
-permission: "["new", "updated", "permission"]"
-       */
   const fixedDataColumn = ['role_name', 'detail']
   const scrollDataColumn = ['totalUser', 'created_at', 'updated_at', 'status']
   const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
-    <Container isSort={sort.status} sortType={sort.option.type}>
+    <Container>
       <div className='header'>
         <span>Role Management</span>
       </div>

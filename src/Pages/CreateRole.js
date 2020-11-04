@@ -1,8 +1,10 @@
 import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
 import { Container, PermissionSection } from './CreateRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
-import { firstCharacterCantBeSpace, noSpecialCharacter } from '../Utils'
-import { getRequest, postRequest } from '../Services'
+import {
+  isContainSpecialCharacter,
+  isFirstCharacterSpace,
+} from '../Utils/inputValidation'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import TextArea from '../components/Input/TextArea/TextArea'
@@ -10,15 +12,21 @@ import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
+import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const CreateRole = () => {
   const history = useHistory()
+
+  const userState = useRecoilValue(atomState.userState)
+  const [toastState, setToastState] = useRecoilState(atomState.toastState)
+
   const choicesDetailRef = useRef([])
   const inputRef = useRef(null)
   const containerRef = useRef(null)
-  const userState = useRecoilValue(atomState.userState)
-  const [toastState, setToastState] = useRecoilState(atomState.toastState)
+
+  const [permissionCheckBox, setPermissionCheckBox] = useState([])
+  const [inputError, setError] = useState({})
   const [roleData, setRoleData] = useState({
     role_name: '',
     detail: '',
@@ -34,16 +42,14 @@ const CreateRole = () => {
       userManagement: false,
     },
   })
-  const [permissionCheckBox, setPermissionCheckBox] = useState([])
-  const [inputError, setError] = useState({})
 
   const onSubmit = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/roles`
-      const { success } = await postRequest(
-        URL,
+      const { success } = await request(
+        '/roles',
         roleData,
         userState.accessToken,
+        'post',
       )
       if (success) {
         setToastState([
@@ -58,42 +64,69 @@ const CreateRole = () => {
         ])
         history.goBack()
       }
-    } catch (error) {}
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to create. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
   }
 
   const onCancel = () => history.goBack()
 
-  const checkDuplicate = async (keyword) => {
+  const checkDuplicate = async (keyword, TYPE) => {
     try {
-      const URL = `${process.env.REACT_APP_API}/roles?validate=${keyword}`
-      const { result } = await getRequest(URL, userState.accessToken)
-      if (result.length) {
-        setError((oldState) => ({
-          ...oldState,
-          role_name: 'This key is not available',
-        }))
+      const { result } = await request(
+        '/roles',
+        { validate: keyword },
+        userState.accessToken,
+        'get',
+      )
+      if (result?.length) {
+        const tempError = { ...inputError }
+        tempError[TYPE] = 'This key is not available'
+        setError(tempError)
       }
     } catch (error) {
-      console.log(error)
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Network error',
+          message: 'Disconnect from the server.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
     }
   }
 
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
-    if (TYPE === 'role_name') {
-      if (firstCharacterCantBeSpace(value)) {
-        tempError[TYPE] = 'First Character can not be a space'
-      } else if (noSpecialCharacter(value)) {
-        tempError[TYPE] = 'a-z, A-Z, ก-ฮ'
-      } else {
-        tempError[TYPE] = null
-      }
-      checkDuplicate(value)
+    if (TYPE === 'detail') {
+    } else if (isFirstCharacterSpace(value)) {
+      tempError[TYPE] = 'First Character should be alphabet'
+    } else if (isContainSpecialCharacter(value)) {
+      tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
+    } else {
+      tempError[TYPE] = null
     }
+
+    if (TYPE === 'role_name' && value !== '' && tempError[TYPE] === null) {
+      checkDuplicate(value, TYPE)
+    }
+
+    const updateRoleData = { ...roleData }
+    updateRoleData[TYPE] = value
+
     setError(tempError)
-    const temp = { ...roleData }
-    temp[TYPE] = value
-    setRoleData(temp)
+    setRoleData(updateRoleData)
     return true
   }, 300)
 
