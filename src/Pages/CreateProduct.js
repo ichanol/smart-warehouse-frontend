@@ -1,6 +1,5 @@
 import { CancelButton, SubmitButton } from '../components/Button'
 import React, { useState } from 'react'
-import { getRequest, postRequest } from '../Services'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './CreateProductStyle'
@@ -8,6 +7,7 @@ import TextArea from '../components/Input/TextArea/TextArea'
 import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
+import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const CreateProduct = () => {
@@ -27,11 +27,11 @@ const CreateProduct = () => {
 
   const onSubmit = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/products`
-      const { success } = await postRequest(
-        URL,
+      const { success } = await request(
+        '/products',
         productData,
         userState.accessToken,
+        'post',
       )
       if (success) {
         setToastState([
@@ -68,9 +68,13 @@ const CreateProduct = () => {
 
   const checkDuplicate = async (keyword) => {
     try {
-      const URL = `${process.env.REACT_APP_API}/products?validate=${keyword}`
-      const { result } = await getRequest(URL, userState.accessToken)
-      if (result.length) {
+      const { result } = await request(
+        '/products',
+        { validate: keyword },
+        userState.accessToken,
+        'get',
+      )
+      if (result?.length) {
         setError((oldState) => ({
           ...oldState,
           product_id: 'This key is not available',

@@ -8,7 +8,7 @@ import TextArea from '../components/Input/TextArea/TextArea'
 import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { putRequest } from '../Services'
+import { request } from '../Services'
 
 const CreateProduct = () => {
   const history = useHistory()
@@ -39,11 +39,11 @@ const CreateProduct = () => {
 
   const onSubmit = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/products`
-      const { success } = await putRequest(
-        URL,
+      const { success } = await request(
+        '/products',
         editedProductData,
         userState.accessToken,
+        'put',
       )
       if (success) {
         setToastState([

@@ -151,11 +151,10 @@ const ProductManagement = () => {
     setActivePage(1)
   }
 
-  const onEdit = (index) => {
+  const onEdit = (index) =>
     history.push(
       `/product-management/edit/${productListState[index].product_id}`,
     )
-  }
 
   const onSearchInputChange = debounce(
     (text) => setSearch({ ...search, text }),
