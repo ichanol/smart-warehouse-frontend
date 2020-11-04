@@ -1,5 +1,10 @@
 import { CancelButton, SubmitButton } from '../components/Button'
 import React, { useEffect, useState } from 'react'
+import {
+  engIsContainSpecialCharacter,
+  isContainSpecialCharacter,
+  isFirstCharacterSpace,
+} from '../Utils/inputValidation'
 import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
@@ -12,27 +17,33 @@ import { request } from '../Services'
 
 const CreateProduct = () => {
   const history = useHistory()
-  const userState = useRecoilValue(atomState.userState)
-  const [inputError, setError] = useState({})
-  const [toastState, setToastState] = useRecoilState(atomState.toastState)
-
   const { productid } = useParams()
 
+  const userState = useRecoilValue(atomState.userState)
+  const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const productListState = useRecoilValue(atomState.productListState)
-  const [selectedProduct] = productListState.filter(
-    (value) => value.product_id === productid,
-  )
-  const [editedProductData, setEditedProductData] = useState({
-    company_name: selectedProduct?.company_name,
-    detail: selectedProduct?.detail,
-    location: selectedProduct?.location,
-    product_id: selectedProduct?.product_id,
-    product_name: selectedProduct?.product_name,
-    status: selectedProduct?.status,
-  })
+
+  const [inputError, setError] = useState({})
+  const [editedProductData, setEditedProductData] = useState({})
 
   useEffect(() => {
-    if (!productid || !selectedProduct) {
+    if (productid) {
+      const [selectedProduct] = productListState.filter(
+        (value) => value.product_id === productid,
+      )
+      if (selectedProduct) {
+        setEditedProductData({
+          company_name: selectedProduct?.company_name,
+          detail: selectedProduct?.detail,
+          location: selectedProduct?.location,
+          product_id: selectedProduct?.product_id,
+          product_name: selectedProduct?.product_name,
+          status: selectedProduct?.status,
+        })
+      } else {
+        history.push('/product-management')
+      }
+    } else {
       history.push('/product-management')
     }
   }, [])
@@ -58,7 +69,18 @@ const CreateProduct = () => {
         ])
         history.goBack()
       }
-    } catch (error) {}
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to save changes. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
   }
 
   const onCancel = () => history.goBack()
@@ -80,27 +102,23 @@ const CreateProduct = () => {
 
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
-    if (/^\s.*$/.exec(value)) {
-      tempError[TYPE] = 'First Character can not be a space'
-    } else if (
-      /[!@#$%^&*(),.?":;'/\\{}|<>_+\-~ก-๙]/.exec(value) &&
-      TYPE === 'product_id'
-    ) {
+
+    if (TYPE === 'detail') {
+    } else if (isFirstCharacterSpace(value)) {
+      tempError[TYPE] = 'First Character should be alphabet'
+    } else if (engIsContainSpecialCharacter(value) && TYPE === 'product_id') {
       tempError[TYPE] = 'a-z, A-Z, 0-9'
-    } else if (
-      /[!@#$%^&*,?":;'/\\{}|<>_+\-~]/.exec(value) &&
-      TYPE !== 'detail'
-    ) {
+    } else if (isContainSpecialCharacter(value)) {
       tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
     } else {
       tempError[TYPE] = null
     }
-    console.log(value)
+
+    const updateEditedProductData = { ...editedProductData }
+    updateEditedProductData[TYPE] = value
+
     setError(tempError)
-    const temp = { ...editedProductData }
-    temp[TYPE] = value
-    setEditedProductData(temp)
-    return true
+    setEditedProductData(updateEditedProductData)
   }, 300)
 
   return (

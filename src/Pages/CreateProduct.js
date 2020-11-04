@@ -1,5 +1,10 @@
 import { CancelButton, SubmitButton } from '../components/Button'
 import React, { useState } from 'react'
+import {
+  engIsContainSpecialCharacter,
+  isContainSpecialCharacter,
+  isFirstCharacterSpace,
+} from '../Utils/inputValidation'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './CreateProductStyle'
@@ -12,10 +17,11 @@ import { useHistory } from 'react-router-dom'
 
 const CreateProduct = () => {
   const history = useHistory()
+
   const userState = useRecoilValue(atomState.userState)
-  const [inputError, setError] = useState({})
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
+  const [inputError, setError] = useState({})
   const [productData, setProductData] = useState({
     company_name: '',
     detail: '',
@@ -46,7 +52,18 @@ const CreateProduct = () => {
         ])
         history.goBack()
       }
-    } catch (error) {}
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to create. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
   }
 
   const onCancel = () => history.goBack()
@@ -66,7 +83,7 @@ const CreateProduct = () => {
     }
   }
 
-  const checkDuplicate = async (keyword) => {
+  const checkDuplicate = async (keyword, TYPE) => {
     try {
       const { result } = await request(
         '/products',
@@ -75,42 +92,47 @@ const CreateProduct = () => {
         'get',
       )
       if (result?.length) {
-        setError((oldState) => ({
-          ...oldState,
-          product_id: 'This key is not available',
-        }))
+        const tempError = { ...inputError }
+        tempError[TYPE] = 'This key is not available'
+        setError(tempError)
       }
     } catch (error) {
-      console.log(error)
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Network error',
+          message: 'Disconnect from the server.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
     }
   }
 
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
-    if (/^\s.*$/.exec(value)) {
-      tempError[TYPE] = 'First Character can not be a space'
-    } else if (
-      /[!@#$%^&*(),.?":;'/\\{}|<>_+\-~ก-๙]/.exec(value) &&
-      TYPE === 'product_id'
-    ) {
+
+    if (TYPE === 'detail') {
+    } else if (isFirstCharacterSpace(value)) {
+      tempError[TYPE] = 'First Character should be alphabet'
+    } else if (engIsContainSpecialCharacter(value) && TYPE === 'product_id') {
       tempError[TYPE] = 'a-z, A-Z, 0-9'
-    } else if (
-      /[!@#$%^&*,?":;'/\\{}|<>_+\-~]/.exec(value) &&
-      TYPE !== 'detail'
-    ) {
+    } else if (isContainSpecialCharacter(value)) {
       tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
     } else {
       tempError[TYPE] = null
     }
-    if (TYPE === 'product_id') {
-      checkDuplicate(value)
+
+    if (TYPE === 'product_id' && value !== '' && tempError[TYPE] === null) {
+      checkDuplicate(value, TYPE)
     }
-    console.log(value)
+
+    const updateProductData = { ...productData }
+    updateProductData[TYPE] = value
+
     setError(tempError)
-    const temp = { ...productData }
-    temp[TYPE] = value
-    setProductData(temp)
-    return true
+    setProductData(updateProductData)
   }, 300)
 
   return (

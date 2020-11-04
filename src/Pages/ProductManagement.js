@@ -1,11 +1,6 @@
 import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { Container } from './ProductManagementStyle'
 import { Pagination } from '../components'
@@ -16,52 +11,52 @@ import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
   const history = useHistory()
+
   const userState = useRecoilValue(atomState.userState)
-  const setModalState = useSetRecoilState(atomState.modalState)
-  const resetDefaultModalState = useResetRecoilState(atomState.modalState)
+  const setToastState = useSetRecoilState(atomState.toastState)
+  const [productListState, setProductListState] = useRecoilState(
+    atomState.productListState,
+  )
+
+  const scrollRef = useRef([])
+  const searchRef = useRef()
+  const dropDownRef = useRef()
+
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
   const [refreshFlag, setRefreshFlag] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [productListState, setProductListState] = useRecoilState(
-    atomState.productListState,
-  )
-  const scrollRef = useRef([])
-  const searchRef = useRef()
-  const dropDownRef = useRef()
+  const [search, setSearch] = useState({ status: false, data: [], text: '' })
+  const [sort, setSort] = useState({ column: null, desc: false })
   const [filter, setFilter] = useState({
     available: false,
     notAvailable: false,
   })
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
-  const [sort, setSort] = useState({ column: null, desc: false })
+
+  const statusFilterHandler = () => {
+    if (
+      (filter.available && filter.notAvailable) ||
+      (!filter.available && !filter.notAvailable)
+    ) {
+      return null
+    } else if (filter.available) {
+      return '1'
+    } else if (filter.notAvailable) {
+      return '0'
+    } else {
+      return null
+    }
+  }
 
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
     search: search.text === '' ? null : search.text,
-    status: (() => {
-      if (
-        (filter.available && filter.notAvailable) ||
-        (!filter.available && !filter.notAvailable)
-      ) {
-        console.log('both')
-        return null
-      } else if (filter.available) {
-        return '1'
-      } else if (filter.notAvailable) {
-        return '0'
-      } else {
-        return null
-      }
-    })(),
+    status: statusFilterHandler(),
     page: activePage,
     numberPerPage,
   }
-
-  const dismissModal = () => resetDefaultModalState()
 
   const getProductsList = async () => {
     try {
@@ -138,9 +133,28 @@ const ProductManagement = () => {
 
       if (success) {
         setProductListState(cloneProductList)
+        setToastState((oldState) => [
+          ...oldState,
+          {
+            onClick: () => {},
+            title: 'Success',
+            message: 'Update product successfully',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
       }
     } catch (error) {
-      console.log(error)
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to update. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
     }
   }
 
@@ -219,8 +233,7 @@ const ProductManagement = () => {
   const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
-    <Container //isSort={sort.status} sortType={sort.option.type}
-    >
+    <Container>
       <div className='header'>
         <span>Product Management</span>
       </div>
