@@ -1,6 +1,10 @@
 import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
 import { Container, PermissionSection } from './EditRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
+import {
+  isContainSpecialCharacter,
+  isFirstCharacterSpace,
+} from '../Utils/inputValidation'
 import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
@@ -9,37 +13,31 @@ import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
-import { putRequest } from '../Services'
+import { request } from '../Services'
 
 const EditRole = () => {
   const history = useHistory()
+  const { rolename } = useParams()
+
   const choicesDetailRef = useRef([])
   const inputRef = useRef(null)
   const containerRef = useRef(null)
+
   const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
+  const roleListState = useRecoilValue(atomState.roleListState)
+
   const [permissionCheckBox, setPermissionCheckBox] = useState([])
   const [inputError, setError] = useState({})
-  const { rolename } = useParams()
-
-  const roleListState = useRecoilValue(atomState.roleListState)
-  const [selectedRole] = roleListState.filter(
-    (value) => value.role_name === rolename,
-  )
-  const [editedRoleData, setEditedRoleData] = useState({
-    detail: selectedRole?.detail,
-    role_name: selectedRole?.role_name,
-    permission: selectedRole?.permission,
-    id: selectedRole?.id,
-  })
+  const [editedRoleData, setEditedRoleData] = useState({})
 
   const onSubmit = async () => {
     try {
-      const URL = `${process.env.REACT_APP_API}/roles`
-      const { success } = await putRequest(
-        URL,
+      const { success } = await request(
+        '/roles',
         editedRoleData,
         userState.accessToken,
+        'put',
       )
       if (success) {
         setToastState([
@@ -54,26 +52,40 @@ const EditRole = () => {
         ])
         history.goBack()
       }
-    } catch (error) {}
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to save changes. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
   }
 
   const onCancel = () => history.goBack()
 
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
+
     if (TYPE === 'role_name') {
-      if (/^\s.*$/.exec(value)) {
-        tempError[TYPE] = 'First Character can not be a space'
-      } else if (/[!@#$%^&*(),.?":;'/\\{}|<>_+\-~\d]/.exec(value)) {
-        tempError[TYPE] = 'a-z, A-Z, ก-ฮ'
+      if (isFirstCharacterSpace(value)) {
+        tempError[TYPE] = 'First Character should be alphabet'
+      } else if (isContainSpecialCharacter(value)) {
+        tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
       } else {
         tempError[TYPE] = null
       }
     }
+
+    const updateEditedRoleData = { ...editedRoleData }
+    updateEditedRoleData[TYPE] = value
+
     setError(tempError)
-    const temp = { ...editedRoleData }
-    temp[TYPE] = value
-    setEditedRoleData(temp)
+    setEditedRoleData(updateEditedRoleData)
     return true
   }, 300)
 
@@ -123,17 +135,30 @@ const EditRole = () => {
       }
     }
     if (isError) {
-      containerRef.current.scrollTop = inputRef.current.offsetParent.offsetTop
+      //containerRef.current.scrollTop = inputRef.current.offsetParent.offsetTop
     } else {
       onSubmit()
     }
   }
 
   useEffect(() => {
-    if (!rolename || !selectedRole) {
-      history.push('/role-management')
+    if (rolename) {
+      const [selectedRole] = roleListState.filter(
+        (value) => value.role_name === rolename,
+      )
+      if (selectedRole) {
+        checkDetailElementHeight()
+        setEditedRoleData({
+          detail: selectedRole?.detail,
+          role_name: selectedRole?.role_name,
+          permission: selectedRole?.permission,
+          id: selectedRole?.id,
+        })
+      } else {
+        history.push('/product-management')
+      }
     } else {
-      checkDetailElementHeight()
+      history.push('/product-management')
     }
   }, [])
 
