@@ -23,6 +23,7 @@ const ProductManagement = () => {
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
+  const [refreshFlag, setRefreshFlag] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [productListState, setProductListState] = useRecoilState(
     atomState.productListState,
@@ -104,50 +105,42 @@ const ProductManagement = () => {
         }
       }
     } catch (error) {
+      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
       console.log(error)
     }
   }
 
-  const onClickPageNumber = (pageNumber) => {
-    setActivePage(pageNumber)
-    getProductsList(pageNumber)
-  }
+  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
-  const onSortByColumn = (columnType) => {
-    if (columnType) {
-      setSort({
-        ...sort,
-        status: true,
-        option: { type: columnType, desc: !sort.option.desc },
-      })
-      const sortOptions = `sort=${columnType},${!sort.option.desc}`
-      getProductsList(activePage, sortOptions)
-    }
-  }
+  const onSortByColumn = (columnType) =>
+    setSort({ column: columnType, desc: !sort.desc })
 
   const onChangeNumberPerPage = (number, primaryIndex) => {
     dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
     setNumberPerPage(number)
     setActivePage(1)
-    getProductsList(1, null, number)
   }
 
   const onToggleSwitch = async (primaryIndex) => {
-    const cloneProductList = [...productListState]
-    cloneProductList[primaryIndex] = {
-      ...cloneProductList[primaryIndex],
-      status: !cloneProductList[primaryIndex].status,
-    }
+    try {
+      const cloneProductList = [...productListState]
+      cloneProductList[primaryIndex] = {
+        ...cloneProductList[primaryIndex],
+        status: !cloneProductList[primaryIndex].status,
+      }
 
-    const { success } = await request(
-      '/products',
-      cloneProductList[primaryIndex],
-      userState.accessToken,
-      'delete',
-    )
+      const { success } = await request(
+        '/products',
+        cloneProductList[primaryIndex],
+        userState.accessToken,
+        'delete',
+      )
 
-    if (success) {
-      setProductListState(cloneProductList)
+      if (success) {
+        setProductListState(cloneProductList)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -155,6 +148,7 @@ const ProductManagement = () => {
     const filterOptions = { ...filter }
     filterOptions[filterType] = !filterOptions[filterType]
     setFilter(filterOptions)
+    setActivePage(1)
   }
 
   const onEdit = (index) => {
@@ -181,19 +175,20 @@ const ProductManagement = () => {
   const onClearSearchBox = () => {
     searchRef.current.value = ''
     setSearch({ ...search, text: '' })
+    setRefreshFlag(!refreshFlag)
   }
 
   const onSubmitSearch = (event) => {
     if (event.key === 'Enter') {
-      getProductsList()
-      // setActivePage(1)
+      setActivePage(1)
       setSearch({ ...search, status: false })
+      setRefreshFlag(!refreshFlag)
     }
   }
 
   useEffect(() => {
     getProductsList()
-  }, [sort, activePage, numberPerPage, filter])
+  }, [sort, activePage, numberPerPage, filter, refreshFlag])
 
   useEffect(() => {
     searchProductList()
