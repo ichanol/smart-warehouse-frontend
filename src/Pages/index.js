@@ -1,8 +1,10 @@
 import CreateProduct from './CreateProduct'
 import CreateRole from './CreateRole'
+import CreateUser from './CreateUser'
 import EditImportExportProduct from './EditImportExportProduct'
 import EditProduct from './EditProduct'
 import EditRole from './EditRole'
+import EditUser from './EditUser'
 import ImportExportProduct from './ImportExportProduct'
 import Login from './Login'
 import Map from './Map'
@@ -18,9 +20,11 @@ import UserManagement from './UserManagement'
 export {
   CreateProduct,
   CreateRole,
+  CreateUser,
   EditImportExportProduct,
   EditProduct,
   EditRole,
+  EditUser,
   ImportExportProduct,
   Login,
   Map,

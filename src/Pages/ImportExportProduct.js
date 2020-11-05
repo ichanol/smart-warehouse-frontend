@@ -23,7 +23,6 @@ const ImportExportProduct = () => {
   const setToastState = useSetRecoilState(atomState.toastState)
   const [modalState, setModalState] = useRecoilState(atomState.modalState)
   const resetModalState = useResetRecoilState(atomState.modalState)
-  const resetUserAction = useSetRecoilState(atomState.userActionSelector())
   const [actionTabs, setActionTabs] = useState({ id: 1, action_type: 'Import' })
   const scrollRef = useRef([])
 
@@ -34,7 +33,6 @@ const ImportExportProduct = () => {
   }
 
   const onCancleScanning = () => {
-    resetUserAction()
     resetModalState()
     history.goBack()
   }
@@ -138,7 +136,6 @@ const ImportExportProduct = () => {
   const onDismissModal = () => resetModalState()
 
   const cancleTransaction = () => {
-    resetUserAction()
     resetReadProductListDefaultValue()
     onDismissModal()
     history.push('/import-export')

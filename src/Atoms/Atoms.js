@@ -1,4 +1,4 @@
-import { atom, selectorFamily } from 'recoil'
+import { atom } from 'recoil'
 
 const userState = atom({
   key: 'userState',
@@ -26,6 +26,10 @@ const roleListState = atom({
   key: 'roleListState',
   default: [],
 })
+const userListState = atom({
+  key: 'userListState',
+  default: [],
+})
 
 const toastState = atom({
   key: 'toastState',
@@ -48,26 +52,12 @@ const modalState = atom({
   },
 })
 
-const userActionSelector = selectorFamily({
-  key: 'userActionSelector',
-  get: () => ({ get }) => {
-    const user = get(userState)
-    return user.action
-  },
-  set: () => ({ set }) => {
-    set(userState, (oldState) => ({
-      ...oldState,
-      action: { id: null, actionType: null },
-    }))
-  },
-})
-
 const atomState = {
   userState,
   readProductListState,
   toastState,
   modalState,
-  userActionSelector,
+  userListState,
   roleListState,
   productListState,
 }
