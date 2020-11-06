@@ -211,6 +211,7 @@ const UserManagement = () => {
     { title: 'Firstname', type: 'firstname', isSort: true },
     { title: 'Lastname', type: 'lastname', isSort: true },
     { title: 'Username', type: 'username', isSort: true },
+    { title: 'E-mail', type: 'email', isSort: true },
     { title: 'Role', type: 'role_name', isSort: true },
     { title: 'Detail', type: 'detail', isSort: true },
     { title: 'Created at', type: 'created_at', isSort: true },
@@ -221,6 +222,7 @@ const UserManagement = () => {
   const fixedDataColumn = ['firstname', 'lastname']
   const scrollDataColumn = [
     'username',
+    'email',
     'role_name',
     'detail',
     'created_at',

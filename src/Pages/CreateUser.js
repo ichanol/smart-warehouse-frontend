@@ -140,7 +140,7 @@ const CreateUser = () => {
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
 
-    if (TYPE === 'detail') {
+    if (TYPE === 'detail' || TYPE === 'email') {
     } else if (isFirstCharacterSpace(value)) {
       tempError[TYPE] = 'First Character should be alphabet'
     } else if (engIsContainSpecialCharacter(value) && TYPE === 'username') {
@@ -182,7 +182,6 @@ const CreateUser = () => {
             placeholder='E-mail'
             onValueChange={onValueChange}
             valueType='email'
-            maxLength='10'
             error={inputError.email}
           />
           <TextInput
