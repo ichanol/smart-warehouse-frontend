@@ -25,9 +25,17 @@ const engIsContainSpecialCharacter = (text) => {
   }
 }
 
-//=============
-const firstCharacterCantBeSpace = (text) => {
-  const regex = /^\s.*$/
+const isEmailInvalid = (text) => {
+  const regex = /^[a-zA-Z\d\.\_]+\@.*[a-zA-Z]+\..*[a-zA-Z\.]$/
+  if (regex.exec(text)) {
+    return false
+  } else {
+    return true
+  }
+}
+
+const isENorTH = (text) => {
+  const regex = /[^ก-๙a-zA-Z]/
   if (regex.exec(text)) {
     return true
   } else {
@@ -35,13 +43,10 @@ const firstCharacterCantBeSpace = (text) => {
   }
 }
 
-const noSpecialCharacter = (text) => {
-  const regex = /[!@#$%^&*(),.?":;'/\\{}|<>_+\-~\d]/
-  if (regex.exec(text)) {
-    return true
-  } else {
-    return false
-  }
+export {
+  isFirstCharacterSpace,
+  isContainSpecialCharacter,
+  engIsContainSpecialCharacter,
+  isEmailInvalid,
+  isENorTH,
 }
-
-export { isFirstCharacterSpace, isContainSpecialCharacter, engIsContainSpecialCharacter, firstCharacterCantBeSpace, noSpecialCharacter }

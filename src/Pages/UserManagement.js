@@ -58,7 +58,7 @@ const UserManagement = () => {
     numberPerPage,
   }
 
-  const getProductsList = async () => {
+  const getUserList = async () => {
     try {
       const { success, result, totalPages, totalRecords } = await request(
         '/users',
@@ -67,7 +67,6 @@ const UserManagement = () => {
         'get',
       )
       if (success) {
-        console.log(result)
         const temp = []
         for (let i = 1; i <= totalPages; i = i + 1) {
           temp.push(i)
@@ -81,7 +80,7 @@ const UserManagement = () => {
     }
   }
 
-  const searchProductList = async () => {
+  const searchUserList = async () => {
     try {
       if (search.text === '') {
         setSearch({ ...search, data: [] })
@@ -138,7 +137,7 @@ const UserManagement = () => {
           {
             onClick: () => {},
             title: 'Success',
-            message: 'Update product successfully',
+            message: 'Update user successfully',
             dismiss: false,
             type: 'success',
           },
@@ -200,11 +199,11 @@ const UserManagement = () => {
   }
 
   useEffect(() => {
-    getProductsList()
+    getUserList()
   }, [sort, activePage, numberPerPage, filter, refreshFlag])
 
   useEffect(() => {
-    searchProductList()
+    searchUserList()
   }, [search.text])
 
   const titleArray = [

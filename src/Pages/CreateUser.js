@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
   isContainSpecialCharacter,
+  isENorTH,
+  isEmailInvalid,
   isFirstCharacterSpace,
 } from '../Utils/inputValidation'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -24,23 +26,24 @@ const CreateUser = () => {
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
   const [inputError, setError] = useState({})
+  const [role, setRole] = useState({ selected: null, choices: [] })
   const [userData, setUserData] = useState({
     username: '',
     email: '',
     password: '',
     firstname: '',
     lastname: '',
-    role: '1',
+    role: '',
     detail: '',
     status: true,
   })
 
-  const queryParams = {
-    get_role: true,
-  }
-
   const getRoleList = async () => {
     try {
+      const queryParams = {
+        get_role: true,
+      }
+
       const { success, result } = await request(
         '/roles',
         queryParams,
@@ -48,6 +51,9 @@ const CreateUser = () => {
         'get',
       )
       if (success) {
+        console.log(result)
+        const temp = result.map((value, index) => value.role_name)
+        setRole({ ...role, choices: temp, selected: temp[0] })
       }
     } catch (error) {
       console.log(error)
@@ -113,8 +119,8 @@ const CreateUser = () => {
   const checkDuplicate = async (keyword, TYPE) => {
     try {
       const { result } = await request(
-        '/products',
-        { validate: keyword },
+        '/users',
+        { validate: keyword, type: TYPE },
         userState.accessToken,
         'get',
       )
@@ -137,21 +143,39 @@ const CreateUser = () => {
     }
   }
 
+  const onChangeRole = (roleName, primaryIndex) => {
+    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+    setRole({ ...role, selected: roleName })
+    setUserData({ ...userData, role: roleName })
+  }
+
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
 
-    if (TYPE === 'detail' || TYPE === 'email') {
+    if (TYPE === 'detail') {
+      tempError[TYPE] = null
     } else if (isFirstCharacterSpace(value)) {
       tempError[TYPE] = 'First Character should be alphabet'
     } else if (engIsContainSpecialCharacter(value) && TYPE === 'username') {
       tempError[TYPE] = 'a-z, A-Z, 0-9'
-    } else if (isContainSpecialCharacter(value)) {
+    } else if (isEmailInvalid(value) && TYPE === 'email') {
+      tempError[TYPE] = 'Your e-mail address is invalid'
+    } else if (
+      isENorTH(value) &&
+      (TYPE === 'firstname' || TYPE === 'lastname')
+    ) {
+      tempError[TYPE] = 'a-z, A-Z, ก-ฮ'
+    } else if (isContainSpecialCharacter(value) && TYPE !== 'email') {
       tempError[TYPE] = 'a-z, A-Z, ก-ฮ, 0-9'
     } else {
       tempError[TYPE] = null
     }
 
-    if (TYPE === 'product_id' && value !== '' && tempError[TYPE] === null) {
+    if (
+      (TYPE === 'username' || TYPE === 'email') &&
+      value !== '' &&
+      tempError[TYPE] === null
+    ) {
       checkDuplicate(value, TYPE)
     }
 
@@ -177,6 +201,17 @@ const CreateUser = () => {
             maxLength='10'
             error={inputError.username}
           />
+          <div className='dropdown-wrapper'>
+            <DropDown
+              ref={dropDownRef}
+              selectedValue={role.selected}
+              choices={role.choices}
+              onSelect={onChangeRole}
+              width='initial'
+              isCenter={false}
+            />
+            <span className='placeholder'>Role</span>
+          </div>
           <TextInput
             required
             placeholder='E-mail'
