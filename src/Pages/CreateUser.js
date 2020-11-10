@@ -179,11 +179,11 @@ const CreateUser = () => {
       checkDuplicate(value, TYPE)
     }
 
-    const updateProductData = { ...userData }
-    updateProductData[TYPE] = value
+    const updateUserData = { ...userData }
+    updateUserData[TYPE] = value
 
     setError(tempError)
-    setUserData(updateProductData)
+    setUserData(updateUserData)
   }, 300)
 
   return (
