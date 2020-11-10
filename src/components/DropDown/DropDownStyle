@@ -5,12 +5,15 @@ const Container = styled.label`
   display: flex;
   flex: 1;
   background-color: ${COLORS.natural.white};
+  height: 100%;
   align-items: center;
-  justify-content: center;
-  max-width: 80px;
+  justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
+  padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
+  max-width: ${({ containerWidth = '80px' }) => containerWidth};
   border-radius: 8px;
   cursor: pointer;
   position: relative;
+
   input {
     height: 0;
     width: 0;
@@ -20,7 +23,8 @@ const Container = styled.label`
   }
   input:checked + .choice-container {
     overflow-y: auto;
-    height: 120px;
+    height: ${({ multiplier }) =>
+      multiplier * 40 <= 120 ? multiplier * 40 : 120}px;
     width: 100%;
     position: absolute;
     left: 0;
@@ -32,11 +36,12 @@ const Container = styled.label`
       0 -5px 15px 0 rgba(255, 255, 255, 0.35);
   }
   .choice-container {
+    position: absolute;
     border-radius: 0;
     height: 0px;
     width: 100%;
     overflow: hidden;
-    align-items: center;
+    align-items: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};;
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease-in-out;
@@ -44,17 +49,10 @@ const Container = styled.label`
   .item-per-page-choice {
     min-height: 40px;
     display: flex;
-    justify-content: center;
+    justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
+    padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
     align-items: center;
     border-top: 1px solid ${COLORS.gray[200]};
-  }
-  .display-choice-container {
-    background-color: ${COLORS.red[400]};
-    width: 200%;
-    height: 185px;
-    position: absolute;
-    left: 0;
-    z-index: 1;
   }
   .disable-dropdown {
     position: fixed;
