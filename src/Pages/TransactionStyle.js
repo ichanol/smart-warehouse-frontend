@@ -253,34 +253,174 @@ const Container = styled.div`
   }
 
   .transaction-list {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
-    min-height: 70px;
 
-    margin: 20px 0;
+    margin: 20px 0 0;
+    transition: all 0.3s ease-in-out;
 
-    background-color: red;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15),
+      -5px -5px 10px rgba(255, 255, 255, 0.3);
+    &:hover {
+      box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1),
+        -10px -10px 20px rgba(255, 255, 255, 0.5);
+    }
 
     input[type='checkbox'] {
       width: 0;
       height: 0;
     }
 
-    .expand {
-      position: absolute;
-      top: -100%;
+    .transaction-information {
+      display: flex;
+      align-items: center;
+      height: 50px;
+
+      padding: 20px;
+
+      background-color: ${COLORS.natural.white};
+      cursor: pointer;
+    }
+
+    .transaction-product-list-container {
       width: 100%;
       height: 0;
       overflow: hidden;
-      background-color: pink;
+      background-color: ${COLORS.natural.white};
 
-      transition: all 0.2 ease-in-out;
+      transition: all 0.2s ease-in-out;
     }
 
-    input:checked + .expand {
-      height: initial;
+    input:checked + .transaction-product-list-container {
+      height: 100%;
     }
+
+    .transaction-detail {
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      padding: 0 12px;
+    }
+
+    .transaction-reference-number {
+    }
+    .transaction-timestamp {
+      flex: 1.4;
+    }
+    .transaction-type {
+    }
+    .transaction-remark {
+    }
+    .transaction-author {
+      justify-content: center;
+    }
+
+    .product-list {
+      height: 50px;
+      display: flex;
+
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 8px solid transparent;
+      padding: 0 20px 0 0;
+
+      font-weight: 500;
+      font-size: ${FONT.l};
+      color: ${COLORS.gray[800]};
+    }
+
+    .product-list-title {
+      color: ${COLORS.gray[600]};
+    }
+
+    .product-detail {
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .product-information {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .amount-tag {
+      padding: 0 12px;
+      border-radius: 4px;
+
+      background-color: ${COLORS.red[100]};
+      border: 2px solid ${COLORS.red[300]};
+    }
+    .add {
+      background-color: ${COLORS.green[100]};
+      border: 2px solid ${COLORS.green[400]};
+    }
+
+    .product-id {
+      /* background-color: red; */
+    }
+    .product-name {
+      /* background-color: orange; */
+    }
+    .product-amount {
+      flex: 0.75;
+      /* background-color: blue; */
+    }
+    .product-balance {
+      flex: 0.75;
+      /* background-color: coral; */
+    }
+    .product-location {
+      /* background-color: lime; */
+    }
+    .product-remark {
+      /* background-color: gray; */
+    }
+    .index {
+      flex: 0.3;
+      /* background-color: lime; */
+    }
+  }
+
+  .export {
+    border-left: 8px solid ${COLORS.red[400]};
+  }
+  .import {
+    border-left: 8px solid ${COLORS.green[600]};
   }
 `
 
-export { Container }
+const TestDND = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: gray;
+
+  .slider {
+    height: 50px;
+    width: 500px;
+    position: relative;
+
+    background-color: orange;
+  }
+  .knob {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-35px, -50%);
+
+    border-radius: 70px;
+
+    background-color: black;
+  }
+`
+export { Container, TestDND }

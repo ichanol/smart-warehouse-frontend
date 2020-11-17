@@ -1,19 +1,15 @@
-import { Container, FilterBlock, Input } from '../Pages/TransactionStyle'
-import { CrossIcon, SearchIcon } from '../components/Icon' //
-import {
-  DropDown,
-  FilterIcon,
-  Pagination,
-  ResponsiveTable,
-  SearchBox,
-} from '../components'
+import { Container, TestDND } from '../Pages/TransactionStyle'
+import { DropDown, FilterIcon, Pagination, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { Datepicker } from '../components/Datepicker' //
 import { TransactionTable } from '../components' //
 import { atomState } from '../Atoms'
+import { capitalize } from 'lodash'
+import clsx from 'clsx'
 import { debounce } from 'lodash'
+import moment from 'moment'
 import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
@@ -26,6 +22,10 @@ const Transaction = () => {
   const scrollRef = useRef([])
   const searchRef = useRef()
   const dropDownRef = useRef()
+
+  //
+  const knobRef = useRef()
+  const knobAnimatedValue = useRef({ x: 0, y: 0, isGrant: false })
 
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
@@ -158,83 +158,88 @@ const Transaction = () => {
 
   const itemPerPageList = [20, 40, 60, 80, 100]
 
+  const onMouseDown = (event) => {
+    event.preventDefault()
+
+    //
+    console.log('mouse down x pos:', event.clientX)
+
+    knobAnimatedValue.current.x = event.clientX
+    knobAnimatedValue.current.isGrant = true
+  }
+
+  const onMouseMove = (event) => {
+    event.preventDefault()
+    const x0 = knobAnimatedValue.current.x
+    const x = event.clientX
+    const dx = x - x0
+    const oldLeftPosition = knobRef.current.style.left.split('px')[0] * 1
+
+    if (knobAnimatedValue.current.isGrant) {
+      //
+      // console.log('mouse move x pos:', x)
+      // console.log('x and x0:', x, x0)
+      // console.log('left pos:', x - x0)
+
+      //  Go Right
+      if (dx >= 0) {
+        console.log('Go Right', dx, oldLeftPosition)
+        const newPosition = x0 + dx - 500
+        //  If maximum
+        if (newPosition >= 500) {
+          knobRef.current.style.left = '500px'
+        } else {
+          knobRef.current.style.left = newPosition + 'px'
+        }
+        return true
+      }
+
+      //  Go Left
+      if (dx < 0) {
+        console.log('Go Left')
+        const newPosition = x0 + dx - 500
+
+        //  If minimum
+        if (newPosition <= 0) {
+          knobRef.current.style.left = '0px'
+        } else {
+          knobRef.current.style.left = newPosition + 'px'
+        }
+        return true
+      }
+
+      // if (x - x0 < 0 || x0 - x < 0) {
+      //   console.log('min')
+      //   knobRef.current.style.left = '0px'
+      // } else if (x - x0 >= 500 || x0 - x >= 500) {
+      //   console.log('max')
+      //   knobRef.current.style.left = '500px' //max-width of element
+      // } else {
+      //   console.log('slide')
+      //   if (x >= x0) {
+      //     knobRef.current.style.left = oldLeftPosition + (x - x0) + 'px'
+      //   } else {
+      //     knobRef.current.style.left = oldLeftPosition + (x0 - x) + 'px'
+      //   }
+      // }
+    }
+  }
+
+  const onMouseUp = (event) => {
+    knobAnimatedValue.current.isGrant = false
+    knobAnimatedValue.current.x -= event.clientX
+    console.log('UP:', event.clientX)
+  }
+
   return (
     <Container>
       <div className='header'>
         <span>Transaction</span>
       </div>
 
-      {/* <div className='header'>
-        <FilterBlock>
-          <div className='filter'>
-            <div className='search'>
-              <Input
-                name='search'
-                placeholder='Search ID, Name or Reporter'
-                value={keyword}
-                onChange={search}
-              />
-              {keyword && (
-                <i className='clearIcon' onClick={() => setKeyword('')}>
-                  <CrossIcon />
-                </i>
-              )}
-
-              <div className='searchIcon'>
-                <SearchIcon />
-              </div>
-            </div>
-            <div className='amount-wrap'>
-              <div className='amount'>
-                <Input
-                  placeholder='Min amount'
-                  className='input-amount-min'
-                  value={amount.start}
-                  type='number'
-                  onChange={(event) => {
-                    setAmount({
-                      start: event.target.value,
-                      end: amount.end,
-                    })
-                  }}
-                />
-                {amount.start && (
-                  <div
-                    className='amount-start'
-                    onClick={() => setAmount({ start: '', end: amount.end })}>
-                    <CrossIcon />
-                  </div>
-                )}
-                <Input
-                  placeholder='Max amount'
-                  className='input-amount-max'
-                  value={amount.end}
-                  type='number'
-                  onChange={(event) => {
-                    setAmount({
-                      start: amount.start,
-                      end: event.target.value,
-                    })
-                  }}
-                />
-                {amount.end && (
-                  <div
-                    className='amount-end'
-                    onClick={() => setAmount({ start: amount.start, end: '' })}>
-                    <CrossIcon />
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-              <Datepicker date={date} setStart={setStart} setEnd={setEnd} />
-            </div>
-            <div />
-          </div>
-        </FilterBlock>
-      </div> */}
+      {/* <Datepicker date={date} setStart={setStart} setEnd={setEnd} /> */}
+      {/* <TransactionTable data={[]} handleSort={handleSort} sort={sort} /> */}
       <div className='content'>
-        {/* <TransactionTable data={[]} handleSort={handleSort} sort={sort} /> */}
         <div className='tools-bar-wrapper'>
           <div className='tools-bar'>
             <SearchBox
@@ -306,24 +311,115 @@ const Transaction = () => {
         {transactionData.length &&
           transactionData.map((value, index) => {
             return (
-              <>
-                <label className='transaction-list'>
-                  <div>
-                    {value.reference_number}, {value.action_name},{' '}
-                    {value.created_at}, {value.detail}, {value.status_value},{' '}
-                    {value.username}
+              <label className='transaction-list' key={index}>
+                <div
+                  className={clsx(
+                    'transaction-information',
+                    value.action_name.toLowerCase(),
+                  )}>
+                  <div className='transaction-detail transaction-reference-number'>
+                    <span>{value.reference_number}</span>
                   </div>
-                  <input type='checkbox' />
-                  <div className='expand'>
-                    {transactionData[index].data.map((subValue, subIndex) => {
-                      return <li>{subValue.product_id}</li>
-                    })}
+                  <div className='transaction-detail transaction-timestamp'>
+                    <span>{moment.utc(value.created_at).format('lll')}</span>
                   </div>
-                </label>
-              </>
+                  <div className='transaction-detail transaction-type'>
+                    <span>{capitalize(value.action_name)}</span>
+                  </div>
+                  <div className='transaction-detail transaction-remark'>
+                    <span>{value.detail}</span>
+                  </div>
+                  <div className='transaction-detail transaction-author'>
+                    <span>{value.username}</span>
+                  </div>
+                </div>
+                <input type='checkbox' />
+                <div className='transaction-product-list-container'>
+                  <div className='product-list product-list-title'>
+                    <div className='product-detail index' />
+                    <div className='product-detail product-id'>
+                      <span className='product-information'>Serial Number</span>
+                    </div>
+                    <div className='product-detail product-name'>
+                      <span className='product-information'>Name</span>
+                    </div>
+                    <div className='product-detail product-amount'>
+                      <span className='product-information'>Amount</span>
+                    </div>
+                    <div className='product-detail product-balance'>
+                      <span className='product-information'>Balance</span>
+                    </div>
+                    <div className='product-detail product-location'>
+                      <span className='product-information'>Location</span>
+                    </div>
+                    <div className='product-detail product-remark'>
+                      <span className='product-information'>Remark</span>
+                    </div>
+                  </div>
+                  {transactionData[index].data.map((subValue, subIndex) => {
+                    return (
+                      <div className='product-list' key={subIndex}>
+                        <div className='product-detail index'>
+                          <span className='product-information'>
+                            {subIndex + 1}
+                          </span>
+                        </div>
+                        <div className='product-detail product-id'>
+                          <span className='product-information'>
+                            {subValue.product_id}
+                          </span>
+                        </div>
+                        <div className='product-detail product-name'>
+                          <span className='product-information'>
+                            {subValue.product_name}
+                          </span>
+                        </div>
+                        <div className='product-detail product-amount'>
+                          <span
+                            className={clsx(
+                              'product-information amount-tag',
+                              value.action_type.toLowerCase(),
+                            )}>
+                            {value.action_type.toLowerCase() === 'add'
+                              ? '+'
+                              : '-'}{' '}
+                            {subValue.amount.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className='product-detail product-balance'>
+                          <span className='product-information'>
+                            {subValue.balance}
+                          </span>
+                        </div>
+                        <div className='product-detail product-location'>
+                          <span className='product-information'>
+                            {subValue.location}
+                          </span>
+                        </div>
+                        <div className='product-detail product-remark'>
+                          <span className='product-information'>
+                            {subValue.product_detail}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </label>
             )
           })}
       </div>
+      <TestDND>
+        <div className='slider'>
+          <div
+            className='knob'
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseMove={onMouseMove}
+            ref={knobRef}
+          />
+        </div>
+      </TestDND>
     </Container>
   )
 }
