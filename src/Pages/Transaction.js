@@ -160,10 +160,6 @@ const Transaction = () => {
 
   const onMouseDown = (event) => {
     event.preventDefault()
-
-    //
-    console.log('mouse down x pos:', event.clientX)
-
     knobAnimatedValue.current.x = event.clientX
     knobAnimatedValue.current.isGrant = true
   }
@@ -173,62 +169,39 @@ const Transaction = () => {
     const x0 = knobAnimatedValue.current.x
     const x = event.clientX
     const dx = x - x0
-    const oldLeftPosition = knobRef.current.style.left.split('px')[0] * 1
+    const newPosition = x0 + dx - 500 - 70
 
     if (knobAnimatedValue.current.isGrant) {
-      //
-      // console.log('mouse move x pos:', x)
-      // console.log('x and x0:', x, x0)
-      // console.log('left pos:', x - x0)
-
+      const value = newPosition / 500
+      console.log(value + ((35 / 100) * 500))
       //  Go Right
       if (dx >= 0) {
-        console.log('Go Right', dx, oldLeftPosition)
-        const newPosition = x0 + dx - 500
         //  If maximum
-        if (newPosition >= 500) {
-          knobRef.current.style.left = '500px'
+        if (newPosition >= 500 - 70) {
+          knobRef.current.style.left = '430px'
         } else {
-          knobRef.current.style.left = newPosition + 'px'
+          // knobRef.current.style.left = newPosition + 'px'
+          knobRef.current.style.left = value * 100 + '%'
         }
-        return true
       }
 
       //  Go Left
       if (dx < 0) {
-        console.log('Go Left')
-        const newPosition = x0 + dx - 500
-
         //  If minimum
         if (newPosition <= 0) {
           knobRef.current.style.left = '0px'
         } else {
           knobRef.current.style.left = newPosition + 'px'
         }
-        return true
       }
-
-      // if (x - x0 < 0 || x0 - x < 0) {
-      //   console.log('min')
-      //   knobRef.current.style.left = '0px'
-      // } else if (x - x0 >= 500 || x0 - x >= 500) {
-      //   console.log('max')
-      //   knobRef.current.style.left = '500px' //max-width of element
-      // } else {
-      //   console.log('slide')
-      //   if (x >= x0) {
-      //     knobRef.current.style.left = oldLeftPosition + (x - x0) + 'px'
-      //   } else {
-      //     knobRef.current.style.left = oldLeftPosition + (x0 - x) + 'px'
-      //   }
-      // }
     }
   }
 
   const onMouseUp = (event) => {
     knobAnimatedValue.current.isGrant = false
     knobAnimatedValue.current.x -= event.clientX
-    console.log('UP:', event.clientX)
+
+    console.log(event.clientX - 500 / 500)
   }
 
   return (

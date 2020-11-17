@@ -406,6 +406,7 @@ const TestDND = styled.div`
   .slider {
     height: 50px;
     width: 500px;
+    border-radius: 50px;
     position: relative;
 
     background-color: orange;
@@ -416,7 +417,7 @@ const TestDND = styled.div`
     position: absolute;
     top: 50%;
     left: 0;
-    transform: translate(-35px, -50%);
+    transform: translateY(-50%);
 
     border-radius: 70px;
 
