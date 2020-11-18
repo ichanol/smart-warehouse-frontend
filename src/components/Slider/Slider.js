@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Container } from './SliderStyle'
 
-const Slider = () => {
+const Slider = ({ height = 30, width = 350, knobSize = 50 }) => {
   const knobRef = useRef([])
   const knobAnimatedValue = useRef({ x: 0, y: 0, isGrant: false })
 
@@ -22,8 +22,8 @@ const Slider = () => {
 
   const onMouseMove = (event, ref) => {
     event.preventDefault()
-    const sliderWidth = 350
-    const knobWidth = 70
+    const sliderWidth = width
+    const knobWidth = knobSize
 
     const oldLeftPositionPercent =
       knobRef.current[ref].style.left.split('%')[0] * 1
@@ -105,7 +105,7 @@ const Slider = () => {
   }
 
   return (
-    <Container>
+    <Container height={height} width={width} knobSize={knobSize}>
       <div className='cap cap-left' />
       <div className='cap cap-right' />
       <div
@@ -115,7 +115,7 @@ const Slider = () => {
         onMouseOut={onMouseUp}
         onMouseMove={(event) => onMouseMove(event, 0)}
         ref={(ref) => (knobRef.current[0] = ref)}>
-        1
+        <div className='inner-knob' />
       </div>
       <div
         className='knob'
@@ -124,7 +124,7 @@ const Slider = () => {
         onMouseOut={onMouseUp}
         onMouseMove={(event) => onMouseMove(event, 1)}
         ref={(ref) => (knobRef.current[1] = ref)}>
-        2
+        <div className='inner-knob' />
       </div>
       <div
         className='slide-bar'
