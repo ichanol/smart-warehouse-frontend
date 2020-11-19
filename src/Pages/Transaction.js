@@ -1,4 +1,10 @@
-import { DropDown, FilterIcon, Pagination, SearchBox, Slider } from '../components'
+import {
+  DropDown,
+  FilterIcon,
+  Pagination,
+  SearchBox,
+  Slider,
+} from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
@@ -23,6 +29,7 @@ const Transaction = () => {
   const searchRef = useRef()
   const dropDownRef = useRef()
 
+  const [minMax, setMinMax] = useState({ min: 0, max: 0 })
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
@@ -148,12 +155,15 @@ const Transaction = () => {
     setActivePage(1)
   }
 
+  const setMin = debounce((value) => setMinMax({ ...minMax, min: value }), 300)
+  const setMax = debounce((value) => setMinMax({ ...minMax, max: value }), 300)
+
   const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>
       <div className='header'>
-        <span>Transaction</span>
+        <span>Transaction {minMax.max}</span>
       </div>
 
       {/* <Datepicker date={date} setStart={setStart} setEnd={setEnd} /> */}
@@ -220,11 +230,6 @@ const Transaction = () => {
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
             />
-            <div
-              className='create-new-button'
-              onClick={() => history.push('/user-management/create')}>
-              Create
-            </div>
           </div>
         </div>
         {transactionData.length &&
@@ -328,7 +333,9 @@ const Transaction = () => {
             )
           })}
       </div>
-      <Slider/>
+      <div className='slider-wrapper'>
+        <Slider setMax={setMax} setMin={setMin} />
+      </div>
     </Container>
   )
 }

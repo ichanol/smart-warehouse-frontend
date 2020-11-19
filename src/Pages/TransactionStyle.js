@@ -392,6 +392,12 @@ const Container = styled.div`
   .import {
     border-left: 8px solid ${COLORS.green[600]};
   }
+  .slider-wrapper {
+    height: 60px;
+    display: flex;
+
+    margin-left: 60px;
+  }
 `
 
 export { Container }
