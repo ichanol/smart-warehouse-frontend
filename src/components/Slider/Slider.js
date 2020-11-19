@@ -92,13 +92,10 @@ const Slider = ({
           )
 
           const newMin =
-            Math.round(updatedMin / Math.pow(10, divider)) *
-            Math.pow(10, divider)
-          //   const newMin =
-          //     updatedMin < min
-          //       ? min
-          //       : Math.round(updatedMin / Math.pow(10, divider)) *
-          //         Math.pow(10, divider)
+            updatedMin < min
+              ? min
+              : Math.round(updatedMin / Math.pow(10, divider)) *
+                Math.pow(10, divider)
 
           setSliderValue({
             ...sliderValue,
@@ -125,13 +122,10 @@ const Slider = ({
             min + ((max - min) * newLeftPositionPercent) / 100,
           )
           const newMax =
-            Math.round(updatedMax / Math.pow(10, divider)) *
-            Math.pow(10, divider)
-          //   const newMax =
-          //     updatedMax > max
-          //       ? max
-          //       : Math.round(updatedMax / Math.pow(10, divider)) *
-          //         Math.pow(10, divider)
+            updatedMax > max
+              ? max
+              : Math.round(updatedMax / Math.pow(10, divider)) *
+                Math.pow(10, divider)
           setSliderValue({
             ...sliderValue,
             max: newMax,
@@ -168,19 +162,15 @@ const Slider = ({
           min + ((max - min) * newSecondaryLeftPositionPercent) / 100,
         )
         const newMin =
-          Math.round(updatedMin / Math.pow(10, divider)) * Math.pow(10, divider)
+          updatedMin < min
+            ? min
+            : Math.round(updatedMin / Math.pow(10, divider)) *
+              Math.pow(10, divider)
         const newMax =
-          Math.round(updatedMax / Math.pow(10, divider)) * Math.pow(10, divider)
-        // const newMin =
-        //   updatedMin < min
-        //     ? min
-        //     : Math.round(updatedMin / Math.pow(10, divider)) *
-        //       Math.pow(10, divider)
-        // const newMax =
-        //   updatedMax > max
-        //     ? max
-        //     : Math.round(updatedMax / Math.pow(10, divider)) *
-        //       Math.pow(10, divider)
+          updatedMax > max
+            ? max
+            : Math.round(updatedMax / Math.pow(10, divider)) *
+              Math.pow(10, divider)
 
         setSliderValue({
           ...sliderValue,
@@ -234,8 +224,7 @@ const Slider = ({
         ref={(ref) => (knobRef.current[2] = ref)}>
         <div className='display-number'>
           <span className='display-range'>
-            {sliderValue.min.toLocaleString()} -{' '}
-            {sliderValue.max.toLocaleString()}
+            {sliderValue.min.toLocaleString()} - {sliderValue.max.toLocaleString()}
           </span>
         </div>
       </div>
