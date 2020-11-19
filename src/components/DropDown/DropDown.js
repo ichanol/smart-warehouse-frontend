@@ -14,25 +14,28 @@ const DropDown = forwardRef(
         multiplier={choices.length}
         containerWidth={width}
         isCenter={isCenter}>
-        <span className='show-item-per-page'>{selectedValue}</span>
-        <input
-          type='checkbox'
-          checked={display}
-          onChange={() => setDisplay(!display)}
-        />
-        <div
-          className='choice-container'
-          ref={(ref) => (dropDownRef.current = ref)}>
-          {choices.map((value, index) => (
-            <div
-              className='item-per-page-choice'
-              key={index}
-              onClick={() => onSelect(value, index)}>
-              {value}
-            </div>
-          ))}
+        <span>Show:</span>
+        <div className='choice-placeholder'>
+          <span className='show-item-per-page'>{selectedValue}</span>
+          <input
+            type='checkbox'
+            checked={display}
+            onChange={() => setDisplay(!display)}
+          />
+          <div
+            className='choice-container'
+            ref={(ref) => (dropDownRef.current = ref)}>
+            {choices.map((value, index) => (
+              <div
+                className='item-per-page-choice'
+                key={index}
+                onClick={() => onSelect(value, index)}>
+                {value}
+              </div>
+            ))}
+          </div>
+          {display && <div className='disable-dropdown' />}
         </div>
-        {display && <div className='disable-dropdown' />}
       </Container>
     )
   },

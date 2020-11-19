@@ -2,17 +2,30 @@ import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const Container = styled.label`
-  display: flex;
-  flex: 1;
-  background-color: ${COLORS.natural.white};
-  height: 100%;
-  align-items: center;
-  justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
-  padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
-  max-width: ${({ containerWidth = '80px' }) => containerWidth};
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 130px;
+
+    padding: 0 0 0 12px;
+    border-radius: 8px;
+    
+    background-color: ${COLORS.natural.white};
+
+  .choice-placeholder {
+    display: flex;
+    flex: 1;
+    background-color: ${COLORS.natural.white};
+    height: 100%;
+    align-items: center;
+    justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
+    padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
+    max-width: ${({ containerWidth = '80px' }) => containerWidth};
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
 
   input {
     height: 0;
@@ -41,7 +54,7 @@ const Container = styled.label`
     height: 0px;
     width: 100%;
     overflow: hidden;
-    align-items: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};;
+    align-items: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease-in-out;

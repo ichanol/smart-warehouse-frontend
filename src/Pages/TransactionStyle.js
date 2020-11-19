@@ -44,6 +44,7 @@ const Container = styled.div`
     display: flex;
     flex: 1;
     max-width: 40px;
+    margin-right: 12px;
   }
   .filter-button {
     background-color: ${COLORS.natural.white};
@@ -144,12 +145,6 @@ const Container = styled.div`
     margin-left: 8px;
     color: ${COLORS.gray[700]};
     font-size: ${FONT.l};
-  }
-  .item-per-page-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 12px;
   }
   .items-per-page {
     display: flex;
