@@ -222,9 +222,17 @@ const Slider = ({
         onTouchMove={(event) => onMouseMove(event, 2, 'touch')}
         onTouchStart={(event) => onMouseDown(event, 2, 'touch')}
         ref={(ref) => (knobRef.current[2] = ref)}>
-        <div className='display-number'>
+        <div
+          className='display-number'
+          onMouseDown={onMouseUp}
+          onMouseUp={onMouseUp}
+          onMouseOut={onMouseUp}
+          onMouseMove={onMouseUp}
+          onTouchMove={onMouseUp}
+          onTouchStart={onMouseUp}>
           <span className='display-range'>
-            {sliderValue.min.toLocaleString()} - {sliderValue.max.toLocaleString()}
+            {sliderValue.min.toLocaleString()} -{' '}
+            {sliderValue.max.toLocaleString()}
           </span>
         </div>
       </div>
