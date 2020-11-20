@@ -56,28 +56,49 @@ const Container = styled.div`
     border-radius: 8px;
     cursor: pointer;
     position: relative;
+
+    transition: all 0.2s linear;
+
+    &:hover{
+      z-index:1;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
   .filter-button:hover > .filter-options {
     display: flex;
   }
   .filter-options {
     display: none;
-    flex-direction: column;
     position: absolute;
-    width: 300px;
+    width: fit-content;
     left: 0;
     top: 40px;
     z-index: 1;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.125),
       0 -5px 15px 0 rgba(255, 255, 255, 0.35);
+    flex-direction: column;
+    background-color: ${COLORS.natural.white};
+  }
+  .options-row {
+    display: flex;
   }
   .checkbox {
     align-items: center;
     display: flex;
+    min-width: 100px;
+
+    margin: 8px;
   }
-  .checkbox:not(:first-child) {
+  .date-picker-wrapper {
+    display: flex;
+    margin: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: fit-content;
+  }
+  /* .checkbox:not(:first-child) {
     margin-top: 12px;
-  }
+  } */
   .custom-checkbox input[type='checkbox'] {
     opacity: 0;
     width: 0;
@@ -122,17 +143,18 @@ const Container = styled.div`
   .options {
     display: flex;
     flex: 1;
-    background-color: ${COLORS.natural.white};
     padding: 20px;
   }
   .options-name {
     display: flex;
     flex: 1;
     max-width: 75px;
+    margin: 8px;
   }
   .options-name span {
     color: ${COLORS.gray[700]};
     font-size: ${FONT.l};
+    white-space: nowrap;
   }
   .option-actions {
     min-height: 5%;
@@ -141,10 +163,32 @@ const Container = styled.div`
     flex-direction: column;
     flex: 1;
   }
+  .option-actions-row {
+    display: flex;
+    width: 280px;
+    flex-wrap: wrap;
+    padding: 0 15px;
+  }
+  .range-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 20px;
+  }
+  .slider-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+    margin-left: 60px;
+  }
   .checkbox .title {
     margin-left: 8px;
     color: ${COLORS.gray[700]};
     font-size: ${FONT.l};
+    white-space: nowrap;
   }
   .items-per-page {
     display: flex;
@@ -247,6 +291,25 @@ const Container = styled.div`
     background: #555;
   }
 
+  .transaction-information-title {
+    display: flex;
+    align-items: center;
+    height: 50px;
+
+    padding: 20px;
+    margin: 25px 0 0;
+
+    background-color: ${COLORS.natural.white};
+    color: ${COLORS.gray[600]};
+
+    cursor: pointer;
+  }
+
+  input[type='checkbox'] {
+    width: 0;
+    height: 0;
+  }
+
   .transaction-list {
     display: flex;
     flex-direction: column;
@@ -261,56 +324,6 @@ const Container = styled.div`
     &:hover {
       box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1),
         -10px -10px 20px rgba(255, 255, 255, 0.5);
-    }
-
-    input[type='checkbox'] {
-      width: 0;
-      height: 0;
-    }
-
-    .transaction-information {
-      display: flex;
-      align-items: center;
-      height: 50px;
-
-      padding: 20px;
-
-      background-color: ${COLORS.natural.white};
-      cursor: pointer;
-    }
-
-    .transaction-product-list-container {
-      width: 100%;
-      height: 0;
-      overflow: hidden;
-      background-color: ${COLORS.natural.white};
-
-      transition: all 0.2s ease-in-out;
-    }
-
-    input:checked + .transaction-product-list-container {
-      height: 100%;
-    }
-
-    .transaction-detail {
-      flex: 1;
-      display: flex;
-      align-items: center;
-
-      padding: 0 12px;
-    }
-
-    .transaction-reference-number {
-    }
-    .transaction-timestamp {
-      flex: 1.4;
-    }
-    .transaction-type {
-    }
-    .transaction-remark {
-    }
-    .transaction-author {
-      justify-content: center;
     }
 
     .product-list {
@@ -381,17 +394,68 @@ const Container = styled.div`
     }
   }
 
+  .transaction-information {
+    display: flex;
+    align-items: center;
+    height: 50px;
+
+    padding: 20px;
+
+    background-color: ${COLORS.natural.white};
+    cursor: pointer;
+  }
+
+  .transaction-product-list-container {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    background-color: ${COLORS.natural.white};
+
+    transition: all 0.2s ease-in-out;
+  }
+
+  input:checked + .transaction-product-list-container {
+    height: 100%;
+  }
+
+  .transaction-detail,
+  .transaction-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    padding: 0 12px;
+  }
+
+  .chevron-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .transaction-reference-number {
+  }
+  .transaction-timestamp {
+    flex: 1.4;
+  }
+  .transaction-type {
+  }
+  .transaction-remark {
+  }
+  .transaction-author {
+    justify-content: center;
+  }
+
   .export {
     border-left: 8px solid ${COLORS.red[400]};
   }
   .import {
     border-left: 8px solid ${COLORS.green[600]};
-  }
-  .slider-wrapper {
-    height: 60px;
-    display: flex;
-
-    margin-left: 60px;
   }
 `
 

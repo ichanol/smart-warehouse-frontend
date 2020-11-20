@@ -1,4 +1,5 @@
 import {
+  ChevronDownIcon,
   DropDown,
   FilterIcon,
   Pagination,
@@ -10,7 +11,6 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { Container } from '../Pages/TransactionStyle'
 import { Datepicker } from '../components/Datepicker' //
-import { TransactionTable } from '../components' //
 import { atomState } from '../Atoms'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
@@ -53,7 +53,7 @@ const Transaction = () => {
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
-    search: null,
+    search: search.text,
     amount: null,
     balance: null,
     status: null,
@@ -61,6 +61,8 @@ const Transaction = () => {
     page: activePage,
     numberPerPage,
   }
+
+  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   const handleSelect = (option) => {
     setSelected(option)
@@ -135,6 +137,31 @@ const Transaction = () => {
     }
   }
 
+  const searchTransactionList = async () => {
+    try {
+      if (search.text === '') {
+        setSearch({ ...search, data: [] })
+      } else {
+        const { result } = await request(
+          '/product-transaction',
+          queryParams,
+          userState.accessToken,
+          'get',
+        )
+        console.log(result)
+
+        if (result && result.length > 0) {
+          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
+        } else {
+          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+        }
+      }
+    } catch (error) {
+      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
+      console.log(error)
+    }
+  }
+
   const onCheckBoxChange = (filterType) => {
     const filterOptions = { ...filter }
     filterOptions[filterType] = !filterOptions[filterType]
@@ -142,12 +169,17 @@ const Transaction = () => {
     setActivePage(1)
   }
 
-  // const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
-  // const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
+  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
+  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
   useEffect(() => {
     getTransactionList()
-  }, [sort, keyword, selected, date, amount])
+  }, [activePage, numberPerPage, refreshFlag, sort])
+  // }, [sort, keyword, selected, date, amount])
+
+  useEffect(() => {
+    searchTransactionList()
+  }, [search.text])
 
   const onChangeNumberPerPage = (number, primaryIndex) => {
     dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
@@ -163,11 +195,8 @@ const Transaction = () => {
   return (
     <Container>
       <div className='header'>
-        <span>Transaction {minMax.max}</span>
+        <span>Transaction</span>
       </div>
-
-      {/* <Datepicker date={date} setStart={setStart} setEnd={setEnd} /> */}
-      {/* <TransactionTable data={[]} handleSort={handleSort} sort={sort} /> */}
       <div className='content'>
         <div className='tools-bar-wrapper'>
           <div className='tools-bar'>
@@ -181,44 +210,126 @@ const Transaction = () => {
               text={search.text}
               data={search.data}
               status={search.status}
-              field='username'
+              field='reference_number'
             />
           </div>
           <div className='tools-bar'>
             <div className='filter'>
               <div className='filter-button'>
                 <FilterIcon width={30} />
+                {/* ============================================= */}
                 <div className='filter-options'>
-                  <div className='options'>
-                    <div className='options-name'>
-                      <span>Status</span>
-                    </div>
-                    <div className='option-actions'>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.available}
-                            onChange={() => onCheckBoxChange('available')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Available</span>
+                  <div className='options-row'>
+                    <div className='options'>
+                      <div className='options-name'>
+                        <span>Status</span>
                       </div>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.notAvailable}
-                            onChange={() => onCheckBoxChange('notAvailable')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Not Available</span>
+                      <div className='option-actions'>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.available}
+                              onChange={() => onCheckBoxChange('available')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Available</span>
+                        </div>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.notAvailable}
+                              onChange={() => onCheckBoxChange('notAvailable')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Not Available</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/*  */}
+                    <div className='options'>
+                      <div className='options-name'>
+                        <span>Action</span>
+                      </div>
+                      <div className='option-actions-row'>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.available}
+                              onChange={() => onCheckBoxChange('available')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Import</span>
+                        </div>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.notAvailable}
+                              onChange={() => onCheckBoxChange('notAvailable')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Export</span>
+                        </div>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.available}
+                              onChange={() => onCheckBoxChange('available')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Expired</span>
+                        </div>
+                        <div className='checkbox'>
+                          <label className='custom-checkbox'>
+                            <input
+                              type='checkbox'
+                              checked={filter.notAvailable}
+                              onChange={() => onCheckBoxChange('notAvailable')}
+                            />
+                            <span className='box' />
+                          </label>
+                          <span className='title'>Damaged</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/*  */}
+                  </div>
+                  <div className='options-row'>
+                    <div className='range-slider'>
+                      <div className='options-name'>
+                        <span>Amount</span>
+                      </div>
+                      <div className='slider-wrapper'>
+                        <Slider setMax={setMax} setMin={setMin} width={220} color='blue' />
+                      </div>
+                    </div>
+                    <div className='range-slider'>
+                      <div className='options-name'>
+                        <span>Balance</span>
+                      </div>
+                      <div className='slider-wrapper'>
+                        <Slider setMax={setMax} setMin={setMin} width={220} color='blue' />
                       </div>
                     </div>
                   </div>
+                  <div className='date-picker-wrapper'>
+                    <Datepicker
+                      date={date}
+                      setStart={setStart}
+                      setEnd={setEnd}
+                    />
+                  </div>
                 </div>
+                {/* ============================================= */}
               </div>
             </div>
             <DropDown
@@ -229,7 +340,47 @@ const Transaction = () => {
             />
           </div>
         </div>
-        {transactionData.length &&
+        <div className='transaction-information-title'>
+          <div className='transaction-title transaction-reference-number'>
+            <span>Ref</span>
+            <div className='chevron-wrapper'>
+              <ChevronDownIcon
+                isActive={sort.desc}
+                activeType={sort.column}
+                type={'reference_number'}
+              />
+            </div>
+          </div>
+          <div className='transaction-title transaction-timestamp'>
+            <span>Date</span>
+            <div className='chevron-wrapper'>
+              <ChevronDownIcon
+                isActive={sort.desc}
+                activeType={sort.column}
+                type={'created_at'}
+              />
+            </div>
+          </div>
+          <div className='transaction-title transaction-type'>
+            <span>Action</span>
+          </div>
+          <div className='transaction-title transaction-remark'>
+            <span>Detail</span>
+          </div>
+          <div className='transaction-title transaction-author'>
+            <span>Responsable</span>
+            <div className='chevron-wrapper'>
+              <ChevronDownIcon
+                isActive={sort.desc}
+                activeType={sort.column}
+                type={'username'}
+              />
+            </div>
+          </div>
+        </div>
+        <input type='checkbox' />
+
+        {transactionData.length > 0 &&
           transactionData.map((value, index) => {
             return (
               <label className='transaction-list' key={index}>
@@ -330,9 +481,11 @@ const Transaction = () => {
             )
           })}
       </div>
-      <div className='slider-wrapper'>
-        <Slider setMax={setMax} setMin={setMin} />
-      </div>
+      <Pagination
+        totalPage={totalPage}
+        activePage={activePage}
+        onChangePage={onClickPageNumber}
+      />
     </Container>
   )
 }

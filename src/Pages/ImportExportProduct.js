@@ -172,7 +172,7 @@ const ImportExportProduct = () => {
   const onSubmit = async () => {
     try {
       const body = {
-        referenceNumber: Math.random() * 1000,
+        referenceNumber: Math.round(Math.random() * 1000),
         actionType: actionTabs.id,
         username: userState.username,
         productList: readProductListState,
