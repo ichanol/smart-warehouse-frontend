@@ -5,7 +5,7 @@ import propTypes from 'prop-types'
 
 const DropDown = forwardRef(
   (
-    { selectedValue, choices, onSelect, width = '80px', isCenter = true },
+    { selectedValue, choices, onSelect, width = '80px', isCenter = true, placeholder, fullWidth = true },
     dropDownRef,
   ) => {
     const [display, setDisplay] = useState(false)
@@ -13,8 +13,9 @@ const DropDown = forwardRef(
       <Container
         multiplier={choices.length}
         containerWidth={width}
-        isCenter={isCenter}>
-        <span>Show:</span>
+        isCenter={isCenter}
+        fullWidth={fullWidth}>
+        {placeholder && <span>Show:</span>}
         <div className='choice-placeholder'>
           <span className='show-item-per-page'>{selectedValue}</span>
           <input

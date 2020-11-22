@@ -30,60 +30,86 @@ const Transaction = () => {
   const dropDownRef = useRef()
 
   const [minMax, setMinMax] = useState({ min: 0, max: 0 })
-  const [numberPerPage, setNumberPerPage] = useState(20)
+  const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
+  const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
+  const [numberPerPage, setNumberPerPage] = useState(10)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
   const [refreshFlag, setRefreshFlag] = useState(false)
   const [search, setSearch] = useState({ status: false, data: [], text: '' })
-  const [sort, setSort] = useState({ column: null, desc: false })
+  const [sort, setSort] = useState({ column: null, desc: true })
   const [filter, setFilter] = useState({
-    available: false,
-    notAvailable: false,
+    status: {
+      available: false,
+      notAvailable: false,
+    },
+    action: {
+      import: false,
+      export: false,
+      damaged: false,
+      expired: false,
+    },
   })
 
   const [transactionData, setTransactionData] = useState([])
 
   const [date, setDate] = useState({ start: '', end: '' })
-  const [keyword, setKeyword] = useState('')
-  const [amount, setAmount] = useState({ start: '', end: '' })
-  const [selected, setSelected] = useState('')
-  const [open, setOpen] = useState(false)
+
+  const statusFilterHandler = () => {
+    if (
+      (filter.status.available && filter.status.notAvailable) ||
+      (!filter.status.available && !filter.status.notAvailable)
+    ) {
+      return null
+    } else if (filter.status.available) {
+      return '1'
+    } else if (filter.status.notAvailable) {
+      return '0'
+    } else {
+      return null
+    }
+  }
+
+  const actionFilterHandler = () => {
+    if (
+      (filter.action.import &&
+        filter.action.export &&
+        filter.action.expired &&
+        filter.action.damaged) ||
+      (!filter.action.import &&
+        !filter.action.export &&
+        !filter.action.expired &&
+        !filter.action.damaged)
+    ) {
+      return null
+    } else {
+      let action = ''
+      for (const [key, value] of Object.entries(filter.action)) {
+        if (value) {
+          action = action + `"${key}",`
+        }
+      }
+      return action
+    }
+  }
 
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
     search: search.text,
-    amount: null,
-    balance: null,
-    status: null,
-    action: null,
+    amount: `${minMaxAmount.min},${minMaxAmount.max}`,
+    balance: `${minMaxBalance.min},${minMaxBalance.max}`,
+    status: statusFilterHandler(),
+    action: actionFilterHandler(),
     page: activePage,
     numberPerPage,
   }
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
-  const handleSelect = (option) => {
-    setSelected(option)
-    setOpen(!open)
-  }
-
-  const handleSort = (name) => {
-    if (sort.column === name) {
-      setSort({
-        column: name,
-        isSortUp: !sort.isSortUp,
-        sortDirection: sort.isSortUp ? 'ASC' : 'DESC',
-      })
-    } else {
-      setSort({
-        column: name,
-        isSortUp: true,
-        sortDirection: 'DESC',
-      })
-    }
-  }
+  const onSortByColumn = (columnType) =>
+    setSort({ column: columnType, desc: !sort.desc })
 
   const getTransactionList = async () => {
     try {
@@ -162,9 +188,11 @@ const Transaction = () => {
     }
   }
 
-  const onCheckBoxChange = (filterType) => {
+  const onCheckBoxChange = (filterGroup, filterType) => {
     const filterOptions = { ...filter }
-    filterOptions[filterType] = !filterOptions[filterType]
+    filterOptions[filterGroup][filterType] = !filterOptions[filterGroup][
+      filterType
+    ]
     setFilter(filterOptions)
     setActivePage(1)
   }
@@ -174,8 +202,7 @@ const Transaction = () => {
 
   useEffect(() => {
     getTransactionList()
-  }, [activePage, numberPerPage, refreshFlag, sort])
-  // }, [sort, keyword, selected, date, amount])
+  }, [activePage, numberPerPage, refreshFlag, sort, filter, minMaxBalance, minMaxAmount])
 
   useEffect(() => {
     searchTransactionList()
@@ -187,10 +214,25 @@ const Transaction = () => {
     setActivePage(1)
   }
 
-  const setMin = debounce((value) => setMinMax({ ...minMax, min: value }), 300)
-  const setMax = debounce((value) => setMinMax({ ...minMax, max: value }), 300)
+  const setMinBalance = debounce(
+    (value) => setMinMaxBalance({ ...minMax, min: value }),
+    300,
+  )
+  const setMaxBalance = debounce(
+    (value) => setMinMaxBalance({ ...minMax, max: value }),
+    300,
+  )
 
-  const itemPerPageList = [20, 40, 60, 80, 100]
+  const setMinAmount = debounce(
+    (value) => setMinMaxAmount({ ...minMax, min: value }),
+    300,
+  )
+  const setMaxAmount = debounce(
+    (value) => setMinMaxAmount({ ...minMax, max: value }),
+    300,
+  )
+
+  const itemPerPageList = [10, 20, 30, 50, 100]
 
   return (
     <Container>
@@ -229,8 +271,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.available}
-                              onChange={() => onCheckBoxChange('available')}
+                              checked={filter.status.available}
+                              onChange={() =>
+                                onCheckBoxChange('status', 'available')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -240,8 +284,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.notAvailable}
-                              onChange={() => onCheckBoxChange('notAvailable')}
+                              checked={filter.status.notAvailable}
+                              onChange={() =>
+                                onCheckBoxChange('status', 'notAvailable')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -259,8 +305,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.available}
-                              onChange={() => onCheckBoxChange('available')}
+                              checked={filter.action.import}
+                              onChange={() =>
+                                onCheckBoxChange('action', 'import')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -270,8 +318,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.notAvailable}
-                              onChange={() => onCheckBoxChange('notAvailable')}
+                              checked={filter.action.export}
+                              onChange={() =>
+                                onCheckBoxChange('action', 'export')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -281,8 +331,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.available}
-                              onChange={() => onCheckBoxChange('available')}
+                              checked={filter.action.expired}
+                              onChange={() =>
+                                onCheckBoxChange('action', 'expired')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -292,8 +344,10 @@ const Transaction = () => {
                           <label className='custom-checkbox'>
                             <input
                               type='checkbox'
-                              checked={filter.notAvailable}
-                              onChange={() => onCheckBoxChange('notAvailable')}
+                              checked={filter.action.damaged}
+                              onChange={() =>
+                                onCheckBoxChange('action', 'damaged')
+                              }
                             />
                             <span className='box' />
                           </label>
@@ -309,7 +363,12 @@ const Transaction = () => {
                         <span>Amount</span>
                       </div>
                       <div className='slider-wrapper'>
-                        <Slider setMax={setMax} setMin={setMin} width={220} color='blue' />
+                        <Slider
+                          setMax={setMaxAmount}
+                          setMin={setMinAmount}
+                          width={220}
+                          color='red'
+                        />
                       </div>
                     </div>
                     <div className='range-slider'>
@@ -317,7 +376,12 @@ const Transaction = () => {
                         <span>Balance</span>
                       </div>
                       <div className='slider-wrapper'>
-                        <Slider setMax={setMax} setMin={setMin} width={220} color='blue' />
+                        <Slider
+                          setMax={setMaxBalance}
+                          setMin={setMinBalance}
+                          width={220}
+                          color='blue'
+                        />
                       </div>
                     </div>
                   </div>
@@ -337,11 +401,15 @@ const Transaction = () => {
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
+              fullWidth={false}
+              placeholder
             />
           </div>
         </div>
         <div className='transaction-information-title'>
-          <div className='transaction-title transaction-reference-number'>
+          <div
+            className='transaction-title transaction-reference-number'
+            onClick={() => onSortByColumn('reference_number')}>
             <span>Ref</span>
             <div className='chevron-wrapper'>
               <ChevronDownIcon
@@ -351,7 +419,9 @@ const Transaction = () => {
               />
             </div>
           </div>
-          <div className='transaction-title transaction-timestamp'>
+          <div
+            className='transaction-title transaction-timestamp'
+            onClick={() => onSortByColumn('created_at')}>
             <span>Date</span>
             <div className='chevron-wrapper'>
               <ChevronDownIcon
@@ -367,7 +437,9 @@ const Transaction = () => {
           <div className='transaction-title transaction-remark'>
             <span>Detail</span>
           </div>
-          <div className='transaction-title transaction-author'>
+          <div
+            className='transaction-title transaction-author'
+            onClick={() => onSortByColumn('username')}>
             <span>Responsable</span>
             <div className='chevron-wrapper'>
               <ChevronDownIcon

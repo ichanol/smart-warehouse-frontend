@@ -54,7 +54,7 @@ const Container = styled.div`
     display: flex;
     font-weight: bold;
     letter-spacing: 1px;
-    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
   }
   .header span {
     font-size: ${FONT.xl};
@@ -66,7 +66,7 @@ const Container = styled.div`
     background-color: ${COLORS.natural.white};
     padding: 0px;
     min-width: 100%;
-    filter: blur(${({ blur }) => blur ? 10 : 0}px);
+    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
     position: relative;
   }
   .button-wrapper {
@@ -79,6 +79,27 @@ const Container = styled.div`
   }
   .list-manipulate-button .cancle-button-wrapper {
     margin-left: 10px;
+  }
+  .mock-button-product,
+  .mock-button-user {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 120px;
+    right: 50px;
+    width: 120px;
+    height: 50px;
+
+    border-radius: 12px;
+    background-color: ${COLORS.natural.red};
+    z-index: 200;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: ${COLORS.natural.white};
+    cursor: pointer;
+  }
+  .mock-button-user {
+    top: 50px;
   }
 `
 

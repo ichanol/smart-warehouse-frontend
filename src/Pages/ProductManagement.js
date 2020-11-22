@@ -289,14 +289,13 @@ const ProductManagement = () => {
                 </div>
               </div>
             </div>
-            <div className='item-per-page-placeholder'>
-              <span>Shows: </span>
-            </div>
             <DropDown
               ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
+              fullWidth={false}
+              placeholder
             />
             <div
               className='create-new-button'

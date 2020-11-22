@@ -2,16 +2,16 @@ import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const Container = styled.label`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: ${({ fullWidth }) => fullWidth ? '100%' : '130px'};
+  padding: ${({ fullWidth }) => fullWidth ? 'none' : '0 0 0 12px'};
 
-    padding: 0 0 0 12px;
-    border-radius: 8px;
-    
-    background-color: ${COLORS.natural.white};
+  border-radius: 8px;
+
+  background-color: ${COLORS.natural.white};
 
   .choice-placeholder {
     display: flex;

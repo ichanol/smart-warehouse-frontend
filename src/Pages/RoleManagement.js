@@ -2,7 +2,7 @@ import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { Container } from './ProductManagementStyle'
+import { Container } from './RoleManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
 import { debounce } from 'lodash'
@@ -287,14 +287,13 @@ const ProductManagement = () => {
                 </div>
               </div>
             </div>
-            <div className='item-per-page-placeholder'>
-              <span>Shows: </span>
-            </div>
             <DropDown
               ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
+              fullWidth={false}
+              placeholder
             />
             <div
               className='create-new-button'

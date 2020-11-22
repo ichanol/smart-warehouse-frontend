@@ -1,5 +1,6 @@
 import { CancelButton, RetryButton, SubmitButton } from '../components/Button'
 import React, { useEffect, useRef, useState } from 'react'
+import { postRequest, request } from '../Services'
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ImportExportProductStyle'
@@ -7,7 +8,6 @@ import { ResponsiveTable } from '../components'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import io from 'socket.io-client'
-import { postRequest } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ImportExportProduct = () => {
@@ -130,7 +130,8 @@ const ImportExportProduct = () => {
 
   const onEdit = (selectedList) =>
     history.push(
-      '/import-export/edit-product/' + readProductListState[selectedList].product_serial_number,
+      '/import-export/edit-product/' +
+        readProductListState[selectedList].product_serial_number,
     )
 
   const onDismissModal = () => resetModalState()
@@ -138,7 +139,7 @@ const ImportExportProduct = () => {
   const cancleTransaction = () => {
     resetReadProductListDefaultValue()
     onDismissModal()
-    history.push('/import-export')
+    history.goBack()
   }
 
   const onCancle = () => {
@@ -287,8 +288,79 @@ const ImportExportProduct = () => {
   const fixedDataColumn = ['product_serial_number', 'product_name']
   const scrollDataColumn = ['company_name', 'detail', 'amount', 'status']
   const centerColumn = ['amount']
+
+  const scanUser = async () => {
+    const body = {
+      username: userState.username,
+    }
+    const result = await request(
+      '/detect-user-RFID',
+      body,
+      userState.accessToken,
+      'post',
+    )
+  }
+  const scanProduct = async () => {
+    const body = {
+      username: userState.username,
+      data: [
+        {
+          product_serial_number: 'a3KEeZbXBx',
+          amount: 100,
+        },
+        {
+          product_serial_number: 'xEBjTv2RhB',
+          amount: 200,
+        },
+        {
+          product_serial_number: '7i8xzdx1OO',
+          amount: 300,
+        },
+        {
+          product_serial_number: '7YcgFL8zb9',
+          amount: 400,
+        },
+        {
+          product_serial_number: 'XmUwfOCzKv',
+          amount: 50,
+        },
+        {
+          product_serial_number: 'Y3nSy3Wcsw',
+          amount: 50,
+        },
+        {
+          product_serial_number: 'WWcQZYpEEw',
+          amount: 150,
+        },
+        {
+          product_serial_number: 'BImPJwGAZE',
+          amount: 75,
+        },
+        {
+          product_serial_number: '4Eh8SiaaWK',
+          amount: 500,
+        },
+        {
+          product_serial_number: 'Db6yY11WIj',
+          amount: 50,
+        },
+      ],
+    }
+    const result = await request(
+      '/detect-product-RFID',
+      body,
+      userState.accessToken,
+      'post',
+    )
+  }
   return (
     <Container blur={modalState.isDisplay}>
+      <div className='mock-button-user' onClick={scanUser}>
+        Scan user
+      </div>
+      <div className='mock-button-product' onClick={scanProduct}>
+        Scan Product
+      </div>
       <div className='action-tabs-container'>
         {MOCK_CHOICES.map((value, index) => {
           return (

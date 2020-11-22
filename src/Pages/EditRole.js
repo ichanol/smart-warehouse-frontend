@@ -111,9 +111,9 @@ const EditRole = () => {
     setEditedRoleData(acc)
   }
 
-  const checkDetailElementHeight = async () => {
+  const checkDetailElementHeight = async (permission) => {
     const temp = []
-    for (const [key, value] of Object.entries(editedRoleData.permission)) {
+    for (const [key, value] of Object.entries(permission)) {
       temp.push({ key, value, expand: false, showExpand: false })
     }
     await setPermissionCheckBox(temp)
@@ -147,7 +147,7 @@ const EditRole = () => {
         (value) => value.role_name === rolename,
       )
       if (selectedRole) {
-        checkDetailElementHeight()
+        checkDetailElementHeight(selectedRole?.permission)
         setEditedRoleData({
           detail: selectedRole?.detail,
           role_name: selectedRole?.role_name,
