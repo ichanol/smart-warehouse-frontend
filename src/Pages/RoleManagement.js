@@ -67,22 +67,22 @@ const ProductManagement = () => {
         'get',
       )
       if (success) {
-        const parseData = result.map((value, index) => {
-          const temp = { ...value }
-          temp.permission = JSON.parse(temp.permission)
-          for (const [permissionName, isPermitted] of Object.entries(
-            temp.permission,
-          )) {
-            temp.permission[permissionName] = isPermitted
-          }
-          return temp
-        })
+        // const parseData = result.map((value, index) => {
+        //   const temp = { ...value }
+        //   temp.permission = JSON.parse(temp.permission)
+        //   for (const [permissionName, isPermitted] of Object.entries(
+        //     temp.permission,
+        //   )) {
+        //     temp.permission[permissionName] = isPermitted
+        //   }
+        //   return temp
+        // })
         const temp = []
         for (let i = 1; i <= totalPages; i = i + 1) {
           temp.push(i)
         }
         setTotalPage(temp)
-        setRoleListState(parseData)
+        setRoleListState(result)
         setTotalRecord(totalRecords)
       }
     } catch (error) {

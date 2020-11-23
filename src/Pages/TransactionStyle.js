@@ -450,6 +450,14 @@ const Container = styled.div`
   .transaction-author {
     justify-content: center;
   }
+  .transaction-menu{
+    max-width: 50px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50px;
+    cursor: pointer;
+    z-index: 200;
+  }
 
   .export {
     border-left: 8px solid ${COLORS.red[400]};

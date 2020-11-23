@@ -4,6 +4,7 @@ import CancelIcon from './CancelIcon'
 import ChevronDownIcon from './ChevronDownIcon'
 import CrossIcon from './CrossIcon'
 import DeleteIcon from './DeleteIcon'
+import DotsMenu from './DotsMenu'
 import EditIcon from './EditIcon'
 import ErrorIcon from './ErrorIcon'
 import FilterIcon from './FilterIcon'
@@ -42,4 +43,5 @@ export {
   SuccessIcon,
   UserIcon,
   WarningIcon,
+  DotsMenu,
 }

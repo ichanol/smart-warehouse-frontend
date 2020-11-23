@@ -1,5 +1,6 @@
 import {
   ChevronDownIcon,
+  DotsMenu,
   DropDown,
   FilterIcon,
   Pagination,
@@ -202,7 +203,15 @@ const Transaction = () => {
 
   useEffect(() => {
     getTransactionList()
-  }, [activePage, numberPerPage, refreshFlag, sort, filter, minMaxBalance, minMaxAmount])
+  }, [
+    activePage,
+    numberPerPage,
+    refreshFlag,
+    sort,
+    filter,
+    minMaxBalance,
+    minMaxAmount,
+  ])
 
   useEffect(() => {
     searchTransactionList()
@@ -233,6 +242,11 @@ const Transaction = () => {
   )
 
   const itemPerPageList = [10, 20, 30, 50, 100]
+
+  const onClickTransactionMenu = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 
   return (
     <Container>
@@ -367,7 +381,7 @@ const Transaction = () => {
                           setMax={setMaxAmount}
                           setMin={setMinAmount}
                           width={220}
-                          color='red'
+                          color='blue'
                         />
                       </div>
                     </div>
@@ -450,7 +464,6 @@ const Transaction = () => {
             </div>
           </div>
         </div>
-        <input type='checkbox' />
 
         {transactionData.length > 0 &&
           transactionData.map((value, index) => {
@@ -475,6 +488,11 @@ const Transaction = () => {
                   </div>
                   <div className='transaction-detail transaction-author'>
                     <span>{value.username}</span>
+                  </div>
+                  <div
+                    className='transaction-detail transaction-menu'
+                    onClick={(event) => onClickTransactionMenu(event)}>
+                    <DotsMenu />
                   </div>
                 </div>
                 <input type='checkbox' />

@@ -33,6 +33,7 @@ const EditRole = () => {
 
   const onSubmit = async () => {
     try {
+      // console.log(editedRoleData)
       const { success } = await request(
         '/roles',
         editedRoleData,
@@ -100,22 +101,32 @@ const EditRole = () => {
   }
 
   const onToggle = (primaryIndex) => {
-    const temp = [...permissionCheckBox]
-    temp[primaryIndex].value = !temp[primaryIndex].value
-    const someObj = {}
-    permissionCheckBox.map((value, index) => {
-      someObj[value.key] = value.value
-    })
+    const editedPermission = permissionCheckBox.map((value) => ({
+      permission: value.permission,
+      status: value.status,
+    }))
+    editedPermission[primaryIndex].status = !editedPermission[primaryIndex]
+      .status
+
     const acc = { ...editedRoleData }
-    acc.permission = someObj
+    acc.permission = editedPermission
     setEditedRoleData(acc)
+
+    const updatedPermissionCheckBox = [...permissionCheckBox]
+    updatedPermissionCheckBox[primaryIndex].status = !updatedPermissionCheckBox[
+      primaryIndex
+    ].status
+    setPermissionCheckBox(updatedPermissionCheckBox)
   }
 
   const checkDetailElementHeight = async (permission) => {
-    const temp = []
-    for (const [key, value] of Object.entries(permission)) {
-      temp.push({ key, value, expand: false, showExpand: false })
-    }
+    const temp = permission.map((value) => ({
+      permission: value.permission,
+      status: value.status,
+      expand: false,
+      showExpand: false,
+    }))
+
     await setPermissionCheckBox(temp)
     const acc = [...temp]
     choicesDetailRef.current.map((value, index) => {
@@ -155,10 +166,10 @@ const EditRole = () => {
           id: selectedRole?.id,
         })
       } else {
-        history.push('/product-management')
+        history.push('/role-management')
       }
     } else {
-      history.push('/product-management')
+      history.push('/role-management')
     }
   }, [])
 
@@ -191,7 +202,7 @@ const EditRole = () => {
               <div
                 key={index}
                 className={clsx('permission-list', value.expand && 'expand')}>
-                <div className='permission-title'>{value.key}</div>
+                <div className='permission-title'>{value.permission}</div>
                 <div className='permission-detail-container'>
                   <div
                     ref={(ref) => (choicesDetailRef.current[index] = ref)}
@@ -218,7 +229,7 @@ const EditRole = () => {
                 <div className='toggle-button-wrapper'>
                   <ToggleButton
                     action={() => onToggle(index)}
-                    value={value.value}
+                    value={value.status}
                   />
                 </div>
                 {value.showExpand && (
