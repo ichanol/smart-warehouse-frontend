@@ -29,7 +29,7 @@ const ProductList = () => {
     page: activePage,
     numberPerPage,
   }
-  const [data, loading] = useAxios('/product-balance', queryParams, userState.accessToken, 'get')
+  const [data, loading] = useAxios('/product-balance', userState.accessToken, queryParams, 'get')
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })

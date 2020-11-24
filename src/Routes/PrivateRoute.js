@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { Redirect, Route, useHistory } from 'react-router-dom'
-import { getRequest, useAxios } from '../Services'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil'
 
 import atomState from '../Atoms/Atoms'
+import axios from 'axios'
+import { getRequest } from '../Services'
 import { verify } from 'jsonwebtoken'
 
 const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
@@ -23,12 +24,14 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
     : { status: true }
   const isUserAuthorized = !!status === true
 
-  const requestNewToken = useRecoilCallback(({ set }) => async () => {
+  const requestNewToken = useRecoilCallback(({ set }) => async (source) => {
     try {
-      const response = await getRequest(
-        `${process.env.REACT_APP_API}/renewtoken`,
-        userState.refreshToken,
-      )
+      const response = axios.get(`${process.env.REACT_APP_API}/renewtoken`, {
+        cancelToken: source.token,
+        headers: {
+          Authorization: `Bearer ${userState.refreshToken}`,
+        },
+      })
       set(atomState.userState, (oldState) => ({
         ...oldState,
         accessToken: response.newAccessToken,
@@ -67,23 +70,40 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
     }
   }
 
-  const verifyUserToken = (isAccessTokenValid, isRefreshTokenValid) => {
+  const verifyUserToken = async(isAccessTokenValid, isRefreshTokenValid, source) => {
     if (!isAccessTokenValid && isRefreshTokenValid) {
-      requestNewToken()
+      // await requestNewToken(source)
+      console.log('renewToken')
     } else if (!isAccessTokenValid && !isRefreshTokenValid) {
-      resetUserStateDefaultValue()
-      resetReadProductListStateDefaultValue()
+      console.log('go to home')
+      // resetUserStateDefaultValue()
+      // resetReadProductListStateDefaultValue()
     }
   }
 
+  const verifyUserTokenHandler = (source) => {
+    // const isAccessTokenValid = verifyAccessToken()
+    // const isRefreshTokenValid = verifyRefreshToken()
+    // verifyUserToken(isAccessTokenValid, isRefreshTokenValid, source)
+  }
+
   useEffect(() => {
+    const source = axios.CancelToken.source()
+    let isSubscribed = true
+
     console.log(routePermission, 'Authorized:', isUserAuthorized)
+
     if (!isUserAuthorized) {
       history.goBack()
-    } else {
-      const isAccessTokenValid = verifyAccessToken()
-      const isRefreshTokenValid = verifyRefreshToken()
-      verifyUserToken(isAccessTokenValid, isRefreshTokenValid)
+    } else if (isSubscribed) {
+      verifyUserTokenHandler(source)
+    }
+
+    return () => {
+      isSubscribed = false
+      source.cancel('Cancelling in cleanup')
+
+      console.log('clean axios PRIVATE ROUTE')
     }
   }, [])
 

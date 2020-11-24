@@ -4,7 +4,7 @@ import { atomState } from '../Atoms'
 import axios from 'axios'
 import { useSetRecoilState } from 'recoil'
 
-const useAxios = (URL, BODY, TOKEN = false, METHOD, timeout = 0) => {
+const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
