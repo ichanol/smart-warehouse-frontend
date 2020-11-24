@@ -1,15 +1,10 @@
-import {
-  DropDown,
-  Pagination,
-  ResponsiveTable,
-  SearchBox,
-} from '../components'
+import { DropDown, Pagination, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
+import { request, useAxios } from '../Services'
 
 import { Container } from '../Pages/ProductListStyle'
 import { atomState } from '../Atoms'
 import { debounce } from 'lodash'
-import { request } from '../Services'
 import { useRecoilValue } from 'recoil'
 
 const ProductList = () => {
@@ -26,6 +21,7 @@ const ProductList = () => {
   const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: false })
 
+
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
@@ -33,6 +29,7 @@ const ProductList = () => {
     page: activePage,
     numberPerPage,
   }
+  const [data, loading] = useAxios('/product-balance', queryParams, userState.accessToken, 'get')
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
@@ -114,12 +111,14 @@ const ProductList = () => {
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   useEffect(() => {
-    getCurrentProductBalanceList()
-  }, [sort, numberPerPage, activePage])
+    setProductList(data.result)
+    console.log(data)
+    // const getData = getCurrentProductBalanceList()
+  }, [sort, numberPerPage, activePage, data])
 
-  useEffect(() => {
-    searchCurrentProductBalanceList()
-  }, [search.text])
+  // useEffect(() => {
+  //   const getData = searchCurrentProductBalanceList()
+  // }, [search.text])
 
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: true },

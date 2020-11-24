@@ -13,11 +13,15 @@ import React, { useState } from 'react'
 
 import { NavLink } from 'react-router-dom'
 import { ROUTER_PATH } from '../../Constant'
+import { atomState } from '../../Atoms'
+import { useRecoilValue } from 'recoil'
 
 const NavBar = () => {
   const [openMenu, setOpenMenu] = useState(false)
   const toggleMenu = () => setOpenMenu(!openMenu)
   const closeMenu = () => setOpenMenu(false)
+
+  const { permission } = useRecoilValue(atomState.userState)
 
   return (
     <SideBar open={openMenu}>

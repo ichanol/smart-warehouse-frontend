@@ -8,7 +8,7 @@ const userState = atom({
     refreshToken: null,
     isLogin: false,
     isUserCardVerify: false,
-    action: { id: null, actionType: null },
+    permission: [],
   },
 })
 

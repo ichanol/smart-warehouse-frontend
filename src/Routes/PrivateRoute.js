@@ -1,17 +1,27 @@
 import React, { useEffect } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect, Route, useHistory } from 'react-router-dom'
+import { getRequest, useAxios } from '../Services'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil'
 
 import atomState from '../Atoms/Atoms'
-import { getRequest } from '../Services'
 import { verify } from 'jsonwebtoken'
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
+  const history = useHistory()
+
   const userState = useRecoilValue(atomState.userState)
   const resetUserStateDefaultValue = useResetRecoilState(atomState.userState)
   const resetReadProductListStateDefaultValue = useResetRecoilState(
     atomState.readProductListState,
   )
+
+  const [matchedPermission] = userState.permission.filter(
+    (value) => value.permission === routePermission,
+  )
+  const { status } = matchedPermission?.permission
+    ? matchedPermission
+    : { status: true }
+  const isUserAuthorized = !!status === true
 
   const requestNewToken = useRecoilCallback(({ set }) => async () => {
     try {
@@ -24,6 +34,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         accessToken: response.newAccessToken,
         refreshToken: response.newRefreshToken,
       }))
+      history.go(0)
       return true
     } catch (error) {
       resetUserStateDefaultValue()
@@ -66,9 +77,14 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }
 
   useEffect(() => {
-    const isAccessTokenValid = verifyAccessToken()
-    const isRefreshTokenValid = verifyRefreshToken()
-    verifyUserToken(isAccessTokenValid, isRefreshTokenValid)
+    console.log(routePermission, 'Authorized:', isUserAuthorized)
+    if (!isUserAuthorized) {
+      history.goBack()
+    } else {
+      const isAccessTokenValid = verifyAccessToken()
+      const isRefreshTokenValid = verifyRefreshToken()
+      verifyUserToken(isAccessTokenValid, isRefreshTokenValid)
+    }
   }, [])
 
   return (

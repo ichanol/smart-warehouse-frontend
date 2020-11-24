@@ -89,6 +89,7 @@ const Login = () => {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
         isLogin: response.success,
+        permission: response.permission,
       }))
       history.push('/overview')
     } catch (error) {

@@ -1,6 +1,9 @@
 import axios from 'axios'
 
 const getRequest = async (URL, BODY, TOKEN = false, METHOD) => {
+  const source = axios.CancelToken.source()
+  getRequest.cleanUp = source
+
   const api = axios.create({
     baseURL: `${process.env.REACT_APP_API}`,
   })
@@ -10,6 +13,7 @@ const getRequest = async (URL, BODY, TOKEN = false, METHOD) => {
       try {
         if (TOKEN) {
           const response = await api.get(URL, {
+            cancelToken: source.token,
             headers: {
               Authorization: `Bearer ${TOKEN}`,
             },

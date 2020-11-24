@@ -131,7 +131,7 @@ const ImportExportProduct = () => {
   const onEdit = (selectedList) =>
     history.push(
       '/import-export/edit-product/' +
-        readProductListState[selectedList].product_serial_number,
+        readProductListState[selectedList].product_id,
     )
 
   const onDismissModal = () => resetModalState()
@@ -278,14 +278,14 @@ const ImportExportProduct = () => {
   ]
 
   const titleArray = [
-    { title: 'Serial number', type: 'product_serial_number', isSort: false },
+    { title: 'Serial number', type: 'product_id', isSort: false },
     { title: 'Product name', type: 'product_name', isSort: false },
     { title: 'Company', type: 'company_name', isSort: false },
     { title: 'Detail', type: 'detail', isSort: false },
     { title: 'Amount', type: 'amount', isSort: false },
     { title: 'Actions', type: 'status', isSort: false },
   ]
-  const fixedDataColumn = ['product_serial_number', 'product_name']
+  const fixedDataColumn = ['product_id', 'product_name']
   const scrollDataColumn = ['company_name', 'detail', 'amount', 'status']
   const centerColumn = ['amount']
 
@@ -305,43 +305,43 @@ const ImportExportProduct = () => {
       username: userState.username,
       data: [
         {
-          product_serial_number: 'a3KEeZbXBx',
+          product_id: 'a3KEeZbXBx',
           amount: 100,
         },
         {
-          product_serial_number: 'xEBjTv2RhB',
+          product_id: 'xEBjTv2RhB',
           amount: 200,
         },
         {
-          product_serial_number: '7i8xzdx1OO',
+          product_id: '7i8xzdx1OO',
           amount: 300,
         },
         {
-          product_serial_number: '7YcgFL8zb9',
+          product_id: '7YcgFL8zb9',
           amount: 400,
         },
         {
-          product_serial_number: 'XmUwfOCzKv',
+          product_id: 'XmUwfOCzKv',
           amount: 50,
         },
         {
-          product_serial_number: 'Y3nSy3Wcsw',
+          product_id: 'Y3nSy3Wcsw',
           amount: 50,
         },
         {
-          product_serial_number: 'WWcQZYpEEw',
+          product_id: 'WWcQZYpEEw',
           amount: 150,
         },
         {
-          product_serial_number: 'BImPJwGAZE',
+          product_id: 'BImPJwGAZE',
           amount: 75,
         },
         {
-          product_serial_number: '4Eh8SiaaWK',
+          product_id: '4Eh8SiaaWK',
           amount: 500,
         },
         {
-          product_serial_number: 'Db6yY11WIj',
+          product_id: 'Db6yY11WIj',
           amount: 50,
         },
       ],

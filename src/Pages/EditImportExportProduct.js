@@ -15,7 +15,7 @@ const EditImportExportProduct = () => {
     atomState.readProductListState,
   )
   const [selectedProduct] = readProductListState.filter(
-    (value) => value.product_serial_number === productid,
+    (value) => value.product_id === productid,
   )
   const [editInformation, setEditInformation] = useState(selectedProduct)
 
@@ -24,7 +24,7 @@ const EditImportExportProduct = () => {
   const updatedProductList = () => {
     const index = readProductListState.findIndex(
       (value) =>
-        value.product_serial_number === editInformation.product_serial_number,
+        value.product_id === editInformation.product_id,
     )
     const newReadProductlistState = [...readProductListState]
     newReadProductlistState[index] = editInformation
@@ -52,7 +52,7 @@ const EditImportExportProduct = () => {
       </div>
       <div className='content'>
         <TextInput
-          value={editInformation.product_serial_number}
+          value={editInformation.product_id}
           placeholder='Product Serial number'
           disabled
         />
