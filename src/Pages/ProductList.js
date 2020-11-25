@@ -1,10 +1,10 @@
 import { DropDown, Pagination, ResponsiveTable, SearchBox } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { request, useAxios } from '../Services'
 
 import { Container } from '../Pages/ProductListStyle'
 import { atomState } from '../Atoms'
 import { debounce } from 'lodash'
+import { useAxios } from '../Services'
 import { useRecoilValue } from 'recoil'
 
 const ProductList = () => {
@@ -28,61 +28,23 @@ const ProductList = () => {
     page: activePage,
     numberPerPage,
   }
-  const [productListData, fetchProductListData] = useAxios(
-    '/product-balance',
-    userState.accessToken,
-    queryParams,
-    'get',
-  )
+
+  const [
+    productListData,
+    ProductListDataTrigger,
+    setProductListDataTrigger,
+    setFetchProductListData,
+  ] = useAxios('/product-balance', true, queryParams, 'get')
+
+  const [
+    searchProductListData,
+    SearchProductListDataTrigger,
+    setSearchProductListDataTrigger,
+    setFetchSearchProductListData,
+  ] = useAxios('/product-balance', true, queryParams, 'get')
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
-
-  const getCurrentProductBalanceList = async () => {
-    try {
-      const res = await request(
-        '/product-balance',
-        queryParams,
-        userState.accessToken,
-        'get',
-      )
-      console.log(res)
-      if (res.success) {
-        const temp = []
-        for (let i = 1; i <= res.totalPages; i = i + 1) {
-          temp.push(i)
-        }
-        setTotalPage(temp)
-        setProductList(res.result)
-      }
-    } catch (error) {}
-  }
-
-  const [searchProductListData, fetchSearchProductListData] = useAxios(
-    '/product-balance',
-    userState.accessToken,
-    queryParams,
-    'get',
-  )
-
-  const searchCurrentProductBalanceList = async () => {
-    try {
-      if (search.text === '') {
-        setSearch({ ...search, data: [] })
-      } else {
-        const res = await request(
-          '/product-balance',
-          queryParams,
-          userState.accessToken,
-          'get',
-        )
-        console.log(res)
-        if (res.success) {
-          setSearch({ ...search, data: res.result })
-        }
-      }
-    } catch (error) {}
-  }
 
   const onChangeNumberPerPage = (number, primaryIndex) => {
     dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
@@ -91,10 +53,11 @@ const ProductList = () => {
     // getProductsList(1, null, number)
   }
 
-  const onSearchInputChange = debounce(
-    (text) => setSearch({ ...search, text }),
-    300,
-  )
+  const onSearchInputChange = debounce((text) => {
+    setSearch({ ...search, text })
+    setFetchSearchProductListData(true)
+    setSearchProductListDataTrigger(!SearchProductListDataTrigger)
+  }, 300)
 
   const onSearchBoxBlur = () =>
     setSearch((oldState) => ({
@@ -122,13 +85,17 @@ const ProductList = () => {
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   useEffect(() => {
-    fetchProductListData(true)
+    setFetchProductListData(true)
     setProductList(productListData.result)
-  }, [sort, numberPerPage, activePage, productListData])
+  }, [productListData])
 
-  // useEffect(() => {
-  //   const getData = searchCurrentProductBalanceList()
-  // }, [search.text])
+  useEffect(() => {
+    setProductListDataTrigger(!ProductListDataTrigger)
+  }, [sort, numberPerPage, activePage])
+
+  useEffect(() => {
+    setSearch({ ...search, data: searchProductListData.result })
+  }, [searchProductListData])
 
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: true },

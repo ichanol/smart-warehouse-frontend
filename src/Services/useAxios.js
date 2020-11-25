@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom'
 
 const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
   const [data, setData] = useState([])
+  const [fetchTrigger, setFetchTrigger] = useState(false)
   const [trigger, setTrigger] = useState(false)
 
   const history = useHistory()
@@ -139,16 +140,16 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
   }
 
   useEffect(() => {
-    if (trigger) {
+    if (fetchTrigger) {
       requestHandler()
     }
 
     return () => {
       source.cancel('abort service request')
     }
-  }, [URL, timeout, trigger])
+  }, [fetchTrigger, trigger])
 
-  return [data, setTrigger]
+  return [data, trigger, setTrigger, setFetchTrigger]
 }
 
 export default useAxios
