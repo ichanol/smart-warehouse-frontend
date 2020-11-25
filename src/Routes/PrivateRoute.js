@@ -1,11 +1,13 @@
+import React, { useEffect } from 'react'
 import { Redirect, Route } from 'react-router-dom'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 
-import React from 'react'
-import atomState from '../Atoms/Atoms'
-import { useRecoilValue } from 'recoil'
+import { atomState } from '../Atoms'
+import { verify } from 'jsonwebtoken'
 
 const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
   const userState = useRecoilValue(atomState.userState)
+  const resetUserStateDefaultValue = useResetRecoilState(atomState.userState)
 
   const [matchedPermission] = userState.permission.filter(
     (value) => value.permission === routePermission,
@@ -15,24 +17,7 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
     : { status: false }
   const isUserAuthorized = !!status
 
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (isUserAuthorized) {
-          return <Component {...props} />
-        } else {
-          return <Redirect to={'/'} />
-        }
-      }}
-    />
-  )
-}
-
-export default PrivateRoute
-
-/**
- * const verifyRefreshToken = () => {
+  const verifyRefreshToken = () => {
     try {
       const { exp: refreshTokenExpiredTime } = verify(
         userState.refreshToken,
@@ -56,20 +41,34 @@ export default PrivateRoute
     }
   }
 
-  const verifyUserToken = async(isAccessTokenValid, isRefreshTokenValid, source) => {
-    if (!isAccessTokenValid && isRefreshTokenValid) {
-      // await requestNewToken(source)
-      console.log('renewToken')
-    } else if (!isAccessTokenValid && !isRefreshTokenValid) {
-      console.log('go to home')
-      // resetUserStateDefaultValue()
-      // resetReadProductListStateDefaultValue()
+  const verifyUserToken = (isAccessTokenValid, isRefreshTokenValid) => {
+    if (!isAccessTokenValid && !isRefreshTokenValid) {
+      resetUserStateDefaultValue()
     }
   }
 
-  const verifyUserTokenHandler = (source) => {
-    // const isAccessTokenValid = verifyAccessToken()
-    // const isRefreshTokenValid = verifyRefreshToken()
-    // verifyUserToken(isAccessTokenValid, isRefreshTokenValid, source)
+  const verifyUserTokenHandler = () => {
+    const isAccessTokenValid = verifyAccessToken()
+    const isRefreshTokenValid = verifyRefreshToken()
+    verifyUserToken(isAccessTokenValid, isRefreshTokenValid)
   }
- */
+
+  useEffect(() => {
+    verifyUserTokenHandler()
+  }, [])
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (isUserAuthorized) {
+          return <Component {...props} />
+        } else {
+          return <Redirect to={'/'} />
+        }
+      }}
+    />
+  )
+}
+
+export default PrivateRoute

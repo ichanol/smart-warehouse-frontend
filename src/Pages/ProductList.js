@@ -21,7 +21,6 @@ const ProductList = () => {
   const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: false })
 
-
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
@@ -29,7 +28,12 @@ const ProductList = () => {
     page: activePage,
     numberPerPage,
   }
-  const data = useAxios('/product-balance', userState.accessToken, queryParams, 'get')
+  const [productListData, fetchProductListData] = useAxios(
+    '/product-balance',
+    userState.accessToken,
+    queryParams,
+    'get',
+  )
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
@@ -53,6 +57,13 @@ const ProductList = () => {
       }
     } catch (error) {}
   }
+
+  const [searchProductListData, fetchSearchProductListData] = useAxios(
+    '/product-balance',
+    userState.accessToken,
+    queryParams,
+    'get',
+  )
 
   const searchCurrentProductBalanceList = async () => {
     try {
@@ -102,17 +113,18 @@ const ProductList = () => {
 
   const onSubmitSearch = (event) => {
     if (event.key === 'Enter') {
-      getCurrentProductBalanceList()
+      // getCurrentProductBalanceList()
       // setActivePage(1)
-      setSearch({ ...search, status: false })
+      // setSearch({ ...search, status: false })
     }
   }
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   useEffect(() => {
-    setProductList(data.result)
-  }, [sort, numberPerPage, activePage, data])
+    fetchProductListData(true)
+    setProductList(productListData.result)
+  }, [sort, numberPerPage, activePage, productListData])
 
   // useEffect(() => {
   //   const getData = searchCurrentProductBalanceList()

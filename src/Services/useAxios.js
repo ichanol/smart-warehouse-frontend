@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom'
 
 const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
   const [data, setData] = useState([])
+  const [trigger, setTrigger] = useState(false)
+
   const history = useHistory()
 
   const setModalState = useSetRecoilState(atomState.modalState)
@@ -28,7 +30,7 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
       try {
         const originalRequest = { ...error.config }
 
-        if (error.response.status === 403 && !isSentRenewToken) {
+        if (error?.response?.status === 403 && !isSentRenewToken) {
           isSentRenewToken = true
           const response = await baseAxiosInstance.get('/renewtoken', {
             cancelToken: source.token,
@@ -137,14 +139,16 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
   }
 
   useEffect(() => {
-    requestHandler()
+    if (trigger) {
+      requestHandler()
+    }
 
     return () => {
-      source.cancel('Cancelling in cleanup')
+      source.cancel('abort service request')
     }
-  }, [URL, timeout])
+  }, [URL, timeout, trigger])
 
-  return data
+  return [data, setTrigger]
 }
 
 export default useAxios
