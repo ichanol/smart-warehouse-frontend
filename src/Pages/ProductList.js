@@ -29,7 +29,7 @@ const ProductList = () => {
     page: activePage,
     numberPerPage,
   }
-  const [data, loading] = useAxios('/product-balance', userState.accessToken, queryParams, 'get')
+  const data = useAxios('/product-balance', userState.accessToken, queryParams, 'get')
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
@@ -112,8 +112,6 @@ const ProductList = () => {
 
   useEffect(() => {
     setProductList(data.result)
-    console.log(data)
-    // const getData = getCurrentProductBalanceList()
   }, [sort, numberPerPage, activePage, data])
 
   // useEffect(() => {
