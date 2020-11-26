@@ -1,47 +1,77 @@
-import { DropDown, Pagination, ResponsiveTable, SearchBox } from '../components'
+import {
+  DropDown,
+  Pagination,
+  ResponsiveTable,
+  SearchBox as useSearchBox,
+} from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Container } from '../Pages/ProductListStyle'
-import { atomState } from '../Atoms'
-import { debounce } from 'lodash'
 import { useAxios } from '../Services'
-import { useRecoilValue } from 'recoil'
 
 const ProductList = () => {
-  const searchRef = useRef()
   const dropDownRef = useRef()
   const scrollRef = useRef([])
 
-  const userState = useRecoilValue(atomState.userState)
-
   const [productList, setProductList] = useState([])
+  const [searchSuggest, setSearchSuggest] = useState([])
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [numberPerPage, setNumberPerPage] = useState(20)
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: false })
+  const [totalRecord, setTotalRecord] = useState(null)
+
+  const [searchText, searchTrigger, trigger, setTrigger, SearchBoxComponent] = useSearchBox(
+    searchSuggest,
+  )
 
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
-    search: search.text === '' ? null : search.text,
+    search: searchText === '' ? null : searchText,
     page: activePage,
     numberPerPage,
   }
 
   const [
     productListData,
-    ProductListDataTrigger,
+    productListDataTrigger,
     setProductListDataTrigger,
     setFetchProductListData,
   ] = useAxios('/product-balance', true, queryParams, 'get')
 
   const [
     searchProductListData,
-    SearchProductListDataTrigger,
+    searchProductListDataTrigger,
     setSearchProductListDataTrigger,
     setFetchSearchProductListData,
   ] = useAxios('/product-balance', true, queryParams, 'get')
+
+  useEffect(() => {
+    setFetchProductListData(true)
+    const { result, totalPages, totalRecords } = productListData
+    setProductList(result)
+    setTotalRecord(totalRecords)
+    if (totalPages) {
+      setTotalPage(new Array(totalPages).fill(1))
+    } else {
+      setTotalPage([])
+    }
+  }, [productListData])
+
+  useEffect(() => {
+    setProductListDataTrigger(!productListDataTrigger)
+  }, [sort, numberPerPage, activePage, searchTrigger])
+
+  useEffect(() => {
+    setFetchSearchProductListData(true)
+    setSearchProductListDataTrigger(!searchProductListDataTrigger)
+  }, [searchText])
+
+  useEffect(() => {
+    setSearchSuggest(searchProductListData.result)
+    setTrigger(!trigger)
+  }, [searchProductListData])
 
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
@@ -49,53 +79,10 @@ const ProductList = () => {
   const onChangeNumberPerPage = (number, primaryIndex) => {
     dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
     setNumberPerPage(number)
-    // setActivePage(1)
-    // getProductsList(1, null, number)
-  }
-
-  const onSearchInputChange = debounce((text) => {
-    setSearch({ ...search, text })
-    setFetchSearchProductListData(true)
-    setSearchProductListDataTrigger(!SearchProductListDataTrigger)
-  }, 300)
-
-  const onSearchBoxBlur = () =>
-    setSearch((oldState) => ({
-      ...oldState,
-      status: false,
-      data: [],
-    }))
-
-  const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
-
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch({ ...search, text: '' })
-  }
-
-  const onSubmitSearch = (event) => {
-    if (event.key === 'Enter') {
-      // getCurrentProductBalanceList()
-      // setActivePage(1)
-      // setSearch({ ...search, status: false })
-    }
+    setActivePage(1)
   }
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
-
-  useEffect(() => {
-    setFetchProductListData(true)
-    setProductList(productListData.result)
-  }, [productListData])
-
-  useEffect(() => {
-    setProductListDataTrigger(!ProductListDataTrigger)
-  }, [sort, numberPerPage, activePage])
-
-  useEffect(() => {
-    setSearch({ ...search, data: searchProductListData.result })
-  }, [searchProductListData])
 
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: true },
@@ -117,28 +104,15 @@ const ProductList = () => {
       </div>
       <div className='content'>
         <div className='tools-bar-wrapper'>
+          <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
-            <SearchBox
-              ref={searchRef}
-              onSearchInputChange={onSearchInputChange}
-              onSubmitSearch={onSubmitSearch}
-              onSearchBoxBlur={onSearchBoxBlur}
-              onSearchBoxFocus={onSearchBoxFocus}
-              onClearSearchBox={onClearSearchBox}
-              text={search.text}
-              data={search.data}
-              status={search.status}
-            />
-          </div>
-          <div className='tools-bar'>
-            <div className='item-per-page-placeholder'>
-              <span>Shows: </span>
-            </div>
             <DropDown
               ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
+              fullWidth={false}
+              placeholder
             />
           </div>
         </div>
@@ -153,6 +127,16 @@ const ProductList = () => {
           scrollDataColumn={scrollDataColumn}
           centerColumn={centerColumn}
         />
+        {productList?.length > 0 && (
+          <div className='number-of-items-indicator'>
+            Show{' '}
+            {productList.length === 1
+              ? null
+              : `${(activePage - 1) * numberPerPage + 1} - `}
+            {(activePage - 1) * numberPerPage + productList.length} of{' '}
+            {totalRecord}
+          </div>
+        )}
         <Pagination
           activePage={activePage}
           totalPage={totalPage}

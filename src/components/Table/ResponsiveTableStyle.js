@@ -1,4 +1,5 @@
-import { COLORS } from '../../Constant'
+import { COLORS, FONT } from '../../Constant'
+
 import styled from 'styled-components'
 
 const DataSection = styled.div`
@@ -8,6 +9,24 @@ const DataSection = styled.div`
   overflow-x: hidden;
   position: relative;
   display: flex;
+
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    background-color: ${COLORS.gray[100]};
+  }
+
+  .no-data-title {
+    font-size: ${FONT.xl};
+    text-transform: uppercase;
+  }
 
   .fixed-section {
     display: flex;

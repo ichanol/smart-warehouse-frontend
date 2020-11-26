@@ -232,8 +232,13 @@ const ResponsiveTable = forwardRef(
           multiplier={fixedDataColumn.length}
           isShowIndex={indexCounter}
           darkHeader={darkHeader}>
+          {data?.length === 0 && (
+            <div className='no-data'>
+              <span className='no-data-title'>no data</span>
+            </div>
+          )}
           <div className='fixed-section'>
-            {data.map((value, index) => renderFixedDataColumn(value, index))}
+            {data?.map((value, index) => renderFixedDataColumn(value, index))}
           </div>
           <div
             className='scroll-section'
@@ -245,7 +250,7 @@ const ResponsiveTable = forwardRef(
                 scrollRef.current[0].scrollLeft = target.scrollLeft
               }
             }}>
-            {data.map((value, index) => renderScrollDataColumn(value, index))}
+            {data?.map((value, index) => renderScrollDataColumn(value, index))}
           </div>
         </DataSection>
       </React.Fragment>

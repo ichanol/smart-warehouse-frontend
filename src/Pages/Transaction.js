@@ -4,41 +4,35 @@ import {
   DropDown,
   FilterIcon,
   Pagination,
-  SearchBox,
   Slider,
+  SearchBox as useSearchBox,
 } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { Container } from '../Pages/TransactionStyle'
-import { Datepicker } from '../components/Datepicker' //
+import { Datepicker } from '../components/Datepicker'
 import { atomState } from '../Atoms'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
 import moment from 'moment'
-import { request } from '../Services'
+import { useAxios } from '../Services'
 import { useHistory } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
 
 const Transaction = () => {
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
-  const userState = useRecoilValue(atomState.userState)
 
-  const scrollRef = useRef([])
-  const searchRef = useRef()
   const dropDownRef = useRef()
 
-  const [minMax, setMinMax] = useState({ min: 0, max: 0 })
   const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
   const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
   const [numberPerPage, setNumberPerPage] = useState(10)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
-  const [refreshFlag, setRefreshFlag] = useState(false)
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: true })
   const [filter, setFilter] = useState({
     status: {
@@ -54,6 +48,7 @@ const Transaction = () => {
   })
 
   const [transactionData, setTransactionData] = useState([])
+  const [searchSuggest, setSearchSuggest] = useState([])
 
   const [date, setDate] = useState({ start: '', end: '' })
 
@@ -95,10 +90,15 @@ const Transaction = () => {
     }
   }
 
+  const [searchText, searchTrigger, trigger, setTrigger, SearchBoxComponent] = useSearchBox(
+    searchSuggest,
+    'reference_number',
+  )
+
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
-    search: search.text,
+    search: searchText === '' ? null : searchText,
     amount: `${minMaxAmount.min},${minMaxAmount.max}`,
     balance: `${minMaxBalance.min},${minMaxBalance.max}`,
     status: statusFilterHandler(),
@@ -106,87 +106,61 @@ const Transaction = () => {
     page: activePage,
     numberPerPage,
   }
+  const [
+    transactionListData,
+    transactionListDataTrigger,
+    setTransactionListDataTrigger,
+    setFetchTransactionListData,
+  ] = useAxios('/product-transaction', true, queryParams, 'get')
 
-  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
+  const [
+    searchTransactionListData,
+    searchTransactionListDataTrigger,
+    setSearchTransactionListDataTrigger,
+    setFetchSearchTransactionListData,
+  ] = useAxios('/product-transaction', true, queryParams, 'get')
 
-  const onSortByColumn = (columnType) =>
-    setSort({ column: columnType, desc: !sort.desc })
-
-  const getTransactionList = async () => {
-    try {
-      const { success, totalPages, totalRecords, result } = await request(
-        '/product-transaction',
-        queryParams,
-        userState.accessToken,
-        'get',
-      )
-      if (success) {
-        const temp = []
-        for (let i = 1; i <= totalPages; i = i + 1) {
-          temp.push(i)
-        }
-        setTotalPage(temp)
-        setTotalRecord(totalRecords)
-        setTransactionData(result)
-      }
-      console.log(result)
-    } catch (error) {
-      console.log(error)
+  useEffect(() => {
+    setFetchTransactionListData(true)
+    const { result, totalPages, totalRecords } = transactionListData
+    setTransactionData(result)
+    setTotalRecord(totalRecords)
+    if (totalPages) {
+      setTotalPage(new Array(totalPages).fill(1))
+    } else {
+      setTotalPage([])
     }
-  }
+  }, [transactionListData])
 
-  const onSearchInputChange = debounce(
-    (text) => setSearch({ ...search, text }),
-    300,
-  )
+  useEffect(() => {
+    setTransactionListDataTrigger(!transactionListDataTrigger)
+  }, [
+    sort,
+    numberPerPage,
+    activePage,
+    filter,
+    minMaxBalance,
+    minMaxAmount,
+    searchTrigger,
+  ])
 
-  const onSearchBoxBlur = () =>
-    setSearch((oldState) => ({
-      ...oldState,
-      status: false,
-      data: [],
-    }))
+  useEffect(() => {
+    setFetchSearchTransactionListData(true)
+    setSearchTransactionListDataTrigger(!searchTransactionListDataTrigger)
+  }, [searchText])
 
-  const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
+  useEffect(() => {
+    setSearchSuggest(searchTransactionListData.result)
+    setTrigger(!trigger)
+  }, [searchTransactionListData])
 
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch({ ...search, text: '' })
-    setRefreshFlag(!refreshFlag)
-  }
+  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
+  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
-  const onSubmitSearch = (event) => {
-    if (event.key === 'Enter') {
-      setActivePage(1)
-      setSearch({ ...search, status: false })
-      setRefreshFlag(!refreshFlag)
-    }
-  }
-
-  const searchTransactionList = async () => {
-    try {
-      if (search.text === '') {
-        setSearch({ ...search, data: [] })
-      } else {
-        const { result } = await request(
-          '/product-transaction',
-          queryParams,
-          userState.accessToken,
-          'get',
-        )
-        console.log(result)
-
-        if (result && result.length > 0) {
-          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
-        } else {
-          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-        }
-      }
-    } catch (error) {
-      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-      console.log(error)
-    }
+  const onChangeNumberPerPage = (number, primaryIndex) => {
+    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+    setNumberPerPage(number)
+    setActivePage(1)
   }
 
   const onCheckBoxChange = (filterGroup, filterType) => {
@@ -198,46 +172,26 @@ const Transaction = () => {
     setActivePage(1)
   }
 
-  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
-  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
+  const onSortByColumn = (columnType) =>
+    setSort({ column: columnType, desc: !sort.desc })
 
-  useEffect(() => {
-    getTransactionList()
-  }, [
-    activePage,
-    numberPerPage,
-    refreshFlag,
-    sort,
-    filter,
-    minMaxBalance,
-    minMaxAmount,
-  ])
-
-  useEffect(() => {
-    searchTransactionList()
-  }, [search.text])
-
-  const onChangeNumberPerPage = (number, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
-    setNumberPerPage(number)
-    setActivePage(1)
-  }
+  const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   const setMinBalance = debounce(
-    (value) => setMinMaxBalance({ ...minMax, min: value }),
+    (value) => setMinMaxBalance({ ...minMaxBalance, min: value }),
     300,
   )
   const setMaxBalance = debounce(
-    (value) => setMinMaxBalance({ ...minMax, max: value }),
+    (value) => setMinMaxBalance({ ...minMaxBalance, max: value }),
     300,
   )
 
   const setMinAmount = debounce(
-    (value) => setMinMaxAmount({ ...minMax, min: value }),
+    (value) => setMinMaxAmount({ ...minMaxAmount, min: value }),
     300,
   )
   const setMaxAmount = debounce(
-    (value) => setMinMaxAmount({ ...minMax, max: value }),
+    (value) => setMinMaxAmount({ ...minMaxAmount, max: value }),
     300,
   )
 
@@ -255,20 +209,7 @@ const Transaction = () => {
       </div>
       <div className='content'>
         <div className='tools-bar-wrapper'>
-          <div className='tools-bar'>
-            <SearchBox
-              ref={searchRef}
-              onSearchInputChange={onSearchInputChange}
-              onSubmitSearch={onSubmitSearch}
-              onSearchBoxBlur={onSearchBoxBlur}
-              onSearchBoxFocus={onSearchBoxFocus}
-              onClearSearchBox={onClearSearchBox}
-              text={search.text}
-              data={search.data}
-              status={search.status}
-              field='reference_number'
-            />
-          </div>
+          <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
             <div className='filter'>
               <div className='filter-button'>
@@ -465,7 +406,7 @@ const Transaction = () => {
           </div>
         </div>
 
-        {transactionData.length > 0 &&
+        {transactionData?.length > 0 &&
           transactionData.map((value, index) => {
             return (
               <label className='transaction-list' key={index}>

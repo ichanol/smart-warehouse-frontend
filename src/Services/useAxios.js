@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 
 import { atomState } from '../Atoms'
 import axios from 'axios'
@@ -12,7 +12,6 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
 
   const history = useHistory()
 
-  const setModalState = useSetRecoilState(atomState.modalState)
   const [userState, setUserState] = useRecoilState(atomState.userState)
   const resetUserStateDefaultValue = useResetRecoilState(atomState.userState)
 
@@ -135,6 +134,7 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
       }
     } catch (error) {
       source.cancel()
+      setData([])
       return Promise.reject(error)
     }
   }
@@ -153,20 +153,3 @@ const useAxios = (URL, TOKEN = false, BODY, METHOD, timeout = 0) => {
 }
 
 export default useAxios
-
-//   setModalState((oldState) => ({
-//     ...oldState,
-//     isDisplay: true,
-//     modalType: 'confirm',
-//     title: 'Login failed',
-//     isIndicator: false,
-//     detail: 'Username or password incorrect',
-//     onClickNegativeButton: onForgotPassword,
-//     onClickPositiveButton: onTryAgain,
-//     positiveButton: {
-//       text: 'Try again',
-//     },
-//     negativeButton: {
-//       text: 'Forgot password ?',
-//     },
-//   }))
