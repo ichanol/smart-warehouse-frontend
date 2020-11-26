@@ -31,9 +31,20 @@ const App = () => {
     return null
   }
 
+  const isBlacklistLocalStorage = (key) => {
+    if (key === 'accessToken' || key === 'refreshToken') {
+      return true
+    } else {
+      return false
+    }
+  }
+
   const initializeState = ({ set }) => {
     for (const [key, value] of Object.entries(window.localStorage)) {
-      set(atomSearcher(key), JSON.parse(value).value)
+      if (isBlacklistLocalStorage(key)) {
+      } else {
+        set(atomSearcher(key), JSON.parse(value).value)
+      }
     }
   }
 

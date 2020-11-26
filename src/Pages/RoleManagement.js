@@ -5,12 +5,12 @@ import {
   SearchBox as useSearchBox,
 } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
+import { requestHandler, useAxios } from '../Services'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './RoleManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
-import { useAxios } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
@@ -118,45 +118,40 @@ const ProductManagement = () => {
   }
 
   const onToggleSwitch = async (primaryIndex) => {
-    // try {
-    //   const cloneProductList = [...roleListState]
-    //   cloneProductList[primaryIndex] = {
-    //     ...cloneProductList[primaryIndex],
-    //     status: !cloneProductList[primaryIndex].status,
-    //   }
-    //   const temp = cloneProductList[primaryIndex]
-    //   const body = { role_name: temp.role_name, status: temp.status }
-    //   const { success } = await request(
-    //     '/roles',
-    //     body,
-    //     userState.accessToken,
-    //     'delete',
-    //   )
-    //   if (success) {
-    //     setRoleListState(cloneProductList)
-    //     setToastState((oldState) => [
-    //       ...oldState,
-    //       {
-    //         onClick: () => {},
-    //         title: 'Success',
-    //         message: 'Update role successfully',
-    //         dismiss: false,
-    //         type: 'success',
-    //       },
-    //     ])
-    //   }
-    // } catch (error) {
-    //   setToastState((oldState) => [
-    //     ...oldState,
-    //     {
-    //       onClick: () => {},
-    //       title: 'Failed',
-    //       message: 'Failed to update. Try again.',
-    //       dismiss: false,
-    //       type: 'error',
-    //     },
-    //   ])
-    // }
+    try {
+      const cloneProductList = [...roleListState]
+      cloneProductList[primaryIndex] = {
+        ...cloneProductList[primaryIndex],
+        status: !cloneProductList[primaryIndex].status,
+      }
+      const temp = cloneProductList[primaryIndex]
+      const body = { role_name: temp.role_name, status: temp.status }
+      const { success } = await requestHandler('/roles', true, body)
+      if (success) {
+        setRoleListState(cloneProductList)
+        setToastState((oldState) => [
+          ...oldState,
+          {
+            onClick: () => {},
+            title: 'Success',
+            message: 'Update role successfully',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
+      }
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to update. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
   }
 
   const onCheckBoxChange = (filterType) => {

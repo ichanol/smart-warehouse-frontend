@@ -83,6 +83,8 @@ const Login = () => {
         `${process.env.REACT_APP_API}/login`,
         requestBody,
       )
+      window.localStorage.setItem('accessToken', response.accessToken)
+      window.localStorage.setItem('refreshToken', response.refreshToken)
       set(atomState.userState, (oldState) => ({
         ...oldState,
         username: username,
