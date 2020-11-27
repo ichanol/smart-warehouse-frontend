@@ -47,7 +47,36 @@ const requestHandler = async (
     }
   } catch (error) {
     source.cancel()
-    return Promise.reject(error)
+    const statusCode = error?.response?.status
+    if (statusCode === 403) {
+      throw {
+        name: 'Unauthorized',
+        message: 'Please verfiy your account',
+        error,
+        statusCode,
+      }
+    } else if (statusCode === 404 && error?.config?.url === '/login') {
+      throw {
+        name: 'Login Failed',
+        message: 'Username or Password incorrect',
+        error,
+        statusCode,
+      }
+    } else if (statusCode === 404) {
+      throw {
+        name: 'Not found',
+        message: 'Cannot get the information',
+        error,
+        statusCode,
+      }
+    } else {
+      throw {
+        name: 'Network Error',
+        message: 'Cannot connect to the server',
+        error,
+        statusCode,
+      }
+    }
   }
 }
 

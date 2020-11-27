@@ -1,38 +1,39 @@
-import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
+import {
+  DropDown,
+  FilterIcon,
+  ResponsiveTable,
+  SearchBox as useSearchBox,
+} from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { requestHandler, useAxios } from '../Services'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './UserManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
-import { debounce } from 'lodash'
-import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const UserManagement = () => {
   const history = useHistory()
 
-  const userState = useRecoilValue(atomState.userState)
   const setToastState = useSetRecoilState(atomState.toastState)
   const [userListState, setUserListState] = useRecoilState(
     atomState.userListState,
   )
 
   const scrollRef = useRef([])
-  const searchRef = useRef()
   const dropDownRef = useRef()
 
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
-  const [refreshFlag, setRefreshFlag] = useState(false)
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: false })
   const [filter, setFilter] = useState({
     available: false,
     notAvailable: false,
   })
+  const [searchSuggest, setSearchSuggest] = useState([])
 
   const statusFilterHandler = () => {
     if (
@@ -49,60 +50,62 @@ const UserManagement = () => {
     }
   }
 
+  const [
+    searchText,
+    searchTrigger,
+    trigger,
+    setTrigger,
+    SearchBoxComponent,
+  ] = useSearchBox(searchSuggest, 'username')
+
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
-    search: search.text === '' ? null : search.text,
+    search: searchText === '' ? null : searchText,
     status: statusFilterHandler(),
     page: activePage,
     numberPerPage,
   }
 
-  const getUserList = async () => {
-    try {
-      const { success, result, totalPages, totalRecords } = await request(
-        '/users',
-        queryParams,
-        userState.accessToken,
-        'get',
-      )
-      if (success) {
-        const temp = []
-        for (let i = 1; i <= totalPages; i = i + 1) {
-          temp.push(i)
-        }
-        setTotalPage(temp)
-        setUserListState(result)
-        setTotalRecord(totalRecords)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [
+    userListData,
+    userListDataTrigger,
+    setUserListDataTrigger,
+    setFetchUserListData,
+  ] = useAxios('/users', true, queryParams, 'get')
 
-  const searchUserList = async () => {
-    try {
-      if (search.text === '') {
-        setSearch({ ...search, data: [] })
-      } else {
-        const { result } = await request(
-          '/users',
-          queryParams,
-          userState.accessToken,
-          'get',
-        )
+  const [
+    searchUserListData,
+    searchUserListDataTrigger,
+    setSearchUserListDataTrigger,
+    setFetchSearchUserListData,
+  ] = useAxios('/users', true, queryParams, 'get')
 
-        if (result && result.length > 0) {
-          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
-        } else {
-          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-        }
-      }
-    } catch (error) {
-      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-      console.log(error)
+  useEffect(() => {
+    setFetchUserListData(true)
+    const { result, totalPages, totalRecords } = userListData
+    setUserListState(result)
+    setTotalRecord(totalRecords)
+    if (totalPages) {
+      setTotalPage(new Array(totalPages).fill(1))
+    } else {
+      setTotalPage([])
     }
-  }
+  }, [userListData])
+
+  useEffect(() => {
+    setUserListDataTrigger(!userListDataTrigger)
+  }, [sort, numberPerPage, activePage, searchTrigger])
+
+  useEffect(() => {
+    setFetchSearchUserListData(true)
+    setSearchUserListDataTrigger(!searchUserListDataTrigger)
+  }, [searchText])
+
+  useEffect(() => {
+    setSearchSuggest(searchUserListData.result)
+    setTrigger(!trigger)
+  }, [searchUserListData])
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
@@ -123,10 +126,10 @@ const UserManagement = () => {
         status: !cloneProductList[primaryIndex].status,
       }
 
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/users',
+        true,
         cloneProductList[primaryIndex],
-        userState.accessToken,
         'delete',
       )
 
@@ -165,46 +168,7 @@ const UserManagement = () => {
   }
 
   const onEdit = (index) =>
-    history.push(
-      `/user-management/edit/${userListState[index].username}`,
-    )
-
-  const onSearchInputChange = debounce(
-    (text) => setSearch({ ...search, text }),
-    300,
-  )
-
-  const onSearchBoxBlur = () =>
-    setSearch((oldState) => ({
-      ...oldState,
-      status: false,
-      data: [],
-    }))
-
-  const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
-
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch({ ...search, text: '' })
-    setRefreshFlag(!refreshFlag)
-  }
-
-  const onSubmitSearch = (event) => {
-    if (event.key === 'Enter') {
-      setActivePage(1)
-      setSearch({ ...search, status: false })
-      setRefreshFlag(!refreshFlag)
-    }
-  }
-
-  useEffect(() => {
-    getUserList()
-  }, [sort, activePage, numberPerPage, filter, refreshFlag])
-
-  useEffect(() => {
-    searchUserList()
-  }, [search.text])
+    history.push(`/user-management/edit/${userListState[index].username}`)
 
   const titleArray = [
     { title: 'Firstname', type: 'firstname', isSort: true },
@@ -238,20 +202,7 @@ const UserManagement = () => {
       </div>
       <div className='content'>
         <div className='tools-bar-wrapper'>
-          <div className='tools-bar'>
-            <SearchBox
-              ref={searchRef}
-              onSearchInputChange={onSearchInputChange}
-              onSubmitSearch={onSubmitSearch}
-              onSearchBoxBlur={onSearchBoxBlur}
-              onSearchBoxFocus={onSearchBoxFocus}
-              onClearSearchBox={onClearSearchBox}
-              text={search.text}
-              data={search.data}
-              status={search.status}
-              field='username'
-            />
-          </div>
+          <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
             <div className='filter'>
               <div className='filter-button'>
@@ -318,7 +269,7 @@ const UserManagement = () => {
           actionColumn='status'
           deleteButton={false}
         />
-        {userListState.length > 0 && (
+        {userListState?.length > 0 && (
           <div className='number-of-items-indicator'>
             Show {(activePage - 1) * numberPerPage + 1} -{' '}
             {(activePage - 1) * numberPerPage + userListState.length} of{' '}

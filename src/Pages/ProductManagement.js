@@ -1,38 +1,39 @@
-import { DropDown, FilterIcon, ResponsiveTable, SearchBox } from '../components'
+import {
+  DropDown,
+  FilterIcon,
+  ResponsiveTable,
+  SearchBox as useSearchBox,
+} from '../components'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { requestHandler, useAxios } from '../Services'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ProductManagementStyle'
 import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
-import { debounce } from 'lodash'
-import { request } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
   const history = useHistory()
 
-  const userState = useRecoilValue(atomState.userState)
   const setToastState = useSetRecoilState(atomState.toastState)
   const [productListState, setProductListState] = useRecoilState(
     atomState.productListState,
   )
 
   const scrollRef = useRef([])
-  const searchRef = useRef()
   const dropDownRef = useRef()
 
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
   const [totalRecord, setTotalRecord] = useState(null)
-  const [refreshFlag, setRefreshFlag] = useState(false)
-  const [search, setSearch] = useState({ status: false, data: [], text: '' })
   const [sort, setSort] = useState({ column: null, desc: false })
   const [filter, setFilter] = useState({
     available: false,
     notAvailable: false,
   })
+  const [searchSuggest, setSearchSuggest] = useState([])
 
   const statusFilterHandler = () => {
     if (
@@ -49,61 +50,62 @@ const ProductManagement = () => {
     }
   }
 
+  const [
+    searchText,
+    searchTrigger,
+    trigger,
+    setTrigger,
+    SearchBoxComponent,
+  ] = useSearchBox(searchSuggest)
+
   const queryParams = {
     column: sort.column,
     desc: sort.desc,
-    search: search.text === '' ? null : search.text,
+    search: searchText === '' ? null : searchText,
     status: statusFilterHandler(),
     page: activePage,
     numberPerPage,
   }
 
-  const getProductsList = async () => {
-    try {
-      const { success, result, totalPages, totalRecords } = await request(
-        '/products',
-        queryParams,
-        userState.accessToken,
-        'get',
-      )
-      if (success) {
-        console.log(result)
-        const temp = []
-        for (let i = 1; i <= totalPages; i = i + 1) {
-          temp.push(i)
-        }
-        setTotalPage(temp)
-        setProductListState(result)
-        setTotalRecord(totalRecords)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [
+    productListData,
+    productListDataTrigger,
+    setProductListDataTrigger,
+    setFetchProductListData,
+  ] = useAxios('/products', true, queryParams, 'get')
 
-  const searchProductList = async () => {
-    try {
-      if (search.text === '') {
-        setSearch({ ...search, data: [] })
-      } else {
-        const { result } = await request(
-          '/products',
-          queryParams,
-          userState.accessToken,
-          'get',
-        )
+  const [
+    searchProductListData,
+    searchProductListDataTrigger,
+    setSearchProductListDataTrigger,
+    setFetchSearchProductListData,
+  ] = useAxios('/products', true, queryParams, 'get')
 
-        if (result && result.length > 0) {
-          setSearch((oldState) => ({ ...oldState, status: true, data: result }))
-        } else {
-          setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-        }
-      }
-    } catch (error) {
-      setSearch((oldState) => ({ ...oldState, status: false, data: [] }))
-      console.log(error)
+  useEffect(() => {
+    setFetchProductListData(true)
+    const { result, totalPages, totalRecords } = productListData
+    setProductListState(result)
+    setTotalRecord(totalRecords)
+    if (totalPages) {
+      setTotalPage(new Array(totalPages).fill(1))
+    } else {
+      setTotalPage([])
     }
-  }
+  }, [productListData])
+
+  useEffect(() => {
+    setProductListDataTrigger(!productListDataTrigger)
+  }, [sort, numberPerPage, activePage, searchTrigger])
+
+  useEffect(() => {
+    setFetchSearchProductListData(true)
+    setSearchProductListDataTrigger(!searchProductListDataTrigger)
+  }, [searchText])
+
+  useEffect(() => {
+    setSearchSuggest(searchProductListData.result)
+    setTrigger(!trigger)
+  }, [searchProductListData])
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
@@ -124,10 +126,10 @@ const ProductManagement = () => {
         status: !cloneProductList[primaryIndex].status,
       }
 
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/products',
+        true,
         cloneProductList[primaryIndex],
-        userState.accessToken,
         'delete',
       )
 
@@ -170,43 +172,6 @@ const ProductManagement = () => {
       `/product-management/edit/${productListState[index].product_id}`,
     )
 
-  const onSearchInputChange = debounce(
-    (text) => setSearch({ ...search, text }),
-    300,
-  )
-
-  const onSearchBoxBlur = () =>
-    setSearch((oldState) => ({
-      ...oldState,
-      status: false,
-      data: [],
-    }))
-
-  const onSearchBoxFocus = () =>
-    setSearch((oldState) => ({ ...oldState, status: true, data: [] }))
-
-  const onClearSearchBox = () => {
-    searchRef.current.value = ''
-    setSearch({ ...search, text: '' })
-    setRefreshFlag(!refreshFlag)
-  }
-
-  const onSubmitSearch = (event) => {
-    if (event.key === 'Enter') {
-      setActivePage(1)
-      setSearch({ ...search, status: false })
-      setRefreshFlag(!refreshFlag)
-    }
-  }
-
-  useEffect(() => {
-    getProductsList()
-  }, [sort, activePage, numberPerPage, filter, refreshFlag])
-
-  useEffect(() => {
-    searchProductList()
-  }, [search.text])
-
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: true },
     { title: 'Product name', type: 'product_name', isSort: true },
@@ -239,19 +204,7 @@ const ProductManagement = () => {
       </div>
       <div className='content'>
         <div className='tools-bar-wrapper'>
-          <div className='tools-bar'>
-            <SearchBox
-              ref={searchRef}
-              onSearchInputChange={onSearchInputChange}
-              onSubmitSearch={onSubmitSearch}
-              onSearchBoxBlur={onSearchBoxBlur}
-              onSearchBoxFocus={onSearchBoxFocus}
-              onClearSearchBox={onClearSearchBox}
-              text={search.text}
-              data={search.data}
-              status={search.status}
-            />
-          </div>
+          <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
             <div className='filter'>
               <div className='filter-button'>
@@ -318,7 +271,7 @@ const ProductManagement = () => {
           actionColumn='status'
           deleteButton={false}
         />
-        {productListState.length > 0 && (
+        {productListState?.length > 0 && (
           <div className='number-of-items-indicator'>
             Show {(activePage - 1) * numberPerPage + 1} -{' '}
             {(activePage - 1) * numberPerPage + productListState.length} of{' '}

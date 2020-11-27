@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
   const verifyRefreshToken = () => {
     try {
       const { exp: refreshTokenExpiredTime } = verify(
-        userState.refreshToken,
+        window.localStorage.getItem('refreshToken'),
         process.env.REACT_APP_REFRESHER_TOKEN,
       )
       return true
@@ -32,7 +32,7 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
   const verifyAccessToken = () => {
     try {
       const { exp: accessTokenExpiredTime } = verify(
-        userState.accessToken,
+        window.localStorage.getItem('accessToken'),
         process.env.REACT_APP_ACCESS_TOKEN,
       )
       return true

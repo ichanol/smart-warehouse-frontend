@@ -126,7 +126,7 @@ const ProductManagement = () => {
       }
       const temp = cloneProductList[primaryIndex]
       const body = { role_name: temp.role_name, status: temp.status }
-      const { success } = await requestHandler('/roles', true, body)
+      const { success } = await requestHandler('/roles', true, body, 'delete')
       if (success) {
         setRoleListState(cloneProductList)
         setToastState((oldState) => [

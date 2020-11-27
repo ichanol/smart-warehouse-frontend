@@ -22,7 +22,6 @@ const NavBar = () => {
   const closeMenu = () => setOpenMenu(false)
 
   const { permission } = useRecoilValue(atomState.userState)
-  console.log(permission)
 
   return (
     <SideBar open={openMenu}>
