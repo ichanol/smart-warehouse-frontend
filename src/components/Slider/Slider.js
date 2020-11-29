@@ -11,6 +11,7 @@ const Slider = ({
   color = 'green',
   setMin,
   setMax,
+  setMinMax,
 }) => {
   const knobRef = useRef([])
   const knobAnimatedValue = useRef({ x: 0, isGrant: false })
@@ -29,6 +30,8 @@ const Slider = ({
   const setMinHandler = (value) => setMin(value)
 
   const setMaxHandler = (value) => setMax(value)
+
+  const setMinMaxHandler = (min, max) => setMinMax(min, max)
 
   const onMouseDown = (event, ref, type) => {
     if (type === 'touch') {
@@ -177,8 +180,7 @@ const Slider = ({
           min: newMin,
           max: newMax,
         })
-        setMinHandler(newMin)
-        setMaxHandler(newMax)
+        setMinMaxHandler(newMin, newMax)
       }
     }
   }

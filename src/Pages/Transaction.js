@@ -90,10 +90,13 @@ const Transaction = () => {
     }
   }
 
-  const [searchText, searchTrigger, trigger, setTrigger, SearchBoxComponent] = useSearchBox(
-    searchSuggest,
-    'reference_number',
-  )
+  const [
+    searchText,
+    searchTrigger,
+    trigger,
+    setTrigger,
+    SearchBoxComponent,
+  ] = useSearchBox(searchSuggest, 'reference_number')
 
   const queryParams = {
     column: sort.column,
@@ -106,6 +109,7 @@ const Transaction = () => {
     page: activePage,
     numberPerPage,
   }
+
   const [
     transactionListData,
     transactionListDataTrigger,
@@ -185,13 +189,21 @@ const Transaction = () => {
     (value) => setMinMaxBalance({ ...minMaxBalance, max: value }),
     300,
   )
-
-  const setMinAmount = debounce(
-    (value) => setMinMaxAmount({ ...minMaxAmount, min: value }),
+  const setMinMaxBalanceOnSlider = debounce(
+    (min, max) => setMinMaxBalance({ ...minMaxBalance, max, min }),
     300,
   )
+
+  const setMinAmount = debounce((value) => {
+    console.log(value)
+    setMinMaxAmount({ ...minMaxAmount, min: value })
+  }, 300)
   const setMaxAmount = debounce(
     (value) => setMinMaxAmount({ ...minMaxAmount, max: value }),
+    300,
+  )
+  const setMinMaxAmountOnSlider = debounce(
+    (min, max) => setMinMaxAmount({ ...minMaxAmount, max, min }),
     300,
   )
 
@@ -321,6 +333,7 @@ const Transaction = () => {
                         <Slider
                           setMax={setMaxAmount}
                           setMin={setMinAmount}
+                          setMinMax={setMinMaxAmountOnSlider}
                           width={220}
                           color='blue'
                         />
@@ -334,6 +347,7 @@ const Transaction = () => {
                         <Slider
                           setMax={setMaxBalance}
                           setMin={setMinBalance}
+                          setMinMax={setMinMaxBalanceOnSlider}
                           width={220}
                           color='blue'
                         />
@@ -430,11 +444,14 @@ const Transaction = () => {
                   <div className='transaction-detail transaction-author'>
                     <span>{value.username}</span>
                   </div>
-                  <div
+                  <label
                     className='transaction-detail transaction-menu'
-                    onClick={(event) => onClickTransactionMenu(event)}>
+                    htmlFor='context-menu'
+                    // onClick={(event) => onClickTransactionMenu(event)}
+                  >
                     <DotsMenu />
-                  </div>
+                    <input type='checkbox' id='context-menu' />
+                  </label>
                 </div>
                 <input type='checkbox' />
                 <div className='transaction-product-list-container'>

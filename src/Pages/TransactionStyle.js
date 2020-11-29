@@ -456,7 +456,7 @@ const Container = styled.div`
     justify-content: center;
     border-radius: 50px;
     cursor: pointer;
-    z-index: 200;
+    background-color: red;
   }
 
   .export {
