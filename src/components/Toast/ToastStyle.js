@@ -32,7 +32,7 @@ const slideOut = keyframes`
 
 const Container = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 100;
   bottom: 60px;
   margin-left: 20px;
   display: flex;

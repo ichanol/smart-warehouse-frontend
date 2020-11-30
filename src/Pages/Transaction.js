@@ -1,15 +1,22 @@
 import {
   ChevronDownIcon,
+  DocumentIcon,
   DotsMenu,
   DropDown,
+  EditIcon,
   FilterIcon,
   Pagination,
   Slider,
   SearchBox as useSearchBox,
 } from '../components'
+import {
+  Container,
+  TransactionList,
+  TransactionTitle,
+} from '../Pages/TransactionStyle'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Container } from '../Pages/TransactionStyle'
+import {COLORS} from '../Constant'
 import { Datepicker } from '../components/Datepicker'
 import { atomState } from '../Atoms'
 import { capitalize } from 'lodash'
@@ -127,7 +134,11 @@ const Transaction = () => {
   useEffect(() => {
     setFetchTransactionListData(true)
     const { result, totalPages, totalRecords } = transactionListData
-    setTransactionData(result)
+    const newTransaction = result?.map((value, index) => {
+      value.isOpen = false
+      return value
+    })
+    setTransactionData(newTransaction)
     setTotalRecord(totalRecords)
     if (totalPages) {
       setTotalPage(new Array(totalPages).fill(1))
@@ -209,9 +220,20 @@ const Transaction = () => {
 
   const itemPerPageList = [10, 20, 30, 50, 100]
 
-  const onClickTransactionMenu = (event) => {
+  const onClickTransactionMenu = (event, index) => {
     event.preventDefault()
     event.stopPropagation()
+    const temp = [...transactionData]
+    temp[index].isOpen = !temp[index].isOpen
+    setTransactionData(temp)
+  }
+
+  const onDismissContextMenu = (event, index) => {
+    event.preventDefault()
+    event.stopPropagation()
+    const temp = [...transactionData]
+    temp[index].isOpen = false
+    setTransactionData(temp)
   }
 
   return (
@@ -375,7 +397,7 @@ const Transaction = () => {
             />
           </div>
         </div>
-        <div className='transaction-information-title'>
+        <TransactionTitle>
           <div
             className='transaction-title transaction-reference-number'
             onClick={() => onSortByColumn('reference_number')}>
@@ -418,114 +440,19 @@ const Transaction = () => {
               />
             </div>
           </div>
-        </div>
+        </TransactionTitle>
 
         {transactionData?.length > 0 &&
           transactionData.map((value, index) => {
             return (
-              <label className='transaction-list' key={index}>
-                <div
-                  className={clsx(
-                    'transaction-information',
-                    value.action_name.toLowerCase(),
-                  )}>
-                  <div className='transaction-detail transaction-reference-number'>
-                    <span>{value.reference_number}</span>
-                  </div>
-                  <div className='transaction-detail transaction-timestamp'>
-                    <span>{moment.utc(value.created_at).format('lll')}</span>
-                  </div>
-                  <div className='transaction-detail transaction-type'>
-                    <span>{capitalize(value.action_name)}</span>
-                  </div>
-                  <div className='transaction-detail transaction-remark'>
-                    <span>{value.detail}</span>
-                  </div>
-                  <div className='transaction-detail transaction-author'>
-                    <span>{value.username}</span>
-                  </div>
-                  <label
-                    className='transaction-detail transaction-menu'
-                    htmlFor='context-menu'
-                    // onClick={(event) => onClickTransactionMenu(event)}
-                  >
-                    <DotsMenu />
-                    <input type='checkbox' id='context-menu' />
-                  </label>
-                </div>
-                <input type='checkbox' />
-                <div className='transaction-product-list-container'>
-                  <div className='product-list product-list-title'>
-                    <div className='product-detail index' />
-                    <div className='product-detail product-id'>
-                      <span className='product-information'>Serial Number</span>
-                    </div>
-                    <div className='product-detail product-name'>
-                      <span className='product-information'>Name</span>
-                    </div>
-                    <div className='product-detail product-amount'>
-                      <span className='product-information'>Amount</span>
-                    </div>
-                    <div className='product-detail product-balance'>
-                      <span className='product-information'>Balance</span>
-                    </div>
-                    <div className='product-detail product-location'>
-                      <span className='product-information'>Location</span>
-                    </div>
-                    <div className='product-detail product-remark'>
-                      <span className='product-information'>Remark</span>
-                    </div>
-                  </div>
-                  {transactionData[index].data.map((subValue, subIndex) => {
-                    return (
-                      <div className='product-list' key={subIndex}>
-                        <div className='product-detail index'>
-                          <span className='product-information'>
-                            {subIndex + 1}
-                          </span>
-                        </div>
-                        <div className='product-detail product-id'>
-                          <span className='product-information'>
-                            {subValue.product_id}
-                          </span>
-                        </div>
-                        <div className='product-detail product-name'>
-                          <span className='product-information'>
-                            {subValue.product_name}
-                          </span>
-                        </div>
-                        <div className='product-detail product-amount'>
-                          <span
-                            className={clsx(
-                              'product-information amount-tag',
-                              value.action_type.toLowerCase(),
-                            )}>
-                            {value.action_type.toLowerCase() === 'add'
-                              ? '+'
-                              : '-'}{' '}
-                            {subValue.amount.toLocaleString()}
-                          </span>
-                        </div>
-                        <div className='product-detail product-balance'>
-                          <span className='product-information'>
-                            {subValue.balance}
-                          </span>
-                        </div>
-                        <div className='product-detail product-location'>
-                          <span className='product-information'>
-                            {subValue.location}
-                          </span>
-                        </div>
-                        <div className='product-detail product-remark'>
-                          <span className='product-information'>
-                            {subValue.product_detail}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </label>
+              <TransactionRecord
+                value={value}
+                index={index}
+                onDismissContextMenu={onDismissContextMenu}
+                onClickTransactionMenu={onClickTransactionMenu}
+                transactionData={transactionData}
+                key={index}
+              />
             )
           })}
       </div>
@@ -539,3 +466,149 @@ const Transaction = () => {
 }
 
 export default Transaction
+
+const TransactionRecord = ({
+  value,
+  index,
+  onClickTransactionMenu,
+  onDismissContextMenu,
+  transactionData,
+}) => {
+  const [dismissContext, setDismissContext] = useState(false)
+
+  const onToggleMenu = (event, subIndex) => {
+    onClickTransactionMenu(event, subIndex)
+    setDismissContext(!dismissContext)
+  }
+
+  const onDismissMenu = (event, subIndex) => {
+    onDismissContextMenu(event, subIndex)
+    setDismissContext(false)
+  }
+
+  const onEdit = (event) => {
+    // event.preventDefault()
+    // event.stopPropagation()
+    console.log('edit')
+  }
+
+  const onGenerateReport = (event) => {
+    // event.preventDefault()
+    // event.stopPropagation()
+    console.log('report')
+  }
+
+  return (
+    <TransactionList key={index} isOpen={value.isOpen}>
+      <div
+        className={clsx(
+          'transaction-information',
+          value.action_name.toLowerCase(),
+        )}>
+        <div className='transaction-detail transaction-reference-number'>
+          <span>{value.reference_number}</span>
+        </div>
+        <div className='transaction-detail transaction-timestamp'>
+          <span>{moment.utc(value.created_at).format('lll')}</span>
+        </div>
+        <div className='transaction-detail transaction-type'>
+          <span>{capitalize(value.action_name)}</span>
+        </div>
+        <div className='transaction-detail transaction-remark'>
+          <span>{value.detail}</span>
+        </div>
+        <div className='transaction-detail transaction-author'>
+          <span>{value.username}</span>
+        </div>
+        <div
+          className='transaction-detail transaction-menu'
+          htmlFor='context-menu'
+          onClick={(event) => onToggleMenu(event, index)}>
+          <DotsMenu />
+          <div className='transaction-context-menu'>
+            <div
+              className='transaction-record-menu'
+              onClick={(event) => onEdit(event)}>
+              <EditIcon fill={COLORS.gray[600]} />
+              <span className='transaction-record-menu-title'>Edit Transaction</span>
+            </div>
+            <div
+              className='transaction-record-menu'
+              onClick={(event) => onGenerateReport(event)}>
+              <DocumentIcon fill={COLORS.gray[600]}/>
+              <span className='transaction-record-menu-title'>Generate Report</span>
+            </div>
+          </div>
+        </div>
+        <div
+          className='dismiss-context'
+          onClick={(event) => onDismissMenu(event, index)}
+        />
+      </div>
+      <input type='checkbox' />
+      <div className='transaction-product-list-container'>
+        <div className='product-list product-list-title'>
+          <div className='product-detail index' />
+          <div className='product-detail product-id'>
+            <span className='product-information'>Serial Number</span>
+          </div>
+          <div className='product-detail product-name'>
+            <span className='product-information'>Name</span>
+          </div>
+          <div className='product-detail product-amount'>
+            <span className='product-information'>Amount</span>
+          </div>
+          <div className='product-detail product-balance'>
+            <span className='product-information'>Balance</span>
+          </div>
+          <div className='product-detail product-location'>
+            <span className='product-information'>Location</span>
+          </div>
+          <div className='product-detail product-remark'>
+            <span className='product-information'>Remark</span>
+          </div>
+        </div>
+        {transactionData[index].data.map((subValue, subIndex) => {
+          return (
+            <div className='product-list' key={subIndex}>
+              <div className='product-detail index'>
+                <span className='product-information'>{subIndex + 1}</span>
+              </div>
+              <div className='product-detail product-id'>
+                <span className='product-information'>
+                  {subValue.product_id}
+                </span>
+              </div>
+              <div className='product-detail product-name'>
+                <span className='product-information'>
+                  {subValue.product_name}
+                </span>
+              </div>
+              <div className='product-detail product-amount'>
+                <span
+                  className={clsx(
+                    'product-information amount-tag',
+                    value.action_type.toLowerCase(),
+                  )}>
+                  {value.action_type.toLowerCase() === 'add' ? '+' : '-'}{' '}
+                  {subValue.amount.toLocaleString()}
+                </span>
+              </div>
+              <div className='product-detail product-balance'>
+                <span className='product-information'>{subValue.balance}</span>
+              </div>
+              <div className='product-detail product-location'>
+                <span className='product-information'>{subValue.location}</span>
+              </div>
+              <div className='product-detail product-remark'>
+                <span className='product-information'>
+                  {subValue.product_detail}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </TransactionList>
+  )
+}

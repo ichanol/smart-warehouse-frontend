@@ -25,7 +25,7 @@ const ProfileSettings = () => {
   return (
     <React.Fragment>
       <h1>ProfileSettings</h1>
-      <input type='file' onChange={onFileChange} accept='.xlsx' />
+      <input type='file' onChange={onFileChange} accept='.xlsx, .csv' />
       <button onClick={onFileUpload}>submit</button>
       {/* <button
         type='button'

@@ -61,7 +61,7 @@ const PrivateRoute = ({ component: Component, routePermission, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        if (isUserAuthorized) {
+        if (isUserAuthorized || routePermission === 'public') {
           return <Component {...props} />
         } else {
           return <Redirect to={'/'} />

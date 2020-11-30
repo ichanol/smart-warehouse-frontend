@@ -36,6 +36,7 @@ const DefaultRoutes = () => {
             path={ROUTER_PATH.userSettings.path}
             key={ROUTER_PATH.userSettings.path}
             component={ProfileSettings}
+            routePermission='public'
           />
           <PrivateRoute
             path={ROUTER_PATH.editImportExportProduct.path}
