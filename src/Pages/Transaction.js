@@ -15,17 +15,26 @@ import {
   TransactionTitle,
 } from '../Pages/TransactionStyle'
 import React, { useEffect, useRef, useState } from 'react'
+import { requestHandler, useAxios } from '../Services'
 
-import {COLORS} from '../Constant'
+import { COLORS } from '../Constant'
 import { Datepicker } from '../components/Datepicker'
 import { atomState } from '../Atoms'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
 import moment from 'moment'
-import { useAxios } from '../Services'
 import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
+
+// import FileDownload from 'js-file-download'
+
+
+
+
+
+
+
 
 const Transaction = () => {
   const history = useHistory()
@@ -492,10 +501,34 @@ const TransactionRecord = ({
     console.log('edit')
   }
 
-  const onGenerateReport = (event) => {
+  const onGenerateReport = async (event) => {
     // event.preventDefault()
     // event.stopPropagation()
-    console.log('report')
+    const response = await requestHandler(
+      '/generate-pdf',
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    // FileDownload(response, 'test.pdf')
+
+    const downloadUrl = window.URL.createObjectURL(new Blob([response]))
+
+    const link = document.createElement('a')
+
+    link.href = downloadUrl
+
+    link.setAttribute('download', 'file.pdf') //any other extension
+
+    document.body.appendChild(link)
+
+    link.click()
+
+    link.remove()
+    console.log(response)
   }
 
   return (
@@ -530,13 +563,17 @@ const TransactionRecord = ({
               className='transaction-record-menu'
               onClick={(event) => onEdit(event)}>
               <EditIcon fill={COLORS.gray[600]} />
-              <span className='transaction-record-menu-title'>Edit Transaction</span>
+              <span className='transaction-record-menu-title'>
+                Edit Transaction
+              </span>
             </div>
             <div
               className='transaction-record-menu'
               onClick={(event) => onGenerateReport(event)}>
-              <DocumentIcon fill={COLORS.gray[600]}/>
-              <span className='transaction-record-menu-title'>Generate Report</span>
+              <DocumentIcon fill={COLORS.gray[600]} />
+              <span className='transaction-record-menu-title'>
+                Generate Report
+              </span>
             </div>
           </div>
         </div>

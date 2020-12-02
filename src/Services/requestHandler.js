@@ -8,6 +8,7 @@ const requestHandler = async (
   METHOD,
   sourceFromHook,
   timeout = 0,
+  blob = false,
 ) => {
   let source
   let response
@@ -21,6 +22,9 @@ const requestHandler = async (
   const options = {
     cancelToken: source.token,
     timeout: timeout,
+  }
+  if (blob) {
+    options.responseType = 'blob'
   }
   if (TOKEN) {
     options.headers = {
