@@ -10,7 +10,6 @@ import { Container } from '../Pages/ProductListStyle'
 import { useAxios } from '../Services'
 
 const ProductList = () => {
-  const dropDownRef = useRef()
   const scrollRef = useRef([])
 
   const [productList, setProductList] = useState([])
@@ -76,8 +75,7 @@ const ProductList = () => {
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+  const onChangeNumberPerPage = (number) => {
     setNumberPerPage(number)
     setActivePage(1)
   }
@@ -107,7 +105,6 @@ const ProductList = () => {
           <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
             <DropDown
-              ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}

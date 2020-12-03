@@ -1,5 +1,5 @@
 import { CancelButton, DropDown, SubmitButton } from '../components'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
   isContainSpecialCharacter,
@@ -18,8 +18,6 @@ import { debounce } from 'lodash'
 import { request } from '../Services'
 
 const EditUser = () => {
-  const dropDownRef = useRef()
-
   const history = useHistory()
   const { username } = useParams()
 
@@ -113,8 +111,7 @@ const EditUser = () => {
     }
   }
 
-  const onChangeRole = (roleName, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+  const onChangeRole = (roleName) => {
     setRole({ ...role, selected: roleName })
     setEditedUserData({ ...editedUserData, role: roleName })
   }
@@ -218,7 +215,6 @@ const EditUser = () => {
           />
           <div className='dropdown-wrapper'>
             <DropDown
-              ref={dropDownRef}
               selectedValue={role.selected}
               choices={role.choices}
               onSelect={onChangeRole}

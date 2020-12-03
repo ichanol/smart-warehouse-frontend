@@ -22,7 +22,6 @@ const UserManagement = () => {
   )
 
   const scrollRef = useRef([])
-  const dropDownRef = useRef()
 
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
@@ -112,8 +111,7 @@ const UserManagement = () => {
   const onSortByColumn = (columnType) =>
     setSort({ column: columnType, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+  const onChangeNumberPerPage = (number) => {
     setNumberPerPage(number)
     setActivePage(1)
   }
@@ -241,7 +239,6 @@ const UserManagement = () => {
               </div>
             </div>
             <DropDown
-              ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}

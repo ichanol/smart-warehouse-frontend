@@ -33,8 +33,6 @@ const Transaction = () => {
 
   const setToastState = useSetRecoilState(atomState.toastState)
 
-  const dropDownRef = useRef()
-
   const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
   const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
   const [numberPerPage, setNumberPerPage] = useState(10)
@@ -173,8 +171,7 @@ const Transaction = () => {
   const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
   const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
-  const onChangeNumberPerPage = (number, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+  const onChangeNumberPerPage = (number) => {
     setNumberPerPage(number)
     setActivePage(1)
   }
@@ -389,7 +386,6 @@ const Transaction = () => {
               </div>
             </div>
             <DropDown
-              ref={dropDownRef}
               selectedValue={numberPerPage}
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
