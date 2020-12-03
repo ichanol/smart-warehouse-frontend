@@ -472,7 +472,7 @@ const TransactionList = styled.label`
     white-space: nowrap;
   }
 
-  .export {
+  .export, .expired, .damaged {
     border-left: 8px solid ${COLORS.red[400]};
   }
   .import {

@@ -20,21 +20,13 @@ import { requestHandler, useAxios } from '../Services'
 import { COLORS } from '../Constant'
 import { Datepicker } from '../components/Datepicker'
 import { atomState } from '../Atoms'
+import { blobFileDownloader } from '../Utils'
 import { capitalize } from 'lodash'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
-
-// import FileDownload from 'js-file-download'
-
-
-
-
-
-
-
 
 const Transaction = () => {
   const history = useHistory()
@@ -501,11 +493,10 @@ const TransactionRecord = ({
     console.log('edit')
   }
 
-  const onGenerateReport = async (event) => {
-    // event.preventDefault()
-    // event.stopPropagation()
+  const onGenerateReport = async (event, reportNumber) => {
+    event.preventDefault()
     const response = await requestHandler(
-      '/generate-pdf',
+      `/generate-pdf/${reportNumber}`,
       true,
       null,
       'get',
@@ -513,22 +504,8 @@ const TransactionRecord = ({
       0,
       true,
     )
-    // FileDownload(response, 'test.pdf')
-
-    const downloadUrl = window.URL.createObjectURL(new Blob([response]))
-
-    const link = document.createElement('a')
-
-    link.href = downloadUrl
-
-    link.setAttribute('download', 'file.pdf') //any other extension
-
-    document.body.appendChild(link)
-
-    link.click()
-
-    link.remove()
-    console.log(response)
+    blobFileDownloader(response, `${reportNumber}.pdf`)
+    console.log('response', response)
   }
 
   return (
@@ -569,7 +546,9 @@ const TransactionRecord = ({
             </div>
             <div
               className='transaction-record-menu'
-              onClick={(event) => onGenerateReport(event)}>
+              onClick={(event) =>
+                onGenerateReport(event, value.reference_number)
+              }>
               <DocumentIcon fill={COLORS.gray[600]} />
               <span className='transaction-record-menu-title'>
                 Generate Report
