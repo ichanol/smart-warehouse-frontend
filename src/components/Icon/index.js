@@ -2,6 +2,7 @@ import ArrowIcon from './ArrowIcon'
 import CalendarIcon from './CalendarIcon'
 import CancelIcon from './CancelIcon'
 import ChevronDownIcon from './ChevronDownIcon'
+import CreateIcon from './CreateIcon'
 import CrossIcon from './CrossIcon'
 import DeleteIcon from './DeleteIcon'
 import DocumentIcon from './DocumentIcon'
@@ -19,6 +20,8 @@ import ProductIcon from './ProductIcon'
 import ProductListIcon from './ProductListIcon'
 import SearchIcon from './SearchIcon'
 import SuccessIcon from './SuccessIcon'
+import TemplateIcon from './TemplateIcon'
+import UploadIcon from './UploadIcon'
 import UserIcon from './UserIcon'
 import WarningIcon from './WarningIcon'
 
@@ -46,4 +49,7 @@ export {
   WarningIcon,
   DotsMenu,
   DocumentIcon,
+  CreateIcon,
+  UploadIcon,
+  TemplateIcon,
 }

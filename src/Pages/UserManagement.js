@@ -1,7 +1,10 @@
 import {
+  CreateIcon,
   DropDown,
   FilterIcon,
   ResponsiveTable,
+  TemplateIcon,
+  UploadIcon,
   SearchBox as useSearchBox,
 } from '../components'
 import React, { useEffect, useRef, useState } from 'react'
@@ -33,6 +36,7 @@ const UserManagement = () => {
     notAvailable: false,
   })
   const [searchSuggest, setSearchSuggest] = useState([])
+  const [isDismissMenu, setIsDismissMenu] = useState(false)
 
   const statusFilterHandler = () => {
     if (
@@ -245,11 +249,34 @@ const UserManagement = () => {
               fullWidth={false}
               placeholder
             />
-            <div
+            <label
               className='create-new-button'
-              onClick={() => history.push('/user-management/create')}>
-              Create
-            </div>
+              onChange={() => setIsDismissMenu(!isDismissMenu)}
+              // onClick={() => history.push('/user-management/create')}
+            >
+              <span className='create-new-button-title'>Create</span>
+              <input type='checkbox' />
+              <div className='create-new-context-menu'>
+                <div className='create-new-button-menu'>
+                  <span className='create-new-menu-title'>
+                    <CreateIcon />
+                    Create new
+                  </span>
+                </div>
+                <div className='create-new-button-menu'>
+                  <span className='create-new-menu-title'>
+                    <UploadIcon />
+                    Import csv / excel
+                  </span>
+                </div>
+                <div className='create-new-button-menu'>
+                  <span className='create-new-menu-title'>
+                    <TemplateIcon />Download template
+                  </span>
+                </div>
+              </div>
+              {isDismissMenu && <div className='dissmiss-menu' />}
+            </label>
           </div>
         </div>
         <ResponsiveTable

@@ -210,17 +210,71 @@ const Container = styled.div`
 
   .create-new-button {
     width: 125px;
-    height: 100%;
-    background-color: ${COLORS.green[500]};
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    
+    z-index: 5;
+  }
+
+  .create-new-button-title {
+    width: 100%;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+
     border-radius: 8px;
-    position: absolute;
-    right: 0;
+
+    background-color: ${COLORS.green[500]};
     color: ${COLORS.natural.white};
     letter-spacing: 0.5px;
     cursor: pointer;
+  }
+
+  input[type='checkbox'] {
+    width: 0;
+    height: 0;
+  }
+
+  .dissmiss-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 4;
+  }
+
+  .create-new-context-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-width: 100%;
+    max-height: 0;
+
+    z-index: 5;
+    overflow: hidden;
+    background-color: blanchedalmond;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .create-new-button-menu {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .create-new-menu-title {
+    white-space: nowrap;
+  }
+
+  input:checked + .create-new-context-menu {
+    max-height: 120px;
+    max-width: 300px;
   }
 
   /* width */
