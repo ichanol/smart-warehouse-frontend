@@ -16,12 +16,15 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
               {pageNumber}
             </div>
           )
-        } else if (totalPage.length > 5) {
+        } else if (totalPage.length > 7) {
           if (activePage < 5) {
             if (pageNumber <= 5) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
@@ -36,7 +39,10 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
             } else if (pageNumber === totalPage.length) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
@@ -47,22 +53,34 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
             if (pageNumber === 1 || pageNumber === totalPage.length) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
                 </div>
               )
-            } else if (pageNumber === 2 || pageNumber === totalPage.length - 1) {
+            } else if (
+              pageNumber === 2 ||
+              pageNumber === totalPage.length - 1
+            ) {
               return (
                 <div className='page' key={index}>
                   ...
                 </div>
               )
-            } else if (pageNumber >= activePage - 2 && pageNumber <= activePage + 2) {
+            } else if (
+              pageNumber >= activePage - 2 &&
+              pageNumber <= activePage + 2
+            ) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
@@ -76,7 +94,10 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
             if (pageNumber === 1) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
@@ -94,7 +115,10 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
             ) {
               return (
                 <div
-                  className={clsx('page', pageNumber === activePage && 'active')}
+                  className={clsx(
+                    'page',
+                    pageNumber === activePage && 'active',
+                  )}
                   key={index}
                   onClick={() => onChangePage(pageNumber)}>
                   {pageNumber}
@@ -103,7 +127,7 @@ const Pagination = ({ totalPage, onChangePage, activePage }) => {
             }
           }
         } else {
-          return true
+          return null
         }
       })}
     </Container>

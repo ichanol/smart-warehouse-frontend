@@ -55,6 +55,9 @@ const DataSection = styled.div`
   .table-title-wrapper {
     height: 60px;
   }
+  .table-data-wrapper {
+    width: 100%;
+  }
   .cell {
     width: 140px;
     min-width: 140px;
@@ -72,9 +75,9 @@ const DataSection = styled.div`
       darkHeader ? COLORS.natural.white : COLORS.natural.black};
   }
   .data {
-    background-color: rgba(186, 205, 207, 0.2);
     padding: 0 20px;
     white-space: nowrap;
+    border-top: 1px solid ${COLORS.gray[200]};
   }
   .primarykey {
     width: 75px;
@@ -91,10 +94,11 @@ const DataSection = styled.div`
     min-width: 750px;
   }
   .odd {
-    background-color: rgba(209, 218, 220, 0.1);
+    /* background-color: rgba(209, 218, 220, 0.1); */
   }
   .inactive {
-    background-color: ${COLORS.red[100]};
+    background-color: ${COLORS.gray[100]};
+    color: ${COLORS.gray[400]};
   }
   .number-of-items-indicator {
     margin-top: 12px;
@@ -106,6 +110,10 @@ const DataSection = styled.div`
   }
   .edit-wrapper {
     margin-left: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
 `
 
@@ -123,14 +131,31 @@ const TitleSection = styled(DataSection)`
 `
 
 const SortArrow = styled.div`
-  position: absolute;
-  right: 0;
   height: 30px;
   width: 15px;
   transition: all 0.15s linear;
+  margin-left: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
-export { DataSection, TitleSection, SortArrow }
+const Container = styled.div`
+  position: relative;
+
+  .arrow {
+    min-width: 50px;
+    min-height: 50px;
+    background-color: red;
+    position: absolute;
+    top: 100%;
+    cursor: pointer;
+  }
+  .left {
+    left: 0;
+  }
+  .right {
+    right: 0;
+  }
+`
+export { DataSection, TitleSection, SortArrow, Container }

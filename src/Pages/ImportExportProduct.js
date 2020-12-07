@@ -1,5 +1,5 @@
 import { CancelButton, RetryButton, SubmitButton } from '../components/Button'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { postRequest, request } from '../Services'
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
@@ -24,7 +24,6 @@ const ImportExportProduct = () => {
   const [modalState, setModalState] = useRecoilState(atomState.modalState)
   const resetModalState = useResetRecoilState(atomState.modalState)
   const [actionTabs, setActionTabs] = useState({ id: 1, action_type: 'Import' })
-  const scrollRef = useRef([])
 
   const SOCKET_EVENT = {
     joinRoom: 'join_room',
@@ -388,7 +387,6 @@ const ImportExportProduct = () => {
       </div>
       <div className='content'>
         <ResponsiveTable
-          ref={scrollRef}
           title={titleArray}
           fixedDataColumn={fixedDataColumn}
           centerColumn={centerColumn}

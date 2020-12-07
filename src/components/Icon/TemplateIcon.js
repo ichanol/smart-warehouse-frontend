@@ -1,9 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const TemplateIcon = ({ width = 20, fill = COLORS.gray[700] }) => {
+const TemplateIcon = ({ width = 40, fill = COLORS.gray[700] }) => {
   return (
-    <svg viewBox='0 0 64 80' width={width} fill={fill}>
+    <svg viewBox='-23 -23 110 110' width={width} fill={fill}>
       <path
         className='prefix__st0'
         d='M56 0H8C3.6 0 0 3.6 0 8v48c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V8c0-4.4-3.6-8-8-8zm4.8 56c0 2.7-2.1 4.8-4.8 4.8H8c-2.7 0-4.8-2.1-4.8-4.8V8c0-2.7 2.1-4.8 4.8-4.8h48c2.7 0 4.8 2.1 4.8 4.8v48z'

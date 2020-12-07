@@ -1,10 +1,10 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const CreateIcon = ({ width = 20, fill = COLORS.gray[700] }) => {
+const CreateIcon = ({ width = 40, fill = COLORS.gray[700] }) => {
   return (
     <svg
-      viewBox='0 0 847 1058.75'
+      viewBox='-120 -100 1060 1060'
       fillRule='evenodd'
       clipRule='evenodd'
       shapeRendering='geometricPrecision'

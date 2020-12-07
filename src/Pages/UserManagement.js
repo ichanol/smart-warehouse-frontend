@@ -1,13 +1,12 @@
 import {
-  CreateIcon,
+  CreateButton,
   DropDown,
-  FilterIcon,
+  FilterButton,
+  NumberIndicator,
   ResponsiveTable,
-  TemplateIcon,
-  UploadIcon,
   SearchBox as useSearchBox,
 } from '../components'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
@@ -24,8 +23,6 @@ const UserManagement = () => {
     atomState.userListState,
   )
 
-  const scrollRef = useRef([])
-
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
@@ -36,7 +33,6 @@ const UserManagement = () => {
     notAvailable: false,
   })
   const [searchSuggest, setSearchSuggest] = useState([])
-  const [isDismissMenu, setIsDismissMenu] = useState(false)
 
   const statusFilterHandler = () => {
     if (
@@ -98,11 +94,13 @@ const UserManagement = () => {
 
   useEffect(() => {
     setUserListDataTrigger(!userListDataTrigger)
-  }, [sort, numberPerPage, activePage, searchTrigger])
+  }, [sort, numberPerPage, activePage, searchTrigger, filter])
 
   useEffect(() => {
-    setFetchSearchUserListData(true)
-    setSearchUserListDataTrigger(!searchUserListDataTrigger)
+    if (searchText !== '') {
+      setFetchSearchUserListData(true)
+      setSearchUserListDataTrigger(!searchUserListDataTrigger)
+    }
   }, [searchText])
 
   useEffect(() => {
@@ -206,41 +204,11 @@ const UserManagement = () => {
         <div className='tools-bar-wrapper'>
           <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
-            <div className='filter'>
-              <div className='filter-button'>
-                <FilterIcon width={30} />
-                <div className='filter-options'>
-                  <div className='options'>
-                    <div className='options-name'>
-                      <span>Status</span>
-                    </div>
-                    <div className='option-actions'>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.available}
-                            onChange={() => onCheckBoxChange('available')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Available</span>
-                      </div>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.notAvailable}
-                            onChange={() => onCheckBoxChange('notAvailable')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Not Available</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className='filter-wrapper'>
+              <FilterButton
+                filter={filter}
+                onCheckBoxChange={onCheckBoxChange}
+              />
             </div>
             <DropDown
               selectedValue={numberPerPage}
@@ -249,38 +217,16 @@ const UserManagement = () => {
               fullWidth={false}
               placeholder
             />
-            <label
-              className='create-new-button'
-              onChange={() => setIsDismissMenu(!isDismissMenu)}
-              // onClick={() => history.push('/user-management/create')}
-            >
-              <span className='create-new-button-title'>Create</span>
-              <input type='checkbox' />
-              <div className='create-new-context-menu'>
-                <div className='create-new-button-menu'>
-                  <span className='create-new-menu-title'>
-                    <CreateIcon />
-                    Create new
-                  </span>
-                </div>
-                <div className='create-new-button-menu'>
-                  <span className='create-new-menu-title'>
-                    <UploadIcon />
-                    Import csv / excel
-                  </span>
-                </div>
-                <div className='create-new-button-menu'>
-                  <span className='create-new-menu-title'>
-                    <TemplateIcon />Download template
-                  </span>
-                </div>
-              </div>
-              {isDismissMenu && <div className='dissmiss-menu' />}
-            </label>
+            <div className='create-button-wrapper'>
+              <CreateButton
+                onCreateNew={() => history.push('/user-management/create')}
+                onSelectFile={() => console.log('select file')}
+                onDownloadTemplate={() => console.log('download')}
+              />
+            </div>
           </div>
         </div>
         <ResponsiveTable
-          ref={scrollRef}
           title={titleArray}
           data={userListState}
           sort={sort}
@@ -293,13 +239,12 @@ const UserManagement = () => {
           actionColumn='status'
           deleteButton={false}
         />
-        {userListState?.length > 0 && (
-          <div className='number-of-items-indicator'>
-            Show {(activePage - 1) * numberPerPage + 1} -{' '}
-            {(activePage - 1) * numberPerPage + userListState.length} of{' '}
-            {totalRecord}
-          </div>
-        )}
+        <NumberIndicator
+          numberPerPage={numberPerPage}
+          activePage={activePage}
+          totalRecord={totalRecord}
+          numberOfShown={userListState?.length}
+        />
         <Pagination
           activePage={activePage}
           totalPage={totalPage}

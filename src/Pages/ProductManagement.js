@@ -1,10 +1,12 @@
 import {
+  CreateButton,
   DropDown,
-  FilterIcon,
+  FilterButton,
+  NumberIndicator,
   ResponsiveTable,
   SearchBox as useSearchBox,
 } from '../components'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
@@ -20,8 +22,6 @@ const ProductManagement = () => {
   const [productListState, setProductListState] = useRecoilState(
     atomState.productListState,
   )
-
-  const scrollRef = useRef([])
 
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
@@ -94,11 +94,13 @@ const ProductManagement = () => {
 
   useEffect(() => {
     setProductListDataTrigger(!productListDataTrigger)
-  }, [sort, numberPerPage, activePage, searchTrigger])
+  }, [sort, numberPerPage, activePage, searchTrigger, filter])
 
   useEffect(() => {
-    setFetchSearchProductListData(true)
-    setSearchProductListDataTrigger(!searchProductListDataTrigger)
+    if (searchText !== '') {
+      setFetchSearchProductListData(true)
+      setSearchProductListDataTrigger(!searchProductListDataTrigger)
+    }
   }, [searchText])
 
   useEffect(() => {
@@ -204,41 +206,11 @@ const ProductManagement = () => {
         <div className='tools-bar-wrapper'>
           <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
-            <div className='filter'>
-              <div className='filter-button'>
-                <FilterIcon width={30} />
-                <div className='filter-options'>
-                  <div className='options'>
-                    <div className='options-name'>
-                      <span>Status</span>
-                    </div>
-                    <div className='option-actions'>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.available}
-                            onChange={() => onCheckBoxChange('available')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Available</span>
-                      </div>
-                      <div className='checkbox'>
-                        <label className='custom-checkbox'>
-                          <input
-                            type='checkbox'
-                            checked={filter.notAvailable}
-                            onChange={() => onCheckBoxChange('notAvailable')}
-                          />
-                          <span className='box' />
-                        </label>
-                        <span className='title'>Not Available</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className='filter-wrapper'>
+              <FilterButton
+                filter={filter}
+                onCheckBoxChange={onCheckBoxChange}
+              />
             </div>
             <DropDown
               selectedValue={numberPerPage}
@@ -247,15 +219,16 @@ const ProductManagement = () => {
               fullWidth={false}
               placeholder
             />
-            <div
-              className='create-new-button'
-              onClick={() => history.push('/product-management/create')}>
-              Create
+            <div className='create-button-wrapper'>
+              <CreateButton
+                onCreateNew={() => history.push('/product-management/create')}
+                onSelectFile={() => console.log('select file')}
+                onDownloadTemplate={() => console.log('download')}
+              />
             </div>
           </div>
         </div>
         <ResponsiveTable
-          ref={scrollRef}
           title={titleArray}
           data={productListState}
           sort={sort}
@@ -268,13 +241,12 @@ const ProductManagement = () => {
           actionColumn='status'
           deleteButton={false}
         />
-        {productListState?.length > 0 && (
-          <div className='number-of-items-indicator'>
-            Show {(activePage - 1) * numberPerPage + 1} -{' '}
-            {(activePage - 1) * numberPerPage + productListState.length} of{' '}
-            {totalRecord}
-          </div>
-        )}
+        <NumberIndicator
+          numberPerPage={numberPerPage}
+          activePage={activePage}
+          totalRecord={totalRecord}
+          numberOfShown={productListState?.length}
+        />
         <Pagination
           activePage={activePage}
           totalPage={totalPage}

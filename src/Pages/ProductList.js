@@ -1,17 +1,16 @@
 import {
   DropDown,
+  NumberIndicator,
   Pagination,
   ResponsiveTable,
   SearchBox as useSearchBox,
 } from '../components'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Container } from '../Pages/ProductListStyle'
 import { useAxios } from '../Services'
 
 const ProductList = () => {
-  const scrollRef = useRef([])
-
   const [productList, setProductList] = useState([])
   const [searchSuggest, setSearchSuggest] = useState([])
   const [activePage, setActivePage] = useState(1)
@@ -20,9 +19,13 @@ const ProductList = () => {
   const [sort, setSort] = useState({ column: null, desc: false })
   const [totalRecord, setTotalRecord] = useState(null)
 
-  const [searchText, searchTrigger, trigger, setTrigger, SearchBoxComponent] = useSearchBox(
-    searchSuggest,
-  )
+  const [
+    searchText,
+    searchTrigger,
+    trigger,
+    setTrigger,
+    SearchBoxComponent,
+  ] = useSearchBox(searchSuggest)
 
   const queryParams = {
     column: sort.column,
@@ -63,8 +66,10 @@ const ProductList = () => {
   }, [sort, numberPerPage, activePage, searchTrigger])
 
   useEffect(() => {
-    setFetchSearchProductListData(true)
-    setSearchProductListDataTrigger(!searchProductListDataTrigger)
+    if (searchText !== '') {
+      setFetchSearchProductListData(true)
+      setSearchProductListDataTrigger(!searchProductListDataTrigger)
+    }
   }, [searchText])
 
   useEffect(() => {
@@ -113,9 +118,7 @@ const ProductList = () => {
             />
           </div>
         </div>
-
         <ResponsiveTable
-          ref={scrollRef}
           title={titleArray}
           data={productList}
           onSortByColumn={onSortByColumn}
@@ -124,16 +127,12 @@ const ProductList = () => {
           scrollDataColumn={scrollDataColumn}
           centerColumn={centerColumn}
         />
-        {productList?.length > 0 && (
-          <div className='number-of-items-indicator'>
-            Show{' '}
-            {productList.length === 1
-              ? null
-              : `${(activePage - 1) * numberPerPage + 1} - `}
-            {(activePage - 1) * numberPerPage + productList.length} of{' '}
-            {totalRecord}
-          </div>
-        )}
+        <NumberIndicator
+          numberPerPage={numberPerPage}
+          activePage={activePage}
+          totalRecord={totalRecord}
+          numberOfShown={productList?.length}
+        />
         <Pagination
           activePage={activePage}
           totalPage={totalPage}

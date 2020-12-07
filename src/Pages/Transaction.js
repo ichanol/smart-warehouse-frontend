@@ -5,6 +5,7 @@ import {
   DropDown,
   EditIcon,
   FilterIcon,
+  FilterTrasaction,
   Pagination,
   Slider,
   SearchBox as useSearchBox,
@@ -243,147 +244,8 @@ const Transaction = () => {
         <div className='tools-bar-wrapper'>
           <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
-            <div className='filter'>
-              <div className='filter-button'>
-                <FilterIcon width={30} />
-                {/* ============================================= */}
-                <div className='filter-options'>
-                  <div className='options-row'>
-                    <div className='options'>
-                      <div className='options-name'>
-                        <span>Status</span>
-                      </div>
-                      <div className='option-actions'>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.status.available}
-                              onChange={() =>
-                                onCheckBoxChange('status', 'available')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Available</span>
-                        </div>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.status.notAvailable}
-                              onChange={() =>
-                                onCheckBoxChange('status', 'notAvailable')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Not Available</span>
-                        </div>
-                      </div>
-                    </div>
-                    {/*  */}
-                    <div className='options'>
-                      <div className='options-name'>
-                        <span>Action</span>
-                      </div>
-                      <div className='option-actions-row'>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.action.import}
-                              onChange={() =>
-                                onCheckBoxChange('action', 'import')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Import</span>
-                        </div>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.action.export}
-                              onChange={() =>
-                                onCheckBoxChange('action', 'export')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Export</span>
-                        </div>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.action.expired}
-                              onChange={() =>
-                                onCheckBoxChange('action', 'expired')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Expired</span>
-                        </div>
-                        <div className='checkbox'>
-                          <label className='custom-checkbox'>
-                            <input
-                              type='checkbox'
-                              checked={filter.action.damaged}
-                              onChange={() =>
-                                onCheckBoxChange('action', 'damaged')
-                              }
-                            />
-                            <span className='box' />
-                          </label>
-                          <span className='title'>Damaged</span>
-                        </div>
-                      </div>
-                    </div>
-                    {/*  */}
-                  </div>
-                  <div className='options-row'>
-                    <div className='range-slider'>
-                      <div className='options-name'>
-                        <span>Amount</span>
-                      </div>
-                      <div className='slider-wrapper'>
-                        <Slider
-                          setMax={setMaxAmount}
-                          setMin={setMinAmount}
-                          setMinMax={setMinMaxAmountOnSlider}
-                          width={220}
-                          color='blue'
-                        />
-                      </div>
-                    </div>
-                    <div className='range-slider'>
-                      <div className='options-name'>
-                        <span>Balance</span>
-                      </div>
-                      <div className='slider-wrapper'>
-                        <Slider
-                          setMax={setMaxBalance}
-                          setMin={setMinBalance}
-                          setMinMax={setMinMaxBalanceOnSlider}
-                          width={220}
-                          color='blue'
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className='date-picker-wrapper'>
-                    <Datepicker
-                      date={date}
-                      setStart={setStart}
-                      setEnd={setEnd}
-                    />
-                  </div>
-                </div>
-                {/* ============================================= */}
-              </div>
+            <div className='filter-wrapper'>
+              <FilterTrasaction filter={filter} onCheckBoxChange={onCheckBoxChange}/>
             </div>
             <DropDown
               selectedValue={numberPerPage}
