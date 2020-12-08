@@ -1,4 +1,10 @@
-import { CancelButton, DropDown, SubmitButton } from '../components'
+import {
+  CancelButton,
+  DropDown,
+  SubmitButton,
+  TextArea,
+  TextInput,
+} from '../components'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
@@ -7,22 +13,19 @@ import {
   isEmailInvalid,
   isFirstCharacterSpace,
 } from '../Utils/inputValidation'
-import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './CreateUserStyle'
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 import { useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
 const CreateUser = () => {
   const history = useHistory()
 
   const dropDownRef = useRef()
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
   const [inputError, setError] = useState({})
@@ -44,10 +47,10 @@ const CreateUser = () => {
         get_role: true,
       }
 
-      const { success, result } = await request(
+      const { success, result } = await requestHandler(
         '/roles',
+        true,
         queryParams,
-        userState.accessToken,
         'get',
       )
       if (success) {
@@ -66,12 +69,7 @@ const CreateUser = () => {
 
   const onSubmit = async () => {
     try {
-      const { success } = await request(
-        '/users',
-        userData,
-        userState.accessToken,
-        'post',
-      )
+      const { success } = await requestHandler('/users', true, userData, 'post')
       if (success) {
         setToastState([
           ...toastState,
@@ -118,10 +116,10 @@ const CreateUser = () => {
 
   const checkDuplicate = async (keyword, TYPE) => {
     try {
-      const { result } = await request(
+      const { result } = await requestHandler(
         '/users',
+        true,
         { validate: keyword, type: TYPE },
-        userState.accessToken,
         'get',
       )
       if (result?.length) {

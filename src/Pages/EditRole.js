@@ -1,4 +1,10 @@
-import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
+import {
+  CancelButton,
+  SubmitButton,
+  TextArea,
+  TextInput,
+  ToggleButton,
+} from '../components'
 import { Container, PermissionSection } from './EditRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
 import {
@@ -8,12 +14,10 @@ import {
 import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 
 const EditRole = () => {
   const history = useHistory()
@@ -23,7 +27,6 @@ const EditRole = () => {
   const inputRef = useRef(null)
   const containerRef = useRef(null)
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const roleListState = useRecoilValue(atomState.roleListState)
 
@@ -33,11 +36,10 @@ const EditRole = () => {
 
   const onSubmit = async () => {
     try {
-      // console.log(editedRoleData)
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/roles',
+        true,
         editedRoleData,
-        userState.accessToken,
         'put',
       )
       if (success) {

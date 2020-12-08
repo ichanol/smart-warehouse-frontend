@@ -4,16 +4,15 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;
-  padding: 20px;
   display: flex;
   flex-direction: column;
+
+  padding: 20px;
+
   overflow: auto;
   background-color: ${COLORS.gray[200]};
 
   .dropdown-wrapper {
-    margin: 40px 0 15px 0;
-    border-radius: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
     flex: 1;
     height: 45px;
     min-height: 45px;
@@ -21,12 +20,17 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
+
+    margin: 40px 0 15px 0;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   .dropdown-wrapper .placeholder {
     position: absolute;
     top: -50px;
     left: 0;
+
     opacity: 1;
     transform: translateY(45%);
     transition: all 0.25s ease-in-out;
@@ -36,7 +40,9 @@ const Container = styled.div`
     height: 35px;
     align-items: center;
     display: flex;
+
     margin-bottom: 20px;
+
     font-weight: bold;
     letter-spacing: 1px;
   }
@@ -47,9 +53,11 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: ${COLORS.natural.white};
-    padding: 25px;
     position: relative;
+
+    padding: 25px;
+
+    background-color: ${COLORS.natural.white};
   }
   .button-wrapper {
     display: flex;
@@ -64,6 +72,7 @@ const Container = styled.div`
   }
   .cancel-button-wrapper > button:active {
     border: none;
+
     background-color: transparent;
     color: ${COLORS.gray[500]};
   }

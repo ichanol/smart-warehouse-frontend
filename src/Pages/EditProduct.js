@@ -1,4 +1,4 @@
-import { CancelButton, SubmitButton } from '../components/Button'
+import { CancelButton, SubmitButton, TextArea, TextInput } from '../components'
 import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
@@ -9,11 +9,9 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './EditProductStyle'
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 
 const CreateProduct = () => {
   const history = useHistory()
@@ -50,10 +48,10 @@ const CreateProduct = () => {
 
   const onSubmit = async () => {
     try {
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/products',
+        true,
         editedProductData,
-        userState.accessToken,
         'put',
       )
       if (success) {

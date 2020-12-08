@@ -4,9 +4,11 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;
-  padding: 20px;
   display: flex;
   flex-direction: column;
+
+  padding: 20px;
+
   overflow: auto;
   background-color: ${COLORS.gray[200]};
 
@@ -14,7 +16,9 @@ const Container = styled.div`
     height: 35px;
     align-items: center;
     display: flex;
+
     margin-bottom: 20px;
+
     font-weight: bold;
     letter-spacing: 1px;
   }
@@ -25,9 +29,11 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: ${COLORS.natural.white};
-    padding: 25px;
     position: relative;
+
+    padding: 25px;
+
+    background-color: ${COLORS.natural.white};
   }
   .button-wrapper {
     display: flex;
@@ -38,10 +44,12 @@ const Container = styled.div`
   }
   .cancel-button-wrapper > button {
     border: none;
+
     color: ${COLORS.gray[500]};
   }
   .cancel-button-wrapper > button:active {
     border: none;
+
     background-color: transparent;
     color: ${COLORS.gray[500]};
   }

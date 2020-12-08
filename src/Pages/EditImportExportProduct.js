@@ -1,10 +1,8 @@
-import { CancelButton, SubmitButton } from '../components/Button'
+import { CancelButton, SubmitButton, TextArea, TextInput } from '../components'
 import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { Container } from './EditImportExportProductStyle'
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { useRecoilState } from 'recoil'
 
@@ -23,8 +21,7 @@ const EditImportExportProduct = () => {
 
   const updatedProductList = () => {
     const index = readProductListState.findIndex(
-      (value) =>
-        value.product_id === editInformation.product_id,
+      (value) => value.product_id === editInformation.product_id,
     )
     const newReadProductlistState = [...readProductListState]
     newReadProductlistState[index] = editInformation
@@ -53,7 +50,7 @@ const EditImportExportProduct = () => {
       <div className='content'>
         <TextInput
           value={editInformation.product_id}
-          placeholder='Product Serial number'
+          placeholder='Serial number'
           disabled
         />
         <TextInput

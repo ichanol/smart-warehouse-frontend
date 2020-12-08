@@ -1,24 +1,27 @@
-import { CancelButton, SubmitButton, ToggleButton } from '../components/Button'
+import {
+  CancelButton,
+  SubmitButton,
+  TextArea,
+  TextInput,
+  ToggleButton,
+} from '../components'
 import { Container, PermissionSection } from './CreateRoleStyle'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   isContainSpecialCharacter,
   isFirstCharacterSpace,
 } from '../Utils/inputValidation'
-import { useRecoilState, useRecoilValue } from 'recoil'
 
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 import { useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
 const CreateRole = () => {
   const history = useHistory()
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
   const choicesDetailRef = useRef([])
@@ -45,12 +48,7 @@ const CreateRole = () => {
 
   const onSubmit = async () => {
     try {
-      const { success } = await request(
-        '/roles',
-        roleData,
-        userState.accessToken,
-        'post',
-      )
+      const { success } = await requestHandler('/roles', true, roleData, 'post')
       if (success) {
         setToastState([
           ...toastState,
@@ -82,10 +80,10 @@ const CreateRole = () => {
 
   const checkDuplicate = async (keyword, TYPE) => {
     try {
-      const { result } = await request(
+      const { result } = await requestHandler(
         '/roles',
+        true,
         { validate: keyword },
-        userState.accessToken,
         'get',
       )
       if (result?.length) {
@@ -187,7 +185,10 @@ const CreateRole = () => {
   }, [])
 
   return (
-    <Container ref={(ref) => (containerRef.current = ref)}>
+    <Container
+      ref={(ref) => {
+        containerRef.current = ref
+      }}>
       <div className='header'>
         <span>Create New Role</span>
       </div>
@@ -217,7 +218,9 @@ const CreateRole = () => {
                 <div className='permission-title'>{value.key}</div>
                 <div className='permission-detail-container'>
                   <div
-                    ref={(ref) => (choicesDetailRef.current[index] = ref)}
+                    ref={(ref) => {
+                      choicesDetailRef.current[index] = ref
+                    }}
                     className={clsx(
                       'permission-detail',
                       value.showExpand && 'collapse',

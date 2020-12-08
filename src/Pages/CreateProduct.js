@@ -1,4 +1,4 @@
-import { CancelButton, SubmitButton } from '../components/Button'
+import { CancelButton, SubmitButton, TextArea, TextInput } from '../components'
 import React, { useState } from 'react'
 import {
   engIsContainSpecialCharacter,
@@ -7,8 +7,6 @@ import {
 } from '../Utils/inputValidation'
 
 import { Container } from './CreateProductStyle'
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
 import { requestHandler } from '../Services'
