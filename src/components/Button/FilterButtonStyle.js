@@ -40,6 +40,8 @@ const Container = styled.label`
     left: 0;
     top: 40px;
 
+    border-radius: 8px;
+
     overflow: hidden;
     z-index: 5;
     transition: all 0.25s ease-in-out;

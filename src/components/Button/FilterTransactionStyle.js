@@ -40,6 +40,8 @@ const Container = styled.label`
     left: 0;
     top: 40px;
 
+    border-radius: 8px;
+
     overflow: hidden;
     background-color: ${COLORS.natural.white};
     z-index: 5;
@@ -157,7 +159,6 @@ const Container = styled.label`
     bottom: 0;
 
     z-index: 4;
-    background-color: red;
   }
 `
 

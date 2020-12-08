@@ -22,6 +22,11 @@ const FilterTrasaction = ({
     onCheckBoxChange(group, value)
   }
 
+  const stopPropagation = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
   const onToggle = () => setIsDismissMenu(!isDismissMenu)
 
   return (
@@ -130,7 +135,9 @@ const FilterTrasaction = ({
             <div className='options-name'>
               <span>Amount</span>
             </div>
-            <div className='slider-wrapper'>
+            <div
+              className='slider-wrapper'
+              onClick={(event) => stopPropagation(event)}>
               <Slider
                 setMax={setMaxAmount}
                 setMin={setMinAmount}
@@ -144,7 +151,9 @@ const FilterTrasaction = ({
             <div className='options-name'>
               <span>Balance</span>
             </div>
-            <div className='slider-wrapper'>
+            <div
+              className='slider-wrapper'
+              onClick={(event) => stopPropagation(event)}>
               <Slider
                 setMax={setMaxBalance}
                 setMin={setMinBalance}

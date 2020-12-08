@@ -41,6 +41,8 @@ const Container = styled.label`
     max-width: 100%;
     max-height: 0;
 
+    border-radius: 8px;
+
     z-index: 5;
     overflow: hidden;
     background-color: ${COLORS.natural.white};

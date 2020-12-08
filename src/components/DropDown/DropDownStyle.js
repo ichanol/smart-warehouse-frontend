@@ -6,8 +6,8 @@ const Container = styled.label`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: ${({ fullWidth }) => fullWidth ? '100%' : '130px'};
-  padding: ${({ fullWidth }) => fullWidth ? 'none' : '0 0 0 12px'};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : '130px')};
+  padding: ${({ fullWidth }) => (fullWidth ? 'none' : '0 0 0 12px')};
 
   border-radius: 8px;
 
@@ -66,6 +66,12 @@ const Container = styled.label`
     padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
     align-items: center;
     border-top: 1px solid ${COLORS.gray[200]};
+
+    transition: all 0.25s ease-in-out;
+
+    :hover {
+      background-color: ${COLORS.gray[200]};
+    }
   }
   .disable-dropdown {
     position: fixed;

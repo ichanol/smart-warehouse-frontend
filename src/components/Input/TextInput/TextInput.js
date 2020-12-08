@@ -17,18 +17,13 @@ const TextInput = forwardRef(
     return (
       <Container>
         <Input
-          id='custom-text-input'
           ref={inputRef}
           {...rest}
           width={width}
           height={height}
           onChange={(event) => onValueChange(event.target.value, valueType)}
         />
-        {placeholder && (
-          <label htmlFor='custom-text-input' className='placeholder'>
-            {placeholder}
-          </label>
-        )}
+        {placeholder && <label className='placeholder'>{placeholder}</label>}
         {error && <span className='input-error-suggestion'>{error}</span>}
       </Container>
     )

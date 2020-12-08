@@ -20,6 +20,8 @@ const DataSection = styled.div`
     right: 0;
     left: 0;
 
+    border-radius: 8px;
+
     background-color: ${COLORS.gray[100]};
   }
 
@@ -118,7 +120,6 @@ const DataSection = styled.div`
 `
 
 const TitleSection = styled(DataSection)`
-  margin-top: 25px;
   height: 60px;
   background-color: ${({ darkHeader }) =>
     darkHeader ? COLORS.gray[900] : COLORS.natural.white};
@@ -142,6 +143,13 @@ const SortArrow = styled.div`
 
 const Container = styled.div`
   position: relative;
+
+  border-radius: 8px;
+  margin-top: 25px;
+  padding: 12px;
+
+  overflow: hidden;
+  background-color: ${COLORS.natural.white};
 
   .arrow {
     min-width: 50px;

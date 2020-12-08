@@ -4,10 +4,8 @@ import {
   DotsMenu,
   DropDown,
   EditIcon,
-  FilterIcon,
   FilterTrasaction,
   Pagination,
-  Slider,
   SearchBox as useSearchBox,
 } from '../components'
 import {
@@ -15,11 +13,10 @@ import {
   TransactionList,
   TransactionTitle,
 } from '../Pages/TransactionStyle'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
 
 import { COLORS } from '../Constant'
-import { Datepicker } from '../components/Datepicker'
 import { atomState } from '../Atoms'
 import { blobFileDownloader } from '../Utils'
 import { capitalize } from 'lodash'
@@ -245,7 +242,16 @@ const Transaction = () => {
           <div className='tools-bar'>{SearchBoxComponent}</div>
           <div className='tools-bar'>
             <div className='filter-wrapper'>
-              <FilterTrasaction filter={filter} onCheckBoxChange={onCheckBoxChange}/>
+              <FilterTrasaction
+                filter={filter}
+                onCheckBoxChange={onCheckBoxChange}
+                setMaxAmount={setMaxAmount}
+                setMinAmount={setMinAmount}
+                setMinMaxAmountOnSlider={setMinMaxAmountOnSlider}
+                setMaxBalance={setMaxBalance}
+                setMinBalance={setMinBalance}
+                setMinMaxBalanceOnSlider={setMinMaxBalanceOnSlider}
+              />
             </div>
             <DropDown
               selectedValue={numberPerPage}
@@ -345,14 +351,11 @@ const TransactionRecord = ({
     setDismissContext(false)
   }
 
-  const onEdit = (event) => {
-    // event.preventDefault()
-    // event.stopPropagation()
+  const onEdit = () => {
     console.log('edit')
   }
 
-  const onGenerateReport = async (event, reportNumber) => {
-    event.preventDefault()
+  const onGenerateReport = async (reportNumber) => {
     const response = await requestHandler(
       `/generate-pdf/${reportNumber}`,
       true,
@@ -363,7 +366,6 @@ const TransactionRecord = ({
       true,
     )
     blobFileDownloader(response, `${reportNumber}.pdf`)
-    console.log('response', response)
   }
 
   return (
@@ -394,9 +396,7 @@ const TransactionRecord = ({
           onClick={(event) => onToggleMenu(event, index)}>
           <DotsMenu />
           <div className='transaction-context-menu'>
-            <div
-              className='transaction-record-menu'
-              onClick={(event) => onEdit(event)}>
+            <div className='transaction-record-menu' onClick={() => onEdit()}>
               <EditIcon fill={COLORS.gray[600]} />
               <span className='transaction-record-menu-title'>
                 Edit Transaction
@@ -404,9 +404,7 @@ const TransactionRecord = ({
             </div>
             <div
               className='transaction-record-menu'
-              onClick={(event) =>
-                onGenerateReport(event, value.reference_number)
-              }>
+              onClick={() => onGenerateReport(value.reference_number)}>
               <DocumentIcon fill={COLORS.gray[600]} />
               <span className='transaction-record-menu-title'>
                 Generate Report

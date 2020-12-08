@@ -5,20 +5,19 @@ import {
   isContainSpecialCharacter,
   isFirstCharacterSpace,
 } from '../Utils/inputValidation'
-import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './CreateProductStyle'
 import TextArea from '../components/Input/TextArea/TextArea'
 import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 import { useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
 const CreateProduct = () => {
   const history = useHistory()
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
   const [inputError, setError] = useState({})
@@ -33,10 +32,10 @@ const CreateProduct = () => {
 
   const onSubmit = async () => {
     try {
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/products',
+        true,
         productData,
-        userState.accessToken,
         'post',
       )
       if (success) {
@@ -85,10 +84,10 @@ const CreateProduct = () => {
 
   const checkDuplicate = async (keyword, TYPE) => {
     try {
-      const { result } = await request(
+      const { result } = await requestHandler(
         '/products',
+        true,
         { validate: keyword },
-        userState.accessToken,
         'get',
       )
       if (result?.length) {

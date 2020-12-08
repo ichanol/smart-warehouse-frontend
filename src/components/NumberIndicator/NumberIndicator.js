@@ -10,8 +10,11 @@ const NumberIndicator = ({
   return (
     numberOfShown > 0 && (
       <Container>
-        Show {(activePage - 1) * numberPerPage + 1} -{' '}
-        {(activePage - 1) * numberPerPage + numberOfShown} of {totalRecord}
+        {`Show ${(activePage - 1) * numberPerPage + 1} ${
+          totalRecord > 1
+            ? `- ${(activePage - 1) * numberPerPage + numberOfShown}`
+            : ''
+        } of ${totalRecord} `}
       </Container>
     )
   )

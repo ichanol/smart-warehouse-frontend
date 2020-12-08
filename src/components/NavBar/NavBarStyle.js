@@ -8,8 +8,7 @@ const SideBar = styled.div`
   background-color: ${COLORS.gray[900]};
   display: flex;
   flex-direction: column;
-  transition: all 0.25s ease-in;
-  z-index: 4;
+  z-index: 101;
   position: fixed;
 
   .menu {
@@ -78,7 +77,6 @@ const SideBar = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    z-index: 4;
 
     .menu span {
       transition: all 0.2s ease-in-out;

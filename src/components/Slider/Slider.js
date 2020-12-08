@@ -34,13 +34,8 @@ const Slider = ({
   const setMinMaxHandler = (minValue, maxValue) => setMinMax(minValue, maxValue)
 
   const onMouseDown = (event, ref, type) => {
-    event.preventDefault()
-    event.stopPropagation()
     if (type === 'touch') {
       event.clientX = event.changedTouches[0].clientX
-    } else {
-      event.preventDefault()
-      event.stopPropagation()
     }
     knobAnimatedValue.current.x = event.clientX
     knobAnimatedValue.current.isGrant = true
@@ -55,13 +50,8 @@ const Slider = ({
   }
 
   const onMouseMove = (event, ref, type) => {
-    event.preventDefault()
-    event.stopPropagation()
     if (type === 'touch') {
       event.clientX = event.changedTouches[0].clientX
-    } else {
-      event.preventDefault()
-      event.stopPropagation()
     }
     const sliderWidth = width
 
@@ -191,9 +181,7 @@ const Slider = ({
     }
   }
 
-  const onMouseUp = (event) => {
-    event.preventDefault()
-    event.stopPropagation()
+  const onMouseUp = () => {
     knobAnimatedValue.current.isGrant = false
   }
 
@@ -204,42 +192,48 @@ const Slider = ({
       <div
         className='knob'
         onMouseDown={(event) => onMouseDown(event, 0)}
-        onMouseUp={(event) => onMouseUp(event)}
-        onMouseOut={(event) => onMouseUp(event)}
+        onMouseUp={onMouseUp}
+        onMouseOut={onMouseUp}
         onMouseMove={(event) => onMouseMove(event, 0)}
         onTouchMove={(event) => onMouseMove(event, 0, 'touch')}
         onTouchStart={(event) => onMouseDown(event, 0, 'touch')}
-        ref={(ref) => (knobRef.current[0] = ref)}>
+        ref={(ref) => {
+          knobRef.current[0] = ref
+        }}>
         <div className='inner-knob' />
       </div>
       <div
         className='knob'
         onMouseDown={(event) => onMouseDown(event, 1)}
-        onMouseUp={(event) => onMouseUp(event)}
-        onMouseOut={(event) => onMouseUp(event)}
+        onMouseUp={onMouseUp}
+        onMouseOut={onMouseUp}
         onMouseMove={(event) => onMouseMove(event, 1)}
         onTouchMove={(event) => onMouseMove(event, 1, 'touch')}
         onTouchStart={(event) => onMouseDown(event, 1, 'touch')}
-        ref={(ref) => (knobRef.current[1] = ref)}>
+        ref={(ref) => {
+          knobRef.current[1] = ref
+        }}>
         <div className='inner-knob' />
       </div>
       <div
         className='slide-bar'
         onMouseDown={(event) => onMouseDown(event)}
         onMouseMove={(event) => onMouseMove(event, 2)}
-        onMouseUp={(event) => onMouseUp(event)}
-        onMouseOut={(event) => onMouseUp(event)}
+        onMouseUp={onMouseUp}
+        onMouseOut={onMouseUp}
         onTouchMove={(event) => onMouseMove(event, 2, 'touch')}
         onTouchStart={(event) => onMouseDown(event, 2, 'touch')}
-        ref={(ref) => (knobRef.current[2] = ref)}>
+        ref={(ref) => {
+          knobRef.current[2] = ref
+        }}>
         <div
           className='display-number'
-          onMouseDown={(event) => onMouseUp(event)}
-          onMouseUp={(event) => onMouseUp(event)}
-          onMouseOut={(event) => onMouseUp(event)}
-          onMouseMove={(event) => onMouseUp(event)}
-          onTouchMove={(event) => onMouseUp(event)}
-          onTouchStart={(event) => onMouseUp(event)}>
+          onMouseDown={onMouseUp}
+          onMouseUp={onMouseUp}
+          onMouseOut={onMouseUp}
+          onMouseMove={onMouseUp}
+          onTouchMove={onMouseUp}
+          onTouchStart={onMouseUp}>
           <span className='display-range'>
             {sliderValue.min.toLocaleString()} -{' '}
             {sliderValue.max.toLocaleString()}
