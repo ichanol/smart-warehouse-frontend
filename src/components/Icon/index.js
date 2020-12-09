@@ -13,11 +13,13 @@ import FilterIcon from './FilterIcon'
 import HistoryIcon from './HistoryIcon'
 import ImportExportProductIcon from './ImportExportProductIcon'
 import InformationIcon from './InformationIcon'
+import LogOutIcon from './LogOutIcon'
 import MapIcon from './MapIcon'
 import OverviewIcon from './OverviewIcon'
 import PermissionIcon from './PermissionIcon'
 import ProductIcon from './ProductIcon'
 import ProductListIcon from './ProductListIcon'
+import ProfileSettingIcon from './ProfileSettingIcon'
 import SearchIcon from './SearchIcon'
 import SuccessIcon from './SuccessIcon'
 import TemplateIcon from './TemplateIcon'
@@ -52,4 +54,6 @@ export {
   CreateIcon,
   UploadIcon,
   TemplateIcon,
+  LogOutIcon,
+  ProfileSettingIcon,
 }

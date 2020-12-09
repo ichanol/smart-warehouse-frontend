@@ -7,31 +7,27 @@ const Container = styled.div`
   position: relative;
 
   padding: 15px 30px;
-  
+
   background-color: ${COLORS.natural.white};
   box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.125);
   z-index: 3;
+`
 
-  .wrapper {
-    flex: 1;
-    position: relative;
-  }
+const Profile = styled.label`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .profile {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    padding: 10px;
-    
-    cursor: pointer;
-  }
+  padding: 10px;
 
-  .profile:hover {
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+
+  &:hover {
     background-color: rgba(0, 0, 0, 0.05);
   }
 
@@ -40,21 +36,68 @@ const Container = styled.div`
     height: 30px;
 
     border-radius: 35px;
-    
+
     background-color: ${COLORS.red[300]};
   }
 
-  .profile span {
+  span {
     margin: 0 10px;
-    
+
     text-align: center;
+    white-space: nowrap;
+  }
+
+  input[type='checkbox'] {
+    width: 0;
+    height: 0;
+  }
+
+  .profile-context-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-width: 100%;
+    max-height: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+
+    border-radius: 8px;
+
+    background-color: ${COLORS.natural.white};
+    overflow: hidden;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.125),
+      0 -5px 15px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  input:checked + .profile-context-menu {
+    max-width: 600px;
+    max-height: 600px;
+
+    padding: 12px 0;
+  }
+
+  .profile-menu {
+    height: 50px;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    
+    padding: 12px 24px;
+
+    transition: all 0.25s ease-in-out;
+
+    :hover {
+      background-color: ${COLORS.gray[200]};
+    }
   }
 
   @media only screen and (max-width: 1024px) {
-    .profile span {
+    & > span {
       display: none;
     }
   }
 `
 
-export { Container }
+export { Container, Profile }
