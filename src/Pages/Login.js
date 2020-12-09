@@ -15,9 +15,9 @@ import {
   useResetRecoilState,
 } from 'recoil'
 
-import { Modal } from '../components/Modal'
+import { Modal } from '../components'
 import atomState from '../Atoms/Atoms'
-import { postRequest } from '../Services'
+import { requestHandler } from '../Services'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 
@@ -79,17 +79,17 @@ const Login = () => {
         username: username,
         password: password,
       }
-      const response = await postRequest(
-        `${process.env.REACT_APP_API}/login`,
+      const response = await requestHandler(
+        '/login',
+        false,
         requestBody,
+        'post',
       )
       window.localStorage.setItem('accessToken', response.accessToken)
       window.localStorage.setItem('refreshToken', response.refreshToken)
       set(atomState.userState, (oldState) => ({
         ...oldState,
         username: username,
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
         isLogin: response.success,
         permission: response.permission,
       }))
@@ -102,7 +102,6 @@ const Login = () => {
   useEffect(() => {
     if (userState.isLogin) {
       history.push('/overview')
-    } else {
     }
   }, [])
 

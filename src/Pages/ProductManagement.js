@@ -3,6 +3,7 @@ import {
   DropDown,
   FilterButton,
   NumberIndicator,
+  Pagination,
   ResponsiveTable,
   SearchBox as useSearchBox,
 } from '../components'
@@ -11,7 +12,6 @@ import { requestHandler, useAxios } from '../Services'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ProductManagementStyle'
-import { Pagination } from '../components'
 import { atomState } from '../Atoms/'
 import { useHistory } from 'react-router-dom'
 

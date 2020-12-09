@@ -34,7 +34,9 @@ const DropDown = ({
         />
         <div
           className='choice-container'
-          ref={(ref) => (dropDownRef.current = ref)}>
+          ref={(ref) => {
+            dropDownRef.current = ref
+          }}>
           {choices.map((value, index) => (
             <div
               className='item-per-page-choice'

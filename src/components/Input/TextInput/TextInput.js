@@ -13,21 +13,19 @@ const TextInput = forwardRef(
       ...rest
     },
     inputRef,
-  ) => {
-    return (
-      <Container>
-        <Input
-          ref={inputRef}
-          {...rest}
-          width={width}
-          height={height}
-          onChange={(event) => onValueChange(event.target.value, valueType)}
-        />
-        {placeholder && <label className='placeholder'>{placeholder}</label>}
-        {error && <span className='input-error-suggestion'>{error}</span>}
-      </Container>
-    )
-  },
+  ) => (
+    <Container>
+      <Input
+        ref={inputRef}
+        {...rest}
+        width={width}
+        height={height}
+        onChange={(event) => onValueChange(event.target.value, valueType)}
+      />
+      {placeholder && <label className='placeholder'>{placeholder}</label>}
+      {error && <span className='input-error-suggestion'>{error}</span>}
+    </Container>
+  ),
 )
 
 export default TextInput

@@ -57,6 +57,7 @@ const Container = styled.label`
   }
   .custom-checkbox input[type='checkbox']:checked + .box {
     border-color: ${COLORS.blue[400]};
+
     background-color: ${COLORS.blue[400]};
   }
   .custom-checkbox input[type='checkbox']:checked + .box::after {
@@ -82,16 +83,17 @@ const Container = styled.label`
   }
   .box::after {
     display: none;
-    content: '';
     position: absolute;
     left: 50%;
     top: 50%;
     width: 5px;
     height: 10px;
-
-    transform: translate(-50%, -60%) rotate(45deg);
+    
     border: solid ${COLORS.natural.white};
     border-width: 0 3px 3px 0;
+
+    content: '';
+    transform: translate(-50%, -60%) rotate(45deg);
   }
   .options {
     display: flex;

@@ -14,14 +14,13 @@ import {
   TransactionTitle,
 } from '../Pages/TransactionStyle'
 import React, { useEffect, useState } from 'react'
+import { capitalize, debounce } from 'lodash'
 import { requestHandler, useAxios } from '../Services'
 
 import { COLORS } from '../Constant'
 import { atomState } from '../Atoms'
 import { blobFileDownloader } from '../Utils'
-import { capitalize } from 'lodash'
 import clsx from 'clsx'
-import { debounce } from 'lodash'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
@@ -114,6 +113,9 @@ const Transaction = () => {
     numberPerPage,
   }
 
+  const searchQueryParams = { ...queryParams }
+  searchQueryParams.page = 1
+
   const [
     transactionListData,
     transactionListDataTrigger,
@@ -126,7 +128,7 @@ const Transaction = () => {
     searchTransactionListDataTrigger,
     setSearchTransactionListDataTrigger,
     setFetchSearchTransactionListData,
-  ] = useAxios('/product-transaction', true, queryParams, 'get')
+  ] = useAxios('/product-transaction', true, searchQueryParams, 'get')
 
   useEffect(() => {
     setFetchTransactionListData(true)

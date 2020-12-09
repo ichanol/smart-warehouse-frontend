@@ -8,12 +8,14 @@ const Container = styled.div`
   flex: 1;
 
   .search-box {
-    font-size: ${FONT.l};
     flex: 1;
+
     outline: none;
     border: none;
     border-radius: 8px;
     padding: 0 80px 0 20px;
+    
+    font-size: ${FONT.l};
     transition: all linear 0.2s;
   }
   .search-box:focus {
@@ -32,17 +34,19 @@ const Container = styled.div`
     color: ${COLORS.gray[600]};
   }
   .search-suggest {
-    border-radius: 8px;
-    padding: 25px;
     max-height: 250px;
-    overflow: auto;
     position: absolute;
     width: 100%;
     top: 50px;
-    background-color: ${COLORS.gray[100]};
-    z-index: 1;
     display: flex;
     flex-direction: column;
+
+    padding: 25px;
+    border-radius: 8px;
+    
+    overflow: auto;
+    background-color: ${COLORS.gray[100]};
+    z-index: 1;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.125),
       0 -5px 15px 0 rgba(255, 255, 255, 0.35);
   }
@@ -54,6 +58,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     height: 100%;
+
     cursor: pointer;
   }
   .clear-button {
@@ -63,7 +68,9 @@ const Container = styled.div`
     display: flex;
     min-height: 35px;
     align-items: center;
+
     border-bottom: 1px solid ${COLORS.gray[200]};
+    
     cursor: default;
   }
   .search-suggest-data:last-of-type {

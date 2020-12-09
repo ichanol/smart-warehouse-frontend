@@ -5,10 +5,12 @@ import styled from 'styled-components'
 const Container = styled.div`
   position: relative;
   height: 100%;
-  padding: 20px;
-  padding-top: 70px;
   display: flex;
   flex-direction: column;
+
+  padding-top: 70px;
+  padding: 20px;
+
   overflow: auto;
   background-color: ${COLORS.natural.white};
 
@@ -20,22 +22,26 @@ const Container = styled.div`
     height: 50px;
     display: flex;
     align-items: flex-end;
-    background-color: ${COLORS.gray[300]};
+
     padding-left: 12px;
+
+    background-color: ${COLORS.gray[300]};
   }
   .action-tabs {
     height: 35px;
     min-width: 90px;
     display: flex;
-    padding: 0 10px;
     align-items: center;
+    position: relative;
+
+    padding: 0 10px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+
     color: ${COLORS.gray[700]};
     background-color: ${COLORS.gray[100]};
     opacity: 0.8;
     cursor: pointer;
-    position: relative;
   }
   .focus-tab {
     opacity: 1;
@@ -52,6 +58,7 @@ const Container = styled.div`
     height: 35px;
     align-items: center;
     display: flex;
+
     font-weight: bold;
     letter-spacing: 1px;
     filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
@@ -63,15 +70,18 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: ${COLORS.natural.white};
-    padding: 0px;
-    min-width: 100%;
-    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
     position: relative;
+    min-width: 100%;
+
+    padding: 0px;
+
+    filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
+    background-color: ${COLORS.natural.white};
   }
   .button-wrapper {
     display: flex;
     justify-content: space-between;
+
     padding: 10px;
   }
   .list-manipulate-button {
@@ -92,6 +102,7 @@ const Container = styled.div`
     height: 50px;
 
     border-radius: 12px;
+
     background-color: ${COLORS.natural.red};
     z-index: 200;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);

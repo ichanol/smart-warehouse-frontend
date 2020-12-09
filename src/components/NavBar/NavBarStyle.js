@@ -2,23 +2,25 @@ import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const SideBar = styled.div`
-  box-sizing: border-box;
   width: 275px;
   height: 100%;
-  background-color: ${COLORS.gray[900]};
   display: flex;
   flex-direction: column;
-  z-index: 101;
   position: fixed;
+
+  background-color: ${COLORS.gray[900]};
+  z-index: 101;
 
   .menu {
     display: flex;
-    padding: 15px 20px;
     width: 100%;
     height: 50px;
-    color: ${COLORS.gray[500]};
-    border-left: 5px solid transparent;
     align-items: center;
+
+    padding: 15px 20px;
+    border-left: 5px solid transparent;
+
+    color: ${COLORS.gray[500]};
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
@@ -33,8 +35,11 @@ const SideBar = styled.div`
 
   .hamburger .line {
     width: 100%;
+
     border: 2px solid ${COLORS.natural.white};
-    border-radius: 2px;
+    border-radius: 8px;
+
+    background-color: ${COLORS.natural.white};
   }
 
   .line:nth-of-type(2) {
@@ -42,8 +47,9 @@ const SideBar = styled.div`
   }
 
   .menu:hover {
-    color: ${COLORS.natural.white};
     border-color: ${COLORS.natural.white};
+
+    color: ${COLORS.natural.white};
     background-color: ${COLORS.gray[900]};
   }
 
@@ -52,54 +58,56 @@ const SideBar = styled.div`
   }
 
   .active-menu {
-    color: ${COLORS.orange[500]};
     border-color: ${COLORS.orange[500]};
+
+    color: ${COLORS.orange[500]};
     background-color: ${COLORS.gray[800]};
   }
 
   .menu span {
     margin-left: 15px;
+
     opacity: 1;
     transition: all 0.2s ease-in-out;
   }
 
   .header-text {
-    color: ${COLORS.natural.white};
     margin-top: 40px;
     margin-bottom: 25px;
     margin-left: 25px;
+
+    color: ${COLORS.natural.white};
   }
 
   @media (max-width: 1024px) {
     width: ${({ open }) => open ? '100%' : '65px'};
     min-width: 65px;
     position: fixed;
-    overflow-y: auto;
-    overflow-x: hidden;
     height: 100%;
 
+    overflow-y: auto;
+    overflow-x: hidden;
+
     .menu span {
+      display: ${({ open }) => open ? 'flex' : 'none'};
+
       transition: all 0.2s ease-in-out;
       opacity: ${({ open }) => open ? 1 : 0};
-      display: ${({ open }) => open ? 'flex' : 'none'};
     }
 
     .menu {
-      padding: 0;
       justify-content: center;
       min-height: 50px;
       margin-top: 15px;
+
+      padding: 0;
     }
 
     .menu:first-of-type {
       margin-top: 65px;
     }
 
-    br {
-      display: none;
-    }
-
-    .header-text {
+    br, .header-text {
       display: none;
     }
 
@@ -110,9 +118,10 @@ const SideBar = styled.div`
       display: flex;
       min-height: 50px;
       width: 65px;
-      padding: 0 15px;
       justify-content: center;
       align-items: center;
+
+      padding: 0 15px;
     }
 
     .line:nth-of-type(2) {
@@ -138,9 +147,11 @@ const SideBar = styled.div`
 
 const Logo = styled.div`
   height: 75px;
-  background-color: ${COLORS.natural.white};
   align-items: center;
+
   margin: 25px;
+  
+  background-color: ${COLORS.natural.white};
   text-align: center;
   font-size: 35px;
 

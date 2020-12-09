@@ -4,9 +4,11 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;
-  padding: 25px;
   display: flex;
   flex-direction: column;
+
+  padding: 25px;
+
   overflow: auto;
   background-color: ${COLORS.gray[300]};
 
@@ -14,19 +16,24 @@ const Container = styled.div`
     height: 35px;
     align-items: center;
     display: flex;
+
     margin-bottom: 25px;
+
     font-weight: bold;
     letter-spacing: 1px;
   }
   .header > span {
-    font-size: ${FONT.xl};
     margin-left: 25px;
+
+    font-size: ${FONT.xl};
   }
   .content {
     flex: 1;
     display: flex;
-    padding: 0 25px 25px 25px;
     flex-direction: column;
+
+    padding: 0 25px 25px 25px;
+
     position: relative;
   }
   .tools-bar-wrapper {
@@ -45,6 +52,7 @@ const Container = styled.div`
     display: flex;
     flex: 1;
     max-width: 40px;
+
     margin-right: 12px;
   }
   .create-button-wrapper {

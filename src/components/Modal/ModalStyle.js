@@ -50,6 +50,7 @@ export const Container = styled.div`
   bottom: 0;
   right: 0;
   display: flex;
+
   overflow: hidden;
   z-index: 5;
   background-color: rgba(0, 0, 0, 0.5);
@@ -61,12 +62,14 @@ export const Container = styled.div`
     min-width: 350px;
     display: flex;
     flex-direction: column;
-    background-color: ${COLORS.natural.white};
     justify-content: center;
     align-items: center;
+    position: relative;
+
     border-radius: 8px;
     padding: 30px;
-    position: relative;
+    
+    background-color: ${COLORS.natural.white};
     box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3),
       0 -10px 15px 0 rgba(255, 255, 255, 0.35);
     visibility: ${({ isDisplay }) => isDisplay ? 'visible' : 'hidden'};
@@ -93,14 +96,16 @@ export const Container = styled.div`
   .warnning-negative-button,
   .success-negative-button,
   .error-negative-button {
-    padding: 0 20px;
     height: 45px;
-    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-transform: uppercase;
+
+    padding: 0 20px;
+    border-radius: 8px;
     margin: 10px;
+    
+    text-transform: uppercase;
   }
 
   .warnning-negative-button,
@@ -110,36 +115,43 @@ export const Container = styled.div`
   }
 
   .confirm-negative-button {
+    flex: 1;
+
+    border: 2px solid transparent;
+    
     color: gray;
     background-color: transparent;
-    border: 2px solid transparent;
-    flex: 1;
   }
 
   .confirm-positive-button,
   .error-positive-button,
   .warnning-positive-button,
   .success-positive-button {
+    flex: 1;
+
+    border: 2px solid ${({ color }) => color ? color : COLORS.red[500]};
+    
     color: ${COLORS.natural.white};
     background-color: ${({ color }) => color ? color : COLORS.red[500]};
-    border: 2px solid ${({ color }) => color ? color : COLORS.red[500]};
-    flex: 1;
   }
 
   .warnning-positive-button {
-    background-color: ${COLORS.yellow[500]};
     border: 2px solid ${COLORS.yellow[500]};
+
+    background-color: ${COLORS.yellow[500]};
   }
 
   .success-positive-button {
-    background-color: ${COLORS.green[500]};
     border: 2px solid ${COLORS.green[500]};
+
+    background-color: ${COLORS.green[500]};
   }
 
   .header {
     width: 100%;
     display: flex;
     justify-content: center;
+
     margin-bottom: 25px;
   }
 
@@ -151,15 +163,18 @@ export const Container = styled.div`
   .detail {
     width: 100%;
     max-height: 200px;
-    overflow: auto;
     display: flex;
+    
     margin-bottom: 25px;
     padding: 10px;
+
+    overflow: auto;
   }
 
   .detail span {
-    text-align: center;
     width: 100%;
+    
+    text-align: center;
     font-size: ${FONT.l};
     color: rgba(0, 0, 0, 0.75);
   }

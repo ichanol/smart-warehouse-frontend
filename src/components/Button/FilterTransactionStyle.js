@@ -61,13 +61,15 @@ const Container = styled.label`
   }
   .date-picker-wrapper {
     display: flex;
+    width: fit-content;
+
     margin: 20px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    width: fit-content;
   }
   .custom-checkbox input[type='checkbox']:checked + .box {
-    background-color: ${COLORS.blue[400]};
     border-color: ${COLORS.blue[400]};
+
+    background-color: ${COLORS.blue[400]};
   }
   .custom-checkbox input[type='checkbox']:checked + .box::after {
     display: block;
@@ -81,35 +83,40 @@ const Container = styled.label`
     align-items: center;
   }
   .box {
-    border-radius: 4px;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+
+    border-radius: 4px;
     border: 1px solid ${COLORS.gray[400]};
   }
   .box::after {
     display: none;
-    content: '';
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60%) rotate(45deg);
     width: 5px;
     height: 10px;
+
     border: solid ${COLORS.natural.white};
     border-width: 0 3px 3px 0;
+
+    content: '';
+    transform: translate(-50%, -60%) rotate(45deg);
   }
   .options {
     display: flex;
     flex: 1;
+
     padding: 20px;
   }
   .options-name {
     display: flex;
     flex: 1;
     max-width: 75px;
+
     margin: 8px;
   }
   .options-name span {
@@ -119,15 +126,17 @@ const Container = styled.label`
   }
   .option-actions {
     min-height: 5%;
-    padding: 0 15px;
     display: flex;
     flex-direction: column;
     flex: 1;
+
+    padding: 0 15px;
   }
   .option-actions-row {
     display: flex;
     width: 280px;
     flex-wrap: wrap;
+
     padding: 0 15px;
   }
   .range-slider {
@@ -135,6 +144,7 @@ const Container = styled.label`
     justify-content: center;
     align-items: center;
     flex: 1;
+
     padding: 20px;
   }
   .slider-wrapper {
@@ -142,11 +152,13 @@ const Container = styled.label`
     height: 100%;
     justify-content: center;
     align-items: center;
+
     padding-right: 20px;
     margin-left: 60px;
   }
   .checkbox .title {
     margin-left: 8px;
+
     color: ${COLORS.gray[700]};
     font-size: ${FONT.l};
     white-space: nowrap;

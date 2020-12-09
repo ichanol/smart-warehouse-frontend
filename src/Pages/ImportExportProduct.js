@@ -1,10 +1,14 @@
-import { CancelButton, RetryButton, SubmitButton } from '../components/Button'
+import {
+  CancelButton,
+  ResponsiveTable,
+  RetryButton,
+  SubmitButton,
+} from '../components'
 import React, { useEffect, useState } from 'react'
-import { postRequest, request } from '../Services'
+import { postRequest, requestHandler } from '../Services'
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ImportExportProductStyle'
-import { ResponsiveTable } from '../components'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import io from 'socket.io-client'
@@ -177,10 +181,11 @@ const ImportExportProduct = () => {
         username: userState.username,
         productList: readProductListState,
       }
-      const response = await postRequest(
-        `${process.env.REACT_APP_API}/import-export-product`,
+      const response = await requestHandler(
+        '/import-export-product',
+        true,
         body,
-        userState.accessToken,
+        'post',
       )
       if (response.success) {
         resetReadProductListDefaultValue()
@@ -292,10 +297,10 @@ const ImportExportProduct = () => {
     const body = {
       username: userState.username,
     }
-    const result = await request(
+    const result = await requestHandler(
       '/detect-user-RFID',
+      false,
       body,
-      userState.accessToken,
       'post',
     )
   }
@@ -345,10 +350,10 @@ const ImportExportProduct = () => {
         },
       ],
     }
-    const result = await request(
+    const result = await requestHandler(
       '/detect-product-RFID',
+      false,
       body,
-      userState.accessToken,
       'post',
     )
   }

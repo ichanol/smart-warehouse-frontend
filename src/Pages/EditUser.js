@@ -1,4 +1,10 @@
-import { CancelButton, DropDown, SubmitButton } from '../components'
+import {
+  CancelButton,
+  DropDown,
+  SubmitButton,
+  TextArea,
+  TextInput,
+} from '../components'
 import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
@@ -11,17 +17,14 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { Container } from './EditUserStyle'
-import TextArea from '../components/Input/TextArea/TextArea'
-import TextInput from '../components/Input/TextInput/TextInput'
 import atomState from '../Atoms/Atoms'
 import { debounce } from 'lodash'
-import { request } from '../Services'
+import { requestHandler } from '../Services'
 
 const EditUser = () => {
   const history = useHistory()
   const { username } = useParams()
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const userListState = useRecoilValue(atomState.userListState)
 
@@ -35,10 +38,10 @@ const EditUser = () => {
         get_role: true,
       }
 
-      const { success, result } = await request(
+      const { success, result } = await requestHandler(
         '/roles',
+        true,
         queryParams,
-        userState.accessToken,
         'get',
       )
       if (success) {
@@ -78,10 +81,10 @@ const EditUser = () => {
 
   const onSubmit = async () => {
     try {
-      const { success } = await request(
+      const { success } = await requestHandler(
         '/users',
+        true,
         editedUserData,
-        userState.accessToken,
         'put',
       )
       if (success) {
@@ -135,10 +138,10 @@ const EditUser = () => {
 
   const checkDuplicate = async (keyword, TYPE) => {
     try {
-      const { result } = await request(
+      const { result } = await requestHandler(
         '/users',
+        true,
         { validate: keyword, type: TYPE },
-        userState.accessToken,
         'get',
       )
       if (result?.length) {

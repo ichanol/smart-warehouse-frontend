@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 const Container = styled.span`
   margin-top: 12px;
+  
   color: ${COLORS.gray[600]};
 `
 

@@ -5,8 +5,9 @@ const Container = styled.div`
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
   display: flex;
-  border-radius: ${({ height }) => height}px;
   position: relative;
+
+  border-radius: ${({ height }) => height}px;
 
   background-color: ${({ color }) => COLORS[color][200]};
 
@@ -33,6 +34,7 @@ const Container = styled.div`
     right: 25%;
     bottom: 25%;
     position: absolute;
+
     border-radius: 100%;
 
     background-color: ${({ color }) => COLORS[color][200]};;
@@ -45,12 +47,14 @@ const Container = styled.div`
     background-color: ${({ color }) => COLORS[color][200]};;
   }
   .cap-right {
-    border-radius: 0 50px 50px 0;
     right: ${({ knobSize }) => -knobSize / 2 - 5}px;
+
+    border-radius: 0 50px 50px 0;
   }
   .cap-left {
-    border-radius: 50px 0 0 50px;
     left: ${({ knobSize }) => -knobSize / 2 - 5}px;
+
+    border-radius: 50px 0 0 50px;
   }
   .slide-bar {
     position: absolute;
@@ -65,19 +69,20 @@ const Container = styled.div`
     position: absolute;
     top: -50px;
     left: 50%;
-    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 35px;
     min-width: 100px;
+
     padding: 12px;
 
+    transform: translateX(-50%);
     background-color: ${COLORS.natural.white};
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
   .display-range{
-      white-space: nowrap;
+    white-space: nowrap;
   }
 `
 export { Container }

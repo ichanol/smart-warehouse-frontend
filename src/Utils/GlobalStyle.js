@@ -1,4 +1,3 @@
-import { COLORS } from '../Constant'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -6,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
     font-family: 'Kanit', sans-serif;
   }
 
@@ -22,12 +22,13 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .app-content {
-    padding-left: 275px;
     display: flex;
     width: 100vw;
     flex-direction: column;
     position: relative;
     max-height: 100vh;
+    
+    padding-left: 275px;
   }
   
   @media only screen and (max-width: 1024px) {

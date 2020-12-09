@@ -1,8 +1,4 @@
-import {
-  CancelButton,
-  RetryButton,
-  SubmitButton,
-} from '../components/Button'
+import { CancelButton, RetryButton, SubmitButton } from '../components'
 
 import { Container } from './OverviewStyle'
 import React from 'react'

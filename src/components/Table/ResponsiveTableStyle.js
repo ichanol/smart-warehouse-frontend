@@ -3,12 +3,13 @@ import { COLORS, FONT } from '../../Constant'
 import styled from 'styled-components'
 
 const DataSection = styled.div`
-  background-color: ${COLORS.natural.white};
   height: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
   position: relative;
   display: flex;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: ${COLORS.natural.white};
 
   .no-data {
     display: flex;
@@ -41,6 +42,7 @@ const DataSection = styled.div`
     left: ${({ multiplier, isShowIndex }) =>
       isShowIndex ? multiplier * 140 + 75 : multiplier * 140}px;
     right: 0;
+
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -78,8 +80,9 @@ const DataSection = styled.div`
   }
   .data {
     padding: 0 20px;
-    white-space: nowrap;
     border-top: 1px solid ${COLORS.gray[200]};
+
+    white-space: nowrap;
   }
   .primarykey {
     width: 75px;
@@ -96,7 +99,6 @@ const DataSection = styled.div`
     min-width: 750px;
   }
   .odd {
-    /* background-color: rgba(209, 218, 220, 0.1); */
   }
   .inactive {
     background-color: ${COLORS.gray[100]};
@@ -104,6 +106,7 @@ const DataSection = styled.div`
   }
   .number-of-items-indicator {
     margin-top: 12px;
+
     color: ${COLORS.gray[600]};
   }
   .action {
@@ -111,20 +114,23 @@ const DataSection = styled.div`
     justify-content: center;
   }
   .edit-wrapper {
-    margin-left: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    margin-left: 12px;
+
     cursor: pointer;
   }
 `
 
 const TitleSection = styled(DataSection)`
   height: 60px;
-  background-color: ${({ darkHeader }) =>
-    darkHeader ? COLORS.gray[900] : COLORS.natural.white};
   position: relative;
   display: flex;
+
+  background-color: ${({ darkHeader }) =>
+    darkHeader ? COLORS.gray[900] : COLORS.natural.white};
 
   .cell:hover > div {
     opacity: 1;
@@ -134,11 +140,13 @@ const TitleSection = styled(DataSection)`
 const SortArrow = styled.div`
   height: 30px;
   width: 15px;
-  transition: all 0.15s linear;
-  margin-left: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  margin-left: 8px;
+
+  transition: all 0.15s linear;
 `
 
 const Container = styled.div`
@@ -154,9 +162,10 @@ const Container = styled.div`
   .arrow {
     min-width: 50px;
     min-height: 50px;
-    background-color: red;
     position: absolute;
     top: 100%;
+
+    background-color: red;
     cursor: pointer;
   }
   .left {

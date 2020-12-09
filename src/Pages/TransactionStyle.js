@@ -4,29 +4,36 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;
-  padding: 25px;
   display: flex;
   flex-direction: column;
+
+  padding: 25px;
+
   overflow: auto;
   background-color: ${COLORS.gray[300]};
+
   .header {
     height: 35px;
     align-items: center;
     display: flex;
+
     margin-bottom: 25px;
+
     font-weight: bold;
     letter-spacing: 1px;
   }
   .header > span {
-    font-size: ${FONT.xl};
     margin-left: 25px;
+
+    font-size: ${FONT.xl};
   }
   .content {
     flex: 1;
     display: flex;
-    padding: 0 25px 25px 25px;
     flex-direction: column;
     position: relative;
+
+    padding: 0 25px 25px 25px;
   }
   .tools-bar-wrapper {
     display: flex;
@@ -58,7 +65,6 @@ const TransactionTitle = styled.div`
 
   background-color: ${COLORS.natural.white};
   color: ${COLORS.gray[600]};
-
   cursor: pointer;
 
   .transaction-detail,
@@ -78,6 +84,7 @@ const TransactionTitle = styled.div`
     position: absolute;
     right: 12px;
     top: 50%;
+
     transform: translateY(-50%);
   }
 
@@ -113,10 +120,11 @@ const TransactionList = styled.label`
   width: 100%;
 
   margin: 20px 0 0;
-  transition: all 0.3s ease-in-out;
 
+  transition: all 0.3s ease-in-out;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15),
     -5px -5px 10px rgba(255, 255, 255, 0.3);
+
   &:hover {
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1),
       -10px -10px 20px rgba(255, 255, 255, 0.5);
@@ -153,9 +161,9 @@ const TransactionList = styled.label`
   .transaction-product-list-container {
     width: 100%;
     height: 0;
+
     overflow: hidden;
     background-color: ${COLORS.natural.white};
-
     transition: all 0.2s ease-in-out;
   }
 
@@ -180,6 +188,7 @@ const TransactionList = styled.label`
     position: absolute;
     right: 12px;
     top: 50%;
+
     transform: translateY(-50%);
   }
 
@@ -231,15 +240,18 @@ const TransactionList = styled.label`
     width: 100%;
     display: flex;
     align-items: center;
+
     padding: 12px;
-    /* justify-content: center; */
   }
   .transaction-record-menu-title {
     margin: 0 12px;
+
     white-space: nowrap;
   }
 
-  .export, .expired, .damaged {
+  .export,
+  .expired,
+  .damaged {
     border-left: 8px solid ${COLORS.red[400]};
   }
   .import {
@@ -266,9 +278,10 @@ const TransactionList = styled.label`
   .product-detail {
     display: flex;
     align-items: center;
-    padding-left: 12px;
     flex: 1;
     min-width: 0;
+
+    padding-left: 12px;
   }
 
   .product-information {
@@ -284,33 +297,27 @@ const TransactionList = styled.label`
     border: 2px solid ${COLORS.red[300]};
   }
   .add {
-    background-color: ${COLORS.green[100]};
     border: 2px solid ${COLORS.green[400]};
+
+    background-color: ${COLORS.green[100]};
   }
 
   .product-id {
-    /* background-color: red; */
   }
   .product-name {
-    /* background-color: orange; */
   }
   .product-amount {
     flex: 0.75;
-    /* background-color: blue; */
   }
   .product-balance {
     flex: 0.75;
-    /* background-color: coral; */
   }
   .product-location {
-    /* background-color: lime; */
   }
   .product-remark {
-    /* background-color: gray; */
   }
   .index {
     flex: 0.3;
-    /* background-color: lime; */
   }
 `
 

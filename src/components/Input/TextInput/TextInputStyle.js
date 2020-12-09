@@ -2,17 +2,19 @@ import { COLORS } from '../../../Constant'
 import styled from 'styled-components'
 
 const Input = styled.input`
+  ${({ width }) => (width ? `max-width: ${width}px;` : '')}
+  ${({ height = 45 }) => `height: ${height}px;`}
+  
   border-radius: 5px;
-  background-color: ${COLORS.natural.white};
   border: 1px solid rgba(0, 0, 0, 0.2);
   outline: none;
   margin-bottom: 15px;
   padding-left: 15px;
+  text-overflow: ellipsis;
+
+  background-color: ${COLORS.natural.white};
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
-  ${({ width }) => (width ? `max-width: ${width}px;` : '')}
-  ${({ height = 45 }) => `height: ${height}px;`}
   padding-right: 10px;
 
   &::-webkit-inner-spin-button,
@@ -25,25 +27,29 @@ const Input = styled.input`
   &:not(:focus):valid + .placeholder {
     top: -50px;
     left: 0;
+
     opacity: 1;
   }
   &:disabled {
-    cursor: not-allowed;
     border: none;
+
     background-color: rgba(0, 0, 0, 0.045);
     color: rgba(0, 0, 0, 0.5);
+    cursor: not-allowed;
   }
 `
 const Container = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
+
   margin-top: 40px;
 
   .placeholder {
     position: absolute;
     top: 0;
     left: 15px;
+
     transform: translateY(45%);
     transition: all 0.25s ease-in-out;
     opacity: 0.65;
@@ -52,8 +58,9 @@ const Container = styled.div`
   .input-error-suggestion {
     position: absolute;
     top: -50px;
-    transform: translateY(45%);
     right: 0;
+
+    transform: translateY(45%);
     color: ${COLORS.red[500]};
   }
 `

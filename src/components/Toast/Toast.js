@@ -33,16 +33,11 @@ const Toast = () => {
   }
 
   const manualClearToastEffect = (primaryIndex) => {
-    /* const temp = [...toastState]
-    temp[primaryIndex] = { ...temp[primaryIndex], dismiss: true }
-    */
     const temp = toastState.filter((value, index) => index !== primaryIndex)
     setToastState(temp)
   }
 
   useEffect(() => {
-    console.log('mounted')
-
     const parentTimer = setInterval(() => {
       if (counter.current < toastState.length && toastState.length > 0) {
         (async () => {
@@ -63,7 +58,6 @@ const Toast = () => {
     }, 4000)
 
     return () => {
-      console.log('unmounted')
       clearInterval(parentTimer)
     }
   }, [toastState])
@@ -82,7 +76,9 @@ const Toast = () => {
           <ToastContainer
             onClick={value.onClick}
             className={value.type}
-            ref={(ref) => (toastRef.current[index] = ref)}
+            ref={(ref) => {
+              toastRef.current[index] = ref
+            }}
             key={index}
             dismiss={effectState[index]?.dismiss}>
             <div className='toast-detail'>

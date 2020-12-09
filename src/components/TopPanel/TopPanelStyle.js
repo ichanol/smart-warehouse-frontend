@@ -2,13 +2,13 @@ import { COLORS } from '../../Constant'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  background-color: ${COLORS.natural.white};
   min-height: 50px;
-  position: sticky;
-  top: 0;
-  right: 0;
   display: flex;
+  position: relative;
+
   padding: 15px 30px;
+  
+  background-color: ${COLORS.natural.white};
   box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.125);
   z-index: 3;
 
@@ -19,13 +19,15 @@ const Container = styled.div`
 
   .profile {
     position: absolute;
-    height: 80%;
-    top: 50%;
+    top: 0;
+    bottom: 0;
     right: 15px;
-    transform: translateY(-50%);
     display: flex;
     align-items: center;
+    justify-content: center;
+    
     padding: 10px;
+    
     cursor: pointer;
   }
 
@@ -36,12 +38,15 @@ const Container = styled.div`
   .thumbnail {
     width: 30px;
     height: 30px;
-    background-color: ${COLORS.red[300]};
+
     border-radius: 35px;
+    
+    background-color: ${COLORS.red[300]};
   }
 
   .profile span {
     margin: 0 10px;
+    
     text-align: center;
   }
 

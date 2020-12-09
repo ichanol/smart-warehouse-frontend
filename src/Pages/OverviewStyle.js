@@ -4,16 +4,21 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;
-  padding: 20px;
   display: flex;
   flex-direction: column;
+
+  padding: 20px;
+
   overflow: auto;
   background-color: ${COLORS.gray[300]};
+
   .header {
     height: 35px;
     align-items: center;
     display: flex;
+
     margin-bottom: 20px;
+
     font-weight: bold;
     letter-spacing: 1px;
   }
@@ -23,10 +28,12 @@ const Container = styled.div`
   .content {
     flex: 1;
     display: flex;
-    background-color: ${COLORS.natural.white};
-    padding: 25px;
-    flex-direction: column;
     position: relative;
+    flex-direction: column;
+
+    padding: 25px;
+
+    background-color: ${COLORS.natural.white};
   }
 `
 
