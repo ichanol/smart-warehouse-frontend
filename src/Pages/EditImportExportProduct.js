@@ -83,6 +83,7 @@ const EditImportExportProduct = () => {
           valueType='detail'
           onValueChange={inputHandler}
           placeholder='Product detail'
+          border
         />
         <div className='button-wrapper'>
           <div className='cancle-button-wrapper'>

@@ -208,6 +208,7 @@ const CreateRole = () => {
             valueType='detail'
             value={roleData.detail}
             placeholder='Detail'
+            border
           />
           <div className='title'>Permission</div>
           <PermissionSection>

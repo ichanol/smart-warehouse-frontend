@@ -8,24 +8,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding-top: 70px;
-  padding: 20px;
-
   overflow: auto;
-  background-color: ${COLORS.natural.white};
+  background-color: ${COLORS.gray[200]};
 
   .action-tabs-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     height: 50px;
     display: flex;
     align-items: flex-end;
 
     padding-left: 12px;
+    padding-top: 15px;
 
-    background-color: ${COLORS.gray[300]};
+    background-color: ${COLORS.gray[400]};
+    z-index: 1;
   }
   .action-tabs {
     height: 35px;
@@ -38,19 +34,19 @@ const Container = styled.div`
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 
-    color: ${COLORS.gray[700]};
-    background-color: ${COLORS.gray[100]};
+    color: ${COLORS.gray[500]};
+    background-color: ${COLORS.gray[300]};
     opacity: 0.8;
     cursor: pointer;
   }
   .focus-tab {
     opacity: 1;
     color: ${COLORS.natural.black};
-    background-color: ${COLORS.natural.white};
+    background-color: ${COLORS.gray[200]};
   }
   .disable-tab {
-    color: ${COLORS.gray[500]};
-    background-color: ${COLORS.gray[400]};
+    color: ${COLORS.gray[600]};
+    background-color: ${COLORS.gray[500]};
     cursor: not-allowed;
     opacity: 0.65;
   }
@@ -73,10 +69,10 @@ const Container = styled.div`
     position: relative;
     min-width: 100%;
 
-    padding: 0px;
+    padding: 20px;
 
     filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
-    background-color: ${COLORS.natural.white};
+    background-color: ${COLORS.gray[200]};
   }
   .button-wrapper {
     display: flex;
@@ -106,7 +102,7 @@ const Container = styled.div`
     background-color: ${COLORS.natural.red};
     z-index: 200;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    color: ${COLORS.natural.white};
+    color: ${COLORS.gray[200]};
     cursor: pointer;
   }
   .mock-button-user {

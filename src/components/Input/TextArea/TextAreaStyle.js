@@ -5,10 +5,10 @@ const TextAreaInput = styled.textarea`
   width: 100%;
   height: 100px;
 
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 15px;
   margin-bottom: 35px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: ${({ border }) => border ? '1px solid rgba(0, 0, 0, 0.2)' : 'none'};
   outline: none;
 
   resize: none;

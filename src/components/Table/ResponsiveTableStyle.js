@@ -2,81 +2,94 @@ import { COLORS, FONT } from '../../Constant'
 
 import styled from 'styled-components'
 
-const DataSection = styled.div`
-  height: 500px;
+const Table = styled.div`
+  min-height: 540px;
+  max-height: 540px;
   position: relative;
-  display: flex;
+  width: 100%;
 
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-color: ${COLORS.natural.white};
+  overflow: scroll;
 
-  .no-data {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-
+  ::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
     border-radius: 8px;
 
-    background-color: ${COLORS.gray[100]};
+    background-clip: padding-box;
+    background-color: rgba(0,0,0,0.15);
   }
-
-  .no-data-title {
-    font-size: ${FONT.xl};
-    text-transform: uppercase;
-  }
-
-  .fixed-section {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-  .scroll-section {
-    position: absolute;
-    top: 0;
-    left: ${({ multiplier, isShowIndex }) =>
-      isShowIndex ? multiplier * 140 + 75 : multiplier * 140}px;
-    right: 0;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-  .scroll-section::-webkit-scrollbar {
+  ::-webkit-scrollbar-button {
     width: 0;
     height: 0;
+    display: none;
   }
-  .table-title-wrapper,
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .table {
+    width: fit-content;
+    min-width: 100%;
+    min-height: 525px;
+    display: flex;
+    flex: 1;
+
+    background-color: ${COLORS.natural.white};
+  }
+  .fixed-section {
+    position: sticky;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+
+    z-index: 1;
+    background-color: ${COLORS.natural.white};
+  }
+  .scroll-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    background-color: ${COLORS.natural.white};
+    z-index: 0;
+  }
+  .fixed-headers,
+  .scroll-headers {
+    width: 100%;
+    height: 75px;
+    position: sticky;
+    top: 0;
+    display: flex;
+
+    white-space: nowrap;
+    background-color: ${COLORS.natural.white};
+    z-index: 1;
+  }
   .table-data-wrapper {
     height: 50px;
     display: flex;
     width: 100%;
   }
-  .table-title-wrapper {
-    height: 60px;
-  }
-  .table-data-wrapper {
-    width: 100%;
-  }
   .cell {
-    width: 140px;
     min-width: 140px;
     display: flex;
     align-items: center;
     flex: 1;
     position: relative;
+
+    padding: 20px;
   }
   .center,
   .title {
     justify-content: center;
-  }
-  .title {
-    color: ${({ darkHeader }) =>
-      darkHeader ? COLORS.natural.white : COLORS.natural.black};
   }
   .data {
     padding: 0 20px;
@@ -85,8 +98,8 @@ const DataSection = styled.div`
     white-space: nowrap;
   }
   .primarykey {
-    width: 75px;
-    min-width: 75px;
+    max-width: 75px;
+    min-width: 0;
   }
   .time {
     white-space: break-spaces;
@@ -113,7 +126,8 @@ const DataSection = styled.div`
     min-width: 200px;
     justify-content: center;
   }
-  .edit-wrapper {
+  .edit-wrapper,
+  .delete-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -124,16 +138,37 @@ const DataSection = styled.div`
   }
 `
 
-const TitleSection = styled(DataSection)`
-  height: 60px;
+const Wrapper = styled.div`
   position: relative;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
-  background-color: ${({ darkHeader }) =>
-    darkHeader ? COLORS.gray[900] : COLORS.natural.white};
+  margin-top: 25px;
+  padding: 12px;
+  border-radius: 8px;
 
-  .cell:hover > div {
-    opacity: 1;
+  z-index: 2;
+  background-color: ${COLORS.natural.white};
+
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 87px;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+
+    border-radius: 8px;
+
+    background-color: ${COLORS.gray[100]};
+    z-index:3
+  }
+  .no-data-title {
+    font-size: ${FONT.xl};
+    text-transform: uppercase;
   }
 `
 
@@ -149,30 +184,4 @@ const SortArrow = styled.div`
   transition: all 0.15s linear;
 `
 
-const Container = styled.div`
-  position: relative;
-
-  border-radius: 8px;
-  margin-top: 25px;
-  padding: 12px;
-
-  overflow: hidden;
-  background-color: ${COLORS.natural.white};
-
-  .arrow {
-    min-width: 50px;
-    min-height: 50px;
-    position: absolute;
-    top: 100%;
-
-    background-color: red;
-    cursor: pointer;
-  }
-  .left {
-    left: 0;
-  }
-  .right {
-    right: 0;
-  }
-`
-export { DataSection, TitleSection, SortArrow, Container }
+export { Table, Wrapper, SortArrow }

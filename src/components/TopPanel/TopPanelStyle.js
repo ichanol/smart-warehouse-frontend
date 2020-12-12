@@ -10,7 +10,7 @@ const Container = styled.div`
 
   background-color: ${COLORS.natural.white};
   box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.125);
-  z-index: 3;
+  z-index: 1;
 `
 
 const Profile = styled.label`
@@ -31,6 +31,15 @@ const Profile = styled.label`
     background-color: rgba(0, 0, 0, 0.05);
   }
 
+  .dismiss-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 4;
+  }
   .thumbnail {
     width: 30px;
     height: 30px;
@@ -64,6 +73,7 @@ const Profile = styled.label`
 
     border-radius: 8px;
 
+    z-index: 5;
     background-color: ${COLORS.natural.white};
     overflow: hidden;
     transition: all 0.25s ease-in-out;
@@ -83,7 +93,7 @@ const Profile = styled.label`
     min-width: 200px;
     display: flex;
     align-items: center;
-    
+
     padding: 12px 24px;
 
     transition: all 0.25s ease-in-out;

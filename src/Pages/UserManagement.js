@@ -5,7 +5,7 @@ import {
   NumberIndicator,
   Pagination,
   ResponsiveTable,
-  SearchBox as useSearchBox,
+  SearchBox as useSearchBox
 } from '../components'
 import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'

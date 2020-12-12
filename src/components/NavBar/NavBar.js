@@ -39,8 +39,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <OverviewIcon />
-          <span>Overview</span>
+          <div className='menu-wrapper'>
+            <OverviewIcon />
+            <span className='menu-title'>Overview</span>
+          </div>
         </NavLink>
       )}
       {!!permission[2]?.status && (
@@ -49,8 +51,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <ProductListIcon />
-          <span>Product list</span>
+          <div className='menu-wrapper'>
+            <ProductListIcon />
+            <span className='menu-title'>Product list</span>
+          </div>
         </NavLink>
       )}
       {!!permission[4]?.status && (
@@ -59,8 +63,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <ImportExportProductIcon />
-          <span>Import - Export Product</span>
+          <div className='menu-wrapper'>
+            <ImportExportProductIcon />
+            <span className='menu-title'>Import - Export Product</span>
+          </div>
         </NavLink>
       )}
       {!!permission[3]?.status && (
@@ -69,8 +75,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <HistoryIcon />
-          <span>Transaction</span>
+          <div className='menu-wrapper'>
+            <HistoryIcon />
+            <span className='menu-title'>Transaction</span>
+          </div>
         </NavLink>
       )}
       {!!permission[0]?.status && (
@@ -79,8 +87,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <MapIcon />
-          <span>Map</span>
+          <div className='menu-wrapper'>
+            <MapIcon />
+            <span className='menu-title'>Map</span>
+          </div>
         </NavLink>
       )}
       {(!!permission[6]?.status ||
@@ -92,8 +102,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <UserIcon />
-          <span>User management</span>
+          <div className='menu-wrapper'>
+            <UserIcon />
+            <span className='menu-title'>User management</span>
+          </div>
         </NavLink>
       )}
       {!!permission[7]?.status && (
@@ -102,8 +114,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <ProductIcon />
-          <span>Product management</span>
+          <div className='menu-wrapper'>
+            <ProductIcon />
+            <span className='menu-title'>Product management</span>
+          </div>
         </NavLink>
       )}
       {!!permission[5]?.status && (
@@ -112,8 +126,10 @@ const NavBar = () => {
           className='menu'
           activeClassName='active-menu'
           onClick={closeMenu}>
-          <PermissionIcon />
-          <span>Role management</span>
+          <div className='menu-wrapper'>
+            <PermissionIcon />
+            <span className='menu-title'>Role management</span>
+          </div>
         </NavLink>
       )}
     </SideBar>

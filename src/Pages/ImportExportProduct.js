@@ -3,15 +3,16 @@ import {
   ResponsiveTable,
   RetryButton,
   SubmitButton,
+  TextArea,
 } from '../components'
 import React, { useEffect, useState } from 'react'
-import { postRequest, requestHandler } from '../Services'
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ImportExportProductStyle'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
 import io from 'socket.io-client'
+import { requestHandler } from '../Services'
 import { useHistory } from 'react-router-dom'
 
 const ImportExportProduct = () => {
@@ -358,7 +359,7 @@ const ImportExportProduct = () => {
     )
   }
   return (
-    <Container blur={modalState.isDisplay}>
+    <Container>
       <div className='mock-button-user' onClick={scanUser}>
         Scan user
       </div>
@@ -387,9 +388,6 @@ const ImportExportProduct = () => {
           )
         })}
       </div>
-      <div className='header'>
-        <span>{actionTabs.action_type}</span>
-      </div>
       <div className='content'>
         <ResponsiveTable
           title={titleArray}
@@ -402,8 +400,8 @@ const ImportExportProduct = () => {
           onDelete={onDelete}
           data={readProductListState}
           indexCounter
-          darkHeader
         />
+        <TextArea placeholder='Transaction Remark'/>
         <div className='button-wrapper'>
           <div className='list-manipulate-button'>
             <RetryButton action={onRetry} />

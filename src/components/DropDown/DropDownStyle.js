@@ -6,9 +6,9 @@ const Container = styled.label`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: ${({ fullWidth }) => fullWidth ? '100%' : '130px'};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : '130px')};
 
-  padding: ${({ fullWidth }) => fullWidth ? 'none' : '0 0 0 12px'};
+  padding: ${({ fullWidth }) => (fullWidth ? 'none' : '0 0 0 12px')};
   border-radius: 8px;
 
   background-color: ${COLORS.natural.white};
@@ -19,10 +19,10 @@ const Container = styled.label`
     height: 100%;
     align-items: center;
     position: relative;
-    justify-content: ${({ isCenter }) => isCenter ? 'center' : 'initial'};
+    justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
     max-width: ${({ containerWidth = '80px' }) => containerWidth};
 
-    padding-left: ${({ isCenter }) => isCenter ? 0 : 15}px;
+    padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
     border-radius: 8px;
 
     cursor: pointer;
@@ -45,7 +45,7 @@ const Container = styled.label`
     display: block;
 
     border-radius: 8px;
-    
+
     z-index: 5;
     background-color: ${COLORS.natural.white};
     overflow-y: auto;
@@ -56,24 +56,28 @@ const Container = styled.label`
     position: absolute;
     height: 0px;
     width: 100%;
-    align-items: ${({ isCenter }) => isCenter ? 'center' : 'initial'};
+    align-items: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
     display: flex;
     flex-direction: column;
 
     border-radius: 0;
-    
+
     overflow: hidden;
     transition: all 0.3s ease-in-out;
+
+    ::-webkit-scrollbar {
+      width: 0;
+    }
   }
   .item-per-page-choice {
     min-height: 40px;
     display: flex;
-    justify-content: ${({ isCenter }) => isCenter ? 'center' : 'initial'};
+    justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
     align-items: center;
 
-    padding-left: ${({ isCenter }) => isCenter ? 0 : 15}px;
+    padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
     border-top: 1px solid ${COLORS.gray[200]};
-    
+
     transition: all 0.25s ease-in-out;
 
     :hover {
@@ -86,7 +90,7 @@ const Container = styled.label`
     left: 0;
     right: 0;
     bottom: 0;
-    
+
     z-index: 4;
   }
 `

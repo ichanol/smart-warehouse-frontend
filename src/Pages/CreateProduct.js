@@ -175,6 +175,7 @@ const CreateProduct = () => {
             placeholder='Detail'
             onValueChange={onValueChange}
             valueType='detail'
+            border
           />
           <div className='button-wrapper'>
             <SubmitButton type='submit' />

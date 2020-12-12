@@ -4,8 +4,6 @@ const userState = atom({
   key: 'userState',
   default: {
     username: null,
-    accessToken: null,
-    refreshToken: null,
     isLogin: false,
     isUserCardVerify: false,
     permission: [],

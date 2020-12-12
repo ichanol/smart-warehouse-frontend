@@ -1,13 +1,7 @@
-import {
-  Container,
-  DataSection,
-  SortArrow,
-  TitleSection,
-} from './ResponsiveTableStyle'
-import { DeleteIcon, EditIcon } from '../Icon'
-import React, { useRef, useState } from 'react'
+import { ChevronDownIcon, DeleteIcon, EditIcon } from '../Icon'
+import { SortArrow, Table, Wrapper } from './ResponsiveTableStyle'
 
-import { ChevronDownIcon } from '../Icon'
+import React from 'react'
 import { ToggleButton } from '../Button'
 import clsx from 'clsx'
 import moment from 'moment'
@@ -29,11 +23,7 @@ const ResponsiveTable = ({
   editButton,
   onDelete,
   indexCounter,
-  darkHeader,
 }) => {
-  const [scrollState, setScrollState] = useState('data')
-  const scrollRef = useRef([])
-
   const renderFixedDataColumn = (dataToRender, primaryIndex) => {
     return (
       <div className='table-data-wrapper' key={primaryIndex}>
@@ -94,7 +84,7 @@ const ResponsiveTable = ({
                   primaryIndex % 2 && 'odd',
                   !dataToRender.status && 'inactive',
                 )}>
-                <span>{dataToRender[value]}</span>
+                <span>{dataToRender[value]?.toLocaleString()}</span>
               </div>
             )
           } else if (actionColumn === value) {
@@ -122,7 +112,9 @@ const ResponsiveTable = ({
                   </div>
                 )}
                 {deleteButton && (
-                  <div onClick={() => onDelete(dataToRender)}>
+                  <div
+                    className='delete-wrapper'
+                    onClick={() => onDelete(dataToRender)}>
                     <DeleteIcon />
                   </div>
                 )}
@@ -137,7 +129,7 @@ const ResponsiveTable = ({
                   primaryIndex % 2 && 'odd',
                   !dataToRender.status && 'inactive',
                 )}>
-                <span>{dataToRender[value]}</span>
+                <span>{dataToRender[value]?.toLocaleString()}</span>
               </div>
             )
           }
@@ -147,125 +139,85 @@ const ResponsiveTable = ({
   }
 
   return (
-    <Container>
-      {/* <div
-        className='arrow left'
-        onClick={() => {
-          scrollRef.current[0].scrollLeft = scrollRef.current[0].scrollLeft - 100
-          scrollRef.current[1].scrollLeft = scrollRef.current[0].scrollLeft - 100
-          console.log(scrollRef.current)
-        }}
-      />
-      <div
-        className='arrow right'
-        onClick={() => {
-          scrollRef.current[0].scrollLeft = scrollRef.current[0].scrollLeft + 100
-          scrollRef.current[1].scrollLeft = scrollRef.current[0].scrollLeft + 100
-        }}
-      /> */}
-      <TitleSection
-        multiplier={fixedDataColumn.length}
-        isShowIndex={indexCounter}
-        darkHeader={darkHeader}>
-        <div className='fixed-section'>
-          <div className='table-title-wrapper'>
-            {indexCounter && (
-              <div className='cell title primarykey'>
-                <span>No.</span>
-              </div>
-            )}
-            {title.map((value, index) => {
-              if (index < fixedDataColumn.length) {
-                return (
-                  <div
-                    key={index}
-                    className='cell title'
-                    onClick={() => onSortByColumn(value.type)}>
-                    <span>{value.title}</span>
-                    {value.isSort && (
-                      <SortArrow isActive={sort.desc}>
-                        <ChevronDownIcon
-                          isActive={sort.desc}
-                          activeType={sort.column}
-                          type={value.type}
-                        />
-                      </SortArrow>
-                    )}
-                  </div>
-                )
-              } else {
-                return null
-              }
-            })}
+    <Wrapper>
+      {data.length === 0 && (
+        <div className='no-data'>
+          <span className='no-data-title'>no data</span>
+        </div>
+      )}
+      <Table>
+        <div className='table'>
+          <div className='fixed-section'>
+            <div className='fixed-headers'>
+              {indexCounter && (
+                <div className='cell title primarykey'>
+                  <span>No.</span>
+                </div>
+              )}
+              {title.map((value, index) => {
+                if (index < fixedDataColumn.length) {
+                  return (
+                    <div
+                      key={index}
+                      className='cell title'
+                      onClick={() => onSortByColumn(value.type)}>
+                      <span>{value.title}</span>
+                      {value.isSort && (
+                        <SortArrow isActive={sort.desc}>
+                          <ChevronDownIcon
+                            isActive={sort.desc}
+                            activeType={sort.column}
+                            type={value.type}
+                          />
+                        </SortArrow>
+                      )}
+                    </div>
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </div>
+            <div className='fixed-data' />
+            {data?.map((value, index) => renderFixedDataColumn(value, index))}
+          </div>
+
+          <div className='scroll-section'>
+            <div className='scroll-headers'>
+              {title.map((value, index) => {
+                if (index >= fixedDataColumn.length) {
+                  return (
+                    <div
+                      key={index}
+                      className={clsx(
+                        'cell',
+                        'title',
+                        value.title === 'Actions' && 'action',
+                      )}
+                      onClick={() => onSortByColumn(value.type)}>
+                      <span>{value.title}</span>
+                      {value.isSort && (
+                        <SortArrow isActive={sort.desc}>
+                          <ChevronDownIcon
+                            isActive={sort.desc}
+                            activeType={sort.column}
+                            type={value.type}
+                          />
+                        </SortArrow>
+                      )}
+                    </div>
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </div>
+            <div className='scroll-data' />
+            {data?.map((value, index) => renderScrollDataColumn(value, index))}
           </div>
         </div>
-        <div
-          className='scroll-section'
-          ref={(ref) => (scrollRef.current[0] = ref)}
-          onScroll={({ target }) => {
-            if (scrollState === 'title') {
-              scrollRef.current[1].scrollLeft = target.scrollLeft
-            }
-          }}
-          onMouseEnter={() => setScrollState('title')}
-          onTouchStart={() => setScrollState('title')}>
-          <div className='table-title-wrapper'>
-            {title.map((value, index) => {
-              if (index >= fixedDataColumn.length) {
-                return (
-                  <div
-                    key={index}
-                    className={clsx(
-                      'cell',
-                      'title',
-                      value.title === 'Actions' && 'action',
-                    )}
-                    onClick={() => onSortByColumn(value.type)}>
-                    <span>{value.title}</span>
-                    {value.isSort && (
-                      <SortArrow isActive={sort.desc}>
-                        <ChevronDownIcon
-                          isActive={sort.desc}
-                          activeType={sort.column}
-                          type={value.type}
-                        />
-                      </SortArrow>
-                    )}
-                  </div>
-                )
-              } else {
-                return null
-              }
-            })}
-          </div>
-        </div>
-      </TitleSection>
-      <DataSection
-        multiplier={fixedDataColumn.length}
-        isShowIndex={indexCounter}
-        darkHeader={darkHeader}>
-        {data?.length === 0 && (
-          <div className='no-data'>
-            <span className='no-data-title'>no data</span>
-          </div>
-        )}
-        <div className='fixed-section'>
-          {data?.map((value, index) => renderFixedDataColumn(value, index))}
-        </div>
-        <div
-          className='scroll-section'
-          ref={(ref) => (scrollRef.current[1] = ref)}
-          onMouseEnter={() => setScrollState('data')}
-          onTouchStart={() => setScrollState('data')}
-          onScroll={({ target }) => {
-            if (scrollState === 'data') {
-              scrollRef.current[0].scrollLeft = target.scrollLeft
-            }
-          }}>
-          {data?.map((value, index) => renderScrollDataColumn(value, index))}
-        </div>
-      </DataSection>
-    </Container>
+      </Table>
+    </Wrapper>
   )
 }
 

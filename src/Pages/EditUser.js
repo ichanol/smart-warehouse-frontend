@@ -257,6 +257,7 @@ const EditUser = () => {
             onValueChange={onValueChange}
             valueType='detail'
             defaultValue={editedUserData.detail}
+            border
           />
           <div className='button-wrapper'>
             <SubmitButton type='submit' />

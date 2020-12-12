@@ -8,8 +8,9 @@ const SideBar = styled.div`
   flex-direction: column;
   position: fixed;
 
+  transition: all 0.25s ease-in-out;
   background-color: ${COLORS.gray[900]};
-  z-index: 101;
+  z-index: ${({ open }) => (open ? '101' : '2')};
 
   .menu {
     display: flex;
@@ -24,15 +25,27 @@ const SideBar = styled.div`
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
-  }
 
+    :hover {
+      border-color: ${COLORS.natural.white};
+
+      color: ${COLORS.natural.white};
+      background-color: ${COLORS.gray[900]};
+    }
+  }
+  .menu-wrapper {
+    display: flex;
+    width: 250px;
+    align-items: center;
+  }
   .hamburger {
     height: 35px;
     display: none;
     flex-direction: column;
     justify-content: space-evenly;
-  }
 
+    cursor: pointer;
+  }
   .hamburger .line {
     width: 100%;
 
@@ -41,36 +54,25 @@ const SideBar = styled.div`
 
     background-color: ${COLORS.natural.white};
   }
-
   .line:nth-of-type(2) {
     margin: 6px 0;
   }
-
-  .menu:hover {
-    border-color: ${COLORS.natural.white};
-
-    color: ${COLORS.natural.white};
-    background-color: ${COLORS.gray[900]};
-  }
-
   .menu:first-of-type {
     margin-top: 25px;
   }
-
   .active-menu {
     border-color: ${COLORS.orange[500]};
 
     color: ${COLORS.orange[500]};
     background-color: ${COLORS.gray[800]};
   }
-
-  .menu span {
+  .menu-title {
     margin-left: 15px;
 
     opacity: 1;
     transition: all 0.2s ease-in-out;
+    white-space: nowrap;
   }
-
   .header-text {
     margin-top: 40px;
     margin-bottom: 25px;
@@ -80,7 +82,7 @@ const SideBar = styled.div`
   }
 
   @media (max-width: 1024px) {
-    width: ${({ open }) => open ? '100%' : '65px'};
+    width: ${({ open }) => (open ? '100%' : '65px')};
     min-width: 65px;
     position: fixed;
     height: 100%;
@@ -88,11 +90,13 @@ const SideBar = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
 
-    .menu span {
-      display: ${({ open }) => open ? 'flex' : 'none'};
+    .menu-title {
+      max-width: ${({ open }) => (open ? '100%' : '0')};
 
-      transition: all 0.2s ease-in-out;
-      opacity: ${({ open }) => open ? 1 : 0};
+      margin-left: ${({ open }) => (open ? '15px' : '0')};
+
+      transition: all 0.15s ease-in-out;
+      opacity: ${({ open }) => (open ? 1 : 0)};
     }
 
     .menu {
@@ -103,11 +107,18 @@ const SideBar = styled.div`
       padding: 0;
     }
 
+    .menu-wrapper {
+      display: flex;
+      width: ${({ open }) => (open ? '250px' : 'fit-content')};
+      align-items: center;
+    }
+
     .menu:first-of-type {
       margin-top: 65px;
     }
 
-    br, .header-text {
+    br,
+    .header-text {
       display: none;
     }
 
@@ -125,20 +136,20 @@ const SideBar = styled.div`
     }
 
     .line:nth-of-type(2) {
-      transform: rotate(${({ open }) => open ? '-45deg' : 0});
+      transform: rotate(${({ open }) => (open ? '-45deg' : 0)});
       transition: all 0.2s ease-in-out;
     }
 
     .line:nth-of-type(1) {
-      transform: translateY(${({ open }) => open ? '10px' : 0})
-        rotate(${({ open }) => open ? '45deg' : 0});
+      transform: translateY(${({ open }) => (open ? '10px' : 0)})
+        rotate(${({ open }) => (open ? '45deg' : 0)});
       transform-origin: center;
       transition: all 0.2s ease-in-out;
     }
 
     .line:nth-of-type(3) {
-      transform: translateY(${({ open }) => open ? '-10px' : 0})
-        rotate(${({ open }) => open ? '-225deg' : 0});
+      transform: translateY(${({ open }) => (open ? '-10px' : 0)})
+        rotate(${({ open }) => (open ? '-225deg' : 0)});
       transform-origin: center;
       transition: all 0.2s ease-in-out;
     }
@@ -150,7 +161,7 @@ const Logo = styled.div`
   align-items: center;
 
   margin: 25px;
-  
+
   background-color: ${COLORS.natural.white};
   text-align: center;
   font-size: 35px;

@@ -3,7 +3,14 @@ import React, { forwardRef } from 'react'
 
 const TextArea = forwardRef(
   (
-    { onValueChange, value, valueType, placeholder = null, ...rest },
+    {
+      onValueChange,
+      value,
+      valueType,
+      placeholder = null,
+      border = false,
+      ...rest
+    },
     inputRef,
   ) => (
     <Container>
@@ -11,6 +18,7 @@ const TextArea = forwardRef(
         ref={inputRef}
         id='custom-text-area'
         placeholder='detail'
+        border={border}
         {...rest}
         onChange={(event) => onValueChange(event.target.value, valueType)}
       />

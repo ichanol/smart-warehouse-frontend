@@ -1,5 +1,3 @@
 import ResponsiveTable from './ResponsiveTable'
 
-export {
-  ResponsiveTable,
-}
+export { ResponsiveTable }

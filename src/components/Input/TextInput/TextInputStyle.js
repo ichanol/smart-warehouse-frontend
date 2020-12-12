@@ -5,7 +5,7 @@ const Input = styled.input`
   ${({ width }) => (width ? `max-width: ${width}px;` : '')}
   ${({ height = 45 }) => `height: ${height}px;`}
   
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   outline: none;
   margin-bottom: 15px;

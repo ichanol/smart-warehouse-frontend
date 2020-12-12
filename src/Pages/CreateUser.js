@@ -5,7 +5,7 @@ import {
   TextArea,
   TextInput,
 } from '../components'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
   isContainSpecialCharacter,
@@ -23,8 +23,6 @@ import { useRecoilState } from 'recoil'
 
 const CreateUser = () => {
   const history = useHistory()
-
-  const dropDownRef = useRef()
 
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
@@ -141,8 +139,7 @@ const CreateUser = () => {
     }
   }
 
-  const onChangeRole = (roleName, primaryIndex) => {
-    dropDownRef.current.scrollTop = 40 * (primaryIndex - 1)
+  const onChangeRole = (roleName) => {
     setRole({ ...role, selected: roleName })
     setUserData({ ...userData, role: roleName })
   }
@@ -201,7 +198,6 @@ const CreateUser = () => {
           />
           <div className='dropdown-wrapper'>
             <DropDown
-              ref={dropDownRef}
               selectedValue={role.selected}
               choices={role.choices}
               onSelect={onChangeRole}
@@ -246,6 +242,7 @@ const CreateUser = () => {
             placeholder='Detail'
             onValueChange={onValueChange}
             valueType='detail'
+            border
           />
           <div className='button-wrapper'>
             <SubmitButton type='submit' />

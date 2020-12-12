@@ -168,6 +168,7 @@ const CreateProduct = () => {
             onValueChange={onValueChange}
             valueType='detail'
             defaultValue={editedProductData.detail}
+            border
           />
           <div className='button-wrapper'>
             <SubmitButton type='submit' />

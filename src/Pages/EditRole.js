@@ -197,6 +197,7 @@ const EditRole = () => {
             valueType='detail'
             placeholder='Detail'
             defaultValue={editedRoleData.detail}
+            border
           />
           <div className='title'>Permission</div>
           <PermissionSection>
