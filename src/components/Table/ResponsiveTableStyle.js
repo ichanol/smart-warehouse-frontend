@@ -148,7 +148,7 @@ const Wrapper = styled.div`
   padding: 12px;
   border-radius: 8px;
 
-  z-index: 2;
+  z-index: 0;
   background-color: ${COLORS.natural.white};
 
   .no-data {

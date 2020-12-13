@@ -82,14 +82,14 @@ const EditImportExportProduct = () => {
           value={editInformation.detail}
           valueType='detail'
           onValueChange={inputHandler}
-          placeholder='Product detail'
+          placeholder='Remark'
           border
         />
         <div className='button-wrapper'>
+          <SubmitButton action={submitChanges} />
           <div className='cancle-button-wrapper'>
             <CancelButton action={goBack} />
           </div>
-          <SubmitButton action={submitChanges} />
         </div>
       </div>
     </Container>

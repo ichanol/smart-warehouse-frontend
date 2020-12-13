@@ -7,24 +7,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 25px;
+  padding-bottom: 50px;
 
   overflow: auto;
   background-color: ${COLORS.gray[300]};
 
   .header {
-    height: 35px;
     align-items: center;
     display: flex;
 
-    margin-bottom: 25px;
+    padding: 25px 50px 0;
 
     font-weight: bold;
     letter-spacing: 1px;
+    background-color: ${COLORS.gray[300]};
   }
   .header > span {
-    margin-left: 25px;
-
     font-size: ${FONT.xl};
   }
   .content {
@@ -32,12 +30,17 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-
-    padding: 0 25px 25px 25px;
   }
   .tools-bar-wrapper {
     display: flex;
     flex-direction: column;
+    position: sticky;
+    top: 0;
+
+    padding: 25px 50px;
+
+    background-color: ${COLORS.gray[300]};
+    z-index: 2;
   }
   .tools-bar {
     height: 40px;
@@ -49,9 +52,10 @@ const Container = styled.div`
   }
   .filter-wrapper {
     display: flex;
-    flex: 1;
-    max-width: 40px;
     margin-right: 12px;
+  }
+  .number-indicator-wrapper {
+    margin: 25px 0 0 50px;
   }
 `
 
@@ -59,57 +63,85 @@ const TransactionTitle = styled.div`
   display: flex;
   align-items: center;
   height: 50px;
+  position: sticky;
+  top: 0;
+  width: fit-content;
+  min-width: 100%;
 
-  padding: 20px 70px 20px 20px;
-  margin: 25px 0 0;
+  padding: 0 0 0 20px;
+  border-left: 8px solid transparent;
 
   background-color: ${COLORS.natural.white};
   color: ${COLORS.gray[600]};
+  z-index: 1;
   cursor: pointer;
-
-  .transaction-detail,
-  .transaction-title {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    padding: 0 12px;
-  }
 
   .chevron-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    right: 12px;
-    top: 50%;
+    height: 100%;
+    width: 20px;
 
-    transform: translateY(-50%);
+    margin-left: 8px;
   }
+  .transaction-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 50px;
 
+    padding: 0 12px;
+  }
   .transaction-reference-number {
+    > span {
+      display: flex;
+      align-items: center;
+      min-width: 80px;
+      max-width: 80px;
+    }
   }
   .transaction-timestamp {
     flex: 1.4;
+
+    > span {
+      display: flex;
+      align-items: center;
+      min-width: 175px;
+      max-width: 175px;
+    }
   }
   .transaction-type {
+    > span {
+      display: flex;
+      align-items: center;
+      min-width: 75px;
+      max-width: 75px;
+    }
   }
   .transaction-remark {
+    > span {
+      display: flex;
+      align-items: center;
+      min-width: 140px;
+      max-width: 140px;
+    }
   }
   .transaction-author {
     justify-content: center;
+
+    > span {
+      display: flex;
+      align-items: center;
+      min-width: 100px;
+      max-width: 100px;
+    }
   }
   .transaction-menu {
+    width: 50px;
+    height: 100%;
     max-width: 50px;
-    position: relative;
-    justify-content: center;
-
-    padding: 0;
-    border-radius: 50px;
-
-    cursor: pointer;
-    background-color: red;
   }
 `
 
@@ -117,7 +149,8 @@ const TransactionList = styled.label`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
+  min-width: 100%;
+  width: fit-content;
 
   margin: 20px 0 0;
 
@@ -141,38 +174,31 @@ const TransactionList = styled.label`
     visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
     transition: all 0.2s linear;
   }
-
   input[type='checkbox'] {
     width: 0;
     height: 0;
   }
-
   .transaction-information {
     display: flex;
-    align-items: center;
     height: 50px;
+    width: fit-content;
+    min-width: 100%;
 
-    padding: 20px;
+    padding: 0 0 0 20px;
 
     background-color: ${COLORS.natural.white};
     cursor: pointer;
   }
-
-  .transaction-product-list-container {
+  .chevron-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 0;
-
-    overflow: hidden;
-    background-color: ${COLORS.natural.white};
-    transition: all 0.2s ease-in-out;
-  }
-
-  input:checked + .transaction-product-list-container {
     height: 100%;
-  }
 
-  .transaction-detail,
-  .transaction-title {
+    margin-left: 8px;
+  }
+  .transaction-detail {
     flex: 1;
     display: flex;
     align-items: center;
@@ -180,31 +206,63 @@ const TransactionList = styled.label`
 
     padding: 0 12px;
   }
-
-  .chevron-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 12px;
-    top: 50%;
-
-    transform: translateY(-50%);
-  }
-
   .transaction-reference-number {
+    > span {
+      min-width: 80px;
+      max-width: 80px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   .transaction-timestamp {
     flex: 1.4;
+
+    > span {
+      min-width: 175px;
+      max-width: 175px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   .transaction-type {
+    > span {
+      min-width: 75px;
+      max-width: 75px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   .transaction-remark {
+    > span {
+      min-width: 140px;
+      max-width: 140px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   .transaction-author {
     justify-content: center;
+
+    > span {
+      min-width: 100px;
+      max-width: 100px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   .transaction-menu {
+    width: 50px;
+    height: 100%;
     max-width: 50px;
     position: relative;
     justify-content: center;
@@ -213,7 +271,23 @@ const TransactionList = styled.label`
 
     cursor: pointer;
     background-color: ${COLORS.natural.white};
-    ${({ isOpen }) => (isOpen ? 'z-index: 5;' : null)}
+  }
+  .transaction-product-list-container {
+    width: 100%;
+    height: 0;
+
+    overflow: hidden;
+    background-color: ${COLORS.natural.white};
+    transition: all 0.2s ease-in-out;
+  }
+  input:checked
+    + .transaction-information
+    + .transaction-product-list-container {
+    height: 100%;
+  }
+  input:checked + .transaction-information {
+    position: sticky;
+    top: 50px;
   }
   .transaction-context-menu {
     position: absolute;
@@ -221,7 +295,7 @@ const TransactionList = styled.label`
     flex-direction: column;
     max-width: ${({ isOpen }) => (isOpen ? '250px' : '50px')};
     max-height: ${({ isOpen }) => (isOpen ? '500px' : '0px')};
-    top: 50px;
+    top: 100%;
     right: 0;
 
     padding: 12px;
@@ -321,4 +395,40 @@ const TransactionList = styled.label`
   }
 `
 
-export { Container, TransactionTitle, TransactionList }
+const Table = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 540px;
+  max-height: 540px;
+  position: relative;
+
+  padding: 0 35px 0 50px;
+
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
+    border-radius: 8px;
+
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+`
+
+export { Container, TransactionTitle, TransactionList, Table }

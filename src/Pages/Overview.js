@@ -1,4 +1,4 @@
-import { CancelButton, RetryButton, SubmitButton, Table } from '../components'
+import { CancelButton, RetryButton, SubmitButton } from '../components'
 
 import { Container } from './OverviewStyle'
 import React from 'react'
@@ -127,3 +127,41 @@ const Overview = () => {
 }
 
 export default Overview
+
+/**
+ * TODO:
+ * !       1.Fix Transaction layout [FE]
+ * #       2.Fix Date picker [FE]
+ * ?       3.Add Edit transaction [FE][BE]
+ * ?       4.Add Activity log [FE][BE]
+ * ?       5.Add user's login handler (forget password/username) [FE][BE]
+ * ?       6.Add Reset password via email [FE][BE]
+ * ?       7.Add schedul job [BE]
+ * ?       8.Add upload file [FE]
+ * ?       9.Add upload handler for user, product, role management [BE]
+ * ?       10.Add download excel template [BE]
+ * ?       11.Add profile preferences layout [FE]
+ * *       12.Create weekly / monthly document report
+ *
+ *
+ *
+ *
+ *
+ * *  activity_log
+ * *  ------------------------------------------------------
+ * *  | id | user_id | activity_type | created_at | detail |
+ * *  ------------------------------------------------------
+ *
+ * *  activity_type
+ * !  login
+ * !  logout
+ * !  scan id card
+ * !  import/export product
+ * !  create new user information
+ * !  create new product information
+ * !  create new role information
+ * !  update user information
+ * !  update product information
+ * !  update role information
+ * !  edit / update transaction
+ */

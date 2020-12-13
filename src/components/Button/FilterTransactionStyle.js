@@ -59,13 +59,6 @@ const Container = styled.label`
 
     margin: 8px;
   }
-  .date-picker-wrapper {
-    display: flex;
-    width: fit-content;
-
-    margin: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-  }
   .custom-checkbox input[type='checkbox']:checked + .box {
     border-color: ${COLORS.blue[400]};
 

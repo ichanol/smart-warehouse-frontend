@@ -1,15 +1,14 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const CalendarIcon = ({ width = 18, fill = COLORS.gray[600] }) => (
-  <svg
-    width={width}
-    fill={fill}
-    viewBox='0 0 24 24'
-  >
+const CalendarIcon = ({ width = 30, fill = COLORS.gray[600] }) => (
+  <svg viewBox='-125 -125 1280 1280' width={width} fill={fill}>
     <path
-      d='M20 20h-4v-4h4v4zm-6-10h-4v4h4v-4zm6 0h-4v4h4v-4zm-12 6h-4v4h4v-4zm6 0h-4v4h4v-4zm-6-6h-4v4h4v-4zm16-8v22h-24v-22h3v1c0 1.103.897 2 2 2s2-.897 2-2v-1h10v1c0 1.103.897 2 2 2s2-.897 2-2v-1h3zm-2 6h-20v14h20v-14zm-2-7c0-.552-.447-1-1-1s-1 .448-1 1v2c0 .552.447 1 1 1s1-.448 1-1v-2zm-14 2c0 .552-.447 1-1 1s-1-.448-1-1v-2c0-.552.447-1 1-1s1 .448 1 1v2z'
-      fillRule='evenodd'
+      fill='none'
+      stroke={fill}
+      strokeWidth={50}
+      strokeMiterlimit={10}
+      d='M1002.143 875.049c0 37.003-29.997 67-67 67h-846c-37.003 0-67-29.997-67-67v-642c0-37.003 29.997-67 67-67h846c37.003 0 67 29.997 67 67v642zm-785-811v186m590-186v186m-502.75 157.5h-122v122h122v-122zm266 122h-122v-122h122v122zm271.5 0h-122v-122h122v122zm-539 120h-122v122h122v-122zm266 122h-122v-122h122v122zm271.5 0h-122v-122h122v122z'
     />
   </svg>
 )

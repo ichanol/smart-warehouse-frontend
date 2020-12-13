@@ -11,6 +11,7 @@ import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { Container } from './ImportExportProductStyle'
 import atomState from '../Atoms/Atoms'
 import clsx from 'clsx'
+import { debounce } from 'lodash'
 import io from 'socket.io-client'
 import { requestHandler } from '../Services'
 import { useHistory } from 'react-router-dom'
@@ -18,6 +19,7 @@ import { useHistory } from 'react-router-dom'
 const ImportExportProduct = () => {
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
   const history = useHistory()
+
   const [readProductListState, setReadProductListState] = useRecoilState(
     atomState.readProductListState,
   )
@@ -28,7 +30,9 @@ const ImportExportProduct = () => {
   const setToastState = useSetRecoilState(atomState.toastState)
   const [modalState, setModalState] = useRecoilState(atomState.modalState)
   const resetModalState = useResetRecoilState(atomState.modalState)
+
   const [actionTabs, setActionTabs] = useState({ id: 1, action_type: 'Import' })
+  const [transactionRemark, setTransactionRemark] = useState('')
 
   const SOCKET_EVENT = {
     joinRoom: 'join_room',
@@ -181,6 +185,7 @@ const ImportExportProduct = () => {
         actionType: actionTabs.id,
         username: userState.username,
         productList: readProductListState,
+        transactionRemark,
       }
       const response = await requestHandler(
         '/import-export-product',
@@ -275,6 +280,8 @@ const ImportExportProduct = () => {
     }
   }
 
+  const onValueChange = debounce((value) => setTransactionRemark(value), 300)
+
   const MOCK_CHOICES = [
     { id: 1, action_type: 'Import', disable: false },
     { id: 2, action_type: 'Export', disable: false },
@@ -286,7 +293,7 @@ const ImportExportProduct = () => {
     { title: 'Serial number', type: 'product_id', isSort: false },
     { title: 'Product name', type: 'product_name', isSort: false },
     { title: 'Company', type: 'company_name', isSort: false },
-    { title: 'Detail', type: 'detail', isSort: false },
+    { title: 'Remark', type: 'detail', isSort: false },
     { title: 'Amount', type: 'amount', isSort: false },
     { title: 'Actions', type: 'status', isSort: false },
   ]
@@ -401,7 +408,13 @@ const ImportExportProduct = () => {
           data={readProductListState}
           indexCounter
         />
-        <TextArea placeholder='Transaction Remark'/>
+        <div className='text-area-wrapper'>
+          <TextArea
+            placeholder='Transaction Remark'
+            onValueChange={onValueChange}
+            valueType='detail'
+          />
+        </div>
         <div className='button-wrapper'>
           <div className='list-manipulate-button'>
             <RetryButton action={onRetry} />

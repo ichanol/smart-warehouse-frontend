@@ -44,7 +44,7 @@ const Container = styled.div`
   }
 
   .cancle-button-wrapper {
-    margin-left: 20px;
+    margin-right: 20px;
   }
 `
 

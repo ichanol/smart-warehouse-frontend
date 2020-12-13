@@ -1,15 +1,18 @@
 import {
   ChevronDownIcon,
+  DateRangeButton,
   DocumentIcon,
   DotsMenu,
   DropDown,
   EditIcon,
   FilterTrasaction,
+  NumberIndicator,
   Pagination,
   SearchBox as useSearchBox,
 } from '../components'
 import {
   Container,
+  Table,
   TransactionList,
   TransactionTitle,
 } from '../Pages/TransactionStyle'
@@ -26,6 +29,8 @@ import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 
 const Transaction = () => {
+  const today = new Date()
+
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
@@ -52,8 +57,15 @@ const Transaction = () => {
 
   const [transactionData, setTransactionData] = useState([])
   const [searchSuggest, setSearchSuggest] = useState([])
+  const [date, setDate] = useState({
+    startDate: new Date(today.getFullYear(), today.getMonth(), 1),
+    endDate: new Date(today.getFullYear(), today.getMonth() + 1, 0),
+    key: 'selection',
+  })
 
-  const [date, setDate] = useState({ start: '', end: '' })
+  const oneDayMillis = 24 * 60 * 60 * 1000
+  const startDate = new Date(date.startDate.getTime() - oneDayMillis)
+  const endDate = new Date(date.endDate.getTime() + oneDayMillis)
 
   const statusFilterHandler = () => {
     if (
@@ -111,6 +123,12 @@ const Transaction = () => {
     action: actionFilterHandler(),
     page: activePage,
     numberPerPage,
+    date:
+      date.startDate && date.endDate
+        ? `${startDate.getFullYear()}-${startDate.getMonth() +
+            1}-${startDate.getDate()},${endDate.getFullYear()}-${endDate.getMonth() +
+            1}-${endDate.getDate()}`
+        : null,
   }
 
   const searchQueryParams = { ...queryParams }
@@ -156,20 +174,20 @@ const Transaction = () => {
     minMaxBalance,
     minMaxAmount,
     searchTrigger,
+    date,
   ])
 
   useEffect(() => {
-    setFetchSearchTransactionListData(true)
-    setSearchTransactionListDataTrigger(!searchTransactionListDataTrigger)
+    if (searchText !== '') {
+      setFetchSearchTransactionListData(true)
+      setSearchTransactionListDataTrigger(!searchTransactionListDataTrigger)
+    }
   }, [searchText])
 
   useEffect(() => {
     setSearchSuggest(searchTransactionListData.result)
     setTrigger(!trigger)
   }, [searchTransactionListData])
-
-  const setStart = (dateStart) => setDate({ start: dateStart, end: date.end })
-  const setEnd = (dateEnd) => setDate({ start: date.start, end: dateEnd })
 
   const onChangeNumberPerPage = (number) => {
     setNumberPerPage(number)
@@ -253,7 +271,13 @@ const Transaction = () => {
                 setMaxBalance={setMaxBalance}
                 setMinBalance={setMinBalance}
                 setMinMaxBalanceOnSlider={setMinMaxBalanceOnSlider}
+                // date={date}
+                // setEnd={setEnd}
+                // setStart={setStart}
               />
+            </div>
+            <div className='filter-wrapper'>
+              <DateRangeButton setDate={setDate} date={date} />
             </div>
             <DropDown
               selectedValue={numberPerPage}
@@ -264,65 +288,84 @@ const Transaction = () => {
             />
           </div>
         </div>
-        <TransactionTitle>
-          <div
-            className='transaction-title transaction-reference-number'
-            onClick={() => onSortByColumn('reference_number')}>
-            <span>Ref</span>
-            <div className='chevron-wrapper'>
-              <ChevronDownIcon
-                isActive={sort.desc}
-                activeType={sort.column}
-                type={'reference_number'}
-              />
-            </div>
-          </div>
-          <div
-            className='transaction-title transaction-timestamp'
-            onClick={() => onSortByColumn('created_at')}>
-            <span>Date</span>
-            <div className='chevron-wrapper'>
-              <ChevronDownIcon
-                isActive={sort.desc}
-                activeType={sort.column}
-                type={'created_at'}
-              />
-            </div>
-          </div>
-          <div className='transaction-title transaction-type'>
-            <span>Action</span>
-          </div>
-          <div className='transaction-title transaction-remark'>
-            <span>Detail</span>
-          </div>
-          <div
-            className='transaction-title transaction-author'
-            onClick={() => onSortByColumn('username')}>
-            <span>Responsable</span>
-            <div className='chevron-wrapper'>
-              <ChevronDownIcon
-                isActive={sort.desc}
-                activeType={sort.column}
-                type={'username'}
-              />
-            </div>
-          </div>
-        </TransactionTitle>
 
-        {transactionData?.length > 0 &&
-          transactionData.map((value, index) => {
-            return (
-              <TransactionRecord
-                value={value}
-                index={index}
-                onDismissContextMenu={onDismissContextMenu}
-                onClickTransactionMenu={onClickTransactionMenu}
-                transactionData={transactionData}
-                key={index}
-              />
-            )
-          })}
+        <Table>
+          <TransactionTitle>
+            <div
+              className='transaction-title transaction-reference-number'
+              onClick={() => onSortByColumn('reference_number')}>
+              <span>
+                Ref{' '}
+                <div className='chevron-wrapper'>
+                  <ChevronDownIcon
+                    isActive={sort.desc}
+                    activeType={sort.column}
+                    type={'reference_number'}
+                  />
+                </div>
+              </span>
+            </div>
+            <div
+              className='transaction-title transaction-timestamp'
+              onClick={() => onSortByColumn('created_at')}>
+              <span>
+                Date
+                <div className='chevron-wrapper'>
+                  <ChevronDownIcon
+                    isActive={sort.desc}
+                    activeType={sort.column}
+                    type={'created_at'}
+                  />
+                </div>
+              </span>
+            </div>
+            <div className='transaction-title transaction-type'>
+              <span>Action</span>
+            </div>
+            <div className='transaction-title transaction-remark'>
+              <span>Detail</span>
+            </div>
+            <div
+              className='transaction-title transaction-author'
+              onClick={() => onSortByColumn('username')}>
+              <span>
+                Responsable
+                <div className='chevron-wrapper'>
+                  <ChevronDownIcon
+                    isActive={sort.desc}
+                    activeType={sort.column}
+                    type={'username'}
+                  />
+                </div>
+              </span>
+            </div>
+            <div className='transaction-title transaction-menu' />
+          </TransactionTitle>
+
+          {transactionData?.length > 0 &&
+            transactionData.map((value, index) => {
+              return (
+                <TransactionRecord
+                  value={value}
+                  index={index}
+                  onDismissContextMenu={onDismissContextMenu}
+                  onClickTransactionMenu={onClickTransactionMenu}
+                  transactionData={transactionData}
+                  key={index}
+                />
+              )
+            })}
+        </Table>
+        <div className='number-indicator-wrapper'>
+          <NumberIndicator
+            numberPerPage={numberPerPage}
+            activePage={activePage}
+            totalRecord={totalRecord}
+            numberOfShown={transactionData?.length}
+          />
+        </div>
       </div>
+
       <Pagination
         totalPage={totalPage}
         activePage={activePage}
@@ -372,6 +415,7 @@ const TransactionRecord = ({
 
   return (
     <TransactionList key={index} isOpen={value.isOpen}>
+      <input type='checkbox' />
       <div
         className={clsx(
           'transaction-information',
@@ -419,7 +463,6 @@ const TransactionRecord = ({
           onClick={(event) => onDismissMenu(event, index)}
         />
       </div>
-      <input type='checkbox' />
       <div className='transaction-product-list-container'>
         <div className='product-list product-list-title'>
           <div className='product-detail index' />

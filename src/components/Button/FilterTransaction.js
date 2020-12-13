@@ -30,11 +30,11 @@ const FilterTrasaction = ({
   const onToggle = () => setIsDismissMenu(!isDismissMenu)
 
   return (
-    <Container onChange={onToggle}>
+    <Container>
       <div className='filter-icon-wrapper'>
         <FilterIcon width={30} />
       </div>
-      <input type='checkbox' />
+      <input type='checkbox' onChange={onToggle} />
       <div className='filter-options'>
         <div className='options-row'>
           <div className='options'>
@@ -163,9 +163,6 @@ const FilterTrasaction = ({
               />
             </div>
           </div>
-        </div>
-        <div className='date-picker-wrapper'>
-          {/* <Datepicker date={date} setStart={setStart} setEnd={setEnd} /> */}
         </div>
       </div>
       {isDismissMenu && <div className='dismiss-menu' />}

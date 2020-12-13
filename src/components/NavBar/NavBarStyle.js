@@ -10,7 +10,7 @@ const SideBar = styled.div`
 
   transition: all 0.25s ease-in-out;
   background-color: ${COLORS.gray[900]};
-  z-index: ${({ open }) => (open ? '101' : '2')};
+  z-index: ${({ open }) => (open ? '101' : '100')};
 
   .menu {
     display: flex;

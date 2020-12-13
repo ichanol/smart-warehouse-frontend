@@ -6,9 +6,12 @@ import { Container } from './CreateButtonStyle'
 const CreateButton = ({ onCreateNew, onSelectFile, onDownloadTemplate }) => {
   const [isDismissMenu, setIsDismissMenu] = useState(false)
   return (
-    <Container onChange={() => setIsDismissMenu(!isDismissMenu)}>
+    <Container>
       <span className='create-new-button-title'>Create</span>
-      <input type='checkbox' />
+      <input
+        type='checkbox'
+        onChange={() => setIsDismissMenu(!isDismissMenu)}
+      />
       <div className='create-new-context-menu'>
         <div className='create-new-button-menu' onClick={onCreateNew}>
           <CreateIcon />

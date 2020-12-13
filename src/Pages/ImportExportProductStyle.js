@@ -108,6 +108,9 @@ const Container = styled.div`
   .mock-button-user {
     top: 50px;
   }
+  .text-area-wrapper{
+    margin-top: 12px;
+  }
 `
 
 export { Container }

@@ -9,7 +9,7 @@ import propTypes from 'prop-types'
 
 const ResponsiveTable = ({
   title,
-  data,
+  data = [],
   onSortByColumn,
   sort,
   onToggleSwitch,
@@ -128,8 +128,13 @@ const ResponsiveTable = ({
                   'cell data',
                   primaryIndex % 2 && 'odd',
                   !dataToRender.status && 'inactive',
+                  !dataToRender[value] && 'center',
                 )}>
-                <span>{dataToRender[value]?.toLocaleString()}</span>
+                <span>
+                  {dataToRender[value]
+                    ? dataToRender[value]?.toLocaleString()
+                    : '-'}
+                </span>
               </div>
             )
           }
@@ -140,7 +145,7 @@ const ResponsiveTable = ({
 
   return (
     <Wrapper>
-      {data.length === 0 && (
+      {data?.length === 0 && (
         <div className='no-data'>
           <span className='no-data-title'>no data</span>
         </div>

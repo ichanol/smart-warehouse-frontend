@@ -10,7 +10,7 @@ const Container = styled.div`
 
   background-color: ${COLORS.natural.white};
   box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.125);
-  z-index: 1;
+  z-index: 99;
 `
 
 const Profile = styled.label`
