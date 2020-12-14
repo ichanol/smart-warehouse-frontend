@@ -33,17 +33,7 @@ const CreateRole = () => {
   const [roleData, setRoleData] = useState({
     role_name: '',
     detail: '',
-    status: true,
-    permission: {
-      importExport: false,
-      map: false,
-      overview: false,
-      productList: false,
-      productManagement: false,
-      roleManagement: false,
-      transaction: false,
-      userManagement: false,
-    },
+    permission: [],
   })
 
   const onSubmit = async () => {
@@ -140,25 +130,30 @@ const CreateRole = () => {
 
   const onToggle = (primaryIndex) => {
     const temp = [...permissionCheckBox]
-    temp[primaryIndex].value = !temp[primaryIndex].value
-    const someObj = {}
-    permissionCheckBox.map((value, index) => {
-      someObj[value.key] = value.value
-    })
-    const acc = { ...roleData }
-    acc.permission = someObj
-    setRoleData(acc)
+    temp[primaryIndex].status = !temp[primaryIndex].status
+    setPermissionCheckBox(temp)
+
+    const updatedRoleData = temp.map((value) => ({
+      id: value.id,
+      status: value.status,
+    }))
+    setRoleData({ ...roleData, permission: updatedRoleData })
   }
 
-  const checkDetailElementHeight = async () => {
-    const temp = []
-    for (const [key, value] of Object.entries(roleData.permission)) {
-      temp.push({ key, value, expand: false, showExpand: false })
-    }
+  const checkDetailElementHeight = async (permission) => {
+    const temp = permission.map((value) => ({
+      permission: value.permission_name,
+      id: value.id,
+      status: false,
+      expand: false,
+      showExpand: false,
+      detail: value.detail,
+    }))
+
     await setPermissionCheckBox(temp)
     const acc = [...temp]
     choicesDetailRef.current.map((value, index) => {
-      if (value.clientHeight >= 75) {
+      if (value.clientHeight >= 50) {
         acc[index].showExpand = true
       }
     })
@@ -180,8 +175,26 @@ const CreateRole = () => {
     }
   }
 
+  const getPermissionList = async () => {
+    const { success, result } = await requestHandler(
+      '/roles',
+      true,
+      { getPermission: true },
+      'get',
+    )
+
+    if (success) {
+      const permission = result.map((value) => ({
+        id: value.id,
+        status: false,
+      }))
+      setRoleData({ ...roleData, permission })
+      checkDetailElementHeight(result)
+    }
+  }
+
   useEffect(() => {
-    checkDetailElementHeight()
+    getPermissionList()
   }, [])
 
   return (
@@ -216,7 +229,7 @@ const CreateRole = () => {
               <div
                 key={index}
                 className={clsx('permission-list', value.expand && 'expand')}>
-                <div className='permission-title'>{value.key}</div>
+                <div className='permission-title'>{value.permission}</div>
                 <div className='permission-detail-container'>
                   <div
                     ref={(ref) => {
@@ -227,25 +240,13 @@ const CreateRole = () => {
                       value.showExpand && 'collapse',
                       value.expand && 'expand',
                     )}>
-                    Nostrud enim fugiat ipsum laboris cillum dolor minim
-                    consectetur. Ex nulla quis nulla consectetur anim labore
-                    dolor quis ad est non. Eiusmod cillum consequat Lorem fugiat
-                    ad. Dolor aliqua ea commodo nostrud veniam irure occaecat
-                    est exercitation. Ex do Lorem commodo officia eu incididunt
-                    ad veniam esse nostrud quis dolore duis excepteur. Ea
-                    ullamco eu ipsum aliquip aliquip exercitation amet. Labore
-                    pariatur esse culpa dolor occaecat consectetur officia esse
-                    laborum nisi deserunt. Id excepteur reprehenderit labore
-                    minim sit velit sunt laboris. Laboris anim velit culpa
-                    pariatur consectetur velit cupidatat esse qui adipisicing
-                    adipisicing ullamco. Ex ea duis ut exercitation. Pariatur ex
-                    ipsum nulla ipsum eiusmod.
+                    {value.detail}
                   </div>
                 </div>
                 <div className='toggle-button-wrapper'>
                   <ToggleButton
                     action={() => onToggle(index)}
-                    value={value.value}
+                    value={value.status}
                   />
                 </div>
                 {value.showExpand && (

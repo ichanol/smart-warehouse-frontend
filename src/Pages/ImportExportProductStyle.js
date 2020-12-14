@@ -38,17 +38,12 @@ const Container = styled.div`
     background-color: ${COLORS.gray[300]};
     opacity: 0.8;
     cursor: pointer;
+    text-transform: capitalize;
   }
   .focus-tab {
     opacity: 1;
     color: ${COLORS.natural.black};
     background-color: ${COLORS.gray[200]};
-  }
-  .disable-tab {
-    color: ${COLORS.gray[600]};
-    background-color: ${COLORS.gray[500]};
-    cursor: not-allowed;
-    opacity: 0.65;
   }
   .header {
     height: 35px;
@@ -108,7 +103,7 @@ const Container = styled.div`
   .mock-button-user {
     top: 50px;
   }
-  .text-area-wrapper{
+  .text-area-wrapper {
     margin-top: 12px;
   }
 `

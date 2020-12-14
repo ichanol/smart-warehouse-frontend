@@ -4,6 +4,7 @@ import CreateUser from './CreateUser'
 import EditImportExportProduct from './EditImportExportProduct'
 import EditProduct from './EditProduct'
 import EditRole from './EditRole'
+import EditTransaction from './EditTransaction'
 import EditUser from './EditUser'
 import ImportExportProduct from './ImportExportProduct'
 import Login from './Login'
@@ -36,4 +37,5 @@ export {
   RoleManagement,
   Transaction,
   UserManagement,
+  EditTransaction,
 }

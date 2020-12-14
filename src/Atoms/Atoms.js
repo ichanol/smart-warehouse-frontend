@@ -15,6 +15,11 @@ const readProductListState = atom({
   default: [],
 })
 
+const transactionListState = atom({
+  key: 'transactionListState',
+  default: [],
+})
+
 const productListState = atom({
   key: 'productListState',
   default: [],
@@ -24,6 +29,7 @@ const roleListState = atom({
   key: 'roleListState',
   default: [],
 })
+
 const userListState = atom({
   key: 'userListState',
   default: [],
@@ -58,6 +64,7 @@ const atomState = {
   userListState,
   roleListState,
   productListState,
+  transactionListState,
 }
 
 export default atomState

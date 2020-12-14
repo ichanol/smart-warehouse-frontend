@@ -5,6 +5,7 @@ import {
   EditImportExportProduct,
   EditProduct,
   EditRole,
+  EditTransaction,
   EditUser,
   ImportExportProduct,
   Map,
@@ -123,12 +124,21 @@ const DefaultRoutes = () => {
             routePermission='User Management'
           />
           <PrivateRoute
+            path={ROUTER_PATH.editTransaction.path}
+            key={ROUTER_PATH.editTransaction.path}
+            component={EditTransaction}
+            routePermission='Transaction'
+          />
+          <PrivateRoute
             path={ROUTER_PATH.transaction.path}
             key={ROUTER_PATH.transaction.path}
             component={Transaction}
             routePermission='Transaction'
           />
-          <PrivateRoute component={RedirectNotFound} />
+          <PrivateRoute
+            component={RedirectNotFound}
+            routePermission='public'
+          />
         </Switch>
       </div>
     </div>

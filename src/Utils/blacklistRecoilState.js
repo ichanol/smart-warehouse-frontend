@@ -4,6 +4,7 @@ const blacklistRecoilState = [
   'productListState',
   'roleListState',
   'userListState',
+  'transactionListState',
 ]
 
 export default blacklistRecoilState

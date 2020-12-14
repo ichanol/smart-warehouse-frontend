@@ -104,7 +104,7 @@ const EditRole = () => {
 
   const onToggle = (primaryIndex) => {
     const editedPermission = permissionCheckBox.map((value) => ({
-      permission: value.permission,
+      permission: value.id,
       status: value.status,
     }))
     editedPermission[primaryIndex].status = !editedPermission[primaryIndex]
@@ -123,16 +123,18 @@ const EditRole = () => {
 
   const checkDetailElementHeight = async (permission) => {
     const temp = permission.map((value) => ({
-      permission: value.permission,
+      permission: value.permission_name,
+      id: value.id,
       status: value.status,
       expand: false,
       showExpand: false,
+      detail: value.detail,
     }))
 
     await setPermissionCheckBox(temp)
     const acc = [...temp]
     choicesDetailRef.current.map((value, index) => {
-      if (value.clientHeight >= 75) {
+      if (value.clientHeight >= 50) {
         acc[index].showExpand = true
       }
     })
@@ -160,11 +162,16 @@ const EditRole = () => {
         (value) => value.role_name === rolename,
       )
       if (selectedRole) {
+        console.log(selectedRole)
         checkDetailElementHeight(selectedRole?.permission)
+        const rolePermission = selectedRole?.permission?.map((value) => ({
+          permission: value.id,
+          status: value.status,
+        }))
         setEditedRoleData({
           detail: selectedRole?.detail,
           role_name: selectedRole?.role_name,
-          permission: selectedRole?.permission,
+          permission: rolePermission,
           id: selectedRole?.id,
         })
       } else {
@@ -214,19 +221,7 @@ const EditRole = () => {
                       value.showExpand && 'collapse',
                       value.expand && 'expand',
                     )}>
-                    Nostrud enim fugiat ipsum laboris cillum dolor minim
-                    consectetur. Ex nulla quis nulla consectetur anim labore
-                    dolor quis ad est non. Eiusmod cillum consequat Lorem fugiat
-                    ad. Dolor aliqua ea commodo nostrud veniam irure occaecat
-                    est exercitation. Ex do Lorem commodo officia eu incididunt
-                    ad veniam esse nostrud quis dolore duis excepteur. Ea
-                    ullamco eu ipsum aliquip aliquip exercitation amet. Labore
-                    pariatur esse culpa dolor occaecat consectetur officia esse
-                    laborum nisi deserunt. Id excepteur reprehenderit labore
-                    minim sit velit sunt laboris. Laboris anim velit culpa
-                    pariatur consectetur velit cupidatat esse qui adipisicing
-                    adipisicing ullamco. Ex ea duis ut exercitation. Pariatur ex
-                    ipsum nulla ipsum eiusmod.
+                    {value.detail}
                   </div>
                 </div>
                 <div className='toggle-button-wrapper'>

@@ -83,9 +83,12 @@ const PermissionSection = styled.div`
     font-size: ${FONT.l};
   }
   .permission-detail {
-    max-height: 75px;
+    max-height: 50px;
+    max-width: 500px;
 
     font-size: ${FONT.m};
+    color: ${COLORS.gray[700]};
+    word-wrap: break-word;
   }
   .toggle-button-wrapper {
     display: flex;

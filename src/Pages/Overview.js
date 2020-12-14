@@ -131,8 +131,6 @@ export default Overview
 /**
  * TODO:
  *
- * #       1.Fix Transaction layout [FE]
- * #       2.Fix Date picker [FE]
  * ?       3.Add Edit transaction [FE][BE]
  * ?       4.Add Activity log [FE][BE]
  * ?       5.Add user's login handler (forget password/username) [FE][BE]

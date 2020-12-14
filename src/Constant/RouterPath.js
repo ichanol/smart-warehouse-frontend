@@ -14,6 +14,7 @@ const ROUTER_PATH = {
     title: 'Edit Product',
   },
   transaction: { path: '/transaction', title: 'Transaction' },
+  editTransaction: { path: '/transaction/edit-transaction/:transactionref', title: 'Edit Transaction' },
   userManagement: {
     path: '/user-management',
     title: 'User Management',

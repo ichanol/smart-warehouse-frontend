@@ -171,8 +171,7 @@ const TransactionList = styled.label`
     left: 0;
 
     z-index: 4;
-    visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-    transition: all 0.2s linear;
+    display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   }
   input[type='checkbox'] {
     width: 0;

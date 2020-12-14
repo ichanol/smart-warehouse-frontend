@@ -19,6 +19,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { capitalize, debounce } from 'lodash'
 import { requestHandler, useAxios } from '../Services'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { COLORS } from '../Constant'
 import { atomState } from '../Atoms'
@@ -26,7 +27,6 @@ import { blobFileDownloader } from '../Utils'
 import clsx from 'clsx'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
 
 const Transaction = () => {
   const today = new Date()
@@ -34,6 +34,9 @@ const Transaction = () => {
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
+  const [transactionData, setTransactionData] = useRecoilState(
+    atomState.transactionListState,
+  )
 
   const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
   const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
@@ -44,18 +47,16 @@ const Transaction = () => {
   const [sort, setSort] = useState({ column: null, desc: true })
   const [filter, setFilter] = useState({
     status: {
-      available: false,
-      notAvailable: false,
+      available: true,
+      notAvailable: true,
     },
     action: {
-      import: false,
-      export: false,
-      damaged: false,
-      expired: false,
+      import: true,
+      export: true,
+      damaged: true,
+      expired: true,
     },
   })
-
-  const [transactionData, setTransactionData] = useState([])
   const [searchSuggest, setSearchSuggest] = useState([])
   const [date, setDate] = useState({
     startDate: new Date(today.getFullYear(), today.getMonth(), 1),
@@ -239,17 +240,31 @@ const Transaction = () => {
   const onClickTransactionMenu = (event, index) => {
     event.preventDefault()
     event.stopPropagation()
-    const temp = [...transactionData]
-    temp[index].isOpen = !temp[index].isOpen
-    setTransactionData(temp)
+
+    const cloneTransactionData = [...transactionData]
+    cloneTransactionData[index] = {
+      ...cloneTransactionData[index],
+      isOpen: !cloneTransactionData[index].isOpen,
+    }
+
+    setTransactionData(cloneTransactionData)
   }
 
-  const onDismissContextMenu = (event, index) => {
-    event.preventDefault()
-    event.stopPropagation()
-    const temp = [...transactionData]
-    temp[index].isOpen = false
-    setTransactionData(temp)
+  const onEdit = (transactionReference) => {
+    history.push(`/transaction/edit-transaction/${transactionReference}`)
+  }
+
+  const onGenerateReport = async (reportNumber) => {
+    const response = await requestHandler(
+      `/generate-pdf/${reportNumber}`,
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    blobFileDownloader(response, `${reportNumber}.pdf`)
   }
 
   return (
@@ -348,10 +363,11 @@ const Transaction = () => {
                 <TransactionRecord
                   value={value}
                   index={index}
-                  onDismissContextMenu={onDismissContextMenu}
                   onClickTransactionMenu={onClickTransactionMenu}
                   transactionData={transactionData}
                   key={index}
+                  onEdit={onEdit}
+                  onGenerateReport={onGenerateReport}
                 />
               )
             })}
@@ -381,36 +397,15 @@ const TransactionRecord = ({
   value,
   index,
   onClickTransactionMenu,
-  onDismissContextMenu,
   transactionData,
+  onEdit,
+  onGenerateReport,
 }) => {
   const [dismissContext, setDismissContext] = useState(false)
 
   const onToggleMenu = (event, subIndex) => {
     onClickTransactionMenu(event, subIndex)
     setDismissContext(!dismissContext)
-  }
-
-  const onDismissMenu = (event, subIndex) => {
-    onDismissContextMenu(event, subIndex)
-    setDismissContext(false)
-  }
-
-  const onEdit = () => {
-    console.log('edit')
-  }
-
-  const onGenerateReport = async (reportNumber) => {
-    const response = await requestHandler(
-      `/generate-pdf/${reportNumber}`,
-      true,
-      null,
-      'get',
-      0,
-      0,
-      true,
-    )
-    blobFileDownloader(response, `${reportNumber}.pdf`)
   }
 
   return (
@@ -442,7 +437,9 @@ const TransactionRecord = ({
           onClick={(event) => onToggleMenu(event, index)}>
           <DotsMenu />
           <div className='transaction-context-menu'>
-            <div className='transaction-record-menu' onClick={() => onEdit()}>
+            <div
+              className='transaction-record-menu'
+              onClick={() => onEdit(value.reference_number)}>
               <EditIcon fill={COLORS.gray[600]} />
               <span className='transaction-record-menu-title'>
                 Edit Transaction
@@ -460,7 +457,7 @@ const TransactionRecord = ({
         </div>
         <div
           className='dismiss-context'
-          onClick={(event) => onDismissMenu(event, index)}
+          onClick={(event) => onToggleMenu(event, index)}
         />
       </div>
       <div className='transaction-product-list-container'>

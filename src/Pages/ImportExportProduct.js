@@ -31,7 +31,11 @@ const ImportExportProduct = () => {
   const [modalState, setModalState] = useRecoilState(atomState.modalState)
   const resetModalState = useResetRecoilState(atomState.modalState)
 
-  const [actionTabs, setActionTabs] = useState({ id: 1, action_type: 'Import' })
+  const [selectedTab, setSelectedTab] = useState({
+    id: 1,
+    action_name: 'Import',
+  })
+  const [menuTabs, setMenuTabs] = useState([])
   const [transactionRemark, setTransactionRemark] = useState('')
 
   const SOCKET_EVENT = {
@@ -45,29 +49,90 @@ const ImportExportProduct = () => {
     history.goBack()
   }
 
-  useEffect(() => {
-    socket.emit(SOCKET_EVENT.joinRoom, { room: userState.username })
-    if (!userState.isUserCardVerify && !readProductListState.length) {
-      console.log('no card, nolist')
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please scan your card',
-        isIndicator: true,
-        detail: 'Scan your card to proceed next step',
-        positiveButton: {
-          display: true,
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
-        socket.off(SOCKET_EVENT.userGranted)
-        setUserState((oldState) => ({
+  const getActionList = async () => {
+    try {
+      const { success, result } = await requestHandler(
+        '/import-export-product',
+        true,
+        {},
+        'get',
+      )
+      if (success) {
+        setMenuTabs(result)
+      }
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  const socketHandler = async () => {
+    if (await getActionList()) {
+      socket.emit(SOCKET_EVENT.joinRoom, { room: userState.username })
+      if (!userState.isUserCardVerify && !readProductListState.length) {
+        console.log('no card, nolist')
+        setModalState((oldState) => ({
           ...oldState,
-          isUserCardVerify: true,
+          modalType: 'error',
+          isDisplay: true,
+          title: 'Please scan your card',
+          isIndicator: true,
+          detail: 'Scan your card to proceed next step',
+          positiveButton: {
+            display: true,
+            text: 'cancel',
+          },
+          onClickPositiveButton: onCancleScanning,
         }))
+        socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+          socket.off(SOCKET_EVENT.userGranted)
+          setUserState((oldState) => ({
+            ...oldState,
+            isUserCardVerify: true,
+          }))
+          setModalState((oldState) => ({
+            ...oldState,
+            modalType: 'error',
+            isDisplay: true,
+            title: 'Please wait',
+            isIndicator: true,
+            detail: 'Device is scanning for products',
+            positiveButton: {
+              text: 'cancel',
+            },
+            onClickPositiveButton: onCancleScanning,
+          }))
+          socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
+            socket.off(SOCKET_EVENT.productScanner)
+            resetModalState()
+            setReadProductListState(productData)
+          })
+        })
+      } else if (!userState.isUserCardVerify) {
+        console.log('no card')
+        setModalState((oldState) => ({
+          ...oldState,
+          modalType: 'error',
+          isDisplay: true,
+          title: 'Please scan your card',
+          isIndicator: true,
+          detail: 'Scan your card to proceed next step',
+          positiveButton: {
+            display: true,
+            text: 'cancel',
+          },
+          onClickPositiveButton: onCancleScanning,
+        }))
+        socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
+          socket.off(SOCKET_EVENT.userGranted)
+          setUserState((oldState) => ({
+            ...oldState,
+            isUserCardVerify: true,
+          }))
+          resetModalState()
+        })
+      } else if (!readProductListState.length) {
+        console.log('no list')
         setModalState((oldState) => ({
           ...oldState,
           modalType: 'error',
@@ -85,50 +150,14 @@ const ImportExportProduct = () => {
           resetModalState()
           setReadProductListState(productData)
         })
-      })
-    } else if (!userState.isUserCardVerify) {
-      console.log('no card')
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please scan your card',
-        isIndicator: true,
-        detail: 'Scan your card to proceed next step',
-        positiveButton: {
-          display: true,
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.userGranted, ({ message, granted, room }) => {
-        socket.off(SOCKET_EVENT.userGranted)
-        setUserState((oldState) => ({
-          ...oldState,
-          isUserCardVerify: true,
-        }))
-        resetModalState()
-      })
-    } else if (!readProductListState.length) {
-      console.log('no list')
-      setModalState((oldState) => ({
-        ...oldState,
-        modalType: 'error',
-        isDisplay: true,
-        title: 'Please wait',
-        isIndicator: true,
-        detail: 'Device is scanning for products',
-        positiveButton: {
-          text: 'cancel',
-        },
-        onClickPositiveButton: onCancleScanning,
-      }))
-      socket.on(SOCKET_EVENT.productScanner, ({ success, productData }) => {
-        socket.off(SOCKET_EVENT.productScanner)
-        resetModalState()
-        setReadProductListState(productData)
-      })
+      }
+    } else {
+      history.goBack()
     }
+  }
+
+  useEffect(() => {
+    socketHandler()
     return () => {
       resetModalState()
       socket.removeAllListeners()
@@ -182,7 +211,7 @@ const ImportExportProduct = () => {
     try {
       const body = {
         referenceNumber: Math.round(Math.random() * 1000),
-        actionType: actionTabs.id,
+        actionType: selectedTab.id,
         username: userState.username,
         productList: readProductListState,
         transactionRemark,
@@ -276,18 +305,11 @@ const ImportExportProduct = () => {
 
   const onClickActionTab = (action) => {
     if (!action.disable) {
-      setActionTabs({ id: action.id, action_type: action.action_type })
+      setSelectedTab({ id: action.id, action_name: action.action_name })
     }
   }
 
   const onValueChange = debounce((value) => setTransactionRemark(value), 300)
-
-  const MOCK_CHOICES = [
-    { id: 1, action_type: 'Import', disable: false },
-    { id: 2, action_type: 'Export', disable: false },
-    { id: 3, action_type: 'Expired', disable: true },
-    { id: 4, action_type: 'Damaged', disable: false },
-  ]
 
   const titleArray = [
     { title: 'Serial number', type: 'product_id', isSort: false },
@@ -374,22 +396,21 @@ const ImportExportProduct = () => {
         Scan Product
       </div>
       <div className='action-tabs-container'>
-        {MOCK_CHOICES.map((value, index) => {
+        {menuTabs.map((value, index) => {
           return (
             <div
               key={index}
               onClick={() => onClickActionTab(value)}
               className={clsx(
                 'action-tabs',
-                actionTabs.id === value.id && 'focus-tab',
-                value.disable && 'disable-tab',
+                selectedTab.id === value.id && 'focus-tab',
               )}>
               <span
                 className={clsx(
                   'tab-title',
-                  actionTabs.id === value.id && 'focus-title',
+                  selectedTab.id === value.id && 'focus-title',
                 )}>
-                {value.action_type}
+                {value.action_name}
               </span>
             </div>
           )
