@@ -20,7 +20,7 @@ const Table = styled.div`
     border-radius: 8px;
 
     background-clip: padding-box;
-    background-color: rgba(0,0,0,0.15);
+    background-color: rgba(0, 0, 0, 0.15);
   }
   ::-webkit-scrollbar-button {
     width: 0;
@@ -52,6 +52,8 @@ const Table = styled.div`
 
     z-index: 1;
     background-color: ${COLORS.natural.white};
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, ${({ isScroll }) => isScroll ? 0.05 : 0});
   }
   .scroll-section {
     display: flex;
@@ -164,7 +166,7 @@ const Wrapper = styled.div`
     border-radius: 8px;
 
     background-color: ${COLORS.gray[100]};
-    z-index:3
+    z-index: 3;
   }
   .no-data-title {
     font-size: ${FONT.xl};

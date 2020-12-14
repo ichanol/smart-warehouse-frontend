@@ -1,7 +1,7 @@
 import { ChevronDownIcon, DeleteIcon, EditIcon } from '../Icon'
+import React, { useRef, useState } from 'react'
 import { SortArrow, Table, Wrapper } from './ResponsiveTableStyle'
 
-import React from 'react'
 import { ToggleButton } from '../Button'
 import clsx from 'clsx'
 import moment from 'moment'
@@ -24,6 +24,8 @@ const ResponsiveTable = ({
   onDelete,
   indexCounter,
 }) => {
+  const tableRef = useRef()
+  const [isScroll, setIsScroll] = useState(false)
   const renderFixedDataColumn = (dataToRender, primaryIndex) => {
     return (
       <div className='table-data-wrapper' key={primaryIndex}>
@@ -150,7 +152,11 @@ const ResponsiveTable = ({
           <span className='no-data-title'>no data</span>
         </div>
       )}
-      <Table>
+      <Table
+        ref={tableRef}
+        open={false}
+        isScroll={isScroll}
+        onScroll={() => setIsScroll(tableRef?.current?.scrollLeft > 0)}>
         <div className='table'>
           <div className='fixed-section'>
             <div className='fixed-headers'>
