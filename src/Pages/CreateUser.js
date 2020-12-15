@@ -52,9 +52,8 @@ const CreateUser = () => {
         'get',
       )
       if (success) {
-        console.log(result)
-        const temp = result.map((value, index) => value.role_name)
-        setRole({ ...role, choices: temp, selected: temp[0] })
+        setRole({ ...role, choices: result, selected: result[0].role_name })
+        setUserData({ ...userData, role: result[0].role_name })
       }
     } catch (error) {
       console.log(error)
@@ -139,9 +138,9 @@ const CreateUser = () => {
     }
   }
 
-  const onChangeRole = (roleName) => {
-    setRole({ ...role, selected: roleName })
-    setUserData({ ...userData, role: roleName })
+  const onChangeRole = (id) => {
+    setRole({ ...role, selected: role.choices[id].role_name })
+    setUserData({ ...userData, role: role.choices[id].role_name })
   }
 
   const onValueChange = debounce((value, TYPE) => {
@@ -203,6 +202,7 @@ const CreateUser = () => {
               onSelect={onChangeRole}
               width='initial'
               isCenter={false}
+              field='role_name'
             />
             <span className='placeholder'>Role</span>
           </div>

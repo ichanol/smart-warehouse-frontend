@@ -16,6 +16,25 @@ import { atomState } from '../Atoms/'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
+  const titleArray = [
+    { title: 'Role name', type: 'role_name', isSort: true },
+    { title: 'Detail', type: null, isSort: false },
+    { title: 'Users', type: 'totalUser', isSort: true },
+    { title: 'Created at', type: 'created_at', isSort: true },
+    { title: 'Updated at', type: 'updated_at', isSort: true },
+    { title: 'Actions', type: null, isSort: false },
+  ]
+  const centerColumn = ['totalUser']
+  const fixedDataColumn = ['role_name', 'detail']
+  const scrollDataColumn = ['totalUser', 'created_at', 'updated_at', 'status']
+  const itemPerPageList = [
+    { name: 10 },
+    { name: 20 },
+    { name: 30 },
+    { name: 50 },
+    { name: 100 },
+  ]
+
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
@@ -112,8 +131,8 @@ const ProductManagement = () => {
   const onSortByColumn = (columnType) =>
     setSort({ column: columnType, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number) => {
-    setNumberPerPage(number)
+  const onChangeNumberPerPage = (index) => {
+    setNumberPerPage(itemPerPageList[index].name)
     setActivePage(1)
   }
 
@@ -163,19 +182,6 @@ const ProductManagement = () => {
 
   const onEdit = (index) =>
     history.push(`/role-management/edit/${roleListState[index].role_name}`)
-
-  const titleArray = [
-    { title: 'Role name', type: 'role_name', isSort: true },
-    { title: 'Detail', type: null, isSort: false },
-    { title: 'Users', type: 'totalUser', isSort: true },
-    { title: 'Created at', type: 'created_at', isSort: true },
-    { title: 'Updated at', type: 'updated_at', isSort: true },
-    { title: 'Actions', type: null, isSort: false },
-  ]
-  const centerColumn = ['totalUser']
-  const fixedDataColumn = ['role_name', 'detail']
-  const scrollDataColumn = ['totalUser', 'created_at', 'updated_at', 'status']
-  const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>

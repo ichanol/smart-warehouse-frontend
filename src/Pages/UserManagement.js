@@ -5,7 +5,7 @@ import {
   NumberIndicator,
   Pagination,
   ResponsiveTable,
-  SearchBox as useSearchBox
+  SearchBox as useSearchBox,
 } from '../components'
 import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
@@ -16,6 +16,37 @@ import { atomState } from '../Atoms/'
 import { useHistory } from 'react-router-dom'
 
 const UserManagement = () => {
+  const titleArray = [
+    { title: 'Firstname', type: 'firstname', isSort: true },
+    { title: 'Lastname', type: 'lastname', isSort: true },
+    { title: 'Username', type: 'username', isSort: true },
+    { title: 'E-mail', type: 'email', isSort: true },
+    { title: 'Role', type: 'role_name', isSort: true },
+    { title: 'Detail', type: 'detail', isSort: true },
+    { title: 'Created at', type: 'created_at', isSort: true },
+    { title: 'Updated at', type: 'updated_at', isSort: true },
+    { title: 'Actions', type: null, isSort: false },
+  ]
+
+  const fixedDataColumn = ['firstname', 'lastname']
+  const scrollDataColumn = [
+    'username',
+    'email',
+    'role_name',
+    'detail',
+    'created_at',
+    'updated_at',
+    'status',
+  ]
+  const centerColumn = []
+  const itemPerPageList = [
+    { name: 10 },
+    { name: 20 },
+    { name: 30 },
+    { name: 50 },
+    { name: 100 },
+  ]
+
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
@@ -113,8 +144,8 @@ const UserManagement = () => {
   const onSortByColumn = (columnType) =>
     setSort({ column: columnType, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number) => {
-    setNumberPerPage(number)
+  const onChangeNumberPerPage = (index) => {
+    setNumberPerPage(itemPerPageList[index].name)
     setActivePage(1)
   }
 
@@ -169,31 +200,6 @@ const UserManagement = () => {
 
   const onEdit = (index) =>
     history.push(`/user-management/edit/${userListState[index].username}`)
-
-  const titleArray = [
-    { title: 'Firstname', type: 'firstname', isSort: true },
-    { title: 'Lastname', type: 'lastname', isSort: true },
-    { title: 'Username', type: 'username', isSort: true },
-    { title: 'E-mail', type: 'email', isSort: true },
-    { title: 'Role', type: 'role_name', isSort: true },
-    { title: 'Detail', type: 'detail', isSort: true },
-    { title: 'Created at', type: 'created_at', isSort: true },
-    { title: 'Updated at', type: 'updated_at', isSort: true },
-    { title: 'Actions', type: null, isSort: false },
-  ]
-
-  const fixedDataColumn = ['firstname', 'lastname']
-  const scrollDataColumn = [
-    'username',
-    'email',
-    'role_name',
-    'detail',
-    'created_at',
-    'updated_at',
-    'status',
-  ]
-  const centerColumn = []
-  const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>

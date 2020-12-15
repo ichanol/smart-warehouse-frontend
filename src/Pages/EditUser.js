@@ -45,8 +45,7 @@ const EditUser = () => {
         'get',
       )
       if (success) {
-        const temp = result.map((value, index) => value.role_name)
-        setRole({ ...role, choices: temp, selected: currentRole })
+        setRole({ ...role, choices: result, selected: currentRole })
       }
     } catch (error) {
       console.log(error)
@@ -114,9 +113,9 @@ const EditUser = () => {
     }
   }
 
-  const onChangeRole = (roleName) => {
-    setRole({ ...role, selected: roleName })
-    setEditedUserData({ ...editedUserData, role: roleName })
+  const onChangeRole = (id) => {
+    setRole({ ...role, selected: role.choices[id].role_name })
+    setEditedUserData({ ...editedUserData, role: role.choices[id].role_name })
   }
 
   const onCancel = () => history.goBack()
@@ -223,6 +222,7 @@ const EditUser = () => {
               onSelect={onChangeRole}
               width='initial'
               isCenter={false}
+              field='role_name'
             />
             <span className='placeholder'>Role</span>
           </div>

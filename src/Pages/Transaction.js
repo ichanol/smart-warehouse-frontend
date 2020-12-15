@@ -33,6 +33,13 @@ import { useHistory } from 'react-router-dom'
 const Transaction = () => {
   const today = new Date()
   const tableHeight = 540
+  const itemPerPageList = [
+    { name: 10 },
+    { name: 20 },
+    { name: 30 },
+    { name: 50 },
+    { name: 100 },
+  ]
 
   const history = useHistory()
 
@@ -198,8 +205,8 @@ const Transaction = () => {
     setTrigger(!trigger)
   }, [searchTransactionListData])
 
-  const onChangeNumberPerPage = (number) => {
-    setNumberPerPage(number)
+  const onChangeNumberPerPage = (index) => {
+    setNumberPerPage(itemPerPageList[index].name)
     setActivePage(1)
   }
 
@@ -242,8 +249,6 @@ const Transaction = () => {
     (min, max) => setMinMaxAmount({ ...minMaxAmount, max, min }),
     300,
   )
-
-  const itemPerPageList = [10, 20, 30, 50, 100]
 
   const onClickTransactionMenu = (event, index) => {
     event.preventDefault()
@@ -299,12 +304,6 @@ const Transaction = () => {
     setArrowState(newArrowState)
   }
 
-  // useEffect(() => {
-  //   const handleScroll = () => console.log('start scroll')
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [])
-
   return (
     <Container>
       <div className='header'>
@@ -340,9 +339,9 @@ const Transaction = () => {
         </div>
 
         <ArrowWrapper
-          display={arrowState.display}
-          scrollHeight={arrowState.scrollHeight > tableHeight}
-          rotate={arrowState.rotate}>
+          display={arrowState.display ? 1 : 0}
+          scrollHeight={arrowState.scrollHeight > tableHeight ? 1 : 0}
+          rotate={arrowState.rotate ? 1 : 0}>
           <div className='arrow-wrapper'>
             <ArrowIcon />
           </div>

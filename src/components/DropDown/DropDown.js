@@ -11,12 +11,13 @@ const DropDown = ({
   isCenter = true,
   placeholder,
   fullWidth = true,
+  field,
 }) => {
   const [display, setDisplay] = useState(false)
   const dropDownRef = useRef()
-  const onSelectChoice = (value, index) => {
+  const onSelectChoice = (index) => {
     dropDownRef.current.scrollTop = 40 * (index - 1)
-    onSelect(value)
+    onSelect(index)
   }
   return (
     <Container
@@ -41,8 +42,8 @@ const DropDown = ({
             <div
               className='item-per-page-choice'
               key={index}
-              onClick={() => onSelectChoice(value, index)}>
-              {value}
+              onClick={() => onSelectChoice(index)}>
+              {value[field]}
             </div>
           ))}
         </div>
@@ -56,10 +57,17 @@ DropDown.propTypes = {
   selectedValue: propTypes.any,
   choices: propTypes.array,
   onSelect: propTypes.func,
+  field: propTypes.string,
 }
 DropDown.defaultProps = {
   selectedValue: 'default',
-  choices: ['default', 'choice1', 'choice2', 'choice3'],
+  choices: [
+    { name: 'default' },
+    { name: 'choice1' },
+    { name: 'choice2' },
+    { name: 'choice3' },
+  ],
   onSelect: () => {},
+  field: 'name',
 }
 export default DropDown

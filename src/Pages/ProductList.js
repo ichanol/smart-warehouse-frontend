@@ -11,6 +11,25 @@ import { Container } from '../Pages/ProductListStyle'
 import { useAxios } from '../Services'
 
 const ProductList = () => {
+  const titleArray = [
+    { title: 'Serial number', type: 'product_id', isSort: true },
+    { title: 'Product name', type: 'product_name', isSort: true },
+    { title: 'Balance', type: 'balance', isSort: true },
+    { title: 'Company', type: 'company_name', isSort: true },
+    { title: 'Location', type: 'location', isSort: true },
+    { title: 'Updated at', type: 'updated_at', isSort: true },
+  ]
+  const fixedDataColumn = ['product_id', 'product_name', 'balance']
+  const scrollDataColumn = ['company_name', 'location', 'updated_at']
+  const centerColumn = ['balance']
+  const itemPerPageList = [
+    { name: 10 },
+    { name: 20 },
+    { name: 30 },
+    { name: 50 },
+    { name: 100 },
+  ]
+
   const [productList, setProductList] = useState([])
   const [searchSuggest, setSearchSuggest] = useState([])
   const [activePage, setActivePage] = useState(1)
@@ -80,25 +99,12 @@ const ProductList = () => {
   const onSortByColumn = (column) =>
     setSort({ ...sort, column: column, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number) => {
-    setNumberPerPage(number)
+  const onChangeNumberPerPage = (index) => {
+    setNumberPerPage(itemPerPageList[index].name)
     setActivePage(1)
   }
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
-
-  const titleArray = [
-    { title: 'Serial number', type: 'product_id', isSort: true },
-    { title: 'Product name', type: 'product_name', isSort: true },
-    { title: 'Balance', type: 'balance', isSort: true },
-    { title: 'Company', type: 'company_name', isSort: true },
-    { title: 'Location', type: 'location', isSort: true },
-    { title: 'Updated at', type: 'updated_at', isSort: true },
-  ]
-  const fixedDataColumn = ['product_id', 'product_name', 'balance']
-  const scrollDataColumn = ['company_name', 'location', 'updated_at']
-  const centerColumn = ['balance']
-  const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>

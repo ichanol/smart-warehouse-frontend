@@ -16,6 +16,37 @@ import { atomState } from '../Atoms/'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
+  const titleArray = [
+    { title: 'Serial number', type: 'product_id', isSort: true },
+    { title: 'Product name', type: 'product_name', isSort: true },
+    { title: 'Company', type: 'company_name', isSort: true },
+    { title: 'Detail', type: 'detail', isSort: true },
+    { title: 'Location', type: 'location', isSort: true },
+    { title: 'Created at', type: 'created_at', isSort: true },
+    { title: 'Updated at', type: 'updated_at', isSort: true },
+    { title: 'Created by', type: 'created_by', isSort: true },
+    { title: 'Actions', type: null, isSort: false },
+  ]
+
+  const fixedDataColumn = ['product_id', 'product_name']
+  const scrollDataColumn = [
+    'company_name',
+    'detail',
+    'location',
+    'created_at',
+    'updated_at',
+    'created_by',
+    'status',
+  ]
+  const centerColumn = ['created_by']
+  const itemPerPageList = [
+    { name: 10 },
+    { name: 20 },
+    { name: 30 },
+    { name: 50 },
+    { name: 100 },
+  ]
+
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
@@ -113,8 +144,8 @@ const ProductManagement = () => {
   const onSortByColumn = (columnType) =>
     setSort({ column: columnType, desc: !sort.desc })
 
-  const onChangeNumberPerPage = (number) => {
-    setNumberPerPage(number)
+  const onChangeNumberPerPage = (index) => {
+    setNumberPerPage(itemPerPageList[index].name)
     setActivePage(1)
   }
 
@@ -171,31 +202,6 @@ const ProductManagement = () => {
     history.push(
       `/product-management/edit/${productListState[index].product_id}`,
     )
-
-  const titleArray = [
-    { title: 'Serial number', type: 'product_id', isSort: true },
-    { title: 'Product name', type: 'product_name', isSort: true },
-    { title: 'Company', type: 'company_name', isSort: true },
-    { title: 'Detail', type: 'detail', isSort: true },
-    { title: 'Location', type: 'location', isSort: true },
-    { title: 'Created at', type: 'created_at', isSort: true },
-    { title: 'Updated at', type: 'updated_at', isSort: true },
-    { title: 'Created by', type: 'created_by', isSort: true },
-    { title: 'Actions', type: null, isSort: false },
-  ]
-
-  const fixedDataColumn = ['product_id', 'product_name']
-  const scrollDataColumn = [
-    'company_name',
-    'detail',
-    'location',
-    'created_at',
-    'updated_at',
-    'created_by',
-    'status',
-  ]
-  const centerColumn = ['created_by']
-  const itemPerPageList = [20, 40, 60, 80, 100]
 
   return (
     <Container>
