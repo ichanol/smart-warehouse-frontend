@@ -176,20 +176,24 @@ const CreateRole = () => {
   }
 
   const getPermissionList = async () => {
-    const { success, result } = await requestHandler(
-      '/roles',
-      true,
-      { getPermission: true },
-      'get',
-    )
+    try {
+      const { success, result } = await requestHandler(
+        '/roles',
+        true,
+        { getPermission: true },
+        'get',
+      )
 
-    if (success) {
-      const permission = result.map((value) => ({
-        id: value.id,
-        status: false,
-      }))
-      setRoleData({ ...roleData, permission })
-      checkDetailElementHeight(result)
+      if (success) {
+        const permission = result.map((value) => ({
+          id: value.id,
+          status: false,
+        }))
+        setRoleData({ ...roleData, permission })
+        checkDetailElementHeight(result)
+      }
+    } catch (error) {
+      history.goBack()
     }
   }
 

@@ -1,4 +1,5 @@
 import {
+  ArrowIcon,
   ChevronDownIcon,
   DateRangeButton,
   DocumentIcon,
@@ -11,6 +12,7 @@ import {
   SearchBox as useSearchBox,
 } from '../components'
 import {
+  ArrowWrapper,
   Container,
   Table,
   TransactionList,
@@ -30,6 +32,7 @@ import { useHistory } from 'react-router-dom'
 
 const Transaction = () => {
   const today = new Date()
+  const tableHeight = 540
 
   const history = useHistory()
 
@@ -38,6 +41,11 @@ const Transaction = () => {
     atomState.transactionListState,
   )
 
+  const [arrowState, setArrowState] = useState({
+    display: false,
+    rotate: false,
+    scrollHeight: 0,
+  })
   const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
   const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
   const [numberPerPage, setNumberPerPage] = useState(10)
@@ -267,6 +275,36 @@ const Transaction = () => {
     blobFileDownloader(response, `${reportNumber}.pdf`)
   }
 
+  const onScrollTable = (event) => {
+    const newArrowState = {
+      ...arrowState,
+      scrollHeight: event.currentTarget.scrollHeight,
+    }
+
+    if (event.currentTarget.scrollHeight > tableHeight) {
+      newArrowState.display = true
+    } else {
+      newArrowState.display = false
+    }
+    if (
+      event.currentTarget.scrollTop <=
+        event.currentTarget.scrollHeight - tableHeight &&
+      event.currentTarget.scrollTop >
+        event.currentTarget.scrollHeight - tableHeight - 25
+    ) {
+      newArrowState.rotate = true
+    } else {
+      newArrowState.rotate = false
+    }
+    setArrowState(newArrowState)
+  }
+
+  // useEffect(() => {
+  //   const handleScroll = () => console.log('start scroll')
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [])
+
   return (
     <Container>
       <div className='header'>
@@ -286,9 +324,6 @@ const Transaction = () => {
                 setMaxBalance={setMaxBalance}
                 setMinBalance={setMinBalance}
                 setMinMaxBalanceOnSlider={setMinMaxBalanceOnSlider}
-                // date={date}
-                // setEnd={setEnd}
-                // setStart={setStart}
               />
             </div>
             <div className='filter-wrapper'>
@@ -304,74 +339,82 @@ const Transaction = () => {
           </div>
         </div>
 
-        <Table>
-          <TransactionTitle>
-            <div
-              className='transaction-title transaction-reference-number'
-              onClick={() => onSortByColumn('reference_number')}>
-              <span>
-                Ref{' '}
-                <div className='chevron-wrapper'>
-                  <ChevronDownIcon
-                    isActive={sort.desc}
-                    activeType={sort.column}
-                    type={'reference_number'}
-                  />
-                </div>
-              </span>
-            </div>
-            <div
-              className='transaction-title transaction-timestamp'
-              onClick={() => onSortByColumn('created_at')}>
-              <span>
-                Date
-                <div className='chevron-wrapper'>
-                  <ChevronDownIcon
-                    isActive={sort.desc}
-                    activeType={sort.column}
-                    type={'created_at'}
-                  />
-                </div>
-              </span>
-            </div>
-            <div className='transaction-title transaction-type'>
-              <span>Action</span>
-            </div>
-            <div className='transaction-title transaction-remark'>
-              <span>Detail</span>
-            </div>
-            <div
-              className='transaction-title transaction-author'
-              onClick={() => onSortByColumn('username')}>
-              <span>
-                Responsable
-                <div className='chevron-wrapper'>
-                  <ChevronDownIcon
-                    isActive={sort.desc}
-                    activeType={sort.column}
-                    type={'username'}
-                  />
-                </div>
-              </span>
-            </div>
-            <div className='transaction-title transaction-menu' />
-          </TransactionTitle>
+        <ArrowWrapper
+          display={arrowState.display}
+          scrollHeight={arrowState.scrollHeight > tableHeight}
+          rotate={arrowState.rotate}>
+          <div className='arrow-wrapper'>
+            <ArrowIcon />
+          </div>
+          <Table height={tableHeight} onScroll={onScrollTable}>
+            <TransactionTitle>
+              <div
+                className='transaction-title transaction-reference-number'
+                onClick={() => onSortByColumn('reference_number')}>
+                <span>
+                  Ref{' '}
+                  <div className='chevron-wrapper'>
+                    <ChevronDownIcon
+                      isActive={sort.desc}
+                      activeType={sort.column}
+                      type={'reference_number'}
+                    />
+                  </div>
+                </span>
+              </div>
+              <div
+                className='transaction-title transaction-timestamp'
+                onClick={() => onSortByColumn('created_at')}>
+                <span>
+                  Date
+                  <div className='chevron-wrapper'>
+                    <ChevronDownIcon
+                      isActive={sort.desc}
+                      activeType={sort.column}
+                      type={'created_at'}
+                    />
+                  </div>
+                </span>
+              </div>
+              <div className='transaction-title transaction-type'>
+                <span>Action</span>
+              </div>
+              <div className='transaction-title transaction-remark'>
+                <span>Detail</span>
+              </div>
+              <div
+                className='transaction-title transaction-author'
+                onClick={() => onSortByColumn('username')}>
+                <span>
+                  Responsable
+                  <div className='chevron-wrapper'>
+                    <ChevronDownIcon
+                      isActive={sort.desc}
+                      activeType={sort.column}
+                      type={'username'}
+                    />
+                  </div>
+                </span>
+              </div>
+              <div className='transaction-title transaction-menu' />
+            </TransactionTitle>
 
-          {transactionData?.length > 0 &&
-            transactionData.map((value, index) => {
-              return (
-                <TransactionRecord
-                  value={value}
-                  index={index}
-                  onClickTransactionMenu={onClickTransactionMenu}
-                  transactionData={transactionData}
-                  key={index}
-                  onEdit={onEdit}
-                  onGenerateReport={onGenerateReport}
-                />
-              )
-            })}
-        </Table>
+            {transactionData?.length > 0 &&
+              transactionData.map((value, index) => {
+                return (
+                  <TransactionRecord
+                    value={value}
+                    index={index}
+                    onClickTransactionMenu={onClickTransactionMenu}
+                    transactionData={transactionData}
+                    key={index}
+                    onEdit={onEdit}
+                    onGenerateReport={onGenerateReport}
+                  />
+                )
+              })}
+          </Table>
+        </ArrowWrapper>
         <div className='number-indicator-wrapper'>
           <NumberIndicator
             numberPerPage={numberPerPage}
@@ -381,7 +424,6 @@ const Transaction = () => {
           />
         </div>
       </div>
-
       <Pagination
         totalPage={totalPage}
         activePage={activePage}

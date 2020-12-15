@@ -1,16 +1,9 @@
 import { COLORS } from '../../Constant'
 import React from 'react'
 
-const ArrowIcon = ({ width = 18, fill = COLORS.natural.black }) => (
-  <svg
-    width={width}
-    fill={fill}
-    viewBox='0 0 24 24'
-  >
-    <path
-      d='M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z'
-      fillRule='evenodd'
-    />
+const ArrowIcon = ({ width = 30, fill = COLORS.natural.black }) => (
+  <svg viewBox='0 0 100 100' width={width} fill={fill}>
+    <path d='M50 2.5A47.5 47.5 0 002.5 50 47.5 47.5 0 0050 97.5 47.5 47.5 0 0097.5 50 47.5 47.5 0 0050 2.5zM50 75l-7.09-7.09 13.35-13.35H25v-9.12h31.26L42.91 32.09 50 25l25 25z' />
   </svg>
 )
 

@@ -1,6 +1,22 @@
 import { COLORS, FONT } from '../Constant'
+import styled, { keyframes } from 'styled-components'
 
-import styled from 'styled-components'
+const fadeIn = keyframes`
+from{
+ opacity: 0;
+}
+to{
+ opacity: 0.5;
+
+}`
+const fadeOut = keyframes`
+from{
+ opacity: 0.5;
+}
+to{
+ opacity: 0;
+
+}`
 
 const Container = styled.div`
   height: 100%;
@@ -297,7 +313,7 @@ const TransactionList = styled.label`
     top: 100%;
     right: 0;
 
-    padding: 12px;
+    padding: 12px 0;
 
     z-index: 6;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15),
@@ -314,7 +330,13 @@ const TransactionList = styled.label`
     display: flex;
     align-items: center;
 
-    padding: 12px;
+    padding: 12px 24px;
+
+    transition: all 0.25s ease-in-out;
+
+    :hover {
+      background-color: ${COLORS.gray[200]};
+    }
   }
   .transaction-record-menu-title {
     margin: 0 12px;
@@ -397,37 +419,40 @@ const TransactionList = styled.label`
 const Table = styled.div`
   display: flex;
   flex-direction: column;
-  height: 540px;
-  max-height: 540px;
+  height: ${({ tableHeight = 540 }) => tableHeight}px;
+  max-height: ${({ tableHeight = 540 }) => tableHeight}px;
   position: relative;
 
-  padding: 0 35px 0 50px;
+  padding: 0 50px;
 
   overflow: auto;
+`
 
-  ::-webkit-scrollbar {
-    width: 15px;
-    height: 15px;
-    background-color: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    border: 4px solid rgba(0, 0, 0, 0);
-    border-radius: 8px;
+const ArrowWrapper = styled.div`
+  position: relative;
 
-    background-clip: padding-box;
-    background-color: rgba(0, 0, 0, 0.15);
-  }
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
+  .arrow-wrapper {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: calc(100% - 30px);
+    left: 50%;
+    visibility: ${({ display, scrollHeight }) =>
+      display && scrollHeight ? 'visible' : 'hidden'};
+
+    border-radius: 30px;
+
+    transform: translateX(-50%)
+      ${({ rotate }) => (rotate ? 'rotate(-90deg)' : 'rotate(90deg)')};
+    animation: ${({ display, scrollHeight }) =>
+        display && scrollHeight ? fadeIn : fadeOut}
+      0.25s ease-in-out;
+    transform-origin: center;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    z-index: 1;
+    background-color: ${COLORS.natural.white};
   }
 `
 
-export { Container, TransactionTitle, TransactionList, Table }
+export { Container, TransactionTitle, TransactionList, Table, ArrowWrapper }

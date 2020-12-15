@@ -21,9 +21,19 @@ const Container = styled.div`
     align-items: center;
     position: relative;
 
+    margin: 40px 0 15px 0;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    margin: 40px 0 15px 0;
+  }
+
+  .dropdown-wrapper .placeholder {
+    position: absolute;
+    top: -50px;
+    left: 0;
+
+    opacity: 1;
+    transform: translateY(45%);
+    transition: all 0.25s ease-in-out;
   }
 
   .header {

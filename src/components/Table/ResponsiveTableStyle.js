@@ -48,7 +48,6 @@ const Table = styled.div`
     left: 0;
     display: flex;
     flex-direction: column;
-    border-radius: 8px;
 
     z-index: 1;
     background-color: ${COLORS.natural.white};
