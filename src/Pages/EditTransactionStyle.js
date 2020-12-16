@@ -33,7 +33,10 @@ const Container = styled.div`
 
     padding: 25px;
 
-    background-color: ${COLORS.natural.white};
+    /* background-color: ${COLORS.natural.white}; */
+  }
+  .dropdown-wrapper{
+    height: 40px;
   }
   .button-wrapper {
     display: flex;

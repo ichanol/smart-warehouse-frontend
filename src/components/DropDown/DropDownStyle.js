@@ -6,7 +6,7 @@ const Container = styled.label`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : '130px')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
 
   padding: ${({ fullWidth }) => (fullWidth ? 'none' : '0 0 0 12px')};
   border-radius: 8px;
@@ -20,7 +20,7 @@ const Container = styled.label`
     align-items: center;
     position: relative;
     justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
-    max-width: ${({ containerWidth = '80px' }) => containerWidth};
+    width: ${({ containerWidth = '80px' }) => containerWidth};
 
     padding-left: ${({ isCenter }) => (isCenter ? 0 : 15)}px;
     border-radius: 8px;

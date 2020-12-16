@@ -202,6 +202,7 @@ const CreateUser = () => {
               onSelect={onChangeRole}
               width='initial'
               isCenter={false}
+              placeholder={false}
               field='role_name'
             />
             <span className='placeholder'>Role</span>

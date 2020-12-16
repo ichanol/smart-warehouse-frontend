@@ -223,6 +223,7 @@ const EditUser = () => {
               width='initial'
               isCenter={false}
               field='role_name'
+              placeholder={false}
             />
             <span className='placeholder'>Role</span>
           </div>

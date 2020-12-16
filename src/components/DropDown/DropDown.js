@@ -7,10 +7,10 @@ const DropDown = ({
   selectedValue,
   choices,
   onSelect,
-  width = '80px',
-  isCenter = true,
+  width,
+  isCenter,
   placeholder,
-  fullWidth = true,
+  fullWidth,
   field,
 }) => {
   const [display, setDisplay] = useState(false)
@@ -25,7 +25,7 @@ const DropDown = ({
       containerWidth={width}
       isCenter={isCenter}
       fullWidth={fullWidth}>
-      {placeholder && <span>Show:</span>}
+      {placeholder && <span>{placeholder}</span>}
       <div className='choice-placeholder'>
         <span className='show-item-per-page'>{selectedValue}</span>
         <input
@@ -58,6 +58,10 @@ DropDown.propTypes = {
   choices: propTypes.array,
   onSelect: propTypes.func,
   field: propTypes.string,
+  placeholder: propTypes.any,
+  width: propTypes.any,
+  isCenter: propTypes.bool,
+  fullWidth: propTypes.bool,
 }
 DropDown.defaultProps = {
   selectedValue: 'default',
@@ -69,5 +73,9 @@ DropDown.defaultProps = {
   ],
   onSelect: () => {},
   field: 'name',
+  placeholder: 'Show:',
+  width: '80px',
+  isCenter: true,
+  fullWidth: true,
 }
 export default DropDown

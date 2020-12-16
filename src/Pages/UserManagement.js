@@ -221,7 +221,6 @@ const UserManagement = () => {
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
               fullWidth={false}
-              placeholder
             />
             <div className='create-button-wrapper'>
               <CreateButton

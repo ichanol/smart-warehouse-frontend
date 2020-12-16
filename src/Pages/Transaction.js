@@ -1,38 +1,24 @@
 import {
-  ArrowIcon,
-  ChevronDownIcon,
   DateRangeButton,
-  DocumentIcon,
-  DotsMenu,
   DropDown,
-  EditIcon,
   FilterTrasaction,
   NumberIndicator,
   Pagination,
+  TransactionTable,
   SearchBox as useSearchBox,
 } from '../components'
-import {
-  ArrowWrapper,
-  Container,
-  Table,
-  TransactionList,
-  TransactionTitle,
-} from '../Pages/TransactionStyle'
 import React, { useEffect, useState } from 'react'
-import { capitalize, debounce } from 'lodash'
 import { requestHandler, useAxios } from '../Services'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { COLORS } from '../Constant'
+import { Container } from '../Pages/TransactionStyle'
 import { atomState } from '../Atoms'
 import { blobFileDownloader } from '../Utils'
-import clsx from 'clsx'
-import moment from 'moment'
+import { debounce } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 const Transaction = () => {
   const today = new Date()
-  const tableHeight = 540
   const itemPerPageList = [
     { name: 10 },
     { name: 20 },
@@ -48,11 +34,6 @@ const Transaction = () => {
     atomState.transactionListState,
   )
 
-  const [arrowState, setArrowState] = useState({
-    display: false,
-    rotate: false,
-    scrollHeight: 0,
-  })
   const [minMaxBalance, setMinMaxBalance] = useState({ min: 0, max: 1000000 })
   const [minMaxAmount, setMinMaxAmount] = useState({ min: 0, max: 1000000 })
   const [numberPerPage, setNumberPerPage] = useState(10)
@@ -167,11 +148,7 @@ const Transaction = () => {
   useEffect(() => {
     setFetchTransactionListData(true)
     const { result, totalPages, totalRecords } = transactionListData
-    const newTransaction = result?.map((value, index) => {
-      value.isOpen = false
-      return value
-    })
-    setTransactionData(newTransaction)
+    setTransactionData(result)
     setTotalRecord(totalRecords)
     if (totalPages) {
       setTotalPage(new Array(totalPages).fill(1))
@@ -250,19 +227,6 @@ const Transaction = () => {
     300,
   )
 
-  const onClickTransactionMenu = (event, index) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    const cloneTransactionData = [...transactionData]
-    cloneTransactionData[index] = {
-      ...cloneTransactionData[index],
-      isOpen: !cloneTransactionData[index].isOpen,
-    }
-
-    setTransactionData(cloneTransactionData)
-  }
-
   const onEdit = (transactionReference) => {
     history.push(`/transaction/edit-transaction/${transactionReference}`)
   }
@@ -278,30 +242,6 @@ const Transaction = () => {
       true,
     )
     blobFileDownloader(response, `${reportNumber}.pdf`)
-  }
-
-  const onScrollTable = (event) => {
-    const newArrowState = {
-      ...arrowState,
-      scrollHeight: event.currentTarget.scrollHeight,
-    }
-
-    if (event.currentTarget.scrollHeight > tableHeight) {
-      newArrowState.display = true
-    } else {
-      newArrowState.display = false
-    }
-    if (
-      event.currentTarget.scrollTop <=
-        event.currentTarget.scrollHeight - tableHeight &&
-      event.currentTarget.scrollTop >
-        event.currentTarget.scrollHeight - tableHeight - 25
-    ) {
-      newArrowState.rotate = true
-    } else {
-      newArrowState.rotate = false
-    }
-    setArrowState(newArrowState)
   }
 
   return (
@@ -333,87 +273,18 @@ const Transaction = () => {
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
               fullWidth={false}
-              placeholder
             />
           </div>
         </div>
+        <TransactionTable
+          tableHeight={540}
+          data={transactionData}
+          onSortByColumn={onSortByColumn}
+          sort={sort}
+          onEdit={onEdit}
+          onGenerateReport={onGenerateReport}
+        />
 
-        <ArrowWrapper
-          display={arrowState.display ? 1 : 0}
-          scrollHeight={arrowState.scrollHeight > tableHeight ? 1 : 0}
-          rotate={arrowState.rotate ? 1 : 0}>
-          <div className='arrow-wrapper'>
-            <ArrowIcon />
-          </div>
-          <Table height={tableHeight} onScroll={onScrollTable}>
-            <TransactionTitle>
-              <div
-                className='transaction-title transaction-reference-number'
-                onClick={() => onSortByColumn('reference_number')}>
-                <span>
-                  Ref{' '}
-                  <div className='chevron-wrapper'>
-                    <ChevronDownIcon
-                      isActive={sort.desc}
-                      activeType={sort.column}
-                      type={'reference_number'}
-                    />
-                  </div>
-                </span>
-              </div>
-              <div
-                className='transaction-title transaction-timestamp'
-                onClick={() => onSortByColumn('created_at')}>
-                <span>
-                  Date
-                  <div className='chevron-wrapper'>
-                    <ChevronDownIcon
-                      isActive={sort.desc}
-                      activeType={sort.column}
-                      type={'created_at'}
-                    />
-                  </div>
-                </span>
-              </div>
-              <div className='transaction-title transaction-type'>
-                <span>Action</span>
-              </div>
-              <div className='transaction-title transaction-remark'>
-                <span>Detail</span>
-              </div>
-              <div
-                className='transaction-title transaction-author'
-                onClick={() => onSortByColumn('username')}>
-                <span>
-                  Responsable
-                  <div className='chevron-wrapper'>
-                    <ChevronDownIcon
-                      isActive={sort.desc}
-                      activeType={sort.column}
-                      type={'username'}
-                    />
-                  </div>
-                </span>
-              </div>
-              <div className='transaction-title transaction-menu' />
-            </TransactionTitle>
-
-            {transactionData?.length > 0 &&
-              transactionData.map((value, index) => {
-                return (
-                  <TransactionRecord
-                    value={value}
-                    index={index}
-                    onClickTransactionMenu={onClickTransactionMenu}
-                    transactionData={transactionData}
-                    key={index}
-                    onEdit={onEdit}
-                    onGenerateReport={onGenerateReport}
-                  />
-                )
-              })}
-          </Table>
-        </ArrowWrapper>
         <div className='number-indicator-wrapper'>
           <NumberIndicator
             numberPerPage={numberPerPage}
@@ -433,137 +304,3 @@ const Transaction = () => {
 }
 
 export default Transaction
-
-const TransactionRecord = ({
-  value,
-  index,
-  onClickTransactionMenu,
-  transactionData,
-  onEdit,
-  onGenerateReport,
-}) => {
-  const [dismissContext, setDismissContext] = useState(false)
-
-  const onToggleMenu = (event, subIndex) => {
-    onClickTransactionMenu(event, subIndex)
-    setDismissContext(!dismissContext)
-  }
-
-  return (
-    <TransactionList key={index} isOpen={value.isOpen}>
-      <input type='checkbox' />
-      <div
-        className={clsx(
-          'transaction-information',
-          value.action_name.toLowerCase(),
-        )}>
-        <div className='transaction-detail transaction-reference-number'>
-          <span>{value.reference_number}</span>
-        </div>
-        <div className='transaction-detail transaction-timestamp'>
-          <span>{moment.utc(value.created_at).format('lll')}</span>
-        </div>
-        <div className='transaction-detail transaction-type'>
-          <span>{capitalize(value.action_name)}</span>
-        </div>
-        <div className='transaction-detail transaction-remark'>
-          <span>{value.detail}</span>
-        </div>
-        <div className='transaction-detail transaction-author'>
-          <span>{value.username}</span>
-        </div>
-        <div
-          className='transaction-detail transaction-menu'
-          htmlFor='context-menu'
-          onClick={(event) => onToggleMenu(event, index)}>
-          <DotsMenu />
-          <div className='transaction-context-menu'>
-            <div
-              className='transaction-record-menu'
-              onClick={() => onEdit(value.reference_number)}>
-              <EditIcon fill={COLORS.gray[600]} />
-              <span className='transaction-record-menu-title'>
-                Edit Transaction
-              </span>
-            </div>
-            <div
-              className='transaction-record-menu'
-              onClick={() => onGenerateReport(value.reference_number)}>
-              <DocumentIcon fill={COLORS.gray[600]} />
-              <span className='transaction-record-menu-title'>
-                Generate Report
-              </span>
-            </div>
-          </div>
-        </div>
-        <div
-          className='dismiss-context'
-          onClick={(event) => onToggleMenu(event, index)}
-        />
-      </div>
-      <div className='transaction-product-list-container'>
-        <div className='product-list product-list-title'>
-          <div className='product-detail index' />
-          <div className='product-detail product-id'>
-            <span className='product-information'>Serial Number</span>
-          </div>
-          <div className='product-detail product-name'>
-            <span className='product-information'>Name</span>
-          </div>
-          <div className='product-detail product-amount'>
-            <span className='product-information'>Amount</span>
-          </div>
-          <div className='product-detail product-balance'>
-            <span className='product-information'>Balance</span>
-          </div>
-          <div className='product-detail product-location'>
-            <span className='product-information'>Location</span>
-          </div>
-          <div className='product-detail product-remark'>
-            <span className='product-information'>Remark</span>
-          </div>
-        </div>
-        {transactionData[index].data.map((subValue, subIndex) => {
-          return (
-            <div className='product-list' key={subIndex}>
-              <div className='product-detail index'>
-                <span className='product-information'>{subIndex + 1}</span>
-              </div>
-              <div className='product-detail product-id'>
-                <span className='product-information'>
-                  {subValue.product_id}
-                </span>
-              </div>
-              <div className='product-detail product-name'>
-                <span className='product-information'>
-                  {subValue.product_name}
-                </span>
-              </div>
-              <div className='product-detail product-amount'>
-                <span
-                  className={clsx(
-                    'product-information amount-tag',
-                    value.action_type.toLowerCase(),
-                  )}>
-                  {value.action_type.toLowerCase() === 'add' ? '+' : '-'}{' '}
-                  {subValue.amount.toLocaleString()}
-                </span>
-              </div>
-              <div className='product-detail product-balance'>
-                <span className='product-information'>{subValue.balance}</span>
-              </div>
-              <div className='product-detail product-location'>
-                <span className='product-information'>{subValue.location}</span>
-              </div>
-              <div className='product-detail product-remark'>
-                <span className='product-information'>
-                  {subValue.product_detail}
-                </span>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </TransactionList>
-  )
-}

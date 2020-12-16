@@ -120,7 +120,6 @@ const ProductList = () => {
               choices={itemPerPageList}
               onSelect={onChangeNumberPerPage}
               fullWidth={false}
-              placeholder
             />
           </div>
         </div>

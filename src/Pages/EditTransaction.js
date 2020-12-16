@@ -26,7 +26,9 @@ const EditTransaction = () => {
       )
       if (selectedTransaction) {
         setEditTransactionData(selectedTransaction)
-        console.log(selectedTransaction)
+        setAction(selectedTransaction.action_name)
+
+        console.log(selectedTransaction.action_name)
       } else {
         history.push('/transaction')
       }
@@ -43,8 +45,9 @@ const EditTransaction = () => {
         {},
         'get',
       )
-      console.log(result)
-      setActionList(result)
+      if (success) {
+        setActionList(result)
+      }
     } catch (error) {
       history.goBack()
     }
@@ -59,18 +62,10 @@ const EditTransaction = () => {
       }
    */
 
-  const onChangeNumberPerPage = (id) => {
-    setAction(id)
+  const onChangeAction = (id) => {
+    setAction(actionList[id].action_name)
   }
 
-  useEffect(() => {
-    const listener = (event) => {
-      console.log('scroll', event)
-    }
-    window.addEventListener('scroll', listener, true)
-
-    return () => window.removeEventListener('scroll', listener, true)
-  }, [])
   return (
     <Container>
       <div className='header'>
@@ -78,16 +73,18 @@ const EditTransaction = () => {
       </div>
 
       <div className='content'>
-        <DropDown
-          selectedValue={action}
-          choices={actionList}
-          onSelect={onChangeNumberPerPage}
-          fullWidth={false}
-          placeholder
-          field='action_name'
-        />
+        <div className='dropdown-wrapper'>
+          <DropDown
+            selectedValue={action}
+            choices={actionList}
+            onSelect={onChangeAction}
+            fullWidth={false}
+            placeholder='Action:'
+            field='action_name'
+            width='120px'
+          />
+        </div>
         <div>{editTransactionData.reference_number}</div>
-        <div>{editTransactionData.action_name}</div>
         <div>{editTransactionData.action_type}</div>
         <div>{editTransactionData.detail}</div>
         <br />

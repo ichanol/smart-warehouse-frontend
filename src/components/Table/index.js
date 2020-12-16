@@ -1,3 +1,4 @@
 import ResponsiveTable from './ResponsiveTable'
+import TransactionTable from './TransactionTable'
 
-export { ResponsiveTable }
+export { ResponsiveTable, TransactionTable }
