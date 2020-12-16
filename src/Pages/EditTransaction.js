@@ -1,9 +1,21 @@
+import {
+  CancelButton,
+  DropDown,
+  SubmitButton,
+  TextArea,
+  TextInput,
+  ToggleButton,
+} from '../components'
+import {
+  Container,
+  ProductTable,
+  TransactionDetail,
+} from './EditTransactionStyle'
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
-import { Container } from './EditTransactionStyle'
-import { DropDown } from '../components'
 import { atomState } from '../Atoms'
+import moment from 'moment'
 import { requestHandler } from '../Services'
 import { useRecoilValue } from 'recoil'
 
@@ -28,7 +40,7 @@ const EditTransaction = () => {
         setEditTransactionData(selectedTransaction)
         setAction(selectedTransaction.action_name)
 
-        console.log(selectedTransaction.action_name)
+        console.log(selectedTransaction)
       } else {
         history.push('/transaction')
       }
@@ -73,20 +85,61 @@ const EditTransaction = () => {
       </div>
 
       <div className='content'>
+        {/* <ToggleButton />
         <div className='dropdown-wrapper'>
           <DropDown
             selectedValue={action}
             choices={actionList}
             onSelect={onChangeAction}
             fullWidth={false}
-            placeholder='Action:'
+            placeholder={false}
             field='action_name'
             width='120px'
           />
-        </div>
-        <div>{editTransactionData.reference_number}</div>
-        <div>{editTransactionData.action_type}</div>
-        <div>{editTransactionData.detail}</div>
+        </div> */}
+        <TransactionDetail>
+          {/* <span className='transaction-title'>Transaction Detail</span> */}
+
+          <div className='transaction-information-column'>
+            <div className='transaction-information'>
+              <div className='transaction-information-title'>
+                <span>Transaction Reference:</span>
+              </div>
+              <div className='transaction-information-data'>
+                <span>{editTransactionData.reference_number}</span>
+              </div>
+            </div>
+            <div className='transaction-information flex-end'>
+              <div className='transaction-information-title'>
+                <span>Created at:</span>
+              </div>
+              <div className='transaction-information-data'>
+                <span>
+                  {moment.utc(editTransactionData.created_at).format('lll')}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className='transaction-information'>
+            <div className='transaction-information-title'>
+              <span>Responsable:</span>
+            </div>
+            <div className='transaction-information-data'>
+              <span>{editTransactionData.username}</span>
+            </div>
+          </div>
+          <div className='text-area-wrapper'>
+            <TextArea
+              placeholder='Detail'
+              defaultValue={editTransactionData.detail}
+              height={125}
+              border
+            />
+          </div>
+        </TransactionDetail>
+        <span className='transaction-title'>Product List</span>
+        <ProductTable>{}</ProductTable>
+        {/* <TextInput /> */}
         <br />
         <br />
         <div>
@@ -125,6 +178,12 @@ const EditTransaction = () => {
               </div>
             )
           })}
+        </div>
+        <div className='button-wrapper'>
+          <SubmitButton />
+          <div className='cancel-button-wrapper'>
+            <CancelButton />
+          </div>
         </div>
       </div>
     </Container>

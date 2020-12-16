@@ -25,7 +25,7 @@ const DropDown = ({
       containerWidth={width}
       isCenter={isCenter}
       fullWidth={fullWidth}>
-      {placeholder && <span>{placeholder}</span>}
+      {placeholder && <span className='placeholder-text'>{placeholder}</span>}
       <div className='choice-placeholder'>
         <span className='show-item-per-page'>{selectedValue}</span>
         <input

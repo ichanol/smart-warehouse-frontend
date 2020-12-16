@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 const TextAreaInput = styled.textarea`
   width: 100%;
-  height: 100px;
+  height: ${({ height }) => height}px;
 
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 35px;
-  border: ${({ border }) => border ? '1px solid rgba(0, 0, 0, 0.2)' : 'none'};
+  border: ${({ border }) => (border ? '1px solid rgba(0, 0, 0, 0.2)' : 'none')};
   outline: none;
 
   resize: none;

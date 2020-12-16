@@ -8,11 +8,13 @@ const Container = styled.label`
   height: 100%;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
 
-  padding: ${({ fullWidth }) => (fullWidth ? 'none' : '0 0 0 12px')};
   border-radius: 8px;
 
   background-color: ${COLORS.natural.white};
 
+  .placeholder-text {
+    padding-left: 12px;
+  }
   .choice-placeholder {
     display: flex;
     flex: 1;

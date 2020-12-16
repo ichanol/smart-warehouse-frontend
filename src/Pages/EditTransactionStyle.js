@@ -17,7 +17,7 @@ const Container = styled.div`
     align-items: center;
     display: flex;
 
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 
     font-weight: bold;
     letter-spacing: 1px;
@@ -30,8 +30,10 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
+
+    /* background-color: ${COLORS.gray[100]}; */
   }
-  .dropdown-wrapper{
+  .dropdown-wrapper {
     height: 40px;
   }
   .button-wrapper {
@@ -52,6 +54,45 @@ const Container = styled.div`
     background-color: transparent;
     color: ${COLORS.gray[500]};
   }
+  .transaction-title {
+    margin-bottom: 18px;
+    font-size: ${FONT.xl};
+  }
 `
 
-export { Container }
+const TransactionDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  .transaction-information-column {
+    display: flex;
+  }
+  .transaction-information {
+    display: flex;
+    flex: 1;
+    height: 30px;
+    min-height: 30px;
+    align-items: center;
+  }
+  .transaction-information-title {
+  }
+  .transaction-information-data {
+    margin-left: 12px;
+  }
+  .text-area-wrapper {
+    margin-top: 8px;
+  }
+  .flex-end {
+    justify-content: flex-end;
+  }
+`
+
+const ProductTable = styled.div`
+  height: 85vh;
+  /* max-height: 450px; */
+  width: 100%;
+
+  background-color: red;
+  overflow: auto;
+`
+export { Container, TransactionDetail, ProductTable }

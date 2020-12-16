@@ -4,17 +4,19 @@ import React, { forwardRef } from 'react'
 const TextArea = forwardRef(
   (
     {
-      onValueChange,
+      onValueChange = () => {},
       value,
       valueType,
       placeholder = null,
       border = false,
+      height = 100,
       ...rest
     },
     inputRef,
   ) => (
     <Container>
       <TextAreaInput
+        height={height}
         ref={inputRef}
         id='custom-text-area'
         placeholder='detail'
