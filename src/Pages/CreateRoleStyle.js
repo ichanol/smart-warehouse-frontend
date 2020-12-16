@@ -7,10 +7,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 20px;
+  padding: 25px 70px;
   
   overflow: auto;
-  background-color: ${COLORS.gray[200]};
+  background-color: ${COLORS.natural.white};
 
   .header {
     height: 35px;
@@ -30,10 +30,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-
-    padding: 25px;
-
-    background-color: ${COLORS.natural.white};
   }
   .button-wrapper {
     display: flex;

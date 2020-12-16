@@ -366,8 +366,6 @@ const Table = styled.div`
   max-height: ${({ tableHeight = 540 }) => tableHeight}px;
   position: relative;
 
-  padding: 0 50px;
-
   overflow: auto;
   transition: all 0.2s ease-in-out;
   scroll-behavior: smooth;

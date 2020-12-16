@@ -64,7 +64,7 @@ const Container = styled.div`
     position: relative;
     min-width: 100%;
 
-    padding: 20px;
+    padding: 25px 70px;
 
     filter: blur(${({ blur }) => (blur ? 10 : 0)}px);
     background-color: ${COLORS.gray[200]};

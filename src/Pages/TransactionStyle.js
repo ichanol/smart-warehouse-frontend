@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding-bottom: 50px;
+  padding: 25px 70px;
 
   overflow: auto;
   background-color: ${COLORS.gray[300]};
@@ -15,8 +15,6 @@ const Container = styled.div`
   .header {
     align-items: center;
     display: flex;
-
-    padding: 25px 50px 0;
 
     font-weight: bold;
     letter-spacing: 1px;
@@ -34,10 +32,8 @@ const Container = styled.div`
   .tools-bar-wrapper {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
 
-    padding: 25px 50px;
+    padding: 25px 0;
 
     background-color: ${COLORS.gray[300]};
     z-index: 2;
@@ -55,7 +51,7 @@ const Container = styled.div`
     margin-right: 12px;
   }
   .number-indicator-wrapper {
-    margin: 25px 0 0 50px;
+    margin-top: 12px;
   }
 `
 

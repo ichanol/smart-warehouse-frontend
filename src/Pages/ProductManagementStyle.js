@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 25px;
+  padding: 25px 70px;
 
   overflow: auto;
   background-color: ${COLORS.gray[300]};
@@ -23,17 +23,12 @@ const Container = styled.div`
     letter-spacing: 1px;
   }
   .header > span {
-    margin-left: 25px;
-
     font-size: ${FONT.xl};
   }
   .content {
     flex: 1;
     display: flex;
     flex-direction: column;
-
-    padding: 0 25px 25px 25px;
-
     position: relative;
   }
   .tools-bar-wrapper {
