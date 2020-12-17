@@ -131,7 +131,6 @@ export default Overview
 /**
  * TODO:
  *
- * ?       3.Add Edit transaction [FE][BE]
  * ?       4.Add Activity log [FE][BE]
  * ?       5.Add user's login handler (forget password/username) [FE][BE]
  * ?       6.Add Reset password via email [FE][BE]

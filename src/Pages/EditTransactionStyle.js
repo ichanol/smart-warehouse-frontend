@@ -191,25 +191,14 @@ const ProductList = styled.div`
 `
 
 const SpanInput = styled.span`
-/* color: transparent; */
-&[placeholder]:empty::before {
-  content: '${({ sign = '' }) => sign}' attr(placeholder);
-}
-::before {
-    color: ${COLORS.natural.black};
+  outline: none;
+
+  :empty::before {
+    content: '${({ sign = '' }) => sign}' attr(placeholder);
+  }
+  ::before {
     content: '${({ sign = '' }) => sign}';
   }
-/* &[placeholder]:empty:focus::before {
-    content: "";
-} */
-  /* ::before {
-    color: ${COLORS.natural.black};
-    content: '${({ sign = '' }) => sign}';
-  }
-  ::after{
-    color: ${COLORS.natural.black};
-    content: '${({ amount = '' }) => amount}';
-  } */
 `
 
 export {

@@ -29,33 +29,15 @@ const EditTransaction = () => {
   const history = useHistory()
 
   const transactionListState = useRecoilValue(atomState.transactionListState)
+  const userState = useRecoilValue(atomState.userState)
 
   const [defaultEditTransactionData, setDefaultEditTransactionData] = useState(
     {},
   )
   const [editTransactionData, setEditTransactionData] = useState({})
-  const [action, setAction] = useState()
-  const [actionList, setActionList] = useState()
-
-  useEffect(() => {
-    getActionList()
-    if (transactionref) {
-      const [selectedTransaction] = transactionListState.filter(
-        (value) => value.reference_number === parseInt(transactionref, 10),
-      )
-      if (selectedTransaction) {
-        setEditTransactionData(selectedTransaction)
-        setDefaultEditTransactionData(selectedTransaction)
-        setAction(selectedTransaction.action_name)
-
-        console.log(selectedTransaction)
-      } else {
-        history.push('/transaction')
-      }
-    } else {
-      history.push('/transaction')
-    }
-  }, [])
+  const [action, setAction] = useState({ action_name: '', id: 0 })
+  const [actionList, setActionList] = useState([])
+  const [transactionRemark, setTransactionRemark] = useState('')
 
   const getActionList = async () => {
     try {
@@ -67,31 +49,102 @@ const EditTransaction = () => {
       )
       if (success) {
         setActionList(result)
+        return result
       }
     } catch (error) {
       history.goBack()
+      return false
     }
   }
 
+  const getActionListHandler = async (selectedTransaction) => {
+    const result = await getActionList()
+    if (result) {
+      const [temp] = result.filter(
+        (value) => value.action_name === selectedTransaction.action_name,
+      )
+      setAction(temp)
+    } else {
+      history.push('/transaction')
+    }
+  }
+
+  useEffect(() => {
+    if (transactionref) {
+      const [selectedTransaction] = transactionListState.filter(
+        (value) => value.reference_number === parseInt(transactionref, 10),
+      )
+      if (selectedTransaction) {
+        getActionListHandler(selectedTransaction)
+        setEditTransactionData(selectedTransaction)
+        setDefaultEditTransactionData(selectedTransaction)
+      } else {
+        history.push('/transaction')
+      }
+    } else {
+      history.push('/transaction')
+    }
+  }, [])
+
   const onChangeAmount = (index) => ({
     currentTarget: { textContent: text },
-    ...rest
   }) => {
     const cloneObj = { ...editTransactionData }
     const cloneArr = [...cloneObj.data]
     const cloneTarget = { ...cloneArr[index] }
     cloneTarget.amount = parseInt(text, 10)
-
     cloneArr[index] = cloneTarget
     cloneObj.data = cloneArr
-
-    // rest.target.innerHTML = ''
-    console.log(text)
 
     setEditTransactionData(cloneObj)
   }
 
+  const onKeyDownHandler = (event) => {
+    if (isNaN(parseInt(event.key, 10)) && event.key !== 'Backspace') {
+      event.preventDefault()
+    }
+  }
+
+  const onAmountBlur = (index) => ({ currentTarget: { textContent } }) => {
+    if (textContent === '') {
+      const cloneObj = { ...editTransactionData }
+      const cloneArr = [...cloneObj.data]
+      const cloneTarget = { ...cloneArr[index] }
+      cloneTarget.amount = defaultEditTransactionData.data[index].amount
+      cloneArr[index] = cloneTarget
+      cloneObj.data = cloneArr
+
+      setEditTransactionData(cloneObj)
+    }
+  }
+
+  const onChangeAction = (id) => setAction(actionList[id])
+
+  const onSubmit = async () => {
+    try {
+      const body = {
+        referenceNumber: Math.round(Math.random() * 1000),
+        actionType: action.id,
+        username: userState.username,
+        productList: editTransactionData.data,
+        sourceTransaction: defaultEditTransactionData,
+        transactionRemark,
+      }
+
+      console.log(body)
+      // const response = await requestHandler(
+      //   '/import-export-product',
+      //   true,
+      //   body,
+      //   'post',
+      // )
+      // if (response.success) {
+      // }
+    } catch (error) {}
+  }
+
   /**
+   * {id: 1, action_name: "IMPORT"}
    * {
         referenceNumber: Math.round(Math.random() * 1000),
         actionType: actionTabs.id,
@@ -99,18 +152,32 @@ const EditTransaction = () => {
         productList: readProductListState,
         transactionRemark,
       }
+
+      amount: 100******
+company_name: "Magic Box Asia"
+id: 1*****
+location: "Setthiwan 5th flr."*******
+product_id: "a3KEeZbXBx"*******
+product_name: "Drinking Glass"*********
+
+
+transactionData.push([
+        transactionId,
+        parseInt(productList[index].id),
+        parseInt(productList[index].amount),
+        parseInt(productBalanceResult[index].balance) +
+          parseInt(productList[index].amount * multiplier),
+        productList[index].location,
+        productList[index].detail,
+      ]);
    */
 
-  const onChangeAction = (id) => {
-    setAction(actionList[id].action_name)
-  }
   return (
     <Container>
       <div className='content'>
         <ToggleButton action={() => console.log(editTransactionData)} />
 
         <DetailSection>
-          {/* <span className='transaction-title'>Transaction Detail</span> */}
           <div className='header sticky'>
             <span>Transaction Information</span>
           </div>
@@ -185,10 +252,10 @@ const EditTransaction = () => {
                 <div
                   className={clsx(
                     'dropdown-wrapper',
-                    action?.toString().toLowerCase(),
+                    action.action_name?.toString().toLowerCase(),
                   )}>
                   <DropDown
-                    selectedValue={action}
+                    selectedValue={action.action_name}
                     choices={actionList}
                     onSelect={onChangeAction}
                     fullWidth={false}
@@ -234,29 +301,23 @@ const EditTransaction = () => {
                   </div>
                   <div className='amount'>
                     <SpanInput
-                      onKeyDown={(e) => {
-                        if (
-                          isNaN(parseInt(e.key, 10)) &&
-                          e.key !== 'Backspace'
-                        ) {
-                          e.preventDefault()
-                        }
-
-                        console.log({ ...e })
-                      }}
-                      onBlur={(e) => {
-                        if (e.currentTarget.textContent === '') {
-                          console.log('default')
-                        }
-                      }}
-                      sign={action.toLowerCase() === 'import' ? '+ ' : '- '}
-                      className={clsx('amount-tag', action.toLowerCase())}
-                      role='textbox'
                       contentEditable
+                      role='textbox'
+                      className={clsx(
+                        'amount-tag',
+                        action.action_name.toLowerCase(),
+                      )}
+                      onKeyDown={onKeyDownHandler}
+                      onBlur={onAmountBlur(index)}
                       onInput={onChangeAmount(index)}
-                      placeholder={defaultEditTransactionData.data[
+                      sign={
+                        action.action_name.toLowerCase() === 'import'
+                          ? '+ '
+                          : '- '
+                      }
+                      placeholder={defaultEditTransactionData?.data[
                         index
-                      ].amount.toLocaleString()}
+                      ]?.amount.toLocaleString()}
                     />
                   </div>
                   {/* <div className='balance'>
@@ -273,13 +334,18 @@ const EditTransaction = () => {
             })}
           </ProductTable>
           <div className='text-area-wrapper'>
-            <TextArea placeholder='Detail' height={125} border />
+            <TextArea
+              placeholder='Detail'
+              height={125}
+              border
+              onValueChange={(text) => setTransactionRemark(text)}
+            />
           </div>
         </EditSection>
 
         <div />
         <div className='button-wrapper'>
-          <SubmitButton />
+          <SubmitButton action={onSubmit} />
           <div className='cancel-button-wrapper'>
             <CancelButton />
           </div>
