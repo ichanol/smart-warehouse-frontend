@@ -7,34 +7,46 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 25px 70px;
+  padding: 0 70px 25px 70px;
 
   overflow: auto;
   background-color: ${COLORS.natural.white};
 
   .header {
-    height: 35px;
     align-items: center;
     display: flex;
 
-    margin-bottom: 24px;
+    padding: 25px 0;
 
     font-weight: bold;
     letter-spacing: 1px;
+    z-index: 1;
   }
   .header span {
     font-size: ${FONT.xl};
+  }
+  .sticky {
+    position: sticky;
+    top: 0;
+
+    background-color: ${COLORS.natural.white};
+  }
+  .capitalize {
+    text-transform: capitalize;
   }
   .content {
     flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
-
-    /* background-color: ${COLORS.gray[100]}; */
   }
   .dropdown-wrapper {
     height: 40px;
+    width: fit-content;
+    display: flex;
+
+    border: 1px solid ${COLORS.gray[400]};
+    border-radius: 8px;
   }
   .button-wrapper {
     display: flex;
@@ -57,15 +69,8 @@ const Container = styled.div`
   .transaction-title {
     margin-bottom: 18px;
     font-size: ${FONT.xl};
-  }
-`
 
-const TransactionDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  .transaction-information-column {
-    display: flex;
+    text-transform: capitalize;
   }
   .transaction-information {
     display: flex;
@@ -74,10 +79,17 @@ const TransactionDetail = styled.div`
     min-height: 30px;
     align-items: center;
   }
-  .transaction-information-title {
-  }
   .transaction-information-data {
     margin-left: 12px;
+  }
+`
+
+const DetailSection = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  .transaction-information-column {
+    display: flex;
   }
   .text-area-wrapper {
     margin-top: 8px;
@@ -85,14 +97,126 @@ const TransactionDetail = styled.div`
   .flex-end {
     justify-content: flex-end;
   }
+  .action {
+    padding: 0 12px;
+    border-radius: 4px;
+
+    background-color: ${COLORS.red[100]};
+    border: 2px solid ${COLORS.red[300]};
+  }
+  .add {
+    border: 2px solid ${COLORS.green[400]};
+
+    background-color: ${COLORS.green[100]};
+  }
 `
 
 const ProductTable = styled.div`
-  height: 85vh;
-  /* max-height: 450px; */
+  min-height: ${({ height = 500 }) => height}px;
+  max-height: ${({ height = 500 }) => height + 1}px;
   width: 100%;
 
-  background-color: red;
+  margin-top: 12px;
+
   overflow: auto;
 `
-export { Container, TransactionDetail, ProductTable }
+
+const EditSection = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  .header-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    padding-bottom: 12px;
+
+    z-index: 1;
+  }
+  .text-area-wrapper {
+    margin-top: 25px;
+  }
+`
+
+const ProductList = styled.div`
+  display: flex;
+  height: 50px;
+  width: 100%;
+
+  border-top: 1px solid ${COLORS.gray[200]};
+
+  :nth-child(1) {
+    border-top: none;
+  }
+
+  .serial-number,
+  .product-name,
+  .amount,
+  .balance,
+  .location {
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+    padding-left: 12px;
+
+    span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+  .location {
+    flex: 1.25;
+    padding-left: 35px;
+  }
+  .amount,
+  .balance {
+    justify-content: flex-end;
+    flex: 0.5;
+    max-width: 120px;
+  }
+  .amount-tag {
+    padding: 0 12px;
+    border-radius: 4px;
+
+    background-color: ${COLORS.red[100]};
+    border: 2px solid ${COLORS.red[300]};
+  }
+  .import {
+    border: 2px solid ${COLORS.green[400]};
+
+    background-color: ${COLORS.green[100]};
+  }
+`
+
+const SpanInput = styled.span`
+/* color: transparent; */
+&[placeholder]:empty::before {
+  content: '${({ sign = '' }) => sign}' attr(placeholder);
+}
+::before {
+    color: ${COLORS.natural.black};
+    content: '${({ sign = '' }) => sign}';
+  }
+/* &[placeholder]:empty:focus::before {
+    content: "";
+} */
+  /* ::before {
+    color: ${COLORS.natural.black};
+    content: '${({ sign = '' }) => sign}';
+  }
+  ::after{
+    color: ${COLORS.natural.black};
+    content: '${({ amount = '' }) => amount}';
+  } */
+`
+
+export {
+  Container,
+  DetailSection,
+  ProductTable,
+  EditSection,
+  ProductList,
+  SpanInput,
+}

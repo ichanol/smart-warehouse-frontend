@@ -346,11 +346,14 @@ const TransactionList = styled.label`
   }
   .product-amount {
     flex: 0.75;
+    justify-content: flex-end;
   }
   .product-balance {
     flex: 0.75;
+    justify-content: flex-end;
   }
   .product-location {
+    padding-left: 35px;
   }
   .product-remark {
   }
@@ -369,6 +372,10 @@ const Table = styled.div`
   overflow: auto;
   transition: all 0.2s ease-in-out;
   scroll-behavior: smooth;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const ArrowWrapper = styled.div`

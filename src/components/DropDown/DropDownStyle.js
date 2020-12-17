@@ -14,6 +14,8 @@ const Container = styled.label`
 
   .placeholder-text {
     padding-left: 12px;
+
+    text-transform: capitalize;
   }
   .choice-placeholder {
     display: flex;
@@ -37,9 +39,11 @@ const Container = styled.label`
   }
   .show-item-per-page {
     position: absolute;
+
+    text-transform: capitalize;
   }
   input:checked + .choice-container {
-    height: ${({ multiplier }) =>
+    max-height: ${({ multiplier }) =>
       multiplier * 40 <= 120 ? multiplier * 40 : 120}px;
     width: 100%;
     position: absolute;
@@ -56,7 +60,7 @@ const Container = styled.label`
   }
   .choice-container {
     position: absolute;
-    height: 0px;
+    max-height: 0px;
     width: 100%;
     align-items: ${({ isCenter }) => (isCenter ? 'center' : 'initial')};
     display: flex;
@@ -71,6 +75,9 @@ const Container = styled.label`
       width: 0;
     }
   }
+  .selected {
+    color: ${COLORS.green[600]};
+  }
   .item-per-page-choice {
     min-height: 40px;
     display: flex;
@@ -81,9 +88,12 @@ const Container = styled.label`
     border-top: 1px solid ${COLORS.gray[200]};
 
     transition: all 0.25s ease-in-out;
-
+    text-transform: capitalize;
     :hover {
       background-color: ${COLORS.gray[200]};
+    }
+    :nth-child(1) {
+      border-top: none;
     }
   }
   .disable-dropdown {

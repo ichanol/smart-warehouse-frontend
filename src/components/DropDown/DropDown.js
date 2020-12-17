@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 import { Container } from './DropDownStyle'
+import clsx from 'clsx'
 import propTypes from 'prop-types'
 
 const DropDown = ({
@@ -12,6 +13,7 @@ const DropDown = ({
   placeholder,
   fullWidth,
   field,
+  defaultValue,
 }) => {
   const [display, setDisplay] = useState(false)
   const dropDownRef = useRef()
@@ -25,9 +27,11 @@ const DropDown = ({
       containerWidth={width}
       isCenter={isCenter}
       fullWidth={fullWidth}>
-      {placeholder && <span className='placeholder-text'>{placeholder}</span>}
+      {placeholder && <span className='placeholder-text'>{placeholder?.toString().toLowerCase()}</span>}
       <div className='choice-placeholder'>
-        <span className='show-item-per-page'>{selectedValue}</span>
+        <span className='show-item-per-page'>
+          {selectedValue?.toString().toLowerCase()}
+        </span>
         <input
           type='checkbox'
           checked={display}
@@ -39,12 +43,16 @@ const DropDown = ({
             dropDownRef.current = ref
           }}>
           {choices.map((value, index) => (
-            <div
-              className='item-per-page-choice'
+            <span
+              className={clsx(
+                'item-per-page-choice',
+                value[field] === selectedValue && 'selected',
+                value[field] === defaultValue && 'default',
+              )}
               key={index}
               onClick={() => onSelectChoice(index)}>
-              {value[field]}
-            </div>
+              {value[field]?.toString().toLowerCase()}
+            </span>
           ))}
         </div>
         {display && <div className='disable-dropdown' />}
@@ -62,6 +70,7 @@ DropDown.propTypes = {
   width: propTypes.any,
   isCenter: propTypes.bool,
   fullWidth: propTypes.bool,
+  defaultValue: propTypes.string,
 }
 DropDown.defaultProps = {
   selectedValue: 'default',
@@ -77,5 +86,6 @@ DropDown.defaultProps = {
   width: '80px',
   isCenter: true,
   fullWidth: true,
+  defaultValue: '',
 }
 export default DropDown

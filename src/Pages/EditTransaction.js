@@ -8,13 +8,17 @@ import {
 } from '../components'
 import {
   Container,
+  DetailSection,
+  EditSection,
+  ProductList,
   ProductTable,
-  TransactionDetail,
+  SpanInput,
 } from './EditTransactionStyle'
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { atomState } from '../Atoms'
+import clsx from 'clsx'
 import moment from 'moment'
 import { requestHandler } from '../Services'
 import { useRecoilValue } from 'recoil'
@@ -26,6 +30,9 @@ const EditTransaction = () => {
 
   const transactionListState = useRecoilValue(atomState.transactionListState)
 
+  const [defaultEditTransactionData, setDefaultEditTransactionData] = useState(
+    {},
+  )
   const [editTransactionData, setEditTransactionData] = useState({})
   const [action, setAction] = useState()
   const [actionList, setActionList] = useState()
@@ -38,6 +45,7 @@ const EditTransaction = () => {
       )
       if (selectedTransaction) {
         setEditTransactionData(selectedTransaction)
+        setDefaultEditTransactionData(selectedTransaction)
         setAction(selectedTransaction.action_name)
 
         console.log(selectedTransaction)
@@ -64,6 +72,25 @@ const EditTransaction = () => {
       history.goBack()
     }
   }
+
+  const onChangeAmount = (index) => ({
+    currentTarget: { textContent: text },
+    ...rest
+  }) => {
+    const cloneObj = { ...editTransactionData }
+    const cloneArr = [...cloneObj.data]
+    const cloneTarget = { ...cloneArr[index] }
+    cloneTarget.amount = parseInt(text, 10)
+
+    cloneArr[index] = cloneTarget
+    cloneObj.data = cloneArr
+
+    // rest.target.innerHTML = ''
+    console.log(text)
+
+    setEditTransactionData(cloneObj)
+  }
+
   /**
    * {
         referenceNumber: Math.round(Math.random() * 1000),
@@ -77,36 +104,23 @@ const EditTransaction = () => {
   const onChangeAction = (id) => {
     setAction(actionList[id].action_name)
   }
-
   return (
     <Container>
-      <div className='header'>
-        <span>Edit Transaction</span>
-      </div>
-
       <div className='content'>
-        {/* <ToggleButton />
-        <div className='dropdown-wrapper'>
-          <DropDown
-            selectedValue={action}
-            choices={actionList}
-            onSelect={onChangeAction}
-            fullWidth={false}
-            placeholder={false}
-            field='action_name'
-            width='120px'
-          />
-        </div> */}
-        <TransactionDetail>
-          {/* <span className='transaction-title'>Transaction Detail</span> */}
+        <ToggleButton action={() => console.log(editTransactionData)} />
 
+        <DetailSection>
+          {/* <span className='transaction-title'>Transaction Detail</span> */}
+          <div className='header sticky'>
+            <span>Transaction Information</span>
+          </div>
           <div className='transaction-information-column'>
             <div className='transaction-information'>
               <div className='transaction-information-title'>
                 <span>Transaction Reference:</span>
               </div>
               <div className='transaction-information-data'>
-                <span>{editTransactionData.reference_number}</span>
+                <span>{defaultEditTransactionData.reference_number}</span>
               </div>
             </div>
             <div className='transaction-information flex-end'>
@@ -115,9 +129,29 @@ const EditTransaction = () => {
               </div>
               <div className='transaction-information-data'>
                 <span>
-                  {moment.utc(editTransactionData.created_at).format('lll')}
+                  {moment
+                    .utc(defaultEditTransactionData.created_at)
+                    .format('lll')}
                 </span>
               </div>
+            </div>
+          </div>
+          <div className='transaction-information'>
+            <div className='transaction-information-title'>
+              <span>Transaction type:</span>
+            </div>
+            <div
+              className={clsx(
+                'transaction-information-data capitalize action',
+                defaultEditTransactionData.action_type
+                  ?.toString()
+                  .toLowerCase(),
+              )}>
+              <span>
+                {defaultEditTransactionData.action_name
+                  ?.toString()
+                  .toLowerCase()}
+              </span>
             </div>
           </div>
           <div className='transaction-information'>
@@ -125,60 +159,125 @@ const EditTransaction = () => {
               <span>Responsable:</span>
             </div>
             <div className='transaction-information-data'>
-              <span>{editTransactionData.username}</span>
+              <span>{defaultEditTransactionData.username}</span>
             </div>
           </div>
           <div className='text-area-wrapper'>
             <TextArea
               placeholder='Detail'
-              defaultValue={editTransactionData.detail}
+              defaultValue={defaultEditTransactionData.detail}
               height={125}
               border
+              disabled
             />
           </div>
-        </TransactionDetail>
-        <span className='transaction-title'>Product List</span>
-        <ProductTable>{}</ProductTable>
-        {/* <TextInput /> */}
-        <br />
-        <br />
-        <div>
-          <div>
-            <span>S/N</span>
-          </div>
-          <div>
-            <span>Name</span>
-          </div>
-          <div>
-            <span>Amount</span>
-          </div>
-          <div>
-            <span>Balance</span>
-          </div>
-          <div>
-            <span>Location</span>
-          </div>
-          <div>
-            <span>Remark</span>
-          </div>
-        </div>
-        <br />
-        <br />
-        <div>
-          {editTransactionData.data?.map((value, index) => {
-            return (
-              <div key={index}>
-                <div>{value.product_id}</div>
-                <div>{value.product_name}</div>
-                <div>{value.amount}</div>
-                <div>{value.balance}</div>
-                <div>{value.location}</div>
-                <div>{value.product_detail}</div>
-                <hr />
+        </DetailSection>
+        <EditSection>
+          <div className='header-wrapper sticky'>
+            <div className='header'>
+              <span>Edit Transaction</span>
+            </div>
+            <div className='transaction-information'>
+              <div className='transaction-information-title'>
+                <span>Transaction type:</span>
               </div>
-            )
-          })}
-        </div>
+              <div className='transaction-information-data'>
+                <div
+                  className={clsx(
+                    'dropdown-wrapper',
+                    action?.toString().toLowerCase(),
+                  )}>
+                  <DropDown
+                    selectedValue={action}
+                    choices={actionList}
+                    onSelect={onChangeAction}
+                    fullWidth={false}
+                    placeholder={false}
+                    field='action_name'
+                    width='160px'
+                    defaultValue={defaultEditTransactionData.action_name}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ProductTable>
+            <ProductList className='sticky'>
+              <div className='serial-number'>
+                <span>Serial Number</span>
+              </div>
+              <div className='product-name'>
+                <span>Name</span>
+              </div>
+              <div className='amount'>
+                <span>Amount</span>
+              </div>
+              {/* <div className='balance'>
+                <span>Balance</span>
+              </div> */}
+              <div className='location'>
+                <span>Location</span>
+              </div>
+              {/* <div className='remark'>
+                <span>Remark</span>
+              </div> */}
+            </ProductList>
+            {editTransactionData.data?.map((value, index) => {
+              return (
+                <ProductList key={index}>
+                  <div className='serial-number'>
+                    <span>{value.product_id}</span>
+                  </div>
+                  <div className='product-name'>
+                    <span>{value.product_name}</span>
+                  </div>
+                  <div className='amount'>
+                    <SpanInput
+                      onKeyDown={(e) => {
+                        if (
+                          isNaN(parseInt(e.key, 10)) &&
+                          e.key !== 'Backspace'
+                        ) {
+                          e.preventDefault()
+                        }
+
+                        console.log({ ...e })
+                      }}
+                      onBlur={(e) => {
+                        if (e.currentTarget.textContent === '') {
+                          console.log('default')
+                        }
+                      }}
+                      sign={action.toLowerCase() === 'import' ? '+ ' : '- '}
+                      className={clsx('amount-tag', action.toLowerCase())}
+                      role='textbox'
+                      contentEditable
+                      onInput={onChangeAmount(index)}
+                      placeholder={defaultEditTransactionData.data[
+                        index
+                      ].amount.toLocaleString()}
+                    />
+                  </div>
+                  {/* <div className='balance'>
+                    <span>{value.balance.toLocaleString()}</span>
+                  </div> */}
+                  <div className='location'>
+                    <span>{value.location}</span>
+                  </div>
+                  {/* <div className='remark'>
+                    <span>{value.product_detail}</span>
+                  </div> */}
+                </ProductList>
+              )
+            })}
+          </ProductTable>
+          <div className='text-area-wrapper'>
+            <TextArea placeholder='Detail' height={125} border />
+          </div>
+        </EditSection>
+
+        <div />
         <div className='button-wrapper'>
           <SubmitButton />
           <div className='cancel-button-wrapper'>

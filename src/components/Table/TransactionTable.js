@@ -295,7 +295,7 @@ const TransactionRecord = ({
                 </span>
               </div>
               <div className='product-detail product-balance'>
-                <span className='product-information'>{subValue.balance}</span>
+                <span className='product-information'>{subValue.balance.toLocaleString()}</span>
               </div>
               <div className='product-detail product-location'>
                 <span className='product-information'>{subValue.location}</span>
