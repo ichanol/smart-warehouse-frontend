@@ -12,6 +12,9 @@ const Container = styled.div`
   overflow: auto;
   background-color: ${COLORS.natural.white};
 
+  hr {
+    opacity: 0.5;
+  }
   .header {
     align-items: center;
     display: flex;
@@ -20,7 +23,7 @@ const Container = styled.div`
 
     font-weight: bold;
     letter-spacing: 1px;
-    z-index: 1;
+    z-index: 2;
   }
   .header span {
     font-size: ${FONT.xl};
@@ -30,6 +33,12 @@ const Container = styled.div`
     top: 0;
 
     background-color: ${COLORS.natural.white};
+  }
+  .z1 {
+    z-index: 1;
+  }
+  .no-border {
+    border: none;
   }
   .capitalize {
     text-transform: capitalize;
@@ -82,6 +91,9 @@ const Container = styled.div`
   .transaction-information-data {
     margin-left: 12px;
   }
+  .text-area-wrapper {
+    margin-top: 25px;
+  }
 `
 
 const DetailSection = styled.div`
@@ -90,9 +102,6 @@ const DetailSection = styled.div`
 
   .transaction-information-column {
     display: flex;
-  }
-  .text-area-wrapper {
-    margin-top: 8px;
   }
   .flex-end {
     justify-content: flex-end;
@@ -112,11 +121,13 @@ const DetailSection = styled.div`
 `
 
 const ProductTable = styled.div`
-  min-height: ${({ height = 500 }) => height}px;
-  max-height: ${({ height = 500 }) => height + 1}px;
+  min-height: ${({ height = 500 }) => height - 1}px;
+  max-height: ${({ height = 500 }) => height}px;
   width: 100%;
 
-  margin-top: 12px;
+  border: 1px solid ${COLORS.gray[300]};
+  padding: 0 12px;
+  border-radius: 8px;
 
   overflow: auto;
 `
@@ -131,10 +142,7 @@ const EditSection = styled.div`
 
     padding-bottom: 12px;
 
-    z-index: 1;
-  }
-  .text-area-wrapper {
-    margin-top: 25px;
+    z-index: 2;
   }
 `
 
@@ -145,9 +153,7 @@ const ProductList = styled.div`
 
   border-top: 1px solid ${COLORS.gray[200]};
 
-  :nth-child(1) {
-    border-top: none;
-  }
+  background-color: ${COLORS.natural.white};
 
   .serial-number,
   .product-name,
@@ -190,14 +196,88 @@ const ProductList = styled.div`
   }
 `
 
-const SpanInput = styled.span`
-  outline: none;
+const ProductListWrapper = styled.label`
+  display: flex;
+  flex-direction: column;
 
+  padding-left: 12px;
+
+  z-index: 0;
+
+  :nth-child(1) {
+    border-top: none;
+  }
+  input[type='checkbox'] {
+    display: none;
+  }
+  .product-remark {
+    max-height: 0;
+    display: flex;
+    flex-direction: column;
+
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    z-index: 0;
+  }
+  input:checked + .product-remark {
+    max-height: 1000px;
+  }
+`
+
+const SpanInput = styled.span`
+  max-width: 100%;
+
+  outline: none;
+  overflow: scroll !important;
+  text-overflow: unset !important;
+  white-space: nowrap;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
   :empty::before {
+    color: ${COLORS.gray[600]};
     content: '${({ sign = '' }) => sign}' attr(placeholder);
   }
   ::before {
     content: '${({ sign = '' }) => sign}';
+  }
+`
+
+const DefaultProductListTable = styled.label`
+  input[type='checkbox'] {
+    display: none;
+  }
+  .chevron-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-left: 8px;
+
+    transition: all 0.2s ease-in-out;
+    transform: rotate(-90deg);
+    cursor: pointer;
+  }
+  .product-list-wrapper {
+    display: flex;
+  }
+  .table-wrapper {
+    max-height: 0;
+
+    margin-top: 12px;
+
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+  }
+  input:checked + .transaction-information + .table-wrapper {
+    max-height: 100%;
+  }
+  input:checked
+    + .transaction-information
+    > .product-list-wrapper
+    > .chevron-wrapper {
+    transform: rotate(0deg);
   }
 `
 
@@ -208,4 +288,6 @@ export {
   EditSection,
   ProductList,
   SpanInput,
+  DefaultProductListTable,
+  ProductListWrapper,
 }

@@ -1,28 +1,32 @@
 import {
   CancelButton,
+  ChevronDownIcon,
   DropDown,
   SubmitButton,
   TextArea,
-  TextInput,
   ToggleButton,
 } from '../components'
 import {
   Container,
+  DefaultProductListTable,
   DetailSection,
   EditSection,
   ProductList,
+  ProductListWrapper,
   ProductTable,
   SpanInput,
 } from './EditTransactionStyle'
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { atomState } from '../Atoms'
 import clsx from 'clsx'
+import { debounce } from 'lodash'
 import moment from 'moment'
 import { requestHandler } from '../Services'
-import { useRecoilValue } from 'recoil'
 
+//select sum(amount) from inventory_log_product_list inner join inventory_log ON inventory_log_product_list.reference_number = inventory_log.id where inventory_log.status = 2 AND inventory_log.action_type > 1 AND inventory_log_product_list.product_id = 1;
 const EditTransaction = () => {
   const { transactionref } = useParams()
 
@@ -30,6 +34,7 @@ const EditTransaction = () => {
 
   const transactionListState = useRecoilValue(atomState.transactionListState)
   const userState = useRecoilValue(atomState.userState)
+  const setToastState = useSetRecoilState(atomState.toastState)
 
   const [defaultEditTransactionData, setDefaultEditTransactionData] = useState(
     {},
@@ -99,12 +104,6 @@ const EditTransaction = () => {
     setEditTransactionData(cloneObj)
   }
 
-  const onKeyDownHandler = (event) => {
-    if (isNaN(parseInt(event.key, 10)) && event.key !== 'Backspace') {
-      event.preventDefault()
-    }
-  }
-
   const onAmountBlur = (index) => ({ currentTarget: { textContent } }) => {
     if (textContent === '') {
       const cloneObj = { ...editTransactionData }
@@ -118,7 +117,26 @@ const EditTransaction = () => {
     }
   }
 
+  const onKeyDownHandler = (event) => {
+    if (isNaN(parseInt(event.key, 10)) && event.key !== 'Backspace') {
+      event.preventDefault()
+    }
+  }
+
   const onChangeAction = (id) => setAction(actionList[id])
+
+  const onChangeProductRemark = (index) =>
+    debounce((text) => {
+      const cloneObj = { ...editTransactionData }
+      const cloneArr = [...cloneObj.data]
+      const cloneTarget = { ...cloneArr[index] }
+      cloneTarget.product_detail = text
+      cloneArr[index] = cloneTarget
+      cloneObj.data = cloneArr
+
+      console.log(index, text)
+      setEditTransactionData(cloneObj)
+    }, 300)
 
   const onSubmit = async () => {
     try {
@@ -131,52 +149,41 @@ const EditTransaction = () => {
         transactionRemark,
       }
 
-      console.log(body)
-      // const response = await requestHandler(
-      //   '/import-export-product',
-      //   true,
-      //   body,
-      //   'post',
-      // )
-      // if (response.success) {
-      // }
-    } catch (error) {}
-  }
-
-  /**
-   * {id: 1, action_name: "IMPORT"}
-   * {
-        referenceNumber: Math.round(Math.random() * 1000),
-        actionType: actionTabs.id,
-        username: userState.username,
-        productList: readProductListState,
-        transactionRemark,
+      const response = await requestHandler(
+        '/import-export-product',
+        true,
+        body,
+        'post',
+      )
+      if (response.success) {
+        setToastState((oldState) => [
+          ...oldState,
+          {
+            onClick: () => {},
+            title: 'Success',
+            message: 'Update transaction successfully',
+            dismiss: false,
+            type: 'success',
+          },
+        ])
       }
-
-      amount: 100******
-company_name: "Magic Box Asia"
-id: 1*****
-location: "Setthiwan 5th flr."*******
-product_id: "a3KEeZbXBx"*******
-product_name: "Drinking Glass"*********
-
-
-transactionData.push([
-        transactionId,
-        parseInt(productList[index].id),
-        parseInt(productList[index].amount),
-        parseInt(productBalanceResult[index].balance) +
-          parseInt(productList[index].amount * multiplier),
-        productList[index].location,
-        productList[index].detail,
-      ]);
-   */
+    } catch (error) {
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to update. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
+  }
 
   return (
     <Container>
       <div className='content'>
-        <ToggleButton action={() => console.log(editTransactionData)} />
-
         <DetailSection>
           <div className='header sticky'>
             <span>Transaction Information</span>
@@ -229,16 +236,98 @@ transactionData.push([
               <span>{defaultEditTransactionData.username}</span>
             </div>
           </div>
-          <div className='text-area-wrapper'>
-            <TextArea
-              placeholder='Detail'
-              defaultValue={defaultEditTransactionData.detail}
-              height={125}
-              border
-              disabled
-            />
-          </div>
+          <DefaultProductListTable>
+            <input type='checkbox' defaultChecked />
+            <div className='transaction-information'>
+              <div className='transaction-information-title product-list-wrapper'>
+                <span>Product List</span>
+                <div className='chevron-wrapper'>
+                  <ChevronDownIcon />
+                </div>
+              </div>
+            </div>
+            <div className='table-wrapper'>
+              <ProductTable>
+                <ProductList className='sticky z1 no-border'>
+                  <div className='serial-number'>
+                    <span>Serial Number</span>
+                  </div>
+                  <div className='product-name'>
+                    <span>Name</span>
+                  </div>
+                  <div className='amount'>
+                    <span>Amount</span>
+                  </div>
+                  <div className='balance'>
+                    <span>Balance</span>
+                  </div>
+                  <div className='location'>
+                    <span>Location</span>
+                  </div>
+                </ProductList>
+                {defaultEditTransactionData.data?.map((value, index) => {
+                  return (
+                    <ProductListWrapper key={index}>
+                      <ProductList>
+                        <div className='serial-number'>
+                          <span>{value.product_id}</span>
+                        </div>
+                        <div className='product-name'>
+                          <span>{value.product_name}</span>
+                        </div>
+                        <div className='amount'>
+                          <span
+                            className={clsx(
+                              'product-information amount-tag',
+                              defaultEditTransactionData.action_name.toLowerCase(),
+                            )}>
+                            {defaultEditTransactionData.action_type.toLowerCase() ===
+                            'add'
+                              ? '+'
+                              : '-'}{' '}
+                            {value.amount}
+                          </span>
+                        </div>
+                        <div className='balance'>
+                          <span>{value.balance.toLocaleString()}</span>
+                        </div>
+                        <div className='location'>
+                          <span>{value.location}</span>
+                        </div>
+                      </ProductList>
+
+                      <input type='checkbox' />
+                      <div className='product-remark'>
+                        {value.product_detail ? (
+                          <TextArea
+                            placeholder='Product Remark:'
+                            disabled
+                            defaultValue={value.product_detail}
+                            marginBottom={0}
+                            onValueChange={(text) => setTransactionRemark(text)}
+                          />
+                        ) : (
+                          <span>No product remark</span>
+                        )}
+                      </div>
+                    </ProductListWrapper>
+                  )
+                })}
+              </ProductTable>
+            </div>
+          </DefaultProductListTable>
+          {defaultEditTransactionData.detail && (
+            <div className='text-area-wrapper'>
+              <TextArea
+                placeholder='Transaction Remark'
+                defaultValue={defaultEditTransactionData.detail}
+                height={80}
+                disabled
+              />
+            </div>
+          )}
         </DetailSection>
+        <hr />
         <EditSection>
           <div className='header-wrapper sticky'>
             <div className='header'>
@@ -270,7 +359,7 @@ transactionData.push([
           </div>
 
           <ProductTable>
-            <ProductList className='sticky'>
+            <ProductList className='sticky z1 no-border'>
               <div className='serial-number'>
                 <span>Serial Number</span>
               </div>
@@ -280,9 +369,6 @@ transactionData.push([
               <div className='amount'>
                 <span>Amount</span>
               </div>
-              {/* <div className='balance'>
-                <span>Balance</span>
-              </div> */}
               <div className='location'>
                 <span>Location</span>
               </div>
@@ -292,50 +378,57 @@ transactionData.push([
             </ProductList>
             {editTransactionData.data?.map((value, index) => {
               return (
-                <ProductList key={index}>
-                  <div className='serial-number'>
-                    <span>{value.product_id}</span>
-                  </div>
-                  <div className='product-name'>
-                    <span>{value.product_name}</span>
-                  </div>
-                  <div className='amount'>
-                    <SpanInput
-                      contentEditable
-                      role='textbox'
-                      className={clsx(
-                        'amount-tag',
-                        action.action_name.toLowerCase(),
-                      )}
-                      onKeyDown={onKeyDownHandler}
-                      onBlur={onAmountBlur(index)}
-                      onInput={onChangeAmount(index)}
-                      sign={
-                        action.action_name.toLowerCase() === 'import'
-                          ? '+ '
-                          : '- '
-                      }
-                      placeholder={defaultEditTransactionData?.data[
-                        index
-                      ]?.amount.toLocaleString()}
+                <ProductListWrapper key={index}>
+                  <ProductList>
+                    <div className='serial-number'>
+                      <span>{value.product_id}</span>
+                    </div>
+                    <div className='product-name'>
+                      <span>{value.product_name}</span>
+                    </div>
+                    <div className='amount'>
+                      <SpanInput
+                        contentEditable
+                        role='textbox'
+                        className={clsx(
+                          'amount-tag',
+                          action.action_name.toLowerCase(),
+                        )}
+                        onKeyDown={onKeyDownHandler}
+                        onBlur={onAmountBlur(index)}
+                        onInput={onChangeAmount(index)}
+                        onClick={(event) => event.preventDefault()}
+                        sign={
+                          action.action_name.toLowerCase() === 'import'
+                            ? '+ '
+                            : '- '
+                        }
+                        placeholder={defaultEditTransactionData?.data[
+                          index
+                        ]?.amount.toLocaleString()}
+                      />
+                    </div>
+                    <div className='location'>
+                      <span>{value.location}</span>
+                    </div>
+                  </ProductList>
+                  <input type='checkbox' />
+                  <div className='product-remark'>
+                    <TextArea
+                      placeholder='Remark:'
+                      border
+                      defaultValue={value.product_detail}
+                      onValueChange={onChangeProductRemark(index)}
                     />
                   </div>
-                  {/* <div className='balance'>
-                    <span>{value.balance.toLocaleString()}</span>
-                  </div> */}
-                  <div className='location'>
-                    <span>{value.location}</span>
-                  </div>
-                  {/* <div className='remark'>
-                    <span>{value.product_detail}</span>
-                  </div> */}
-                </ProductList>
+                </ProductListWrapper>
               )
             })}
           </ProductTable>
           <div className='text-area-wrapper'>
             <TextArea
-              placeholder='Detail'
+              placeholder='Transaction Remark'
+              defaultValue={defaultEditTransactionData.detail}
               height={125}
               border
               onValueChange={(text) => setTransactionRemark(text)}

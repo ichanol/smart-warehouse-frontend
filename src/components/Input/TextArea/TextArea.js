@@ -10,6 +10,7 @@ const TextArea = forwardRef(
       placeholder = null,
       border = false,
       height = 100,
+      marginBottom = 35,
       ...rest
     },
     inputRef,
@@ -21,6 +22,7 @@ const TextArea = forwardRef(
         id='custom-text-area'
         placeholder='detail'
         border={border}
+        marginBottom={marginBottom}
         {...rest}
         onChange={(event) => onValueChange(event.target.value, valueType)}
       />

@@ -195,12 +195,16 @@ const TransactionRecord = ({
   }
 
   return (
-    <TransactionList key={index} isOpen={value.isOpen}>
+    <TransactionList
+      key={index}
+      isOpen={value.isOpen}
+      status={value.status_value}>
       <input type='checkbox' />
       <div
         className={clsx(
           'transaction-information',
           value.action_name.toLowerCase(),
+          value.status_value === 0 && 'inactive',
         )}>
         <div className='transaction-detail transaction-reference-number'>
           <span>{value.reference_number}</span>
@@ -246,7 +250,11 @@ const TransactionRecord = ({
           onClick={(event) => onToggleMenu(event, index)}
         />
       </div>
-      <div className='transaction-product-list-container'>
+      <div
+        className={clsx(
+          'transaction-product-list-container',
+          value.status_value === 0 && 'inactive',
+        )}>
         <div className='product-list product-list-title'>
           <div className='product-detail index' />
           <div className='product-detail product-id'>
@@ -270,7 +278,12 @@ const TransactionRecord = ({
         </div>
         {value.data.map((subValue, subIndex) => {
           return (
-            <div className='product-list' key={subIndex}>
+            <div
+              className={clsx(
+                'product-list',
+                value.status_value === 0 && 'inactive',
+              )}
+              key={subIndex}>
               <div className='product-detail index'>
                 <span className='product-information'>{subIndex + 1}</span>
               </div>
@@ -288,6 +301,7 @@ const TransactionRecord = ({
                 <span
                   className={clsx(
                     'product-information amount-tag',
+                    value.status_value === 0 && 'inactive',
                     value.action_type.toLowerCase(),
                   )}>
                   {value.action_type.toLowerCase() === 'add' ? '+' : '-'}{' '}
@@ -295,7 +309,9 @@ const TransactionRecord = ({
                 </span>
               </div>
               <div className='product-detail product-balance'>
-                <span className='product-information'>{subValue.balance.toLocaleString()}</span>
+                <span className='product-information'>
+                  {subValue.balance.toLocaleString()}
+                </span>
               </div>
               <div className='product-detail product-location'>
                 <span className='product-information'>{subValue.location}</span>

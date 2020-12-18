@@ -6,8 +6,8 @@ const TextAreaInput = styled.textarea`
   height: ${({ height }) => height}px;
 
   border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 35px;
+  padding: ${({ border }) => (border ? '15px' : '0 15px 15px')};
+  margin-bottom: ${({ marginBottom = 35 }) => marginBottom}px;
   border: ${({ border }) => (border ? '1px solid rgba(0, 0, 0, 0.2)' : 'none')};
   outline: none;
 

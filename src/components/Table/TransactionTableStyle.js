@@ -111,6 +111,7 @@ const TransactionList = styled.label`
 
   margin: 20px 0 0;
 
+  background-color: ${COLORS.natural.white};
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15),
     -5px -5px 10px rgba(255, 255, 255, 0.3);
@@ -226,7 +227,6 @@ const TransactionList = styled.label`
     padding: 0;
 
     cursor: pointer;
-    background-color: ${COLORS.natural.white};
   }
   .transaction-product-list-container {
     width: 100%;
@@ -339,7 +339,13 @@ const TransactionList = styled.label`
 
     background-color: ${COLORS.green[100]};
   }
-
+  .inactive-tag{
+    border: none;
+    background-color: 8px solid ${COLORS.red[400]};
+  }
+  .inactive-tag-add {
+    background-color: ${COLORS.green[600]};
+  }
   .product-id {
   }
   .product-name {
@@ -359,6 +365,10 @@ const TransactionList = styled.label`
   }
   .index {
     flex: 0.3;
+  }
+  .inactive {
+    background-color: ${COLORS.gray[900]};
+    color: ${COLORS.gray[100]};
   }
 `
 
