@@ -136,8 +136,6 @@ export default Overview
  * ?       6.Add Reset password via email [FE][BE]
  * ?       7.Add schedul job [BE]
  * ?       8.Add upload file [FE]
- * ?       9.Add upload handler for user, product, role management [BE]
- * ?       10.Add download excel template [BE]
  * ?       11.Add profile preferences layout [FE]
  * *       12.Create weekly / monthly document report
  *

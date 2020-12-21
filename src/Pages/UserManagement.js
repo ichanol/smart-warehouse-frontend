@@ -1,8 +1,4 @@
-import {
-  Container,
-  SelectFile,
-  UploadIndicator,
-} from './UserManagementStyle'
+import { Container, SelectFile, UploadIndicator } from './UserManagementStyle'
 import {
   CreateButton,
   DropDown,
@@ -151,17 +147,21 @@ const UserManagement = () => {
     setTrigger(!trigger)
   }, [searchUserListData])
 
-  // useEffect(() => {
-  //   setModalState((oldState) => ({
-  //     ...oldState,
-  //     isDisplay: true,
-  //     title: 'Uploading',
-  //     detail: UploadProgress,
-  //     // dismissFN: () => resetModalState(),
-  //     positiveButton: { ...oldState.positiveButton, text: 'cancel' },
-  //     onClickPositiveButton: () => source.cancel('abort service request'),
-  //   }))
-  // }, [uploadPercent])
+  const UploadProgress = (
+    <div>
+      <span>{uploadPercent} %</span>
+      <UploadIndicator percent={uploadPercent} />
+    </div>
+  )
+
+  useEffect(() => {
+    if (uploadPercent) {
+      setModalState((oldState) => ({
+        ...oldState,
+        detail: UploadProgress,
+      }))
+    }
+  }, [uploadPercent])
 
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
@@ -238,22 +238,102 @@ const UserManagement = () => {
     blobFileDownloader(response, 'user_template.xlsx')
   }
 
+  const onSubmitFile = async (file) => {
+    try {
+      resetModalState()
+      const uploadingEvent = ({ loaded, total }) => {
+        const percent = Math.floor((loaded * 100) / total)
+        setUploadPercent(percent)
+      }
+
+      const formData = new FormData()
+      formData.append('uploadDocument', file)
+
+      setModalState((oldState) => ({
+        ...oldState,
+        isDisplay: true,
+        title: 'Uploading',
+        detail: UploadProgress,
+        positiveButton: { ...oldState.positiveButton, text: 'cancel' },
+        onClickPositiveButton: () => {
+          console.log('cancel')
+          source.cancel('abort service request')
+          resetModalState()
+        },
+      }))
+
+      const { success } = await requestHandler(
+        '/uploadfile/user',
+        true,
+        formData,
+        'post',
+        source,
+        0,
+        false,
+        uploadingEvent,
+      )
+      if (success) {
+        const timer = setTimeout(() => {
+          resetModalState()
+          setUploadPercent(0)
+          setToastState((oldState) => [
+            ...oldState,
+            {
+              onClick: () => {},
+              title: 'Success',
+              message: 'Upload user record successfully',
+              dismiss: false,
+              type: 'success',
+            },
+            {
+              onClick: () => {},
+              title: 'Information',
+              message: 'Refresh to see new record',
+              dismiss: false,
+              type: 'info',
+            },
+          ])
+          clearTimeout(timer)
+        }, 1500)
+      }
+    } catch (error) {
+      resetModalState()
+      setUploadPercent(0)
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to upload file. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
+  }
+
   const onFileChange = ({
     target: {
       files: { 0: file },
     },
   }) => {
+    let fileToUpload
+    if (file) {
+      fileToUpload = file
+    } else {
+      fileToUpload = uploadDocument
+    }
     const SubmitFile = (
       <SelectFile>
         <span>Only .xlsx, .csv extension</span>
         <label className='input-wrapper'>
-          <FileIcon fill={file?.name ? 700 : 300} />
+          <FileIcon fill={fileToUpload?.name ? 700 : 300} />
           <input type='file' accept='.xlsx, .csv' onChange={onFileChange} />
-          <span className='file-name'>{file?.name}</span>
-          {file?.name && (
+          <span className='file-name'>{fileToUpload?.name}</span>
+          {fileToUpload?.name && (
             <span className='change-file'>Click to change file</span>
           )}
-          {!file?.name && <span>Click here to add file</span>}
+          {!fileToUpload?.name && <span>Click here to add file</span>}
         </label>
       </SelectFile>
     )
@@ -265,9 +345,9 @@ const UserManagement = () => {
       modalType: 'confirm',
       fullWidthButton: true,
       onClickNegativeButton: resetModalState,
-      onClickPositiveButton: () => console.log(2323),
+      onClickPositiveButton: () => onSubmitFile(fileToUpload),
     }))
-    setUploadDocument(file)
+    setUploadDocument(fileToUpload)
   }
 
   const onSelectUploadMenu = () => {
@@ -291,39 +371,7 @@ const UserManagement = () => {
         text: 'cancel',
       },
       onClickPositiveButton: () => resetModalState(),
-      // source.cancel('abort service request'),
     }))
-  }
-
-  const onSubmitFile = async () => {
-    try {
-      const UploadProgress = (
-        <div>
-          <span>{uploadPercent} %</span>
-          <UploadIndicator percent={uploadPercent} />
-        </div>
-      )
-
-      const uploadingEvent = (progressEvent) => {
-        const { loaded, total } = progressEvent
-        const percent = Math.floor((loaded * 100) / total)
-        console.log(`${loaded}kb of ${total}kb | ${percent}%`)
-        if (percent < 100) {
-          setUploadPercent(percent)
-        } else {
-          // resetModalState()
-        }
-      }
-
-      // const onFileUpload = () => {
-      //   const formData = new FormData()
-      //   formData.append('uploadDocument', uploadDocument)
-      //   axios
-      //     .post(process.env.REACT_APP_API + '/uploadfile', formData)
-      //     .then((res) => console.log(res))
-      //     .catch((err) => console.log(err))
-      // }
-    } catch (error) {}
   }
 
   return (

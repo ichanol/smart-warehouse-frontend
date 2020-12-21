@@ -1,6 +1,8 @@
+import { Container, SelectFile, UploadIndicator } from './RoleManagementStyle'
 import {
   CreateButton,
   DropDown,
+  FileIcon,
   FilterButton,
   NumberIndicator,
   Pagination,
@@ -9,14 +11,16 @@ import {
 } from '../components'
 import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
-import { Container } from './RoleManagementStyle'
 import { atomState } from '../Atoms/'
+import axios from 'axios'
 import { blobFileDownloader } from '../Utils'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
+  const source = axios.CancelToken.source()
+
   const titleArray = [
     { title: 'Role name', type: 'role_name', isSort: true },
     { title: 'Detail', type: null, isSort: false },
@@ -39,10 +43,14 @@ const ProductManagement = () => {
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
+  const setModalState = useSetRecoilState(atomState.modalState)
+  const resetModalState = useResetRecoilState(atomState.modalState)
   const [roleListState, setRoleListState] = useRecoilState(
     atomState.roleListState,
   )
 
+  const [uploadDocument, setUploadDocument] = useState()
+  const [uploadPercent, setUploadPercent] = useState(0)
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
@@ -127,6 +135,22 @@ const ProductManagement = () => {
     setTrigger(!trigger)
   }, [searchRoleListData])
 
+  const UploadProgress = (
+    <div>
+      <span>{uploadPercent} %</span>
+      <UploadIndicator percent={uploadPercent} />
+    </div>
+  )
+
+  useEffect(() => {
+    if (uploadPercent) {
+      setModalState((oldState) => ({
+        ...oldState,
+        detail: UploadProgress,
+      }))
+    }
+  }, [uploadPercent])
+
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   const onSortByColumn = (columnType) =>
@@ -197,6 +221,142 @@ const ProductManagement = () => {
     blobFileDownloader(response, 'role.xlsx')
   }
 
+  const onSubmitFile = async (file) => {
+    try {
+      resetModalState()
+      const uploadingEvent = ({ loaded, total }) => {
+        const percent = Math.floor((loaded * 100) / total)
+        setUploadPercent(percent)
+      }
+
+      const formData = new FormData()
+      formData.append('uploadDocument', file)
+
+      setModalState((oldState) => ({
+        ...oldState,
+        isDisplay: true,
+        title: 'Uploading',
+        detail: UploadProgress,
+        positiveButton: { ...oldState.positiveButton, text: 'cancel' },
+        onClickPositiveButton: () => {
+          console.log('cancel')
+          source.cancel('abort service request')
+          resetModalState()
+        },
+      }))
+
+      const { success } = await requestHandler(
+        '/uploadfile/role',
+        true,
+        formData,
+        'post',
+        source,
+        0,
+        false,
+        uploadingEvent,
+      )
+      if (success) {
+        const timer = setTimeout(() => {
+          resetModalState()
+          setUploadPercent(0)
+          setToastState((oldState) => [
+            ...oldState,
+            {
+              onClick: () => {},
+              title: 'Success',
+              message: 'Upload role record successfully',
+              dismiss: false,
+              type: 'success',
+            },
+            {
+              onClick: () => {},
+              title: 'Information',
+              message: 'Refresh to see new record',
+              dismiss: false,
+              type: 'info',
+            },
+          ])
+          clearTimeout(timer)
+        }, 1500)
+      }
+    } catch (error) {
+      resetModalState()
+      setUploadPercent(0)
+      setToastState((oldState) => [
+        ...oldState,
+        {
+          onClick: () => {},
+          title: 'Failed',
+          message: 'Failed to upload file. Try again.',
+          dismiss: false,
+          type: 'error',
+        },
+      ])
+    }
+  }
+
+  const onFileChange = ({
+    target: {
+      files: { 0: file },
+    },
+  }) => {
+    let fileToUpload
+    if (file) {
+      fileToUpload = file
+    } else {
+      fileToUpload = uploadDocument
+    }
+    const SubmitFile = (
+      <SelectFile>
+        <span>Only .xlsx, .csv extension</span>
+        <label className='input-wrapper'>
+          <FileIcon fill={fileToUpload?.name ? 700 : 300} />
+          <input type='file' accept='.xlsx, .csv' onChange={onFileChange} />
+          <span className='file-name'>{fileToUpload?.name}</span>
+          {fileToUpload?.name && (
+            <span className='change-file'>Click to change file</span>
+          )}
+          {!fileToUpload?.name && <span>Click here to add file</span>}
+        </label>
+      </SelectFile>
+    )
+    setModalState((oldState) => ({
+      ...oldState,
+      detail: SubmitFile,
+      negativeButton: { text: 'cancel' },
+      positiveButton: { text: 'submit', color: 'green' },
+      modalType: 'confirm',
+      fullWidthButton: true,
+      onClickNegativeButton: resetModalState,
+      onClickPositiveButton: () => onSubmitFile(fileToUpload),
+    }))
+    setUploadDocument(fileToUpload)
+  }
+
+  const onSelectUploadMenu = () => {
+    const SelectFileToUpload = (
+      <SelectFile>
+        <span>Only file with .xlsx, .csv extension</span>
+        <label className='input-wrapper'>
+          <FileIcon />
+          <input type='file' accept='.xlsx, .csv' onChange={onFileChange} />
+          <span>Click here to add file</span>
+        </label>
+      </SelectFile>
+    )
+    setModalState((oldState) => ({
+      ...oldState,
+      isDisplay: true,
+      title: 'Select file',
+      detail: SelectFileToUpload,
+      positiveButton: {
+        ...oldState.positiveButton,
+        text: 'cancel',
+      },
+      onClickPositiveButton: () => resetModalState(),
+    }))
+  }
+
   return (
     <Container>
       <div className='header'>
@@ -221,7 +381,7 @@ const ProductManagement = () => {
             <div className='create-button-wrapper'>
               <CreateButton
                 onCreateNew={() => history.push('/role-management/create')}
-                onSelectFile={() => console.log('select file')}
+                onUploadFile={onSelectUploadMenu}
                 onDownloadTemplate={downloadTemplate}
               />
             </div>
