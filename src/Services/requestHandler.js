@@ -9,6 +9,7 @@ const requestHandler = async (
   sourceFromHook,
   timeout = 0,
   blob = false,
+  onUploadProgress = () => {},
 ) => {
   let source
   let response
@@ -22,6 +23,7 @@ const requestHandler = async (
   const options = {
     cancelToken: source.token,
     timeout: timeout,
+    onUploadProgress,
   }
   if (blob) {
     options.responseType = 'blob'

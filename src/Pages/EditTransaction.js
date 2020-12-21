@@ -150,7 +150,7 @@ const EditTransaction = () => {
       }
 
       const response = await requestHandler(
-        '/import-export-product',
+        '/product-transaction',
         true,
         body,
         'post',

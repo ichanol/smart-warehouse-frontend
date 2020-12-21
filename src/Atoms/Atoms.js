@@ -53,6 +53,7 @@ const modalState = atom({
     negativeButton: {},
     positiveButton: {},
     modalType: 'error',
+    fullWidthButton: false,
   },
 })
 

@@ -13,6 +13,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './RoleManagementStyle'
 import { atomState } from '../Atoms/'
+import { blobFileDownloader } from '../Utils'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
@@ -183,6 +184,19 @@ const ProductManagement = () => {
   const onEdit = (index) =>
     history.push(`/role-management/edit/${roleListState[index].role_name}`)
 
+  const downloadTemplate = async () => {
+    const response = await requestHandler(
+      '/uploadfile/role',
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    blobFileDownloader(response, 'role.xlsx')
+  }
+
   return (
     <Container>
       <div className='header'>
@@ -208,7 +222,7 @@ const ProductManagement = () => {
               <CreateButton
                 onCreateNew={() => history.push('/role-management/create')}
                 onSelectFile={() => console.log('select file')}
-                onDownloadTemplate={() => console.log('download')}
+                onDownloadTemplate={downloadTemplate}
               />
             </div>
           </div>

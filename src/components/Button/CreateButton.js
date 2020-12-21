@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 import { Container } from './CreateButtonStyle'
 
-const CreateButton = ({ onCreateNew, onSelectFile, onDownloadTemplate }) => {
+const CreateButton = ({ onCreateNew, onUploadFile, onDownloadTemplate }) => {
   const [isDismissMenu, setIsDismissMenu] = useState(false)
   return (
     <Container>
@@ -17,11 +17,10 @@ const CreateButton = ({ onCreateNew, onSelectFile, onDownloadTemplate }) => {
           <CreateIcon />
           <span className='create-new-menu-title'>Create new</span>
         </div>
-        <label className='create-new-button-menu'>
+        <div className='create-new-button-menu' onClick={onUploadFile}>
           <UploadIcon />
-          <input type='file' onChange={onSelectFile} accept='.xlsx, .csv' />
           <span className='create-new-menu-title'>Import csv / excel</span>
-        </label>
+        </div>
         <div className='create-new-button-menu' onClick={onDownloadTemplate}>
           <TemplateIcon />
           <span className='create-new-menu-title'>Template</span>

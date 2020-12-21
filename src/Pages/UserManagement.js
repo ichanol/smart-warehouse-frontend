@@ -1,6 +1,12 @@
 import {
+  Container,
+  SelectFile,
+  UploadIndicator,
+} from './UserManagementStyle'
+import {
   CreateButton,
   DropDown,
+  FileIcon,
   FilterButton,
   NumberIndicator,
   Pagination,
@@ -9,10 +15,11 @@ import {
 } from '../components'
 import React, { useEffect, useState } from 'react'
 import { requestHandler, useAxios } from '../Services'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
 
-import { Container } from './UserManagementStyle'
 import { atomState } from '../Atoms/'
+import axios from 'axios'
+import { blobFileDownloader } from '../Utils'
 import { useHistory } from 'react-router-dom'
 
 const UserManagement = () => {
@@ -46,14 +53,19 @@ const UserManagement = () => {
     { name: 50 },
     { name: 100 },
   ]
+  const source = axios.CancelToken.source()
 
   const history = useHistory()
 
   const setToastState = useSetRecoilState(atomState.toastState)
+  const setModalState = useSetRecoilState(atomState.modalState)
+  const resetModalState = useResetRecoilState(atomState.modalState)
   const [userListState, setUserListState] = useRecoilState(
     atomState.userListState,
   )
 
+  const [uploadDocument, setUploadDocument] = useState()
+  const [uploadPercent, setUploadPercent] = useState(0)
   const [numberPerPage, setNumberPerPage] = useState(20)
   const [activePage, setActivePage] = useState(1)
   const [totalPage, setTotalPage] = useState([])
@@ -139,6 +151,18 @@ const UserManagement = () => {
     setTrigger(!trigger)
   }, [searchUserListData])
 
+  // useEffect(() => {
+  //   setModalState((oldState) => ({
+  //     ...oldState,
+  //     isDisplay: true,
+  //     title: 'Uploading',
+  //     detail: UploadProgress,
+  //     // dismissFN: () => resetModalState(),
+  //     positiveButton: { ...oldState.positiveButton, text: 'cancel' },
+  //     onClickPositiveButton: () => source.cancel('abort service request'),
+  //   }))
+  // }, [uploadPercent])
+
   const onClickPageNumber = (pageNumber) => setActivePage(pageNumber)
 
   const onSortByColumn = (columnType) =>
@@ -201,6 +225,107 @@ const UserManagement = () => {
   const onEdit = (index) =>
     history.push(`/user-management/edit/${userListState[index].username}`)
 
+  const downloadTemplate = async () => {
+    const response = await requestHandler(
+      '/uploadfile/user',
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    blobFileDownloader(response, 'user_template.xlsx')
+  }
+
+  const onFileChange = ({
+    target: {
+      files: { 0: file },
+    },
+  }) => {
+    const SubmitFile = (
+      <SelectFile>
+        <span>Only .xlsx, .csv extension</span>
+        <label className='input-wrapper'>
+          <FileIcon fill={file?.name ? 700 : 300} />
+          <input type='file' accept='.xlsx, .csv' onChange={onFileChange} />
+          <span className='file-name'>{file?.name}</span>
+          {file?.name && (
+            <span className='change-file'>Click to change file</span>
+          )}
+          {!file?.name && <span>Click here to add file</span>}
+        </label>
+      </SelectFile>
+    )
+    setModalState((oldState) => ({
+      ...oldState,
+      detail: SubmitFile,
+      negativeButton: { text: 'cancel' },
+      positiveButton: { text: 'submit', color: 'green' },
+      modalType: 'confirm',
+      fullWidthButton: true,
+      onClickNegativeButton: resetModalState,
+      onClickPositiveButton: () => console.log(2323),
+    }))
+    setUploadDocument(file)
+  }
+
+  const onSelectUploadMenu = () => {
+    const SelectFileToUpload = (
+      <SelectFile>
+        <span>Only file with .xlsx, .csv extension</span>
+        <label className='input-wrapper'>
+          <FileIcon />
+          <input type='file' accept='.xlsx, .csv' onChange={onFileChange} />
+          <span>Click here to add file</span>
+        </label>
+      </SelectFile>
+    )
+    setModalState((oldState) => ({
+      ...oldState,
+      isDisplay: true,
+      title: 'Select file',
+      detail: SelectFileToUpload,
+      positiveButton: {
+        ...oldState.positiveButton,
+        text: 'cancel',
+      },
+      onClickPositiveButton: () => resetModalState(),
+      // source.cancel('abort service request'),
+    }))
+  }
+
+  const onSubmitFile = async () => {
+    try {
+      const UploadProgress = (
+        <div>
+          <span>{uploadPercent} %</span>
+          <UploadIndicator percent={uploadPercent} />
+        </div>
+      )
+
+      const uploadingEvent = (progressEvent) => {
+        const { loaded, total } = progressEvent
+        const percent = Math.floor((loaded * 100) / total)
+        console.log(`${loaded}kb of ${total}kb | ${percent}%`)
+        if (percent < 100) {
+          setUploadPercent(percent)
+        } else {
+          // resetModalState()
+        }
+      }
+
+      // const onFileUpload = () => {
+      //   const formData = new FormData()
+      //   formData.append('uploadDocument', uploadDocument)
+      //   axios
+      //     .post(process.env.REACT_APP_API + '/uploadfile', formData)
+      //     .then((res) => console.log(res))
+      //     .catch((err) => console.log(err))
+      // }
+    } catch (error) {}
+  }
+
   return (
     <Container>
       <div className='header'>
@@ -225,8 +350,8 @@ const UserManagement = () => {
             <div className='create-button-wrapper'>
               <CreateButton
                 onCreateNew={() => history.push('/user-management/create')}
-                onSelectFile={() => console.log('select file')}
-                onDownloadTemplate={() => console.log('download')}
+                onUploadFile={onSelectUploadMenu}
+                onDownloadTemplate={downloadTemplate}
               />
             </div>
           </div>

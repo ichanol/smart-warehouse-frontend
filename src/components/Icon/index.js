@@ -9,6 +9,7 @@ import DocumentIcon from './DocumentIcon'
 import DotsMenu from './DotsMenu'
 import EditIcon from './EditIcon'
 import ErrorIcon from './ErrorIcon'
+import FileIcon from './FileIcon'
 import FilterIcon from './FilterIcon'
 import HistoryIcon from './HistoryIcon'
 import ImportExportProductIcon from './ImportExportProductIcon'
@@ -56,4 +57,5 @@ export {
   TemplateIcon,
   LogOutIcon,
   ProfileSettingIcon,
+  FileIcon,
 }

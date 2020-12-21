@@ -1,6 +1,8 @@
 import React from 'react'
 import { atomState } from '../Atoms'
 import axios from 'axios'
+import { blobFileDownloader } from '../Utils'
+import { requestHandler } from '../Services'
 import { useRecoilState } from 'recoil'
 import { useState } from 'react'
 
@@ -22,11 +24,26 @@ const ProfileSettings = () => {
       .catch((err) => console.log(err))
   }
   const toastType = ['success', 'error', 'warning', 'info']
+
+  const onGenerateReport = async (reportNumber) => {
+    const response = await requestHandler(
+      '/uploadfile/user',
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    console.log(response)
+    blobFileDownloader(response, `${reportNumber}.xlsx`)
+  }
   return (
     <React.Fragment>
       <h1>ProfileSettings</h1>
       <input type='file' onChange={onFileChange} accept='.xlsx, .csv' />
       <button onClick={onFileUpload}>submit</button>
+      <button onClick={onGenerateReport}>submit</button>
       {/* <button
         type='button'
         onClick={() => {

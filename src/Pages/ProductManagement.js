@@ -13,6 +13,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { Container } from './ProductManagementStyle'
 import { atomState } from '../Atoms/'
+import { blobFileDownloader } from '../Utils'
 import { useHistory } from 'react-router-dom'
 
 const ProductManagement = () => {
@@ -203,6 +204,18 @@ const ProductManagement = () => {
       `/product-management/edit/${productListState[index].product_id}`,
     )
 
+  const downloadTemplate = async () => {
+    const response = await requestHandler(
+      '/uploadfile/product',
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    blobFileDownloader(response, 'product.xlsx')
+  }
   return (
     <Container>
       <div className='header'>
@@ -228,7 +241,7 @@ const ProductManagement = () => {
               <CreateButton
                 onCreateNew={() => history.push('/product-management/create')}
                 onSelectFile={() => console.log('select file')}
-                onDownloadTemplate={() => console.log('download')}
+                onDownloadTemplate={downloadTemplate}
               />
             </div>
           </div>

@@ -6,6 +6,7 @@ import ModalButton from '../Button/ModalButton'
 import React from 'react'
 import { Sentry } from 'react-activity'
 import atomState from '../../Atoms/Atoms'
+import clsx from 'clsx'
 import { useRecoilValue } from 'recoil'
 
 const Modal = () => {
@@ -34,7 +35,7 @@ const Modal = () => {
           </div>
         )}
 
-        <div className='button-wrapper'>
+        <div className={clsx('button-wrapper', modalState.fullWidthButton && 'full-width')}>
           <ModalButton
             value={modalState.negativeButton.text}
             action={modalState.onClickNegativeButton}
