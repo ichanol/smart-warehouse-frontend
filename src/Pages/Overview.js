@@ -116,12 +116,12 @@ const Overview = () => {
       <div className='header'>
         <span>Overview</span>
       </div>
-      <div className='content'>
+      {/* <div className='content'>
         <SubmitButton />
         <CancelButton />
         <RetryButton />
         {lorem}
-      </div>
+      </div> */}
     </Container>
   )
 }
@@ -135,29 +135,6 @@ export default Overview
  * ?       5.Add user's login handler (forget password/username) [FE][BE]
  * ?       6.Add Reset password via email [FE][BE]
  * ?       7.Add schedul job [BE]
- * ?       8.Add upload file [FE]
  * ?       11.Add profile preferences layout [FE]
  * *       12.Create weekly / monthly document report
- *
- *
- *
- *
- *
- * *  activity_log
- * *  ------------------------------------------------------
- * *  | id | user_id | activity_type | created_at | detail |
- * *  ------------------------------------------------------
- *
- * *  activity_type
- * !  login
- * !  logout
- * !  scan id card
- * !  import/export product
- * !  create new user information
- * !  create new product information
- * !  create new role information
- * !  update user information
- * !  update product information
- * !  update role information
- * !  edit / update transaction
  */

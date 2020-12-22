@@ -367,8 +367,11 @@ const TransactionList = styled.label`
     flex: 0.3;
   }
   .inactive {
-    background-color: ${COLORS.gray[900]};
-    color: ${COLORS.gray[100]};
+    background-color: ${COLORS.gray[500]};
+    color: ${COLORS.natural.white};
+  }
+  .inactive-title{
+    color: ${COLORS.natural.white};
   }
 `
 

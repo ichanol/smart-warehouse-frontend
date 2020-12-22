@@ -225,7 +225,7 @@ const TransactionRecord = ({
           className='transaction-detail transaction-menu'
           htmlFor='context-menu'
           onClick={(event) => onToggleMenu(event, index)}>
-          <DotsMenu />
+          <DotsMenu fill={value.status_value === 0 ? COLORS.gray[200] : COLORS.gray[500]}/>
           <div className='transaction-context-menu'>
             <div
               className='transaction-record-menu'
@@ -255,7 +255,10 @@ const TransactionRecord = ({
           'transaction-product-list-container',
           value.status_value === 0 && 'inactive',
         )}>
-        <div className='product-list product-list-title'>
+        <div className={clsx(
+          'product-list product-list-title',
+          value.status_value === 0 && 'inactive-title',
+        )}>
           <div className='product-detail index' />
           <div className='product-detail product-id'>
             <span className='product-information'>Serial Number</span>
