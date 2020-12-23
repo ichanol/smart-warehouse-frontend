@@ -16,11 +16,10 @@ const ProductList = () => {
     { title: 'Product name', type: 'product_name', isSort: true },
     { title: 'Balance', type: 'balance', isSort: true },
     { title: 'Company', type: 'company_name', isSort: true },
-    { title: 'Location', type: 'location', isSort: true },
     { title: 'Updated at', type: 'updated_at', isSort: true },
   ]
   const fixedDataColumn = ['product_id', 'product_name', 'balance']
-  const scrollDataColumn = ['company_name', 'location', 'updated_at']
+  const scrollDataColumn = ['company_name', 'updated_at']
   const centerColumn = ['balance']
   const itemPerPageList = [
     { name: 10 },

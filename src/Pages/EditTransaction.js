@@ -1,6 +1,7 @@
 import {
   CancelButton,
   ChevronDownIcon,
+  DownloadIcon,
   DropDown,
   SubmitButton,
   TextArea,
@@ -166,6 +167,7 @@ const EditTransaction = () => {
             type: 'success',
           },
         ])
+        history.push('/transaction')
       }
     } catch (error) {
       setToastState((oldState) => [
@@ -181,12 +183,27 @@ const EditTransaction = () => {
     }
   }
 
+  const onCancel = () => history.goBack()
+
   return (
     <Container>
       <div className='content'>
         <DetailSection>
           <div className='header sticky'>
             <span>Transaction Information</span>
+          </div>
+          <div className='transaction-information-column margin-bottom'>
+            <div className='download-button-wrapper'>
+              <div className='download-button'>
+                <DownloadIcon />
+                <span>Download transaction</span>
+              </div>
+            </div>
+            <div className='toggle-button-wrapper'>
+              <div className='flex-end'>
+                <ToggleButton />
+              </div>
+            </div>
           </div>
           <div className='transaction-information-column'>
             <div className='transaction-information'>
@@ -292,7 +309,7 @@ const EditTransaction = () => {
                           <span>{value.balance.toLocaleString()}</span>
                         </div>
                         <div className='location'>
-                          <span>{value.location}</span>
+                          <span>{value.location_name}</span>
                         </div>
                       </ProductList>
 
@@ -316,132 +333,142 @@ const EditTransaction = () => {
               </ProductTable>
             </div>
           </DefaultProductListTable>
-          {defaultEditTransactionData.detail && (
+          <div className='text-area-wrapper'>
+            <TextArea
+              placeholder='Transaction Remark'
+              defaultValue={
+                defaultEditTransactionData.detail !== ''
+                  ? defaultEditTransactionData.detail
+                  : '-'
+              }
+              height={80}
+              disabled
+            />
+          </div>
+        </DetailSection>
+        {defaultEditTransactionData.status_value !== 0 && (
+          <EditSection>
+            <div className='header-wrapper sticky'>
+              <div className='header'>
+                <span>Edit Transaction</span>
+              </div>
+              <div className='transaction-information'>
+                <div className='transaction-information-title'>
+                  <span>Transaction type:</span>
+                </div>
+                <div className='transaction-information-data'>
+                  <div
+                    className={clsx(
+                      'dropdown-wrapper',
+                      action.action_name?.toString().toLowerCase(),
+                    )}>
+                    <DropDown
+                      selectedValue={action.action_name}
+                      choices={actionList}
+                      onSelect={onChangeAction}
+                      fullWidth={false}
+                      placeholder={false}
+                      field='action_name'
+                      width='160px'
+                      defaultValue={defaultEditTransactionData.action_name}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ProductTable>
+              <ProductList className='sticky z1 no-border'>
+                <div className='serial-number'>
+                  <span>Serial Number</span>
+                </div>
+                <div className='product-name'>
+                  <span>Name</span>
+                </div>
+                <div className='amount'>
+                  <span>Amount</span>
+                </div>
+                <div className='location'>
+                  <span>Location</span>
+                </div>
+                {/* <div className='remark'>
+                <span>Remark</span>
+              </div> */}
+              </ProductList>
+              {editTransactionData.data?.map((value, index) => {
+                return (
+                  <ProductListWrapper key={index}>
+                    <ProductList>
+                      <div className='serial-number'>
+                        <span>{value.product_id}</span>
+                      </div>
+                      <div className='product-name'>
+                        <span>{value.product_name}</span>
+                      </div>
+                      <div className='amount'>
+                        <SpanInput
+                          contentEditable
+                          role='textbox'
+                          className={clsx(
+                            'amount-tag',
+                            action.action_name.toLowerCase(),
+                          )}
+                          onKeyDown={onKeyDownHandler}
+                          onBlur={onAmountBlur(index)}
+                          onInput={onChangeAmount(index)}
+                          onClick={(event) => event.preventDefault()}
+                          sign={
+                            action.action_name.toLowerCase() === 'import'
+                              ? '+ '
+                              : '- '
+                          }
+                          placeholder={defaultEditTransactionData?.data[
+                            index
+                          ]?.amount.toLocaleString()}
+                        />
+                      </div>
+                      <div className='location'>
+                        <span>{value.location_name}</span>
+                      </div>
+                    </ProductList>
+                    <input type='checkbox' />
+                    <div className='product-remark'>
+                      <TextArea
+                        placeholder='Remark:'
+                        border
+                        defaultValue={value.product_detail}
+                        onValueChange={onChangeProductRemark(index)}
+                      />
+                    </div>
+                  </ProductListWrapper>
+                )
+              })}
+            </ProductTable>
             <div className='text-area-wrapper'>
               <TextArea
                 placeholder='Transaction Remark'
                 defaultValue={defaultEditTransactionData.detail}
-                height={80}
-                disabled
+                height={125}
+                border
+                onValueChange={(text) => setTransactionRemark(text)}
               />
             </div>
-          )}
-        </DetailSection>
-        <hr />
-        <EditSection>
-          <div className='header-wrapper sticky'>
-            <div className='header'>
-              <span>Edit Transaction</span>
-            </div>
-            <div className='transaction-information'>
-              <div className='transaction-information-title'>
-                <span>Transaction type:</span>
-              </div>
-              <div className='transaction-information-data'>
-                <div
-                  className={clsx(
-                    'dropdown-wrapper',
-                    action.action_name?.toString().toLowerCase(),
-                  )}>
-                  <DropDown
-                    selectedValue={action.action_name}
-                    choices={actionList}
-                    onSelect={onChangeAction}
-                    fullWidth={false}
-                    placeholder={false}
-                    field='action_name'
-                    width='160px'
-                    defaultValue={defaultEditTransactionData.action_name}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <ProductTable>
-            <ProductList className='sticky z1 no-border'>
-              <div className='serial-number'>
-                <span>Serial Number</span>
-              </div>
-              <div className='product-name'>
-                <span>Name</span>
-              </div>
-              <div className='amount'>
-                <span>Amount</span>
-              </div>
-              <div className='location'>
-                <span>Location</span>
-              </div>
-              {/* <div className='remark'>
-                <span>Remark</span>
-              </div> */}
-            </ProductList>
-            {editTransactionData.data?.map((value, index) => {
-              return (
-                <ProductListWrapper key={index}>
-                  <ProductList>
-                    <div className='serial-number'>
-                      <span>{value.product_id}</span>
-                    </div>
-                    <div className='product-name'>
-                      <span>{value.product_name}</span>
-                    </div>
-                    <div className='amount'>
-                      <SpanInput
-                        contentEditable
-                        role='textbox'
-                        className={clsx(
-                          'amount-tag',
-                          action.action_name.toLowerCase(),
-                        )}
-                        onKeyDown={onKeyDownHandler}
-                        onBlur={onAmountBlur(index)}
-                        onInput={onChangeAmount(index)}
-                        onClick={(event) => event.preventDefault()}
-                        sign={
-                          action.action_name.toLowerCase() === 'import'
-                            ? '+ '
-                            : '- '
-                        }
-                        placeholder={defaultEditTransactionData?.data[
-                          index
-                        ]?.amount.toLocaleString()}
-                      />
-                    </div>
-                    <div className='location'>
-                      <span>{value.location}</span>
-                    </div>
-                  </ProductList>
-                  <input type='checkbox' />
-                  <div className='product-remark'>
-                    <TextArea
-                      placeholder='Remark:'
-                      border
-                      defaultValue={value.product_detail}
-                      onValueChange={onChangeProductRemark(index)}
-                    />
-                  </div>
-                </ProductListWrapper>
-              )
-            })}
-          </ProductTable>
-          <div className='text-area-wrapper'>
-            <TextArea
-              placeholder='Transaction Remark'
-              defaultValue={defaultEditTransactionData.detail}
-              height={125}
-              border
-              onValueChange={(text) => setTransactionRemark(text)}
-            />
-          </div>
-        </EditSection>
-
+          </EditSection>
+        )}
         <div />
         <div className='button-wrapper'>
-          <SubmitButton action={onSubmit} />
-          <div className='cancel-button-wrapper'>
-            <CancelButton />
-          </div>
+          {defaultEditTransactionData.status_value === 0 ? (
+            <div className='back-button' onClick={onCancel}>
+              <span>GO BACK</span>
+            </div>
+          ) : (
+            <>
+              <SubmitButton action={onSubmit} />
+              <div className='cancel-button-wrapper'>
+                <CancelButton action={onCancel} />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Container>

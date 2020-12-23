@@ -18,6 +18,8 @@ import { useHistory } from 'react-router-dom'
 
 const ImportExportProduct = () => {
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
+
+  const MOCK_WAREHOUSE = 1
   const history = useHistory()
 
   const [readProductListState, setReadProductListState] = useRecoilState(
@@ -215,6 +217,7 @@ const ImportExportProduct = () => {
         username: userState.username,
         productList: readProductListState,
         transactionRemark,
+        warehouse: MOCK_WAREHOUSE,
       }
       const response = await requestHandler(
         '/import-export-product',

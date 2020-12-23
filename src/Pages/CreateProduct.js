@@ -1,5 +1,11 @@
-import { CancelButton, SubmitButton, TextArea, TextInput } from '../components'
-import React, { useState } from 'react'
+import {
+  CancelButton,
+  DropDown,
+  SubmitButton,
+  TextArea,
+  TextInput,
+} from '../components'
+import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
   isContainSpecialCharacter,
@@ -19,6 +25,16 @@ const CreateProduct = () => {
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
 
   const [inputError, setError] = useState({})
+  const [warehouseList, setWarehouseList] = useState({
+    selected: null,
+    choices: [],
+    id: null,
+  })
+  const [subArea, setSubArea] = useState({
+    selected: null,
+    choices: [],
+    id: null,
+  })
   const [productData, setProductData] = useState({
     company_name: '',
     detail: '',
@@ -60,6 +76,40 @@ const CreateProduct = () => {
           type: 'error',
         },
       ])
+    }
+  }
+
+  const getWarehouseList = async () => {
+    try {
+      const { result } = await requestHandler('/warehouse', true, {}, 'get')
+      setWarehouseList({
+        ...warehouseList,
+        choices: result,
+        selected: result[0].warehouse_name,
+        id: result[0].id,
+      })
+    } catch (error) {
+      history.goBack()
+    }
+  }
+
+  const getSubArea = async (id) => {
+    try {
+      const { result } = await requestHandler(
+        '/warehouse',
+        true,
+        { getWarehouseArea: id },
+        'get',
+      )
+      setSubArea({
+        ...subArea,
+        choices: result,
+        selected: result[0].area_name,
+        id: result[0].id,
+      })
+      setProductData({ ...productData, location: result[0].id })
+    } catch (error) {
+      history.goBack()
     }
   }
 
@@ -110,8 +160,7 @@ const CreateProduct = () => {
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
 
-    if (TYPE === 'detail') {
-    } else if (isFirstCharacterSpace(value)) {
+    if (isFirstCharacterSpace(value)) {
       tempError[TYPE] = 'First Character should be alphabet'
     } else if (engIsContainSpecialCharacter(value) && TYPE === 'product_id') {
       tempError[TYPE] = 'a-z, A-Z, 0-9'
@@ -131,6 +180,33 @@ const CreateProduct = () => {
     setError(tempError)
     setProductData(updateProductData)
   }, 300)
+
+  useEffect(() => {
+    getWarehouseList()
+  }, [])
+
+  useEffect(() => {
+    if (warehouseList.id) {
+      getSubArea(warehouseList.id)
+    }
+  }, [warehouseList.id])
+
+  const onChangeWarehouse = (index) =>
+    setWarehouseList({
+      ...warehouseList,
+      selected: warehouseList.choices[index].warehouse_name,
+      id: warehouseList.choices[index].id,
+    })
+
+  const onChangeArea = (index) => {
+    setSubArea({
+      ...subArea,
+      selected: subArea.choices[index].area_name,
+      id: subArea.choices[index].id,
+    })
+
+    setProductData({ ...productData, location: subArea.choices[index].id })
+  }
 
   return (
     <Container>
@@ -163,14 +239,30 @@ const CreateProduct = () => {
             maxLength='40'
             error={inputError.company_name}
           />
-          <TextInput
-            required
-            placeholder='Location'
-            onValueChange={onValueChange}
-            valueType='location'
-            maxLength='30'
-            error={inputError.location}
-          />
+          <div className='dropdown-wrapper'>
+            <DropDown
+              selectedValue={warehouseList.selected}
+              choices={warehouseList.choices}
+              onSelect={onChangeWarehouse}
+              width='initial'
+              isCenter={false}
+              field='warehouse_name'
+              placeholder={false}
+            />
+            <span className='placeholder'>Warehouse</span>
+          </div>
+          <div className='dropdown-wrapper'>
+            <DropDown
+              selectedValue={subArea.selected}
+              choices={subArea.choices}
+              onSelect={onChangeArea}
+              width='initial'
+              isCenter={false}
+              field='area_name'
+              placeholder={false}
+            />
+            <span className='placeholder'>Location</span>
+          </div>
           <TextArea
             placeholder='Detail'
             onValueChange={onValueChange}

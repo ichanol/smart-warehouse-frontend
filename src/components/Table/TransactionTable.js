@@ -4,6 +4,7 @@ import {
   DocumentIcon,
   DotsMenu,
   EditIcon,
+  InformationIcon,
 } from '../Icon'
 import {
   ArrowWrapper,
@@ -162,6 +163,11 @@ const TransactionTable = ({
           <div className='transaction-title transaction-menu' />
         </TransactionTitle>
 
+        {dataArray.length === 0 && (
+          <div className='no-data'>
+            <span>NO DATA</span>
+          </div>
+        )}
         {dataArray?.length > 0 &&
           dataArray.map((value, index) => {
             return (
@@ -204,7 +210,6 @@ const TransactionRecord = ({
         className={clsx(
           'transaction-information',
           value.action_name.toLowerCase(),
-          value.status_value === 0 && 'inactive',
         )}>
         <div className='transaction-detail transaction-reference-number'>
           <span>{value.reference_number}</span>
@@ -215,8 +220,18 @@ const TransactionRecord = ({
         <div className='transaction-detail transaction-type'>
           <span>{capitalize(value.action_name)}</span>
         </div>
-        <div className='transaction-detail transaction-remark'>
-          <span>{value.detail}</span>
+        <div
+          className={clsx(
+            'transaction-detail transaction-remark',
+            value.status_value === 0 && 'inactive-tag',
+          )}>
+          {value.status_value ? (
+            <span>{value.detail ? value.detail : '-'}</span>
+          ) : (
+            <span>
+              <span>INACTIVE</span>
+            </span>
+          )}
         </div>
         <div className='transaction-detail transaction-author'>
           <span>{value.username}</span>
@@ -225,15 +240,26 @@ const TransactionRecord = ({
           className='transaction-detail transaction-menu'
           htmlFor='context-menu'
           onClick={(event) => onToggleMenu(event, index)}>
-          <DotsMenu fill={value.status_value === 0 ? COLORS.gray[200] : COLORS.gray[500]}/>
+          <DotsMenu />
           <div className='transaction-context-menu'>
             <div
               className='transaction-record-menu'
               onClick={() => onEdit(value.reference_number)}>
-              <EditIcon fill={COLORS.gray[600]} />
-              <span className='transaction-record-menu-title'>
-                Edit Transaction
-              </span>
+              {value.status_value === 0 ? (
+                <React.Fragment>
+                  <InformationIcon fill={COLORS.gray[500]} />
+                  <span className='transaction-record-menu-title'>
+                    See Transaction
+                  </span>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <EditIcon fill={COLORS.gray[600]} />
+                  <span className='transaction-record-menu-title'>
+                    Edit Transaction
+                  </span>
+                </React.Fragment>
+              )}
             </div>
             <div
               className='transaction-record-menu'
@@ -250,15 +276,8 @@ const TransactionRecord = ({
           onClick={(event) => onToggleMenu(event, index)}
         />
       </div>
-      <div
-        className={clsx(
-          'transaction-product-list-container',
-          value.status_value === 0 && 'inactive',
-        )}>
-        <div className={clsx(
-          'product-list product-list-title',
-          value.status_value === 0 && 'inactive-title',
-        )}>
+      <div className={clsx('transaction-product-list-container')}>
+        <div className={clsx('product-list product-list-title')}>
           <div className='product-detail index' />
           <div className='product-detail product-id'>
             <span className='product-information'>Serial Number</span>
@@ -281,12 +300,7 @@ const TransactionRecord = ({
         </div>
         {value.data.map((subValue, subIndex) => {
           return (
-            <div
-              className={clsx(
-                'product-list',
-                value.status_value === 0 && 'inactive',
-              )}
-              key={subIndex}>
+            <div className={clsx('product-list')} key={subIndex}>
               <div className='product-detail index'>
                 <span className='product-information'>{subIndex + 1}</span>
               </div>
@@ -304,7 +318,6 @@ const TransactionRecord = ({
                 <span
                   className={clsx(
                     'product-information amount-tag',
-                    value.status_value === 0 && 'inactive',
                     value.action_type.toLowerCase(),
                   )}>
                   {value.action_type.toLowerCase() === 'add' ? '+' : '-'}{' '}
@@ -317,11 +330,13 @@ const TransactionRecord = ({
                 </span>
               </div>
               <div className='product-detail product-location'>
-                <span className='product-information'>{subValue.location}</span>
+                <span className='product-information'>
+                  {subValue.location_name}
+                </span>
               </div>
               <div className='product-detail product-remark'>
                 <span className='product-information'>
-                  {subValue.product_detail}
+                  {subValue.product_detail ? subValue.product_detail : '-'}
                 </span>
               </div>
             </div>

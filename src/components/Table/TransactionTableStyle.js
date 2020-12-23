@@ -300,7 +300,7 @@ const TransactionList = styled.label`
     height: 50px;
     display: flex;
 
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     border-left: 8px solid transparent;
     padding: 0 20px 0 0;
 
@@ -310,7 +310,8 @@ const TransactionList = styled.label`
   }
 
   .product-list-title {
-    color: ${COLORS.gray[600]};
+    color: ${COLORS.gray[700]};
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
   .product-detail {
@@ -339,7 +340,7 @@ const TransactionList = styled.label`
 
     background-color: ${COLORS.green[100]};
   }
-  .inactive-tag{
+  .inactive-tag {
     border: none;
     background-color: 8px solid ${COLORS.red[400]};
   }
@@ -367,11 +368,25 @@ const TransactionList = styled.label`
     flex: 0.3;
   }
   .inactive {
-    background-color: ${COLORS.gray[500]};
-    color: ${COLORS.natural.white};
+    text-decoration: line-through;
   }
-  .inactive-title{
-    color: ${COLORS.natural.white};
+  .inactive-tag {
+    height: 100%;
+    > span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      > span {
+        max-width: none;
+        min-width: none;
+        border: 2px solid ${COLORS.red[300]};
+        border-radius: 4px;
+        padding: 0 12px;
+
+        background-color: ${COLORS.red[100]};
+      }
+    }
   }
 `
 
@@ -388,6 +403,22 @@ const Table = styled.div`
 
   ::-webkit-scrollbar {
     display: none;
+  }
+  .no-data {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: ${COLORS.gray[100]};
+
+    span {
+      font-size: ${FONT.xl};
+    }
   }
 `
 

@@ -1,4 +1,10 @@
-import { CancelButton, SubmitButton, TextArea, TextInput } from '../components'
+import {
+  CancelButton,
+  DropDown,
+  SubmitButton,
+  TextArea,
+  TextInput,
+} from '../components'
 import React, { useEffect, useState } from 'react'
 import {
   engIsContainSpecialCharacter,
@@ -17,34 +23,79 @@ const CreateProduct = () => {
   const history = useHistory()
   const { productid } = useParams()
 
-  const userState = useRecoilValue(atomState.userState)
   const [toastState, setToastState] = useRecoilState(atomState.toastState)
   const productListState = useRecoilValue(atomState.productListState)
 
+  const [trigger, setTrigger] = useState(true)
   const [inputError, setError] = useState({})
+  const [warehouseList, setWarehouseList] = useState({
+    selected: null,
+    choices: [],
+    id: null,
+  })
+  const [subArea, setSubArea] = useState({
+    selected: null,
+    choices: [],
+    id: null,
+  })
   const [editedProductData, setEditedProductData] = useState({})
 
-  useEffect(() => {
-    if (productid) {
-      const [selectedProduct] = productListState.filter(
-        (value) => value.product_id === productid,
-      )
-      if (selectedProduct) {
-        setEditedProductData({
-          company_name: selectedProduct?.company_name,
-          detail: selectedProduct?.detail,
-          location: selectedProduct?.location,
-          product_id: selectedProduct?.product_id,
-          product_name: selectedProduct?.product_name,
-          status: selectedProduct?.status,
-        })
-      } else {
-        history.push('/product-management')
-      }
-    } else {
-      history.push('/product-management')
+  const getWarehouseList = async () => {
+    try {
+      const { result } = await requestHandler('/warehouse', true, {}, 'get')
+      setWarehouseList({
+        ...warehouseList,
+        choices: result,
+        selected: result[0].warehouse_name,
+        id: result[0].id,
+      })
+      return result
+    } catch (error) {
+      history.goBack()
     }
-  }, [])
+  }
+
+  const getSubArea = async (id) => {
+    try {
+      const { result } = await requestHandler(
+        '/warehouse',
+        true,
+        { getWarehouseArea: id },
+        'get',
+      )
+      return result
+    } catch (error) {
+      history.goBack()
+    }
+  }
+
+  const getLocationHandler = async (editProductObj) => {
+    const warehouseResult = await getWarehouseList()
+    const subAreaResult = await getSubArea(editProductObj.warehouse)
+    if (warehouseResult && subAreaResult) {
+      const [selectedWarehouse] = warehouseResult.filter(
+        (value) => value.id === editProductObj.warehouse,
+      )
+      const [selectedSubArea] = subAreaResult.filter(
+        (value) => value.id === editProductObj.location,
+      )
+      setWarehouseList({
+        ...warehouseList,
+        choices: warehouseResult,
+        selected: selectedWarehouse.warehouse_name,
+        id: selectedWarehouse.id,
+      })
+
+      setSubArea({
+        ...subArea,
+        choices: subAreaResult,
+        selected: selectedSubArea.area_name,
+        id: selectedSubArea.id,
+      })
+    } else {
+      history.goBack()
+    }
+  }
 
   const onSubmit = async () => {
     try {
@@ -101,8 +152,7 @@ const CreateProduct = () => {
   const onValueChange = debounce((value, TYPE) => {
     const tempError = { ...inputError }
 
-    if (TYPE === 'detail') {
-    } else if (isFirstCharacterSpace(value)) {
+    if (isFirstCharacterSpace(value)) {
       tempError[TYPE] = 'First Character should be alphabet'
     } else if (engIsContainSpecialCharacter(value) && TYPE === 'product_id') {
       tempError[TYPE] = 'a-z, A-Z, 0-9'
@@ -118,6 +168,70 @@ const CreateProduct = () => {
     setError(tempError)
     setEditedProductData(updateEditedProductData)
   }, 300)
+
+  const subAreaHandler = async () => {
+    const result = await getSubArea(warehouseList.id)
+    setSubArea({
+      ...subArea,
+      choices: result,
+      selected: result[0].area_name,
+      id: result[0].id,
+    })
+  }
+
+  const onChangeWarehouse = (index) => {
+    setWarehouseList({
+      ...warehouseList,
+      selected: warehouseList.choices[index].warehouse_name,
+      id: warehouseList.choices[index].id,
+    })
+
+    setTrigger(!trigger)
+  }
+
+  const onChangeArea = (index) => {
+    setSubArea({
+      ...subArea,
+      selected: subArea.choices[index].area_name,
+      id: subArea.choices[index].id,
+    })
+
+    setEditedProductData({
+      ...editedProductData,
+      location: subArea.choices[index].id,
+    })
+  }
+
+  useEffect(() => {
+    if (warehouseList.id) {
+      subAreaHandler()
+    }
+  }, [trigger])
+
+  useEffect(() => {
+    if (productid) {
+      const [selectedProduct] = productListState.filter(
+        (value) => value.product_id === productid,
+      )
+      if (selectedProduct) {
+        const editProductObj = {
+          company_name: selectedProduct?.company_name,
+          detail: selectedProduct?.detail,
+          location: selectedProduct?.location_id,
+          warehouse: selectedProduct?.warehouse_id,
+          product_id: selectedProduct?.product_id,
+          product_name: selectedProduct?.product_name,
+          status: selectedProduct?.status,
+        }
+        setEditedProductData(editProductObj)
+        getLocationHandler(editProductObj)
+      } else {
+        history.push('/product-management')
+      }
+    } else {
+      history.push('/product-management')
+    }
+  }, [])
 
   return (
     <Container>
@@ -154,15 +268,30 @@ const CreateProduct = () => {
             error={inputError.company_name}
             defaultValue={editedProductData.company_name}
           />
-          <TextInput
-            required
-            placeholder='Location'
-            onValueChange={onValueChange}
-            valueType='location'
-            maxLength='30'
-            error={inputError.location}
-            defaultValue={editedProductData.location}
-          />
+          <div className='dropdown-wrapper'>
+            <DropDown
+              selectedValue={warehouseList.selected}
+              choices={warehouseList.choices}
+              onSelect={onChangeWarehouse}
+              width='initial'
+              isCenter={false}
+              field='warehouse_name'
+              placeholder={false}
+            />
+            <span className='placeholder'>Warehouse</span>
+          </div>
+          <div className='dropdown-wrapper'>
+            <DropDown
+              selectedValue={subArea.selected}
+              choices={subArea.choices}
+              onSelect={onChangeArea}
+              width='initial'
+              isCenter={false}
+              field='area_name'
+              placeholder={false}
+            />
+            <span className='placeholder'>Location</span>
+          </div>
           <TextArea
             placeholder='Detail'
             onValueChange={onValueChange}

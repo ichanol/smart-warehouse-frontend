@@ -64,7 +64,7 @@ const EditImportExportProduct = () => {
           disabled
         />
         <TextInput
-          value={editInformation.location}
+          value={editInformation.location_name}
           placeholder='Location'
           disabled
         />

@@ -7,6 +7,7 @@ import CrossIcon from './CrossIcon'
 import DeleteIcon from './DeleteIcon'
 import DocumentIcon from './DocumentIcon'
 import DotsMenu from './DotsMenu'
+import DownloadIcon from './DownloadIcon'
 import EditIcon from './EditIcon'
 import ErrorIcon from './ErrorIcon'
 import FileIcon from './FileIcon'
@@ -58,4 +59,5 @@ export {
   LogOutIcon,
   ProfileSettingIcon,
   FileIcon,
+  DownloadIcon,
 }

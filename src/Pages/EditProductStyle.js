@@ -12,6 +12,30 @@ const Container = styled.div`
   overflow: auto;
   background-color: ${COLORS.natural.white};
 
+  .dropdown-wrapper {
+    flex: 1;
+    height: 45px;
+    min-height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    margin: 40px 0 15px 0;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .dropdown-wrapper .placeholder {
+    position: absolute;
+    top: -50px;
+    left: 0;
+
+    opacity: 1;
+    transform: translateY(45%);
+    transition: all 0.25s ease-in-out;
+  }
+
   .header {
     height: 35px;
     align-items: center;

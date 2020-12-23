@@ -60,6 +60,8 @@ const Container = styled.div`
   .button-wrapper {
     display: flex;
     flex-direction: row-reverse;
+
+    margin-top: 24px;
   }
   .cancel-button-wrapper {
     margin-right: 20px;
@@ -94,6 +96,44 @@ const Container = styled.div`
   .text-area-wrapper {
     margin-top: 25px;
   }
+  .back-button {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    border: 1px solid ${COLORS.gray[500]};
+    border-radius: 8px;
+
+    color: ${COLORS.gray[600]};
+    cursor: pointer;
+  }
+  .download-button {
+    height: 40px;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+
+    padding: 0 12px 0 0;
+    border-radius: 4px;
+    border: 1px solid ${COLORS.gray[600]};
+
+    overflow: hidden;
+    color: ${COLORS.natural.black};
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.2s ease-in-out;
+
+    :hover {
+      opacity: 0.6;
+      background-color: ${COLORS.gray[200]};
+    }
+    > span {
+      display: flex;
+      align-items: center;
+    }
+  }
 `
 
 const DetailSection = styled.div`
@@ -104,6 +144,7 @@ const DetailSection = styled.div`
     display: flex;
   }
   .flex-end {
+    display: flex;
     justify-content: flex-end;
   }
   .action {
@@ -117,6 +158,13 @@ const DetailSection = styled.div`
     border: 2px solid ${COLORS.green[400]};
 
     background-color: ${COLORS.green[100]};
+  }
+  .margin-bottom {
+    margin-bottom: 16px;
+  }
+  .toggle-button-wrapper,
+  .download-button-wrapper {
+    flex: 1;
   }
 `
 
