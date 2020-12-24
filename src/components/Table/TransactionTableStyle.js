@@ -296,7 +296,8 @@ const TransactionList = styled.label`
     border-left: 8px solid ${COLORS.green[600]};
   }
 
-  .product-list {
+  .product-list,
+  .refer {
     height: 50px;
     display: flex;
 
@@ -307,6 +308,10 @@ const TransactionList = styled.label`
     font-weight: 500;
     font-size: ${FONT.l};
     color: ${COLORS.gray[800]};
+  }
+  .refer {
+    height: 35px;
+    align-items: center;
   }
 
   .product-list-title {

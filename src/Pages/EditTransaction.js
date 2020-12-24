@@ -22,6 +22,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { atomState } from '../Atoms'
+import { blobFileDownloader } from '../Utils'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
 import moment from 'moment'
@@ -40,6 +41,7 @@ const EditTransaction = () => {
   const [defaultEditTransactionData, setDefaultEditTransactionData] = useState(
     {},
   )
+  const [showEditSection, setShowEditSection] = useState(true)
   const [editTransactionData, setEditTransactionData] = useState({})
   const [action, setAction] = useState({ action_name: '', id: 0 })
   const [actionList, setActionList] = useState([])
@@ -83,6 +85,7 @@ const EditTransaction = () => {
       if (selectedTransaction) {
         getActionListHandler(selectedTransaction)
         setEditTransactionData(selectedTransaction)
+        console.log(selectedTransaction)
         setDefaultEditTransactionData(selectedTransaction)
       } else {
         history.push('/transaction')
@@ -145,9 +148,11 @@ const EditTransaction = () => {
         referenceNumber: Math.round(Math.random() * 1000),
         actionType: action.id,
         username: userState.username,
-        productList: editTransactionData.data,
         sourceTransaction: defaultEditTransactionData,
         transactionRemark,
+      }
+      if (editTransactionData.status_value) {
+        body.productList = editTransactionData.data
       }
 
       const response = await requestHandler(
@@ -183,7 +188,30 @@ const EditTransaction = () => {
     }
   }
 
+  const onToggle = () => {
+    const cloneEditTransactionData = { ...editTransactionData }
+    cloneEditTransactionData.status_value = !cloneEditTransactionData.status_value
+    setEditTransactionData(cloneEditTransactionData)
+    setShowEditSection(!showEditSection)
+  }
+
   const onCancel = () => history.goBack()
+
+  const onGenerateReport = async () => {
+    const response = await requestHandler(
+      `/generate-pdf/${defaultEditTransactionData.reference_number}`,
+      true,
+      null,
+      'get',
+      0,
+      0,
+      true,
+    )
+    blobFileDownloader(
+      response,
+      `${defaultEditTransactionData.reference_number}.pdf`,
+    )
+  }
 
   return (
     <Container>
@@ -194,14 +222,18 @@ const EditTransaction = () => {
           </div>
           <div className='transaction-information-column margin-bottom'>
             <div className='download-button-wrapper'>
-              <div className='download-button'>
+              <div className='download-button' onClick={onGenerateReport}>
                 <DownloadIcon />
                 <span>Download transaction</span>
               </div>
             </div>
             <div className='toggle-button-wrapper'>
               <div className='flex-end'>
-                <ToggleButton />
+                <ToggleButton
+                  disabled={!defaultEditTransactionData.status_value}
+                  value={editTransactionData.status_value}
+                  action={onToggle}
+                />
               </div>
             </div>
           </div>
@@ -324,7 +356,7 @@ const EditTransaction = () => {
                             onValueChange={(text) => setTransactionRemark(text)}
                           />
                         ) : (
-                          <span>No product remark</span>
+                          <span className='no-remark'>No product remark</span>
                         )}
                       </div>
                     </ProductListWrapper>
@@ -346,7 +378,7 @@ const EditTransaction = () => {
             />
           </div>
         </DetailSection>
-        {defaultEditTransactionData.status_value !== 0 && (
+        {defaultEditTransactionData.status_value !== 0 && showEditSection && (
           <EditSection>
             <div className='header-wrapper sticky'>
               <div className='header'>

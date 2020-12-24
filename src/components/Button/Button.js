@@ -25,9 +25,9 @@ const RetryButton = ({ action }) => (
   </OutlineButton>
 )
 
-const ToggleButton = ({ action, value }) => (
+const ToggleButton = ({ action, value, ...rest }) => (
   <ToggleSwitch>
-    <input checked={value} type='checkbox' onChange={action} />
+    <input checked={value} type='checkbox' onChange={action} {...rest} />
     <span className='slider' />
   </ToggleSwitch>
 )

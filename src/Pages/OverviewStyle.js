@@ -78,7 +78,7 @@ const Container = styled.div`
   }
   .chart {
     width: 500px;
-    height: 300px;
+    /* height: 300px; */
     position: relative;
     display: flex;
     justify-content: center;
@@ -86,7 +86,26 @@ const Container = styled.div`
 
     padding: 25px;
     border-radius: 8px;
-    margin: 0 8px 8px;
+    margin: 8px 0;
+
+    background-color: ${COLORS.natural.white};
+  }
+  .chart-section{
+    margin-top: 12px;
+  }
+  .card-section{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .card{
+    width: 350px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 8px;
 
     background-color: ${COLORS.natural.white};
   }
@@ -96,6 +115,9 @@ const Container = styled.div`
       flex-direction: column;
     }
     .activity-log-section{
+      width: 100%;
+    }
+    .chart{
       width: 100%;
     }
   }

@@ -6,7 +6,6 @@ const blobFileDownloader = (blobResponse, fileName) => {
   document.body.appendChild(link)
   link.click()
   link.remove()
-  console.log(downloadUrl)
 }
 
 export default blobFileDownloader

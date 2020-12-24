@@ -80,7 +80,7 @@ const EditImportExportProduct = () => {
         <TextArea
           type='text'
           value={editInformation.detail}
-          valueType='detail'
+          valueType='product_detail'
           onValueChange={inputHandler}
           placeholder='Remark'
           border

@@ -276,8 +276,13 @@ const TransactionRecord = ({
           onClick={(event) => onToggleMenu(event, index)}
         />
       </div>
-      <div className={clsx('transaction-product-list-container')}>
-        <div className={clsx('product-list product-list-title')}>
+      <div className='transaction-product-list-container'>
+        {value.refer && (
+          <div className='refer'>
+            <span>Refer to: {value.refer}</span>
+          </div>
+        )}
+        <div className='product-list product-list-title'>
           <div className='product-detail index' />
           <div className='product-detail product-id'>
             <span className='product-information'>Serial Number</span>

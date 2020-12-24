@@ -263,12 +263,19 @@ const ProductListWrapper = styled.label`
     display: flex;
     flex-direction: column;
 
+    padding: 0;
+
     transition: all 0.2s ease-in-out;
     overflow: hidden;
     z-index: 0;
   }
+  .no-remark {
+    color: ${COLORS.gray[500]};
+    font-size: ${FONT.m};
+  }
   input:checked + .product-remark {
     max-height: 1000px;
+    padding: 12px;
   }
 `
 

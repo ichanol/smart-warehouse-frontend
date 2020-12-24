@@ -37,6 +37,7 @@ const ImportExportProduct = () => {
     id: 1,
     action_name: 'Import',
   })
+  const [preventSocket, setPreventSocket] = useState(false)
   const [menuTabs, setMenuTabs] = useState([])
   const [transactionRemark, setTransactionRemark] = useState('')
 
@@ -159,7 +160,10 @@ const ImportExportProduct = () => {
   }
 
   useEffect(() => {
-    socketHandler()
+    if (preventSocket) {
+    } else {
+      socketHandler()
+    }
     return () => {
       resetModalState()
       socket.removeAllListeners()
@@ -176,6 +180,7 @@ const ImportExportProduct = () => {
   const onDismissModal = () => resetModalState()
 
   const cancleTransaction = () => {
+    setPreventSocket(true)
     resetReadProductListDefaultValue()
     onDismissModal()
     history.goBack()
@@ -299,7 +304,7 @@ const ImportExportProduct = () => {
       onClickNegativeButton: onDismissModal,
       positiveButton: {
         text: 'retry',
-        color: '#04adf6',
+        color: 'blue',
       },
       onClickPositiveButton: () => resetReadProductListDefaultValue(),
       dismissFN: onDismissModal,
@@ -323,7 +328,12 @@ const ImportExportProduct = () => {
     { title: 'Actions', type: 'status', isSort: false },
   ]
   const fixedDataColumn = ['product_id', 'product_name']
-  const scrollDataColumn = ['company_name', 'detail', 'amount', 'status']
+  const scrollDataColumn = [
+    'company_name',
+    'product_detail',
+    'amount',
+    'status',
+  ]
   const centerColumn = ['amount']
 
   const scanUser = async () => {
