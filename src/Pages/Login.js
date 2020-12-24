@@ -93,7 +93,10 @@ const Login = () => {
         isLogin: response.success,
         permission: response.permission,
       }))
-      history.push('/overview')
+
+      const { permission } = response
+      const temp = permission.filter((value) => value.status === 1)
+      history.push(temp[0].url)
     } catch (error) {
       errorHandler(error)
     }

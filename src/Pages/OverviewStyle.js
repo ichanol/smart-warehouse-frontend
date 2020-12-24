@@ -1,6 +1,15 @@
 import { COLORS, FONT } from '../Constant'
+import styled, { keyframes } from 'styled-components'
 
-import styled from 'styled-components'
+const slideIn = keyframes`
+from{
+  transform: translate(-100%, 0);
+  opacity: 0;
+
+}to{
+  transform: translate(0, 0);
+  opacity: 1;
+}`
 
 const Container = styled.div`
   height: 100%;
@@ -17,10 +26,11 @@ const Container = styled.div`
     align-items: center;
     display: flex;
 
-    margin-bottom: 20px;
+    padding-bottom: 20px;
 
     font-weight: bold;
     letter-spacing: 1px;
+    background-color: ${COLORS.gray[300]};
   }
   .header span {
     font-size: ${FONT.xl};
@@ -30,46 +40,61 @@ const Container = styled.div`
     display: flex;
     position: relative;
   }
-  .activity-log-section{
+  .activity-log-section {
     display: flex;
     flex-direction: column;
-    width: 450px;
-    min-width: 450px;
+    width: 650px;
+    min-width: 650px;
     position: relative;
     max-height: 670px;
     margin-right: 12px;
-    
+
     overflow: auto;
 
     ::-webkit-scrollbar {
       display: none;
     }
   }
-  .activity-log-header{
+  .activity-log-header {
     position: sticky;
     top: 0;
-    
+
     background-color: ${COLORS.gray[300]};
-    /* background-color: ${COLORS.natural.white}; */
+    z-index: 1;
   }
-  .activity-log{
-    display: flex; 
+  .activity-log {
+    display: flex;
     flex-direction: column;
   }
-  .activity-log-information{
+  .socket-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .activity-log-information {
     width: 100%;
-    height: 50px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    position: relative;
 
     margin-top: 12px;
     border-radius: 8px;
+    padding: 12px 200px 12px 75px;
+
+    animation: ${slideIn} 1s ease-in-out;
 
     background-color: ${COLORS.natural.white};
-
-    :nth-child(1){
-      margin: 0;
-    }
   }
-  .graph-section{
+  .timestamp {
+    position: absolute;
+    right: 20px;
+
+    color: ${COLORS.green[600]};
+  }
+  .log-detail {
+    white-space: pre-line;
+  }
+  .graph-section {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -90,15 +115,15 @@ const Container = styled.div`
 
     background-color: ${COLORS.natural.white};
   }
-  .chart-section{
+  .chart-section {
     margin-top: 12px;
   }
-  .card-section{
+  .card-section {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
   }
-  .card{
+  .card {
     width: 350px;
     height: 150px;
     display: flex;
@@ -111,16 +136,31 @@ const Container = styled.div`
   }
 
   @media (max-width: 1024px) {
-    .content{
+    .content {
       flex-direction: column;
     }
-    .activity-log-section{
+    .activity-log-section {
       width: 100%;
     }
-    .chart{
+    .chart {
       width: 100%;
     }
   }
 `
+const Thumbnail = styled.div`
+  position: absolute;
+  left: 20px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-export { Container }
+  border-radius: 35px;
+
+  background-color: ${COLORS.gray[600]};
+  color: ${COLORS.natural.white};
+  text-transform: uppercase;
+`
+
+export { Container, Thumbnail }

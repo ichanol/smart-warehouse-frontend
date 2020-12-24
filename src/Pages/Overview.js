@@ -1,26 +1,30 @@
-import { CancelButton, RetryButton, SubmitButton } from '../components'
+import { Container, Thumbnail } from './OverviewStyle'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Chart } from 'chart.js'
-import { Container } from './OverviewStyle'
+import clsx from 'clsx'
 import io from 'socket.io-client'
+import moment from 'moment'
 import { requestHandler } from '../Services'
 
 const Overview = () => {
   const socket = io.connect(process.env.REACT_APP_SOCKET_IO)
 
+  const [activityLogState, setactivityLogState] = useState([])
+  const [activityLogSocketState, setactivityLogSocketState] = useState([])
+
   const ctx = useRef([])
 
   const [graphData, setGraphData] = useState({})
 
-  //data.topExportResult => [{total, product_name}]
-  //data.topImportResult => [{total, product_name}]
-
   const getData = async () => {
     try {
-      const { result } = await requestHandler('/dashboard', true, {}, 'get')
-      setGraphData({ ...graphData, data: result })
-      return result
+      const {
+        result: { topExportResult, topImportResult, activityLogs },
+      } = await requestHandler('/dashboard', true, {}, 'get')
+      setactivityLogState(activityLogs)
+      setGraphData({ ...graphData, data: { topExportResult, topImportResult } })
+      return { topExportResult, topImportResult }
     } catch (error) {
       console.log(error)
     }
@@ -35,16 +39,12 @@ const Overview = () => {
       const topExportData = []
 
       const x = data?.topImportResult?.map((value, index) => {
-        if (index < 5) {
-          topImportData.push(value.total)
-          topImportLabel.push(value.product_name)
-        }
+        topImportData.push(value.total)
+        topImportLabel.push(value.product_name)
       })
       const y = data?.topExportResult?.map((value, index) => {
-        if (index < 5) {
-          topExportData.push(value.total)
-          topExportLabel.push(value.product_name)
-        }
+        topExportData.push(value.total)
+        topExportLabel.push(value.product_name)
       })
       const topImportChart = new Chart(ctx?.current[0]?.getContext('2d'), {
         type: 'bar',
@@ -119,16 +119,23 @@ const Overview = () => {
 
   useEffect(() => {
     initialDashboardHandler()
+  }, [])
 
-    socket.on('ACTIVITY_LOG', ({ message, time }) => {
-      console.log(message, new Date(time))
+  useEffect(() => {
+    socket.on('ACTIVITY_LOG', async ({ message, time, id, username }) => {
+      const newActivity = {
+        activity_id: id,
+        activity_detail: message,
+        created_at: time,
+        username,
+      }
+      setactivityLogSocketState([...activityLogSocketState, newActivity])
     })
-
     return () => {
       socket.removeAllListeners()
       socket.disconnect()
     }
-  }, [])
+  })
 
   return (
     <Container>
@@ -138,31 +145,46 @@ const Overview = () => {
             <span>Activity logs</span>
           </div>
           <div className='activity-log'>
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
-            <div className='activity-log-information' />
+            <div className='socket-wrapper'>
+              {activityLogSocketState.map((value, index) => {
+                return (
+                  <div className='activity-log-information' key={index}>
+                    <Thumbnail>
+                      <span>{value.username[0]}</span>
+                    </Thumbnail>
+                    <div className='log-detail'>
+                      <span>{value.activity_detail}</span>
+                    </div>
+                    <div className='timestamp'>
+                      <span>{moment(value.created_at).fromNow()}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div>
+              {activityLogState.map((value, index) => {
+                const [time] = value.created_at.split('Z')
+                return (
+                  <div className='activity-log-information' key={index}>
+                    <Thumbnail>
+                      <span>{value.username[0]}</span>
+                    </Thumbnail>
+                    <div className='log-detail'>
+                      <span>{value.activity_detail}</span>
+                    </div>
+                    <div className='timestamp'>
+                      <span>{moment(time).fromNow()}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
         <div className='graph-section'>
           <div className='header'>
             <span>Overview</span>
-          </div>
-          <div className='card-section'>
-            <div className='card' />
-            <div className='card' />
-            <div className='card' />
-            <div className='card' />
           </div>
           <div className='chart-section'>
             <div className='chart'>
