@@ -402,12 +402,12 @@ const ImportExportProduct = () => {
   }
   return (
     <Container>
-      <div className='mock-button-user' onClick={scanUser}>
+      {/* <div className='mock-button-user' onClick={scanUser}>
         Scan user
       </div>
       <div className='mock-button-product' onClick={scanProduct}>
         Scan Product
-      </div>
+      </div> */}
       <div className='action-tabs-container'>
         {menuTabs.map((value, index) => {
           return (

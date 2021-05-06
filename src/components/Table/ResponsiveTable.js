@@ -23,6 +23,7 @@ const ResponsiveTable = ({
   editButton,
   onDelete,
   indexCounter,
+  endColumn,
 }) => {
   const tableRef = useRef()
   const [isScroll, setIsScroll] = useState(false)
@@ -39,17 +40,36 @@ const ResponsiveTable = ({
             <span>{primaryIndex + 1}</span>
           </div>
         )}
-        {fixedDataColumn.map((value, index) => (
-          <div
-            key={index}
-            className={clsx(
-              'cell data',
-              primaryIndex % 2 && 'odd',
-              !dataToRender.status && 'inactive',
-            )}>
-            <span>{dataToRender[value]}</span>
-          </div>
-        ))}
+        {fixedDataColumn.map((value, index) => {
+          const isEnd = endColumn?.filter((endField) => value === endField)
+
+          if (isEnd?.length > 0) {
+            console.log(isEnd)
+            return (
+              <div
+                key={index}
+                className={clsx(
+                  'cell data end',
+                  primaryIndex % 2 && 'odd',
+                  !dataToRender.status && 'inactive',
+                )}>
+                <span>{dataToRender[value]}</span>
+              </div>
+            )
+          } else {
+            return (
+              <div
+                key={index}
+                className={clsx(
+                  'cell data',
+                  primaryIndex % 2 && 'odd',
+                  !dataToRender.status && 'inactive',
+                )}>
+                <span>{dataToRender[value]}</span>
+              </div>
+            )
+          }
+        })}
       </div>
     )
   }

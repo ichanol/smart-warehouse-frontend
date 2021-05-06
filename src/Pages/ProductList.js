@@ -20,7 +20,8 @@ const ProductList = () => {
   ]
   const fixedDataColumn = ['product_id', 'product_name', 'balance']
   const scrollDataColumn = ['company_name', 'updated_at']
-  const centerColumn = ['balance']
+  const centerColumn = ['company_name']
+  const endColumn = ['balance']
   const itemPerPageList = [
     { name: 10 },
     { name: 20 },
@@ -130,6 +131,7 @@ const ProductList = () => {
           fixedDataColumn={fixedDataColumn}
           scrollDataColumn={scrollDataColumn}
           centerColumn={centerColumn}
+          endColumn={endColumn}
         />
         <NumberIndicator
           numberPerPage={numberPerPage}

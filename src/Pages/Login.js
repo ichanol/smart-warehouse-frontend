@@ -137,7 +137,7 @@ const Login = () => {
             name='password'
             ref={register({
               required: true,
-              maxLength: 15,
+              maxLength: 20,
             })}
             type='password'
             placeholder='Password'

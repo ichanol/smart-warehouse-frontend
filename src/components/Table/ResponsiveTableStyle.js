@@ -52,7 +52,8 @@ const Table = styled.div`
     z-index: 1;
     background-color: ${COLORS.natural.white};
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 0 10px rgba(0, 0, 0, ${({ isScroll }) => isScroll ? 0.05 : 0});
+    box-shadow: 0 0 10px
+      rgba(0, 0, 0, ${({ isScroll }) => (isScroll ? 0.05 : 0)});
   }
   .scroll-section {
     display: flex;
@@ -87,6 +88,10 @@ const Table = styled.div`
     position: relative;
 
     padding: 20px;
+  }
+  .end {
+    justify-content: flex-end;
+    padding-right: 42px !important;
   }
   .center,
   .title {

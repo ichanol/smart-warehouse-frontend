@@ -26,7 +26,10 @@ const NavBar = () => {
   return (
     <SideBar open={openMenu}>
       <Logo>
-        <span>LOGO</span>
+        <span className='title'>
+          MBX
+          <span className='sub-script'>WAREHOUSE</span>
+        </span>
       </Logo>
       <div className='hamburger' onClick={toggleMenu}>
         <div className='line' />

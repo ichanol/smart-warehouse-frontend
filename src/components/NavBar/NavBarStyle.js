@@ -157,17 +157,28 @@ const SideBar = styled.div`
 `
 
 const Logo = styled.div`
-  height: 75px;
+  display: flex;
+  flex-direction: column;
+  min-height: 75px;
   align-items: center;
 
   margin: 25px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
-  background-color: ${COLORS.natural.white};
+  color: ${COLORS.natural.white};
   text-align: center;
-  font-size: 35px;
 
-  span {
-    line-height: 75px;
+  .title {
+    position: relative;
+
+    font-size: 38px;
+  }
+  .sub-script {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    font-size: 14px;
   }
 
   @media (max-width: 1024px) {

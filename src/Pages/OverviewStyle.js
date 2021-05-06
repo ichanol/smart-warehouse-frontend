@@ -39,14 +39,15 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     position: relative;
+
+    overflow: hidden;
   }
   .activity-log-section {
     display: flex;
     flex-direction: column;
-    width: 650px;
     min-width: 650px;
     position: relative;
-    max-height: 670px;
+    flex:1;
     margin-right: 12px;
 
     overflow: auto;
@@ -100,16 +101,17 @@ const Container = styled.div`
     flex-direction: column;
 
     padding: 0 8px;
+
+    overflow: auto;
   }
   .chart {
-    width: 500px;
-    /* height: 300px; */
+    height: calc(50% - 50px - 16px);
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    padding: 25px;
+    padding: 48px;
     border-radius: 8px;
     margin: 8px 0;
 
